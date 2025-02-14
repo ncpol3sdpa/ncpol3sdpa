@@ -7,3 +7,4 @@
 - (Tous) Prends en main de l'article revue (Tavakoli Pozas-Kerstjens Brown Ara\'ujo)
 - (Tous) faire les exercies envoyé par l'encadrant.
 - (Tous) Première prise en main avec [picos](https://picos-api.gitlab.io/picos/)
+- (Nazar) essayer de faire marcher PICO avec un probleme k=2 (echeque)
