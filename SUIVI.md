@@ -14,3 +14,4 @@
 - (Nazar) Reproduire le resultat de Mathis que l'exo 3 n'est pas borné.
 - (Yann) Résolution de l'exercice 2 à la main
 - (Tous) Rendez-vous avec l'encadrant à 10h30 pour discuter de notre avancement
+- (Thomas et Mathis) Résolution exercice 3 donné par l'encadrant
