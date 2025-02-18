@@ -15,3 +15,4 @@
 ## 18/02/2025
 
 - (Tous) Rendez-vous avec l'encadrant à 10h30 pour discuter de notre avancement
+- (Nazar) Reproduire le resultat de Mathis que l'exo 3 n'est pas borné.
