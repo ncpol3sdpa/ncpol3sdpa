@@ -3,8 +3,10 @@
 ## Problem
 
 $$\max _{x1,x2\in\R} 2x_0x_1 \\
-\text{s.t.} x_0^2 − x_0 = 0 \\
--x_1^2 + x_1 + \frac 14 \ge 0$$
+\text{s.t.} \left\{{\begin{matrix}
+    x_0^2 − x_0 = 0\\
+    -x_1^2 + x_1 + \frac 14 \ge 0
+\end{matrix}}\right.$$
 
 ## Solution
 
