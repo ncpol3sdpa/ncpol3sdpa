@@ -11,3 +11,4 @@
 
 ## 17/02/2045 
 - (Mathis) implementation de la résolution du SDP niveau 2 de l'exercice 2 avec cvxpy (resultat bizarre, solution non bornée)
+- (Tous) Rendez-vous avec l'encadrant à 10h30 pour discuter de notre avancement
