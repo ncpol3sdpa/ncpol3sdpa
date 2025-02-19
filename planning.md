@@ -1,54 +1,97 @@
-# Planing du projet Python-Poly-Opt
+# Planning du projet Python-Poly-Opt
 
-## Mardi 18 février
+## Objectifs
 
- * Organisation, construction du planning.
+Réécriture de la bibliothèque `ncpol3sdpa` en Python.
 
-## Mardi 4 mars
+### Objectifs fin P3:
 
- * Pseudocode de l'algorithme generale.
+Cas d'optimisation des polynomes commutatifs et réel
+   1. Partie "Algèbre", manipulation symbolique des polynomes
+   2. Construction de la matrice des moments de Lassere
+   3. Communication avec des solveurs de SDP
 
-## Mardi 11 mars
+### Objectifs fin P4:
 
- * Lecture de documation pour Sympy. Un membre de groupe commence a etudier a quelle point c'est interesant et faisable de reimplementer les polynomes symboliques.
- * Structure generle de projet, construction de api entre differantes parties de projet(donc comuniquer avec les solveurs) 
+ * Documentation, tutoriel et exemples
+ * Jeux des tests (CI/CD)
+ * Cas de polynomes complexe
+ * Cas de polynomes non Comutative
+ * Optimisations pour aller plus vite
 
-## Mardi 18 mars
 
- * Comancer à implementer les algorithmes
+## Organisation:
 
-## Mardi 25 mars
+### Mardi 4 mars
 
- * continuer à implementer les algorithmes
+ * Pseudocode et structuration du projet
+ * Rdv avec Peter BROWN (10h-12h)
 
-## Mardi 1 avril
+### Mardi 11 mars
 
- * continuer à implementer les algorithmes
+ * Lecture de documentation pour Sympy (faisabilité de recoder ?)
+ * Structure generale du projet
+ * Construction des template des api des differentes parties du projet
 
-## Mardi 8 avril
+### Mardi 18 mars
 
- * mise en commun et ammelieuration de la compatibilité
+ * Début de l'implementation des algorithmes
+ * Rdv avec Peter BROWN (10h-12h)
 
-## Mardi 15 avril
+### Mardi 25 mars
 
- * continuer à implementer les algorithmes
- * tests et debug
+ * Suite de l'implementation des algorithmes
 
-## Mercredi 16 avril
+### Mardi 1 avril
+
+ * Suite de l'implementation des algorithmes
+ * Rdv avec Peter BROWN (10h-12h)
+
+### Mardi 8 avril
+
+ * Mise en commun
+ * Amelioration de la compatibilité entre les différentes parties du projet
+
+### Mardi 15 avril
+
+ * Suite de l'implementation des algorithmes
+ * Tests et debuguage
+ * Mise en place des tests unitaires
+ * Rdv avec Peter BROWN (10h-12h)
+
+### Mercredi 16 avril
 
  * Mise au propre des objectifs de P3
 
-# Fin de P3:
+#### Fin de P3 — Début de P4
 
-## Lundi 5 mai
+### Lundi 5 mai
 
-## Lundi 19 mai
+ * Début de la documentation
+ * Ajout de tests unitaires
+ * Implémentation des polynomes non commutatifs et complexes
 
-## Lundi 26 mai
+### Lundi 19 mai
 
-## Lundi 2 juin
+ * Suite de l'implementation des algorithmes
+ * Optimisation
+ * Documentation
+
+### Lundi 26 mai
+
+ * Premiers tests sur les polynomes non commutatifs et complexes
+ * Optimisation
+ * Documentation
 
 
-## Semain 23-27 juin
+### Lundi 2 juin
+
+ * Mise au propres des optimisations
+ * Mise en place des tests de CI/CD
+ * Mise au propre des polynomes non commutatifs et complexes
 
 
+### Semain 23-27 juin
+
+ * Finalisation de la documentation
+ * Finalisation des tests
