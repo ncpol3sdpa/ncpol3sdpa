@@ -22,7 +22,7 @@ for i in range(3):
 		P.add_constraint(M1[i,j] == m1[i][j])
 
 
-M2 = pc.RealVariable("M2", (3, 3))
+M2 = pc.SymmetricVariable("M2", (3, 3))
 m2 = [
     [-Y[0,5]+Y[0,2]+0.25*Y[0,0], -Y[1,5]+Y[0,4]+0.25*Y[0,1], -Y[2,5]+Y[0,5]+0.25*Y[0,2]],
     [-Y[1,5]+Y[0,4]+0.25*Y[0,1], -Y[3,5]+Y[1,4]+0.25*Y[0,3], -Y[4,5]+Y[1,5]+0.25*Y[0,4]],
@@ -30,16 +30,13 @@ m2 = [
 ]
 
 for i in range(3):
-	for j in range(3):
+	for j in range(i+1):
 		P.add_constraint(M2[i,j] == m2[i][j])
 
-P += M1 == 0, M2 >> 0, Y >> 0, Y <= 1000
+P += M1 == 0, M2 >> 0, Y >> 0, Y[0,0] == 1
 
 P.maximize = 2*Y[1,2] 
 
 P.solve(solver="cvxopt")
 print(Y)
-
-
-P += Y >= 0, M1 == 0, M2 >= 0 
 
