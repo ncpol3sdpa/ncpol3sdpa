@@ -1,0 +1,3 @@
+
+
+def solve_equality_constraints(): ...
