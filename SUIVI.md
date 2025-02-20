@@ -15,3 +15,8 @@
 - (Yann) Résolution de l'exercice 2 à la main
 - (Tous) Rendez-vous avec l'encadrant à 10h30 pour discuter de notre avancement
 - (Thomas et Mathis) Résolution exercice 3 donné par l'encadrant
+
+
+## 20/02/2025
+- (Tous) Rendez-vous avec l'encadrant pour discuter de notre organisation et du plan
+- (Tous) Premiers templates pour la structure du code
