@@ -89,9 +89,11 @@ Cas d'optimisation des polynomes commutatifs et réel
  * Mise au propres des optimisations
  * Mise en place des tests de CI/CD
  * Mise au propre des polynomes non commutatifs et complexes
+ * Debuguage
 
 
 ### Semain 23-27 juin
 
  * Finalisation de la documentation
  * Finalisation des tests
+ * Finalisation du debuguage
