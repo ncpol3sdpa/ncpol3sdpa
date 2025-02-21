@@ -7,10 +7,12 @@ from equality_constraints import *
 from constraints import *
 
 def test_rule_of_constraint():
-    x = sp.symbols('x')
-    pol = x**2 - x -1 
-    c = Constraint(True, pol)
-    assert(rule_of_constraint(c)[0] - x**2 == 0)
-    assert(rule_of_constraint(c)[1] - (x+1) == 0)
+    x, y = sp.symbols('x y')
+    pol1 = sp.poly(x**2 - x -1) 
+    pol2 = sp.poly(3*x*y**2 - 6*x**2 + 12*y) 
+    c1 = Constraint(True, pol1)
+    c2 = Constraint(True, pol2)
+    assert(rule_of_constraint(c1) == [x**2,x+1]) 
+    assert(rule_of_constraint(c2) == [x*y**2, 2*x**2 - 4*y])
 
 test_rule_of_constraint()
