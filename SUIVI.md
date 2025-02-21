@@ -20,3 +20,8 @@
 ## 20/02/2025
 - (Tous) Rendez-vous avec l'encadrant pour discuter de notre organisation et du plan
 - (Tous) Premiers templates pour la structure du code
+
+## 21/02/2025
+- (Mathis) 
+    * implémentation des fonctions rule_of_constraint et rule_of_constraints
+    * ajout de fonctions de test avec pytest
