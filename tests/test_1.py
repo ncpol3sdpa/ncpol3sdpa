@@ -1,5 +1,5 @@
 
 
-def first_test():
+def test_1():
 
     assert True

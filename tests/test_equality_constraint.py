@@ -1,8 +1,7 @@
 import sys 
-import sympy as sp
-
-
 sys.path.append('../src/')
+
+import sympy as sp
 from equality_constraints import *
 from constraints import *
 
