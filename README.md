@@ -1,20 +1,34 @@
 # ncpol3sdpa
 
-## Test
+## Development
 
-To run the tests, you need to install the `pytest` package. You can do this by running the following command:
-
-```bash
-pip install pytest
-```
-
-Then, you can run the tests by executing the following command:
+To develop this package, you need to install the `uv` package. You can do this by running the following command:
 
 ```bash
-pytest
+pip install uv
 ```
 
-If you have the `uv` package installed, you can run the tests with the following command:
+### Testing
+
+You can run the tests by executing the following command:
+
 ```bash
 uv run pytest
+```
+
+### Error Checking
+
+Then, you can check for errors by executing the following command:
+
+```bash
+uvx ruff format .
+```
+
+### Formatting
+
+Then, you can check for formatting issues by executing the following command:
+
+
+```bash
+uvx ruff lint .
 ```
