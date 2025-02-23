@@ -1,9 +1,7 @@
-import sys 
-sys.path.append('../src/')
-
 import sympy as sp
-from equality_constraints import *
-from constraints import *
+import pytest
+from ncpol3sdpa.equality_constraints import *
+from ncpol3sdpa.constraints import *
 
 def test_rule_of_constraint():
     x, y = sp.symbols('x y')
