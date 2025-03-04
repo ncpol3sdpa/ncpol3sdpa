@@ -18,7 +18,7 @@ def create_matrix(L):
     for i in range(n):
         for j in range(n):
             M[i][j] = L[i] * L[j]
-            if M[i][j] in rules:
+            if M[i][j] in rules:                 ## rules : dico avec clé le monome et valeur sa valeur simplifiée 
                 M[i][j] = rules(M[i][j])
     return M
 
