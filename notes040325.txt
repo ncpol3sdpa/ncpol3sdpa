@@ -1,0 +1,2 @@
+ - Use a moddeling langue at first(PICOS or SVXPY), switch to communicatique directly with solver like [MOSEK solver](https://www.mosek.com/)
+ - monomial to monomial substitution only. Word problem
