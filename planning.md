@@ -29,32 +29,32 @@ Cas d'optimisation des polynomes commutatifs et réel
 
 ### Mardi 11 mars
 
- * Lecture de documentation pour Sympy (faisabilité de recoder ?)
- * Structure generale du projet
- * Construction des template des api des differentes parties du projet
+ * Lecture de la documentation pour Sympy (faisabilité de recoder ?)
+ * Structure générale du projet
+ * Construction des templates des api des differentes parties du projet
 
 ### Mardi 18 mars
 
- * Début de l'implementation des algorithmes
+ * Début de l'implémentation des algorithmes
  * Rdv avec Peter BROWN (10h-12h)
 
 ### Mardi 25 mars
 
- * Suite de l'implementation des algorithmes
+ * Suite de l'implémentation des algorithmes
 
 ### Mardi 1 avril
 
- * Suite de l'implementation des algorithmes
+ * Suite de l'implémentation des algorithmes
  * Rdv avec Peter BROWN (10h-12h)
 
 ### Mardi 8 avril
 
  * Mise en commun
- * Amelioration de la compatibilité entre les différentes parties du projet
+ * Amélioration de la compatibilité entre les différentes parties du projet
 
 ### Mardi 15 avril
 
- * Suite de l'implementation des algorithmes
+ * Suite de l'implémentation des algorithmes
  * Tests et debuguage
  * Mise en place des tests unitaires
  * Rdv avec Peter BROWN (10h-12h)
@@ -73,7 +73,7 @@ Cas d'optimisation des polynomes commutatifs et réel
 
 ### Lundi 19 mai
 
- * Suite de l'implementation des algorithmes
+ * Suite de l'implémentation des algorithmes
  * Optimisation
  * Documentation
 
@@ -86,7 +86,7 @@ Cas d'optimisation des polynomes commutatifs et réel
 
 ### Lundi 2 juin
 
- * Mise au propres des optimisations
+ * Mise au propre des optimisations
  * Mise en place des tests de CI/CD
  * Mise au propre des polynomes non commutatifs et complexes
  * Debuguage
