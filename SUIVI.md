@@ -27,5 +27,7 @@
     * ajout de fonctions de test avec pytest
 
 ## 04/03/2025
-  - (Nazar) fonction pour generer tous les monomes
-   
+ - (Tous) RDV avec Peter Brown 
+ - (Mathis) 
+    * ajout de la fonction needed_monomials + tests
+ - (Nazar) fonction pour generer tous les monomes   
