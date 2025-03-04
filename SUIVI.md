@@ -25,3 +25,7 @@
 - (Mathis) 
     * implémentation des fonctions rule_of_constraint et rule_of_constraints
     * ajout de fonctions de test avec pytest
+
+## 04/03/2025
+  - (Nazar) fonction pour generer tous les monomes
+   
