@@ -8,13 +8,9 @@ def needed_monomials(monomials, rules):
         needed_mono = [monomial for monomial in monomials if monomial not in rules.keys()]
         return needed_mono
 
-
-def convert_polynome_to_list(P,k):     # P: polynome of the problem
-     
-     
-     
-
-def create_matrix(L):       # L list of all the monomials used in the moment matrix
+# 
+def create_matrix(L):                           # L list of all the monomials used in the moment matrix
+                                                # this list goes to the degree k of the moment matrix
     n = len(L)
     M = []
     for i in range (n):
@@ -26,11 +22,25 @@ def create_matrix(L):       # L list of all the monomials used in the moment mat
             M[i][j] = L[i] * L[j]
     return M
 
+def create_matrix_of_constraints(L,Q,q):      # L list of all the monomials used in the moment matrix
+                                              # Q polynome of constraints Q(X,Y) < q
+    n = len(L)
+    M = []
+    for i in range (n):
+        P = [0] * n
+        M.append(P) 
+    for i in range(n):
+        for j in range(n):
+            M[i][j] = (q-Q)(L[i] * L[j]) 
+    return M
+
 
      
 class MomentMatrix:
 
-    def __init__(self): ...
+    def __init__(self, polynom, constraints): 
+        self.optimized = None 
+        self.constraints = None
 
 
     def __mul__(self, other): ...
