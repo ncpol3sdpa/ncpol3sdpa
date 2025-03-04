@@ -9,7 +9,7 @@
 
 ## Objectifs fin P4:
 
- * Documentation, tutoril de l'utilisation, exemples d'utilisation
+ * Documentation, tutoriel de l'utilisation, exemples d'utilisation
  * Jeux des testes(CI/CD)
  * Cas complexe
  * Cas non Comutative
