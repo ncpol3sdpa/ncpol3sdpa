@@ -1,5 +1,5 @@
 import sympy as sp
-
+from functools import cmp_to_key
 
 class Monomial:
 
@@ -24,15 +24,17 @@ def generate_monomials_commutative(symbols : list, k : int):
 	""" returns a list of all monomials that have degree less than k"""
 	current_degres = [0 for _ in symbols]
 	n = len(symbols)
-	s = set([])
+	res  = []
 	
 	continue_loop_flag = True
 	while(continue_loop_flag):
 		expr = 1
 		for i, symbol in enumerate(symbols):
 			expr *= symbol**current_degres[i]
-		s.add(expr)
+		if sp.total_degree(expr) <= k:
+			res.append(expr)
 
-		continue_loop_flag = not list_increment(current_degres, k)
-	return list(s)
+		continue_loop_flag = not list_increment(current_degres, k+1)
+	# sort by degree
+	return sorted(res, key=cmp_to_key(lambda item1, item2: sp.total_degree(item1) - sp.total_degree(item2)))
 	
