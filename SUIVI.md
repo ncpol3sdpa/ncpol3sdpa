@@ -25,3 +25,8 @@
 - (Mathis) 
     * implémentation des fonctions rule_of_constraint et rule_of_constraints
     * ajout de fonctions de test avec pytest
+
+ ## 04/03/2025
+ - (Tous) RDV avec Peter Brown 
+ - (Mathis) 
+    * ajout de la fonction needed_monomials + tests
