@@ -8,7 +8,13 @@ def needed_monomials(monomials, rules):
         needed_mono = [monomial for monomial in monomials if monomial not in rules.keys()]
         return needed_mono
 
-def create_matrix(L):
+
+def convert_polynome_to_list(P,k):     # P: polynome of the problem
+     
+     
+     
+
+def create_matrix(L):       # L list of all the monomials used in the moment matrix
     n = len(L)
     M = []
     for i in range (n):
@@ -18,10 +24,10 @@ def create_matrix(L):
     for i in range(n):
         for j in range(n):
             M[i][j] = L[i] * L[j]
-            if M[i][j] in rules:                 ## rules : dico avec clé le monome et valeur sa valeur simplifiée 
-                M[i][j] = rules(M[i][j])
     return M
 
+
+     
 class MomentMatrix:
 
     def __init__(self): ...
