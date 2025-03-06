@@ -20,8 +20,8 @@ def list_increment(l, k):
 			l[i] = 0
 	return True
 
-def generate_monomials_commutative(symbols : list, k : int):
-	""" returns a list of all monomials that have degree less than k"""
+def generate_monomials_commutative(symbols : list, relaxation_order : int):
+	""" returns a list of all monomials that have degree less or equal to k"""
 	current_degres = [0 for _ in symbols]
 	n = len(symbols)
 	res  = []
@@ -31,10 +31,19 @@ def generate_monomials_commutative(symbols : list, k : int):
 		expr = 1
 		for i, symbol in enumerate(symbols):
 			expr *= symbol**current_degres[i]
-		if sp.total_degree(expr) <= k:
+		if sp.total_degree(expr) <= relaxation_order:
 			res.append(expr)
 
-		continue_loop_flag = not list_increment(current_degres, k+1)
+		continue_loop_flag = not list_increment(current_degres, relaxation_order+1)
 	# sort by degree
 	return sorted(res, key=cmp_to_key(lambda item1, item2: sp.total_degree(item1) - sp.total_degree(item2)))
-	
+
+def create_backward_dictionary(monomials: list):
+	"""from a list int -> monomal, create a backwards dictionary monomail -> int, that is the inverse.
+		forall i in [| 0..len(monomials) |[, list[dictionary[i]] = i
+		and
+		forall monomial in monomials, dictionary[list[monomial]] = monomial"""
+	res = {}
+	for i in range(len(monomials)):
+		res[monomials[i]] = i
+	return res

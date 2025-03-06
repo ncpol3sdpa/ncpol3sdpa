@@ -1,2 +1,3 @@
  - Use a moddeling langue at first(PICOS or SVXPY), switch to communicatique directly with solver like [MOSEK solver](https://www.mosek.com/)
  - monomial to monomial substitution only. Word problem
+ - equality constraint: P(x,y, ..) = 0  transforms to constraints m1P(x,y, ..)m2 = 0 for all m1 m2 monomials
