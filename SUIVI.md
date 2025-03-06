@@ -31,3 +31,6 @@
  - (Mathis) 
     * ajout de la fonction needed_monomials + tests
  - (Nazar) fonction pour generer tous les monomes   
+
+ ## 06/03/2025
+- (Mathis) ajout de la fonction create_moment_matrix + tests
