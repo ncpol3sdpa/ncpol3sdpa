@@ -1,6 +1,7 @@
 import sys
 
-import monomial 
+from sympy.polys import monomials
+
 sys.path.append('../src/')
 
 import sympy as sp
@@ -18,7 +19,16 @@ def test_needed_monomials():
     monomials = [1, x, x**2, y, y**2, x*y, x**2*y, x*y**2, x**3, y**3]
     assert(needed_monomials(monomials, rules) == [1, x, y, y**2, x*y, x**2*y, x**3, y**3])
 
-L = [1,2,3]
-def test_create_matrix(L):
+def test_create_matrix():
+    L = [1,2,3]
     assert ( create_matrix([1,2,3]) == [[1, 2, 3], [2, 4, 6], [3, 6, 9]])
-    
+
+def test_create_moment_matrix():
+    x, y = sp.symbols('x y')
+    monomial = [1, x, y]
+    matrix, variable_of_monomial = create_moment_matrix(monomial) 
+    n = len(matrix)
+    assert(
+        matrix == [[variable_of_monomial[monomial[i]*monomial[j]] for i in range(n)] for j in range(n)]
+    )
+
