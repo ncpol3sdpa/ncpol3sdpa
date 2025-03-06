@@ -34,8 +34,23 @@ def create_matrix_of_constraints(L,Q,q):      # L list of all the monomials used
             M[i][j] = (q-Q)(L[i] * L[j]) 
     return M
 
+def create_moment_matrix(monomials):
+    n = len(monomials)
+    variable_of_monomial = {}
+    var = sp.symbols("y0")
+    index_var = 0
+    moment_matrix = [[0 for _ in range(n)] for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            monom = monomials[i]*monomials[j]
+            if monom not in variable_of_monomial:
+                variable_of_monomial[monom] = var 
+                index_var += 1
+                var = sp.symbols("y%i"%index_var)
+            moment_matrix[i][j] = variable_of_monomial[monom]
+    return moment_matrix, variable_of_monomial
 
-     
+
 class MomentMatrix:
 
     def __init__(self, polynom, constraints): 
