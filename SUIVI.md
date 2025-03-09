@@ -31,3 +31,6 @@
  - (Mathis) 
     * ajout de la fonction needed_monomials + tests
  - (Nazar) fonction pour generer tous les monomes   
+
+# 06/03/2025
+ - (Nazar) Ajouter les appels de fonction dans problem.py. ajouter fonction dictionaire dans monmial.py
