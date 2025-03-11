@@ -10,15 +10,16 @@ class Monomial:
 
     def simplify(self): ...
 
-def list_increment(l : List[int], k : int) -> bool:
+def list_increment(degrees : List[int], k : int) -> bool:
 	""" increment l as a base k number. returns True if overflows, False otherwirse """
-	for i,x in enumerate(l):
+	
+	for i,x in enumerate(degrees):
 		if x < k - 1:
-			l[i] += 1
+			degrees[i] += 1
 			return False
 		else:
 			assert(x == k - 1)
-			l[i] = 0
+			degrees[i] = 0
 	return True
 
 def generate_monomials_commutative(symbols : List[Any], relaxation_order : int) -> List[Any]:
@@ -35,7 +36,8 @@ def generate_monomials_commutative(symbols : List[Any], relaxation_order : int) 
 		if sp.total_degree(expr) <= relaxation_order:
 			res.append(expr)
 
-		if list_increment(current_degres, relaxation_order+1): break
+		if list_increment(current_degres, relaxation_order+1): 
+			break
 		
 	return sorted(
 		res, 

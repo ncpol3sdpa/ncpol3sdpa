@@ -1,7 +1,4 @@
 
-from ncpol3sdpa.monomial import *
-from typing import List
-import cvxpy as cp
 import sympy as sp
 
 # return a list of monomials without the monom that lead the equality rules 

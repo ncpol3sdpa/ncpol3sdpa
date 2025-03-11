@@ -1,9 +1,5 @@
 
-from ncpol3sdpa.monomial import *
-from ncpol3sdpa.momentmatrix import *
-from ncpol3sdpa.constraints import *
-from ncpol3sdpa.problem import *
-
+# ruff: noqa: E701
 
 def main():
 
