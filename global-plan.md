@@ -10,8 +10,8 @@ For each variable,
 - add to the moment matrix
 
 Example of simplification:  
-if we get the constraint $X_0^2 - X_0 = 0$
-X_0^2 is not added to the moment matrix
+if we get the constraint $X_0^2 - X_0 = 0$  
+$X_0^2$ is not added to the moment matrix
 
 ## Parts of the package
 
