@@ -1,8 +1,5 @@
-import sys 
-sys.path.append('../src/')
-
 import sympy
-import monomial
+from ncpol3sdpa import monomial
 
 def calculate_number_from_list(l, k):
 	res = 0
