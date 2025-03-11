@@ -32,7 +32,7 @@ def create_matrix_of_constraints(L,Q,q):      # L list of all the monomials used
         M.append(P) 
     for i in range(n):
         for j in range(n):
-            M[i][j] = (q-Q)(L[i] * L[j]) 
+            M[i][j] = (q-Q)*(L[i] * L[j]) 
     return M
 
 # Return a moment matrix whith cvxpy variables 
