@@ -36,3 +36,6 @@
 # 06/03/2025
  - (Nazar) Ajouter les appels de fonction dans problem.py. ajouter fonction dictionaire dans monmial.py
  - (Mathis) ajout de la fonction create_moment_matrix + tests
+
+# 11/03/2025
+- (Nazar et Thomas) première version du solveur utilisant cvxpy
