@@ -18,12 +18,20 @@ You can run the tests by executing the following command:
 uv run pytest
 ```
 
+### Running scripts
+
+You can run a file by executing the following command:
+
+```bash
+uv run hello.py
+```
+
 ### Error Checking
 
 Then, you can check for errors by executing the following command:
 
 ```bash
-uvx ruff format .
+uvx ruff check
 ```
 
 ### Formatting
@@ -32,5 +40,5 @@ Then, you can check for formatting issues by executing the following command:
 
 
 ```bash
-uvx ruff lint .
+uvx ruff format
 ```
