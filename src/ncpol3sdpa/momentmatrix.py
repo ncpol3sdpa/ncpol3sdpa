@@ -4,8 +4,8 @@ import sympy as sp
 # return a list of monomials without the monom that lead the equality rules 
 # ex: needed_monomials([x, x**2], {x : ...}) = [x**2]
 def needed_monomials(monomials, rules):
-        needed_mono = [monomial for monomial in monomials if monomial not in rules.keys()]
-        return needed_mono
+    needed_mono = [monomial for monomial in monomials if monomial not in rules.keys()]
+    return needed_mono
 
 # 
 def create_matrix(L):                           # L list of all the monomials used in the moment matrix

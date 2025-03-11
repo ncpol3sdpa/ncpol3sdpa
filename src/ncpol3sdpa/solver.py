@@ -1,6 +1,4 @@
-from ncpol3sdpa.momentmatrix import *
-from ncpol3sdpa.monomial import *
-from typing import List
+from ncpol3sdpa.momentmatrix import MomentMatrix
 
 class Solver:
 
