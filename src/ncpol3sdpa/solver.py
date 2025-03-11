@@ -5,8 +5,8 @@ from typing import List
 import sympy
 import cvxpy
 
-class Solver:
 
+class Solver:
     @classmethod
     
     def solve(polynome_obj, k : int, moment_matrix : MomentMatrix, list_matrix_positive : list,list_matrix_zero :list):   
@@ -30,7 +30,7 @@ class Solver:
             ki = len(matrix_constraint)
             matrix_constraint_cvxpy = [[0 for _ in range(ki)] for _ in range(ki)]
             for i in range(len(matrix_constraint)):
-                for j in range (len(matrix_constraint)):
+                for j in range(len(matrix_constraint)):
                     d = matrix_constraint[i][j].as_coefficients_dict()
                     for key,value in d.items():
                         matrix_constraint_cvxpy[i][j] += value * sympy_to_cvxpy[key] 
