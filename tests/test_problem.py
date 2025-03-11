@@ -33,4 +33,11 @@ def test_3():
     assert(abs(p.solve(2)) <= 0.1)
     assert(abs(p.solve(3)) <= 0.001)
 
-
+def test_4():
+    obj = x**3
+    c1 = Constraint(False, -x +10)
+    p = Problem(obj)
+    p.add_constraint(c1)
+    assert(abs(p.solve(1)-10) <= 1)
+    assert(abs(p.solve(2)-10) <= 0.1)
+    assert(abs(p.solve(3)-10) <= 0.001)
