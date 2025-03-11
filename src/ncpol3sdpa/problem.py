@@ -1,10 +1,10 @@
-from monomial import Monomial
-from monomial import generate_monomials_commutative
-from equality_constraints import solve_equality_constraints
-from momentmatrix import MomentMatrix
-import momentmatrix
-from solver import Solver
-from constraints import Constraint
+from ncpol3sdpa.monomial import Monomial
+from ncpol3sdpa.monomial import generate_monomials_commutative
+from ncpol3sdpa.equality_constraints import solve_equality_constraints
+from ncpol3sdpa.momentmatrix import MomentMatrix
+from ncpol3sdpa import momentmatrix
+from ncpol3sdpa.solver import Solver
+from ncpol3sdpa.constraints import Constraint
 
 class Problem:
 

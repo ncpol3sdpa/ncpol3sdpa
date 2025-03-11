@@ -1,5 +1,5 @@
 
-from monomial import *
+from ncpol3sdpa.monomial import *
 from typing import List
 import cvxpy as cp
 
