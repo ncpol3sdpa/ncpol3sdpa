@@ -2,45 +2,63 @@ from ncpol3sdpa.momentmatrix import *
 from ncpol3sdpa.monomial import *
 from typing import List
 
+import sympy
 import cvxpy
 
 class Solver:
 
     @classmethod
-    def solve(k : int, moment_matrix : MomentMatrix, list_matrix_positive : list,list_matrix_zero :list):   
-        Y = cvxpy.Variable(k,k)
-        constraints = [Y == Y.T, Y>>0]
+    
+    def solve(polynome_obj, k : int, moment_matrix : MomentMatrix, list_matrix_positive : list,list_matrix_zero :list):   
+        moment_matrix_cvxpy = [[0 for _ in range(k)] for _ in range(k)]
         
-        dict = {}
+        sympy_to_cvxpy = {}
         for i in range(k):
             for j in range (k):
-                if moment_matrix[i][j] not in dict.keys():    
-                    temp = cp.Variable(moment_matrix[i][j].name)
-                    dict[moment_matrix[i][j]] = temp
+                if moment_matrix[i][j] not in sympy_to_cvxpy.keys():    
+                    temp = cvxpy.Variable(moment_matrix[i][j].name)
+                    sympy_to_cvxpy[moment_matrix[i][j]] = temp
                 
-                Y[i,j] = dict[moment_matrix[i][j]]
+                moment_matrix_cvxpy[i][j] = sympy_to_cvxpy[moment_matrix[i][j]]
+        
+        moment_matrix_cvxpy2 = cvxpy.vstack([cvxpy.hstack(row) for row in moment_matrix_cvxpy])
+
+        constraints = [moment_matrix_cvxpy2 == moment_matrix_cvxpy2.T, \
+                       moment_matrix_cvxpy2>>0, moment_matrix_cvxpy2[0,0]== 1]
 
         for matrix_constraint in list_matrix_positive :
-            Z = cvxpy.Variable(len(matrix_constraint),len(matrix_constraint))
-            constraints.append(Z == Z.T, Z>>0)
+            ki = len(matrix_constraint)
+            matrix_constraint_cvxpy = [[0 for _ in range(ki)] for _ in range(ki)]
             for i in range(len(matrix_constraint)):
                 for j in range (len(matrix_constraint)):
                     d = matrix_constraint[i][j].as_coefficients_dict()
                     for key,value in d.items():
-                        Z[i,j] += value * dict[key] 
+                        matrix_constraint_cvxpy[i][j] += value * sympy_to_cvxpy[key] 
+            
+            matrix_constraint_cvxpy2 = cvxpy.vstack([cvxpy.hstack(row) for row in matrix_constraint_cvxpy])
+            constraints.append(matrix_constraint_cvxpy2 == matrix_constraint_cvxpy2.T)
+            constraints.append(matrix_constraint_cvxpy2>>0)
 
+        for matrix_constraint in list_matrix_zero :
+            ki = len(matrix_constraint)
+            for i in range(len(matrix_constraint)):
+                for j in range (len(matrix_constraint)):
+                    d = matrix_constraint[i][j].as_coefficients_dict()
+                    combination = 0
+                    for key,value in d.items():
+                        combination += value * sympy_to_cvxpy[key] 
+                    constraints.append(combination == 0)
 
+                                                                                    
+        d = polynome_obj.as_coefficients_dict()
+        combination = 0
+        for key,value in d.items():
+            combination += value * sympy_to_cvxpy[key] 
 
-                
+        prob = cvxpy.Problem(combination, constraints)
+        prob.solve()
+        print ("status:", prob.status)
+        print("optimal value ", prob.value)
+        print( "optimal var", moment_matrix_cvxpy2.value)
         
-
-
-
-Solver.solve()
-
-m = MomentMatrix()
-n = MomentMatrix()
-
-m * n
-
-print(m)
+        return moment_matrix_cvxpy2.value
