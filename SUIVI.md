@@ -43,3 +43,4 @@
     * correction de logique dans la création des matrices de moments (changement de variable)
     * ajout de test pour le problème finale 
     * aide pour le solveur
+- (Yann) Reformat src. Reformat test. Add mypy and ruff integration details to README; update pyproject.toml for mypy dependency; add new test for typing functionality
