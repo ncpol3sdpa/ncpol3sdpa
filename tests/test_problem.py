@@ -24,3 +24,13 @@ def test_2():
     assert(abs(p.solve(1)) <= 1)
     assert(abs(p.solve(2)) <= 0.1)
     assert(abs(p.solve(3)) <= 0.001)
+
+
+def test_3():
+    obj = -x**2 + 10
+    p = Problem(obj)
+    assert(abs(p.solve(1)) <= 1)
+    assert(abs(p.solve(2)) <= 0.1)
+    assert(abs(p.solve(3)) <= 0.001)
+
+
