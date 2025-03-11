@@ -21,6 +21,7 @@ packages = ["src/ncpol3sdpa"]
 
 [tool.ruff]
 indent-width = 4
+exclude = ["Exercises"]
 
 [tool.ruff.lint]
 ignore = []
