@@ -1,13 +1,9 @@
-import sys
-
 from sympy.polys import monomials
 
-sys.path.append('../src/')
-
 import sympy as sp
-from equality_constraints import *
-from constraints import *
-from momentmatrix import * 
+from ncpol3sdpa.equality_constraints import *
+from ncpol3sdpa.constraints import *
+from ncpol3sdpa.momentmatrix import * 
 
 def test_needed_monomials():
     x, y = sp.symbols('x y')
