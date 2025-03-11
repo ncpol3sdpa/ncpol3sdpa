@@ -1,6 +1,5 @@
 from ncpol3sdpa.problem import *
 from ncpol3sdpa.constraints import *
-import sympy as sp
 from sympy.abc import x, y
 
 def test_1():
