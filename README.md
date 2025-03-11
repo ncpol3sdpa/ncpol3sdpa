@@ -6,6 +6,8 @@ To develop this package, you need to install the `uv` package. You can do this b
 
 ```bash
 pip install uv
+# or
+curl -LsSf https://astral.sh/uv/install.sh | sudo sh
 ```
 
 ### Testing

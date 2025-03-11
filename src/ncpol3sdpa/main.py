@@ -1,8 +1,8 @@
 
-from monomial import *
-from momentmatrix import *
-from constraints import *
-from problem import *
+from ncpol3sdpa.monomial import *
+from ncpol3sdpa.momentmatrix import *
+from ncpol3sdpa.constraints import *
+from ncpol3sdpa.problem import *
 
 
 def main():

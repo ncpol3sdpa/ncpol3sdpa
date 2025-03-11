@@ -1,5 +1,5 @@
-from momentmatrix import *
-from monomial import *
+from ncpol3sdpa.momentmatrix import *
+from ncpol3sdpa.monomial import *
 from typing import List
 
 class Solver:
