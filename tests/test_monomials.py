@@ -10,9 +10,9 @@ def calculate_number_from_list(l, k):
 	return res
 
 def list_increment_on_test_inputs(l, k):
-	assert(type(k)== int)
+	assert(isinstance(k,int))
 	for digit in l:
-		assert(type(digit) == int)
+		assert(isinstance(digit, int))
 		assert(0 <= digit and digit < k)
 	l2 = l.copy()
 	overflow = monomial.list_increment(l2, k)

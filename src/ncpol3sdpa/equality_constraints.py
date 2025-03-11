@@ -1,5 +1,3 @@
-import sympy as sp
-from ncpol3sdpa.constraints import *
 
 
 # return the rule associated to a polynom

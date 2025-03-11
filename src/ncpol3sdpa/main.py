@@ -1,9 +1,7 @@
 
-from ncpol3sdpa.monomial import *
-from ncpol3sdpa.momentmatrix import *
-from ncpol3sdpa.constraints import *
-from ncpol3sdpa.problem import *
-
+class Variable: ...
+class Problem: ...
+class Constraints: ...
 
 def main():
 

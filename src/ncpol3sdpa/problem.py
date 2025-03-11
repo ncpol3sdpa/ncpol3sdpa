@@ -7,6 +7,8 @@ from ncpol3sdpa import momentmatrix
 from ncpol3sdpa.solver import Solver
 from ncpol3sdpa.constraints import Constraint
 import sympy as sp
+
+
 class Problem:
 
     def __init__(self,obj):

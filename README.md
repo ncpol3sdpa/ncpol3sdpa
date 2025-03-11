@@ -28,6 +28,8 @@ uv run hello.py
 
 ### Error Checking
 
+We use `ruff` to check for errors and formatting issues. You can install `ruff` VSCode extension by following the instructions [here](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff).
+
 Then, you can check for errors by executing the following command:
 
 ```bash
