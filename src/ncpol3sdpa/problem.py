@@ -10,20 +10,20 @@ import sympy as sp
 
 
 class Problem:
-
-    def __init__(self,obj):
-
+    def __init__(self, obj):
         self.constraints = []
         self.objective = obj
 
     def add_constraint(self, constraint): ...
-    
+
     def solve(self, relaxation_order: int = 1):
-        """Return the solution of the problem""" 
-        
+        """Return the solution of the problem"""
+
         # 1. Generates all monomials
         # Assumes that no extra symbols in the objectives, for now
-        all_monomials = generate_monomials_commutative(self.objective.free_symbols, relaxation_order)
+        all_monomials = generate_monomials_commutative(
+            self.objective.free_symbols, relaxation_order
+        )
 
         # 2. Substitute the equality constraints
         #        - equality_constraints.py ?
@@ -31,7 +31,9 @@ class Problem:
 
         # 3. Build the moment matrix
         #        - momentmatrix.py
-        moment_matrix, variable_of_monomial = momentmatrix.create_moment_matrix(all_monomials)
+        moment_matrix, variable_of_monomial = momentmatrix.create_moment_matrix(
+            all_monomials
+        )
 
         # 4. Build constraints matrices
         #        - momentmatrix.py
@@ -39,10 +41,14 @@ class Problem:
             momentmatrix.create_matrix_constraints(
                 variable_of_monomial,
                 generate_monomials_commutative(
-                    self.objective.free_symbols, int(relaxation_order-(sp.total_degree(self.constraints[i].polynom)/2))
-                ), 
-                self.constraints[i].polynom
-            ) 
+                    self.objective.free_symbols,
+                    int(
+                        relaxation_order
+                        - (sp.total_degree(self.constraints[i].polynom) / 2)
+                    ),
+                ),
+                self.constraints[i].polynom,
+            )
             for i in range(len(self.constraints))
         ]
 
