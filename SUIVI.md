@@ -39,3 +39,7 @@
 
 # 11/03/2025
 - (Nazar et Thomas) première version du solveur utilisant cvxpy
+- (Mathis) 
+    * correction de logique dans la création des matrices de moments (changement de variable)
+    * ajout de test pour le problème finale 
+    * aide pour le solveur
