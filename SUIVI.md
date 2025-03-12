@@ -44,3 +44,6 @@
     * ajout de test pour le problème finale 
     * aide pour le solveur
 - (Yann) Reformat src. Reformat test. Add mypy and ruff integration details to README; update pyproject.toml for mypy dependency; add new test for typing functionality
+
+# 12/03/2024
+- (Mathis) ajout de test pour la partie solver.py
