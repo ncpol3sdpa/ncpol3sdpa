@@ -9,7 +9,7 @@ import cvxpy
 class Solver:
     @classmethod
     
-    def solve(polynome_obj, k : int, moment_matrix : MomentMatrix, list_matrix_positive : list,list_matrix_zero :list):   
+    def solve(cls, polynome_obj, k : int, moment_matrix, list_matrix_positive : list,list_matrix_zero :list):   
         moment_matrix_cvxpy = [[0 for _ in range(k)] for _ in range(k)]
         
         sympy_to_cvxpy = {}
