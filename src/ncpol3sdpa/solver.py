@@ -15,8 +15,8 @@ class Solver:
         sympy_to_cvxpy = {}
         for i in range(k):
             for j in range (k):
-                if moment_matrix[i][j] not in sympy_to_cvxpy.keys():    
-                    temp = cvxpy.Variable(moment_matrix[i][j].name)
+                if moment_matrix[i][j] not in sympy_to_cvxpy.keys():                
+                    temp = cvxpy.Variable(name=moment_matrix[i][j].name)
                     sympy_to_cvxpy[moment_matrix[i][j]] = temp
                 
                 moment_matrix_cvxpy[i][j] = sympy_to_cvxpy[moment_matrix[i][j]]
@@ -54,11 +54,7 @@ class Solver:
         combination = 0
         for key,value in d.items():
             combination += value * sympy_to_cvxpy[key] 
-
-        prob = cvxpy.Problem(combination, constraints)
+        obj = cvxpy.Maximize(combination)
+        prob = cvxpy.Problem(obj, constraints)
         prob.solve()
-        print ("status:", prob.status)
-        print("optimal value ", prob.value)
-        print( "optimal var", moment_matrix_cvxpy2.value)
-        
-        return moment_matrix_cvxpy2.value
+        return prob.value
