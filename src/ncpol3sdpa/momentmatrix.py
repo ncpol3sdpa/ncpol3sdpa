@@ -43,7 +43,7 @@ def create_moment_matrix(monomials):
     n = len(monomials)
     variable_of_monomial = {}
     index_var = 0
-    var = sp.symbols("y%index_var" % index_var)
+    var = sp.symbols("y%d" % index_var)
     moment_matrix = [[0 for _ in range(n)] for _ in range(n)]
     for i in range(n):
         for j in range(n):
@@ -51,7 +51,7 @@ def create_moment_matrix(monomials):
             if monom not in variable_of_monomial:
                 variable_of_monomial[monom] = var
                 index_var += 1
-                var = sp.symbols("y%index_var" % index_var)
+                var = sp.symbols("y%d" % index_var)
             moment_matrix[i][j] = variable_of_monomial[monom]
     return moment_matrix, variable_of_monomial
 
