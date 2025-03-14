@@ -1,5 +1,8 @@
 # return the rule associated to a polynom
 # exemple : rule_of_constraint(x²-x-1=0) = (x², x+1) because the rule is x² -> x+1
+from sympy.ntheory import qs
+from sympy import rem
+
 def rule_of_constraint(constraint):
     polynom = constraint.polynom.terms()  # express polynom as a list of monom
 
@@ -36,5 +39,13 @@ def rules_of_constraints(constraints):
         rules[leader_monomial] = polynom
     return rules
 
+def apply_rule(monom, rules):
+    print("RULES 2", rules)
+    for key in rules.keys():
+        if rem(key, monom) == 0:
+            monom = monom*rules[key]/key 
+            monom = apply_rule(monom, rules) 
+            return monom 
+    return monom
 
 def solve_equality_constraints(): ...

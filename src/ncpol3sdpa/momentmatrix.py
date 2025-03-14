@@ -1,5 +1,7 @@
 import sympy as sp
 
+from ncpol3sdpa.equality_constraints import apply_rule
+
 
 # return a list of monomials without the monom that lead the equality rules
 # ex: needed_monomials([x, x**2], {x : ...}) = [x**2]
@@ -39,7 +41,7 @@ def create_matrix_of_constraints(
 
 
 # Return a moment matrix whith cvxpy variables
-def create_moment_matrix(monomials):
+def create_moment_matrix(monomials, rules):
     n = len(monomials)
     variable_of_monomial = {}
     index_var = 0
@@ -47,7 +49,8 @@ def create_moment_matrix(monomials):
     moment_matrix = [[0 for _ in range(n)] for _ in range(n)]
     for i in range(n):
         for j in range(n):
-            monom = monomials[i] * monomials[j]
+            print("RULES", rules)
+            monom = apply_rule(monomials[i] * monomials[j], rules)
             if monom not in variable_of_monomial:
                 variable_of_monomial[monom] = var
                 index_var += 1

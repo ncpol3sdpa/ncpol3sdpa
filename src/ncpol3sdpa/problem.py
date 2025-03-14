@@ -3,26 +3,27 @@ from sympy.ntheory import generate
 
 from ncpol3sdpa import momentmatrix
 from ncpol3sdpa.constraints import Constraint
-from ncpol3sdpa.equality_constraints import solve_equality_constraints
+from ncpol3sdpa.equality_constraints import (rule_of_constraint, rules_of_constraints,
+                                             solve_equality_constraints)
 from ncpol3sdpa.momentmatrix import MomentMatrix
 from ncpol3sdpa.monomial import Monomial, generate_monomials_commutative
 from ncpol3sdpa.solver import Solver
 
 
-
 def polynom_linearized(variable_of_monomial, polynom):
     dict_monoms = polynom.as_coefficients_dict()
-    combination = 0 
-    for key,value in dict_monoms.items():
+    combination = 0
+    for key, value in dict_monoms.items():
         combination += value * variable_of_monomial[key]
     return combination
+
 
 class Problem:
     def __init__(self, obj):
         self.constraints = []
         self.objective = obj
 
-    def add_constraint(self, constraint): 
+    def add_constraint(self, constraint):
         self.constraints.append(constraint)
 
     def solve(self, relaxation_order: int = 1):
@@ -30,9 +31,18 @@ class Problem:
 
         # 1. Generates all monomials
         # Assumes that no extra symbols in the objectives, for now
+        all_symbols = self.objective.free_symbols
+
         all_monomials = generate_monomials_commutative(
             self.objective.free_symbols, relaxation_order
         )
+
+        rules = rules_of_constraints([constraint for constraint in self.constraints if constraint.substitution])
+
+
+        for monom in rules:
+            if monom in all_symbols:
+                all_symbols.remove(monom)
 
         # 2. Substitute the equality constraints
         #        - equality_constraints.py ?
@@ -41,7 +51,7 @@ class Problem:
         # 3. Build the moment matrix
         #        - momentmatrix.py
         moment_matrix, variable_of_monomial = momentmatrix.create_moment_matrix(
-            all_monomials
+            all_monomials, rules
         )
 
         # 4. Build constraints matrices
@@ -77,10 +87,14 @@ class Problem:
         ]
 
         poly_obj = polynom_linearized(variable_of_monomial, self.objective)
-        
-      
+
         # 5. Solve the SDP (Solver.solve)
         #        - solver.py
         # CF ex3_cvxpy.py
-        return Solver.solve(poly_obj, len(moment_matrix), moment_matrix, constraint_maricies_positiv, constraint_maricies_equal)
-
+        return Solver.solve(
+            poly_obj,
+            len(moment_matrix),
+            moment_matrix,
+            constraint_maricies_positiv,
+            constraint_maricies_equal,
+        )
