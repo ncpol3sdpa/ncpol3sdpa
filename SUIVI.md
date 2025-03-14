@@ -49,3 +49,7 @@
 - (Mathis) 
     * ajout de test pour la partie solver.py
     * debug de solver.py
+
+# 14/03/2024
+ - (Mathis)
+    * debug de problem.py
