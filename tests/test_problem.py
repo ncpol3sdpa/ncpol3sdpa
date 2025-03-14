@@ -28,9 +28,9 @@ def test_2():
 def test_3():
     obj = -x**2 + 10
     p = Problem(obj)
-    assert(abs(p.solve(1)) <= 1)
-    assert(abs(p.solve(2)) <= 0.1)
-    assert(abs(p.solve(3)) <= 0.001)
+    assert(abs(p.solve(1)-10) <= 1)
+    assert(abs(p.solve(2)-10) <= 0.1)
+    assert(abs(p.solve(3)-10) <= 0.001)
 
 def test_4():
     obj = x**3
@@ -40,3 +40,5 @@ def test_4():
     assert(abs(p.solve(1)-10) <= 1)
     assert(abs(p.solve(2)-10) <= 0.1)
     assert(abs(p.solve(3)-10) <= 0.001)
+
+test_1()
