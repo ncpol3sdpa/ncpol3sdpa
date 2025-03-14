@@ -41,4 +41,3 @@ def test_4():
     assert(abs(p.solve(2)-10) <= 0.1)
     assert(abs(p.solve(3)-10) <= 0.001)
 
-test_1()
