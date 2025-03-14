@@ -53,3 +53,4 @@
 # 14/03/2024
  - (Mathis)
     * debug de problem.py
+    * ajout de la substitution dans le code général (ne marche pas mais ne créer pas d'autre bug (on peut ne pas activer les substitutions))
