@@ -1,3 +1,4 @@
+from sympy import substitution
 from ncpol3sdpa.problem import *
 from ncpol3sdpa.constraints import *
 from sympy.abc import x, y
@@ -34,7 +35,7 @@ def test_3():
 
 def test_4():
     obj = x**3
-    c1 = Constraint(False, -x +10)
+    c1 = Constraint(False, -x +10, substitution=True) # test with substitution
     p = Problem(obj)
     p.add_constraint(c1)
     assert(abs(p.solve(1)-10) <= 1)

@@ -1,12 +1,10 @@
 # from sympy.polys import monomials
 import sympy as sp
-from ncpol3sdpa.equality_constraints import rules_of_constraints
+
 from ncpol3sdpa.constraints import Constraint
-from ncpol3sdpa.momentmatrix import (
-    needed_monomials,
-    create_matrix,
-    create_moment_matrix,
-)
+from ncpol3sdpa.equality_constraints import rules_of_constraints
+from ncpol3sdpa.momentmatrix import (create_matrix, create_moment_matrix,
+                                     needed_monomials)
 
 
 def test_needed_monomials():
@@ -36,7 +34,7 @@ def test_create_matrix():
 def test_create_moment_matrix():
     x, y = sp.symbols("x y")
     monomial = [1, x, y]
-    matrix, variable_of_monomial = create_moment_matrix(monomial)
+    matrix, variable_of_monomial = create_moment_matrix(monomial, {})
     n = len(matrix)
     assert matrix == [
         [variable_of_monomial[monomial[i] * monomial[j]] for i in range(n)]
