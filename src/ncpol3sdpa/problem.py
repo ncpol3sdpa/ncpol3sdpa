@@ -22,7 +22,8 @@ class Problem:
         self.constraints = []
         self.objective = obj
 
-    def add_constraint(self, constraint): ...
+    def add_constraint(self, constraint): 
+        self.constraints.append(constraint)
 
     def solve(self, relaxation_order: int = 1):
         """Return the solution of the problem"""
@@ -46,7 +47,7 @@ class Problem:
         # 4. Build constraints matrices
         #        - momentmatrix.py
         constraint_maricies_equal = [
-            momentmatrix.create_matrix_constraints(
+            momentmatrix.create_matrix_constraint(
                 variable_of_monomial,
                 generate_monomials_commutative(
                     self.objective.free_symbols,
@@ -58,11 +59,10 @@ class Problem:
                 self.constraints[i].polynom,
             )
             for i in range(len(self.constraints))
-            if self.constraints[i].equal_constraint
         ]
 
         constraint_maricies_positiv = [
-            momentmatrix.create_matrix_constraints(
+            momentmatrix.create_matrix_constraint(
                 variable_of_monomial,
                 generate_monomials_commutative(
                     self.objective.free_symbols,
@@ -74,15 +74,13 @@ class Problem:
                 self.constraints[i].polynom,
             )
             for i in range(len(self.constraints))
-            if (not self.constraints[i].equal_constraint)
         ]
 
         poly_obj = polynom_linearized(variable_of_monomial, self.objective)
-
-
+        
+      
         # 5. Solve the SDP (Solver.solve)
         #        - solver.py
         # CF ex3_cvxpy.py
-        print(moment_matrix)
         return Solver.solve(poly_obj, len(moment_matrix), moment_matrix, constraint_maricies_positiv, constraint_maricies_equal)
 
