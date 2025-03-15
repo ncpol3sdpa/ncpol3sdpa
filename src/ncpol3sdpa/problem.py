@@ -11,7 +11,7 @@ from ncpol3sdpa.monomial import Monomial, generate_monomials_commutative
 from ncpol3sdpa.solver import Solver
 
 
-def polynom_linearized(variable_of_monomial, polynom):
+def polynom_linearized(variable_of_monomial, polynom : sp.Poly):
     dict_monoms = polynom.expand().as_coefficients_dict()
     combination = 0
     for key, value in dict_monoms.items():
@@ -52,7 +52,7 @@ class Problem:
 
         # 3. Build the moment matrix
         #        - momentmatrix.py
-        moment_matrix, variable_of_monomial = momentmatrix.create_moment_matrix(
+        moment_matrix, variable_of_monomial = momentmatrix.create_moment_matrix_cvxpy(
             all_monomials, rules
         )
 
@@ -63,7 +63,7 @@ class Problem:
         # 4. Build constraints matrices
         #        - momentmatrix.py
         constraint_maricies_equal = [
-            momentmatrix.create_matrix_constraint(
+            momentmatrix.create_constraints_matrix_cvxpy(
                 variable_of_monomial,
                 generate_monomials_commutative(
                     self.objective.free_symbols,
@@ -80,7 +80,7 @@ class Problem:
         ]
 
         constraint_maricies_positiv = [
-            momentmatrix.create_matrix_constraint(
+            momentmatrix.create_constraints_matrix_cvxpy(
                 variable_of_monomial,
                 generate_monomials_commutative(
                     self.objective.free_symbols,

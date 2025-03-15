@@ -3,8 +3,8 @@ import sympy as sp
 
 from ncpol3sdpa.constraints import Constraint
 from ncpol3sdpa.equality_constraints import rules_of_constraints
-from ncpol3sdpa.momentmatrix import (create_matrix, create_moment_matrix,
-                                     needed_monomials)
+from ncpol3sdpa.momentmatrix import (
+    create_moment_matrix, create_moment_matrix_cvxpy, needed_monomials)
 
 
 def test_needed_monomials():
@@ -27,14 +27,14 @@ def test_needed_monomials():
     ]
 
 
-def test_create_matrix():
-    assert create_matrix([1, 2, 3]) == [[1, 2, 3], [2, 4, 6], [3, 6, 9]]
-
-
 def test_create_moment_matrix():
+    assert create_moment_matrix([1, 2, 3]) == [[1, 2, 3], [2, 4, 6], [3, 6, 9]]
+
+
+def test_create_moment_matrix_cvxpy():
     x, y = sp.symbols("x y")
     monomial = [1, x, y]
-    matrix, variable_of_monomial = create_moment_matrix(monomial, {})
+    matrix, variable_of_monomial = create_moment_matrix_cvxpy(monomial, {})
     n = len(matrix)
     assert matrix == [
         [variable_of_monomial[monomial[i] * monomial[j]] for i in range(n)]
