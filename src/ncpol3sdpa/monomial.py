@@ -48,7 +48,7 @@ def generate_monomials_commutative(
         ),
     )
 
-
+# TODO : replace Any by a generic type
 def create_backward_dictionary(monomials: List[Any]) -> Dict[Any, int]:
     """from a list int -> monomal, create a backwards dictionary monomail -> int, that is the inverse.
     forall i in [| 0..len(monomials) |[, list[dictionary[i]] = i
