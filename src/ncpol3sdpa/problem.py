@@ -76,7 +76,7 @@ class Problem:
                 rules,
             )
             for i in range(len(self.constraints))
-            if self.constraints[i].equal_constraint and (not self.constraints[i].substitution)
+            if self.constraints[i].is_equality_constraint and (not self.constraints[i].substitution)
         ]
 
         constraint_maricies_positiv = [
@@ -93,7 +93,7 @@ class Problem:
                 rules,
             )
             for i in range(len(self.constraints))
-            if not self.constraints[i].equal_constraint
+            if not self.constraints[i].is_equality_constraint
         ]
         
 

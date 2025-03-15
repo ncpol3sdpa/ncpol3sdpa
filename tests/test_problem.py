@@ -7,8 +7,8 @@ from sympy.abc import x, y
 def test_1():
     obj = 2*x*y
     p = Problem(obj)
-    c1 = Constraint(True, x*x-x)
-    c2 = Constraint(False, -y*y + y + 0.25)
+    c1 = Constraint.EqualityConstraint(x*x-x)
+    c2 = Constraint.InequalityConstraint(-y*y + y + 0.25)
     p.add_constraint(c1)
     p.add_constraint(c2)
     assert(abs(p.solve(1) - 2.4142) <= 0.01)
@@ -39,7 +39,7 @@ def test_3():
 Issue with cvxpy ??
 def test_4():
     obj = y*(-x**2 + 2)
-    c1 = Constraint(True, y - 10, substitution=False)
+    c1 = Constraint.EqualityConstraint(y - 10, substitution=False)
     p = Problem(obj)
     p.add_constraint(c1)
     assert(abs(p.solve(2)-20) <= 0.1)
@@ -49,8 +49,8 @@ def test_4():
 def test_1_sub():
     obj = 2*x*y
     p = Problem(obj)
-    c1 = Constraint(True, x*x-x, substitution=True)
-    c2 = Constraint(False, -y*y + y + 0.25)
+    c1 = Constraint.EqualityConstraint(x*x-x, substitution=True)
+    c2 = Constraint.EqualityConstraint(-y*y + y + 0.25)
     p.add_constraint(c1)
     p.add_constraint(c2)
     assert(abs(p.solve(1) - 2.4142) <= 0.01)

@@ -11,8 +11,8 @@ def test_needed_monomials():
     x, y = sp.symbols("x y")
     pol1 = sp.poly(x**2 - x - 1)
     pol2 = sp.poly(3 * x * y**2 - 6 * x**2 + 12 * y)
-    c1 = Constraint(True, pol1)
-    c2 = Constraint(True, pol2)
+    c1 = Constraint.EqualityConstraint(pol1)
+    c2 = Constraint.EqualityConstraint(pol2)
     rules = rules_of_constraints([c1, c2])
     monomials_list = [1, x, x**2, y, y**2, x * y, x**2 * y, x * y**2, x**3, y**3]
     assert needed_monomials(monomials_list, rules) == [

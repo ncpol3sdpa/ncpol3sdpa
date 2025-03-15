@@ -6,7 +6,7 @@ def test_1():
 
 
 def test_2():
-    c = Constraint(None, None)
+    c = Constraint.EqualityConstraint(None)
 
     assert c is not None
 
