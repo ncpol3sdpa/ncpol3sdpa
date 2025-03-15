@@ -3,7 +3,8 @@ from sympy.ntheory import generate
 
 from ncpol3sdpa import momentmatrix
 from ncpol3sdpa.constraints import Constraint
-from ncpol3sdpa.equality_constraints import (rule_of_constraint, rules_of_constraints,
+from ncpol3sdpa.equality_constraints import (rule_of_constraint,
+                                             rules_of_constraints,
                                              solve_equality_constraints)
 from ncpol3sdpa.momentmatrix import MomentMatrix
 from ncpol3sdpa.monomial import Monomial, generate_monomials_commutative
@@ -11,7 +12,7 @@ from ncpol3sdpa.solver import Solver
 
 
 def polynom_linearized(variable_of_monomial, polynom):
-    dict_monoms = polynom.as_coefficients_dict()
+    dict_monoms = polynom.expand().as_coefficients_dict()
     combination = 0
     for key, value in dict_monoms.items():
         combination += value * variable_of_monomial[key]
@@ -37,12 +38,13 @@ class Problem:
             self.objective.free_symbols, relaxation_order
         )
 
-        rules = rules_of_constraints([constraint for constraint in self.constraints if constraint.substitution])
-
+        rules = rules_of_constraints(
+            [constraint for constraint in self.constraints if constraint.substitution]
+        )
 
         for monom in rules:
-            if monom in all_symbols:
-                all_symbols.remove(monom)
+            if monom in all_monomials:
+                all_monomials.remove(monom)
 
         # 2. Substitute the equality constraints
         #        - equality_constraints.py ?
@@ -53,6 +55,10 @@ class Problem:
         moment_matrix, variable_of_monomial = momentmatrix.create_moment_matrix(
             all_monomials, rules
         )
+
+        print(rules)
+        print(variable_of_monomial)
+        print(moment_matrix)
 
         # 4. Build constraints matrices
         #        - momentmatrix.py
@@ -67,8 +73,10 @@ class Problem:
                     ),
                 ),
                 self.constraints[i].polynom,
+                rules,
             )
             for i in range(len(self.constraints))
+            if self.constraints[i].equal_constraint
         ]
 
         constraint_maricies_positiv = [
@@ -82,9 +90,13 @@ class Problem:
                     ),
                 ),
                 self.constraints[i].polynom,
+                rules,
             )
             for i in range(len(self.constraints))
+            if not self.constraints[i].equal_constraint
         ]
+        
+
 
         poly_obj = polynom_linearized(variable_of_monomial, self.objective)
 

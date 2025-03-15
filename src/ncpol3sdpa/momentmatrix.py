@@ -49,7 +49,6 @@ def create_moment_matrix(monomials, rules):
     moment_matrix = [[0 for _ in range(n)] for _ in range(n)]
     for i in range(n):
         for j in range(n):
-            print("RULES", rules)
             monom = apply_rule(monomials[i] * monomials[j], rules)
             if monom not in variable_of_monomial:
                 variable_of_monomial[monom] = var
@@ -60,12 +59,12 @@ def create_moment_matrix(monomials, rules):
 
 
 # return the matrix of contraint with cvxpy variables
-def create_matrix_constraint(variable_of_monomial, monomials, polynom):
+def create_matrix_constraint(variable_of_monomial, monomials, polynom, rules):
     n = len(monomials)
     matrix = [[0 for _ in range(n)] for _ in range(n)]
     for i in range(n):
         for j in range(n):
-            moment_coeff = monomials[i] * monomials[j] * polynom
+            moment_coeff = apply_rule(monomials[i] * monomials[j] * polynom, rules)
             coeff_terms = [
                 (coeff, term)
                 for term, coeff in sp.expand(moment_coeff)
