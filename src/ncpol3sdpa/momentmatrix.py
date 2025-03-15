@@ -5,7 +5,7 @@ from ncpol3sdpa.equality_constraints import apply_rule, apply_rule_to_polynom
 
 
 
-def needed_monomials(monomials, rules):
+def needed_monomials(monomials : List[sp.Poly], rules : Dict[sp.Poly, Any]) -> List[sp.Poly]:
     """Filter the monomials according to the rules"""
     # ex: needed_monomials([x, x**2], {x : ...}) = [x**2]
     return [
@@ -48,7 +48,7 @@ def create_moment_matrix_cvxpy(
 
     for i, monom1 in enumerate(monomials):
         for j, monom2 in enumerate(monomials):
-            monom = apply_rule(monom1 * monom2, rules)
+            monom : sp.Poly = apply_rule(monom1 * monom2, rules)
             if monom not in variable_of_monomial:
                 variable_of_monomial[monom] = sp.symbols(f"y{index_var}")
                 index_var += 1
@@ -70,7 +70,7 @@ def create_constraints_matrix_cvxpy(
 
     for i, monom1 in enumerate(monomials):
         for j, monom2 in enumerate(monomials):
-            moment_coeff = apply_rule_to_polynom(monom1 * monom2 * polynom, rules)
+            moment_coeff : sp.Poly = apply_rule_to_polynom(monom1 * monom2 * polynom, rules)
             constraints_dict = sp.expand(moment_coeff).as_coefficients_dict()
             for term, coeff in constraints_dict.items():
                 matrix[i][j] += coeff * variable_of_monomial[term]
