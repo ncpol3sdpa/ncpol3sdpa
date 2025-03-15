@@ -48,4 +48,11 @@ def apply_rule(monom, rules):
             return apply_rule(monom*rules[key]/key, rules) 
     return monom
 
+def apply_rule_to_polynom(polynom, rules):
+    poly_dict = polynom.as_coefficients_dict()
+    res = 0
+    for monom,coeff in poly_dict.items():
+        res += coeff*apply_rule(monom, rules)
+    return res
+
 def solve_equality_constraints(): ...

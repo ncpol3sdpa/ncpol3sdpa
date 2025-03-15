@@ -1,6 +1,6 @@
 import sympy as sp
 
-from ncpol3sdpa.equality_constraints import apply_rule
+from ncpol3sdpa.equality_constraints import apply_rule, apply_rule_to_polynom
 
 
 # return a list of monomials without the monom that lead the equality rules
@@ -64,7 +64,7 @@ def create_matrix_constraint(variable_of_monomial, monomials, polynom, rules):
     matrix = [[0 for _ in range(n)] for _ in range(n)]
     for i in range(n):
         for j in range(n):
-            moment_coeff = apply_rule(monomials[i] * monomials[j] * polynom, rules)
+            moment_coeff = apply_rule_to_polynom(monomials[i] * monomials[j] * polynom, rules)
             coeff_terms = [
                 (coeff, term)
                 for term, coeff in sp.expand(moment_coeff)
