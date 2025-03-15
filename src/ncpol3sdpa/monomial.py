@@ -1,14 +1,16 @@
-import sympy as sp
+from __future__ import annotations
 from functools import cmp_to_key
-from typing import List, Dict, Any
-
+from typing import List, Dict, Any, TypeVar
+import sympy as sp
 
 class Monomial:
-    def __init__(self): ...
+    def __init__(self) -> None: ...
 
-    def __add__(self, other): ...
+    def __add__(self, other: Monomial) -> Monomial:
+        raise NotImplementedError
 
-    def simplify(self): ...
+    def simplify(self) -> None: ...
+
 
 
 def list_increment(degrees: List[int], k: int) -> bool:
@@ -48,13 +50,9 @@ def generate_monomials_commutative(
         ),
     )
 
-# TODO : replace Any by a generic type
-def create_backward_dictionary(monomials: List[Any]) -> Dict[Any, int]:
-    """from a list int -> monomal, create a backwards dictionary monomail -> int, that is the inverse.
-    forall i in [| 0..len(monomials) |[, list[dictionary[i]] = i
-    and
-    forall monomial in monomials, dictionary[list[monomial]] = monomial"""
-    res = {}
-    for i, monomial in enumerate(monomials):
-        res[monomial] = i
-    return res
+T = TypeVar("T")
+def create_backward_dictionary(monomials: List[T]) -> Dict[T, int]:
+    """returns a dictionary that maps monomials to their index in the list"""
+    return {
+        monomial: i for i, monomial in enumerate(monomials)
+    }

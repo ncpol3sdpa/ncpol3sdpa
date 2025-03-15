@@ -1,7 +1,7 @@
-
+import sympy as sp
 
 class Constraint:
-    def __init__(self, equal_constraint, polynom, substitution=False):
+    def __init__(self, equal_constraint : bool, polynom : sp.Poly, substitution : bool = False) -> None:
         """ 
         equal_constraint : boolean indicating whether the constraint is >= or ==
         polynom : sympy polynom

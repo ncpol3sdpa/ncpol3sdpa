@@ -1,7 +1,7 @@
-from numpy import format_float_scientific
-from sympy import substitution, Poly
-from ncpol3sdpa.problem import *
-from ncpol3sdpa.constraints import *
+# from numpy import format_float_scientific
+# from sympy import substitution, Poly
+from ncpol3sdpa.problem import Problem
+from ncpol3sdpa.constraints import Constraint
 from sympy.abc import x, y
 
 def test_1():
