@@ -3,7 +3,7 @@ from typing import List, Dict, Any
 import sympy as sp
 # from sympy.ntheory import generate
 
-from ncpol3sdpa.equality_constraints import rules_of_constraints
+from ncpol3sdpa.rules import Rule
 from ncpol3sdpa.momentmatrix import create_moment_matrix_cvxpy, create_constraints_matrix_cvxpy
 from ncpol3sdpa.monomial import generate_monomials_commutative
 from ncpol3sdpa.solver import Solver
@@ -43,7 +43,7 @@ class Problem:
             all_symbols, relaxation_order
         )
 
-        rules = rules_of_constraints([
+        rules = Rule.of_constraints([
             constraint 
             for constraint in self.constraints 
             if constraint.substitution
@@ -54,7 +54,7 @@ class Problem:
                 all_monomials.remove(monom)
 
         # 2. Substitute the equality constraints
-        #        - equality_constraints.py ?
+        #        - rules.py ?
         # skip for now, we create constraint matrix = 0 for now
 
         # 3. Build the moment matrix

@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import List, Tuple, Dict, Any
 import sympy as sp
-from ncpol3sdpa.equality_constraints import apply_rule, apply_rule_to_polynom
+from ncpol3sdpa.rules import apply_rule, apply_rule_to_polynom
 
 
 

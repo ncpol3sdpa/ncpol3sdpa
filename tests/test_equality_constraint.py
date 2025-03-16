@@ -1,6 +1,6 @@
 import sympy as sp
 from ncpol3sdpa.constraints import Constraint
-from ncpol3sdpa.equality_constraints import rule_of_constraint, rules_of_constraints, apply_rule
+from ncpol3sdpa.rules import Rule, apply_rule
 
 
 def test_rule_of_constraint():
@@ -11,9 +11,9 @@ def test_rule_of_constraint():
     c1 = Constraint.EqualityConstraint(pol1)
     c2 = Constraint.EqualityConstraint(pol2)
     c3 = Constraint.EqualityConstraint(pol3)
-    assert rule_of_constraint(c1) == [x**2, x + 1]
-    assert rule_of_constraint(c2) == [x * y**2, 2 * x**2 - 4 * y]
-    assert rule_of_constraint(c3) == [x, 2]
+    assert Rule._of_constraint(c1) == (x**2, x + 1)
+    assert Rule._of_constraint(c2) == (x * y**2, 2 * x**2 - 4 * y)
+    assert Rule._of_constraint(c3) == (x, 2)
 
 
 def test_rules_of_constraints():
@@ -22,7 +22,7 @@ def test_rules_of_constraints():
     pol2 = sp.poly(3 * x * y**2 - 6 * x**2 + 12 * y)
     c1 = Constraint.EqualityConstraint(pol1)
     c2 = Constraint.EqualityConstraint(pol2)
-    assert rules_of_constraints([c1, c2]) == {x**2: x + 1, x * y**2: 2 * x**2 - 4 * y}
+    assert Rule.of_constraints([c1, c2]) == {x**2: x + 1, x * y**2: 2 * x**2 - 4 * y}
 
 def test_apply_rule():
     x, y = sp.symbols("x y")

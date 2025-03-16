@@ -1,45 +1,46 @@
-# return the rule associated to a polynom
-# exemple : rule_of_constraint(x²-x-1=0) = (x², x+1) because the rule is x² -> x+1
-# from sympy.ntheory import qs
-from sympy import rem, poly, Symbol
-from typing import List, Dict, Any
+from __future__ import annotations
+from typing import List, Tuple, Dict, Any
 from ncpol3sdpa.constraints import Constraint
+from sympy import rem, poly, Symbol
+# from sympy.ntheory import qs
 
-def rule_of_constraint(constraint : Constraint) -> List[Any]:
+class Rule:
 
-    polynom = poly(constraint.polynom).terms()  # express polynom as a list of monom
+    @classmethod
+    def _of_constraint(cls, constraint : Constraint) -> Tuple[Any]:
+        """Private methode creating a Tuple of equivalence"""
 
-    max_degree = (
-        poly(constraint.polynom).total_degree()
-    )  # degree of the polynom seen as a multivariable polynom
+        # express polynom as a list of monom
+        polynom = poly(constraint.polynom).terms()  
 
-    leader_monomials = [
-        monom for monom in polynom if sum(monom[0]) == max_degree
-    ]  # list of monom that maximize the degree of the polynom
+        leader_monomial = max(polynom,key=lambda monom : sum(monom[0]))
 
-    leader_monomial = leader_monomials[0]
+        # leader_monom expressed with variables
+        leader_monomial_expressed = 1  
+        for monom_index in range(len(poly(constraint.polynom).gens)):
+            leader_monomial_expressed *= (
+                poly(constraint.polynom).gens[monom_index] ** leader_monomial[0][monom_index]
+            )
 
-    leader_monomial_expressed = 1  # leader_monom expressed with variables
-    for monom_index in range(len(poly(constraint.polynom).gens)):
-        leader_monomial_expressed *= (
-            poly(constraint.polynom).gens[monom_index] ** leader_monomial[0][monom_index]
+        # rewriting the constraint as a rule
+        polynom_without_leader = constraint.polynom  
+        polynom_without_leader /= leader_monomial[1]
+        polynom_without_leader -= leader_monomial_expressed
+        polynom_without_leader *= -1
+
+        return (
+            leader_monomial_expressed.as_expr(), 
+            polynom_without_leader.as_expr()
         )
 
-    polynom_without_leader = constraint.polynom  # rewriting the constraint as a rule
-    polynom_without_leader /= leader_monomial[1]
-    polynom_without_leader -= leader_monomial_expressed
-    polynom_without_leader *= -1
-
-    return [leader_monomial_expressed.as_expr(), polynom_without_leader.as_expr()]
-
-
-def rules_of_constraints(constraints : List[Constraint]) -> Dict[Symbol, Any]:
-    """return the rules that represent a list of constraint
-    exemple : rules_of_constraints([x²-x-1=0, x*y²+3=0]) = {x²->x+1, x*y²->-3}"""
-    return dict([
-        rule_of_constraint(constraint) 
-        for constraint in constraints
-    ])
+    @classmethod
+    def of_constraints(cls, constraints : List[Constraint]) -> Dict[Symbol, Any]:
+        """return the rules that represent a list of constraint
+        exemple : of_constraints([x²-x-1=0, x*y²+3=0]) = {x²->x+1, x*y²->-3}"""
+        return dict([
+            Rule._of_constraint(constraint) 
+            for constraint in constraints
+        ])
 
 def apply_rule(monom, rules):
     for key in rules.keys():

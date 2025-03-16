@@ -2,18 +2,20 @@
 import sympy as sp
 
 from ncpol3sdpa.constraints import Constraint
-from ncpol3sdpa.equality_constraints import rules_of_constraints
+from ncpol3sdpa.rules import Rule
 from ncpol3sdpa.momentmatrix import (
-    create_moment_matrix, create_moment_matrix_cvxpy, needed_monomials)
+    create_moment_matrix, create_moment_matrix_cvxpy, needed_monomials
+)
 
 
 def test_needed_monomials():
-    x, y = sp.symbols("x y")
-    pol1 = sp.poly(x**2 - x - 1)
-    pol2 = sp.poly(3 * x * y**2 - 6 * x**2 + 12 * y)
+    x : sp.Symbol = sp.symbols("x")
+    y : sp.Symbol = sp.symbols("y")
+    pol1 : sp.Poly = sp.poly(x**2 - x - 1)
+    pol2 : sp.Poly = sp.poly(3 * x * y**2 - 6 * x**2 + 12 * y)
     c1 = Constraint.EqualityConstraint(pol1)
     c2 = Constraint.EqualityConstraint(pol2)
-    rules = rules_of_constraints([c1, c2])
+    rules = Rule.of_constraints([c1, c2])
     monomials_list = [1, x, x**2, y, y**2, x * y, x**2 * y, x * y**2, x**3, y**3]
     assert needed_monomials(monomials_list, rules) == [
         1,
