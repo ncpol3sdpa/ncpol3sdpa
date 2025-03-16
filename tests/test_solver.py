@@ -1,7 +1,7 @@
 from ncpol3sdpa.solver import Solver
-from sympy import symbols, Symbol
+from sympy import symbols, Symbol # type: ignore
 
-def test_1():
+def test_1() -> None:
     y1: Symbol
     y2: Symbol
     y3: Symbol
@@ -19,5 +19,9 @@ def test_1():
     ]
     constraint_zero = [constraint2]
     constraint_positiv = [constraint3]
-    assert(abs(Solver.solve(p_obj, 3, moment_matrix, constraint_positiv, constraint_zero) - 2.414) <= 0.1)
+
+    solution : float = Solver.solve(
+        p_obj,3, moment_matrix, constraint_positiv, constraint_zero
+    )
+    assert(abs(solution - 2.414) <= 0.1)
 

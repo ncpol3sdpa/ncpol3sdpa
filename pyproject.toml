@@ -8,6 +8,7 @@ dependencies = [
     "cvxpy>=1.6.3",
     "mypy>=1.15.0",
     "sympy>=1.13.3",
+    "typeguard>=4.4.2",
 ]
 
 [dependency-groups]
