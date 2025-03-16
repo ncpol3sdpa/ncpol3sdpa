@@ -38,6 +38,21 @@ Then, you can check for errors by executing the following command:
 uvx ruff check
 ```
 
+### Type Checking
+
+We use `mypy` to check for typing errors.
+
+Then, you can check for typing errors by executing the following command:
+
+```bash
+uv run mypy my_module.py
+```
+Or, you can check for typing errors in all files by executing the following command:
+
+```bash
+uv run mypy my_folder
+```
+
 ### Formatting
 
 Then, you can check for formatting issues by executing the following command:
@@ -46,3 +61,4 @@ Then, you can check for formatting issues by executing the following command:
 ```bash
 uvx ruff format
 ```
+
