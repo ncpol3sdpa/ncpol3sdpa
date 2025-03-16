@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import List, Dict, Any
 import sympy as sp
 # from sympy.ntheory import generate
 
@@ -5,9 +7,14 @@ from ncpol3sdpa.equality_constraints import rules_of_constraints
 from ncpol3sdpa.momentmatrix import create_moment_matrix_cvxpy, create_constraints_matrix_cvxpy
 from ncpol3sdpa.monomial import generate_monomials_commutative
 from ncpol3sdpa.solver import Solver
+from ncpol3sdpa.constraints import Constraint
 
 
-def polynom_linearized(variable_of_monomial, polynom : sp.Poly):
+def polynom_linearized(
+        variable_of_monomial : Dict[Any,Any],
+        polynom : sp.Poly
+    ) -> sp.Expr:
+    dict_monoms : Dict[Any,Any]
     dict_monoms = polynom.expand().as_coefficients_dict()
     combination = 0
     for key, value in dict_monoms.items():
@@ -16,27 +23,31 @@ def polynom_linearized(variable_of_monomial, polynom : sp.Poly):
 
 
 class Problem:
-    def __init__(self, obj):
-        self.constraints = []
+    def __init__(self, obj : sp.Symbol) -> None:
+        self.constraints : List[Constraint] = []
         self.objective = obj
 
-    def add_constraint(self, constraint):
+    def add_constraint(self, constraint : Constraint) -> None:
         self.constraints.append(constraint)
 
-    def solve(self, relaxation_order: int = 1):
+    def solve(self, relaxation_order: int = 1) -> float:
         """Return the solution of the problem"""
 
         # 1. Generates all monomials
         # Assumes that no extra symbols in the objectives, for now
+
+
         all_symbols = self.objective.free_symbols
 
         all_monomials = generate_monomials_commutative(
-            self.objective.free_symbols, relaxation_order
+            all_symbols, relaxation_order
         )
 
-        rules = rules_of_constraints(
-            [constraint for constraint in self.constraints if constraint.substitution]
-        )
+        rules = rules_of_constraints([
+            constraint 
+            for constraint in self.constraints 
+            if constraint.substitution
+        ])
 
         for monom in rules:
             if monom in all_monomials:
@@ -48,6 +59,7 @@ class Problem:
 
         # 3. Build the moment matrix
         #        - momentmatrix.py
+
         moment_matrix, variable_of_monomial = create_moment_matrix_cvxpy(
             all_monomials, rules
         )
@@ -58,6 +70,7 @@ class Problem:
 
         # 4. Build constraints matrices
         #        - momentmatrix.py
+
         constraint_maricies_equal = [
             create_constraints_matrix_cvxpy(
                 variable_of_monomial,
@@ -99,6 +112,7 @@ class Problem:
         # 5. Solve the SDP (Solver.solve)
         #        - solver.py
         # CF ex3_cvxpy.py
+
         return Solver.solve(
             poly_obj,
             len(moment_matrix),

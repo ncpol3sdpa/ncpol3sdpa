@@ -1,7 +1,13 @@
-from ncpol3sdpa.solver import *
-from sympy import symbols 
+from ncpol3sdpa.solver import Solver
+from sympy import symbols, Symbol
 
 def test_1():
+    y1: Symbol
+    y2: Symbol
+    y3: Symbol
+    y4: Symbol
+    y5: Symbol
+    y6: Symbol
     y1, y2, y3, y4, y5, y6 = symbols("y1 y2 y3 y4 y5 y6")
     p_obj = 2*y5 
     constraint2 = [[y4-y2]]

@@ -1,28 +1,32 @@
 import sympy
 from ncpol3sdpa import monomial
+from typing import List
 
 
-def calculate_number_from_list(l, k):
+def calculate_number_from_list(digits : List[int], base : int) -> int:
     res = 0
-    base = 1
-    for digit in l:
-        res += digit * base
-        base *= k
+    power = 1
+    for digit in digits:
+        res += digit * power
+        power *= base
     return res
 
 
-def list_increment_on_test_inputs(l, k):
+def list_increment_on_test_inputs(nums : List[int], k : int) -> None:
+
     assert isinstance(k, int)
-    for digit in l:
+
+    for digit in nums:
         assert isinstance(digit, int)
         assert 0 <= digit and digit < k
-    l2 = l.copy()
-    overflow = monomial.list_increment(l2, k)
-    if l == [k - 1 for _ in l]:
+
+    nums_cp = nums.copy()
+    overflow = monomial.list_increment(nums_cp, k)
+    if nums == [k - 1 for _ in nums]:
         assert overflow
     else:
         assert not overflow
-        assert calculate_number_from_list(l, k) + 1 == calculate_number_from_list(l2, k)
+        assert calculate_number_from_list(nums, k) + 1 == calculate_number_from_list(nums_cp, k)
 
 
 def test_list_increment():
