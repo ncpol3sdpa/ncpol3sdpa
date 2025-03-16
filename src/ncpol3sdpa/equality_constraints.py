@@ -1,6 +1,6 @@
 # return the rule associated to a polynom
 # exemple : rule_of_constraint(x²-x-1=0) = (x², x+1) because the rule is x² -> x+1
-from sympy.ntheory import qs
+# from sympy.ntheory import qs
 from sympy import rem
 from sympy import poly
 

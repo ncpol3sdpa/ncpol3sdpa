@@ -1,13 +1,9 @@
 import sympy as sp
-from sympy.ntheory import generate
+# from sympy.ntheory import generate
 
-from ncpol3sdpa import momentmatrix
-from ncpol3sdpa.constraints import Constraint
-from ncpol3sdpa.equality_constraints import (rule_of_constraint,
-                                             rules_of_constraints,
-                                             solve_equality_constraints)
-from ncpol3sdpa.momentmatrix import MomentMatrix
-from ncpol3sdpa.monomial import Monomial, generate_monomials_commutative
+from ncpol3sdpa.equality_constraints import rules_of_constraints
+from ncpol3sdpa.momentmatrix import create_moment_matrix_cvxpy, create_constraints_matrix_cvxpy
+from ncpol3sdpa.monomial import generate_monomials_commutative
 from ncpol3sdpa.solver import Solver
 
 
@@ -52,7 +48,7 @@ class Problem:
 
         # 3. Build the moment matrix
         #        - momentmatrix.py
-        moment_matrix, variable_of_monomial = momentmatrix.create_moment_matrix_cvxpy(
+        moment_matrix, variable_of_monomial = create_moment_matrix_cvxpy(
             all_monomials, rules
         )
 
@@ -63,7 +59,7 @@ class Problem:
         # 4. Build constraints matrices
         #        - momentmatrix.py
         constraint_maricies_equal = [
-            momentmatrix.create_constraints_matrix_cvxpy(
+            create_constraints_matrix_cvxpy(
                 variable_of_monomial,
                 generate_monomials_commutative(
                     self.objective.free_symbols,
@@ -80,7 +76,7 @@ class Problem:
         ]
 
         constraint_maricies_positiv = [
-            momentmatrix.create_constraints_matrix_cvxpy(
+            create_constraints_matrix_cvxpy(
                 variable_of_monomial,
                 generate_monomials_commutative(
                     self.objective.free_symbols,

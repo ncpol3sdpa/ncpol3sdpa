@@ -1,14 +1,12 @@
-from ncpol3sdpa.momentmatrix import *
-from ncpol3sdpa.monomial import *
-from typing import List
+# from typing import List
 
-import sympy
+# import sympy
 import cvxpy
 
 
 class Solver:
+
     @classmethod
-    
     def solve(cls, polynome_obj, k : int, moment_matrix, list_matrix_positive : list,list_matrix_zero :list):   
         moment_matrix_cvxpy = [[0 for _ in range(k)] for _ in range(k)]
         
