@@ -43,7 +43,12 @@
     * correction de logique dans la création des matrices de moments (changement de variable)
     * ajout de test pour le problème finale 
     * aide pour le solveur
-- (Yann) Reformat src. Reformat test. Add mypy and ruff integration details to README; update pyproject.toml for mypy dependency; add new test for typing functionality
+- (Yann) 
+    * Reformat src
+    * Reformat test
+    * Add mypy and ruff integration details to README
+    * update pyproject.toml for mypy dependency
+    * add new test for typing functionality
 
 # 12/03/2024
 - (Mathis) 
@@ -57,4 +62,6 @@
 
 # 15/03/2024 
  - (Mathis) debug
- - (Yann) Clean and refactor the code, add typing annotations.
+ - (Yann) 
+    * Clean and refactor the code
+    * Add typing annotations.
