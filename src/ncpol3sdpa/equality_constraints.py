@@ -1,11 +1,11 @@
 # return the rule associated to a polynom
 # exemple : rule_of_constraint(x²-x-1=0) = (x², x+1) because the rule is x² -> x+1
 # from sympy.ntheory import qs
-from sympy import rem
-from sympy import poly
+from sympy import rem, poly, Symbol
+from typing import List, Dict, Any
+from ncpol3sdpa.constraints import Constraint
 
-
-def rule_of_constraint(constraint):
+def rule_of_constraint(constraint : Constraint) -> List[Any]:
 
     polynom = poly(constraint.polynom).terms()  # express polynom as a list of monom
 
@@ -33,14 +33,13 @@ def rule_of_constraint(constraint):
     return [leader_monomial_expressed.as_expr(), polynom_without_leader.as_expr()]
 
 
-# return the hashtbl rules that represent a list of constraint, constraints
-# exemple : rules_of_constraints([x²-x-1=0, x*y²+3=0]) = {x²->x+1, x*y²->-3}
-def rules_of_constraints(constraints):
-    rules = {}
-    for constraint in constraints:
-        leader_monomial, polynom = rule_of_constraint(constraint)
-        rules[leader_monomial] = polynom
-    return rules
+def rules_of_constraints(constraints : List[Constraint]) -> Dict[Symbol, Any]:
+    """return the rules that represent a list of constraint
+    exemple : rules_of_constraints([x²-x-1=0, x*y²+3=0]) = {x²->x+1, x*y²->-3}"""
+    return dict([
+        rule_of_constraint(constraint) 
+        for constraint in constraints
+    ])
 
 def apply_rule(monom, rules):
     for key in rules.keys():
