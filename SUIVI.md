@@ -57,3 +57,4 @@
 
 # 15/03/2024 
  - (Mathis) debug
+ - (Yann) Clean and refactor the code, add typing annotations.
