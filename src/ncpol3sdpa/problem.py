@@ -114,7 +114,7 @@ class Problem:
         #        - solver.py
         # CF ex3_cvxpy.py
 
-        return Solver.solve(
+        return Solver.solve_cvxpy(
             poly_obj,
             len(moment_matrix),
             moment_matrix,

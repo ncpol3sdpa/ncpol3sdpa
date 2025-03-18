@@ -15,7 +15,7 @@ class Solver:
             moment_matrix : List[List[Symbol]],
             list_matrix_positive : List[List[List[Symbol]]],
             list_matrix_zero : List[List[List[Symbol]]]
-        ) -> Number:
+        ) -> float:
         """Solve the SDP problem with cvxpy"""
 
         moment_matrix_cvxpy = [[0 for _ in range(k)] for _ in range(k)]
