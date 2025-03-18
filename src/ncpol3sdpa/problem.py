@@ -3,7 +3,7 @@ from typing import List, Dict, Any
 import sympy as sp
 # from sympy.ntheory import generate
 
-from ncpol3sdpa.rules import Rule
+from ncpol3sdpa.rules import Rule, apply_rule_to_polynom
 from ncpol3sdpa.momentmatrix import create_moment_matrix_cvxpy, create_constraints_matrix_cvxpy
 from ncpol3sdpa.monomial import generate_monomials_commutative
 from ncpol3sdpa.solver import Solver
@@ -12,9 +12,11 @@ from ncpol3sdpa.constraints import Constraint
 
 def polynom_linearized(
         variable_of_monomial : Dict[Any,Any],
-        polynom : sp.Poly
+        polynom : sp.Poly,
+    rules
     ) -> sp.Expr:
     dict_monoms : Dict[Any,Any]
+    polynom = apply_rule_to_polynom(polynom, rules)
     dict_monoms = polynom.expand().as_coefficients_dict()
     combination = 0
     for key, value in dict_monoms.items():
@@ -64,9 +66,7 @@ class Problem:
             all_monomials, rules
         )
 
-        print(rules)
-        print(variable_of_monomial)
-        print(moment_matrix)
+
 
         # 4. Build constraints matrices
         #        - momentmatrix.py
@@ -107,7 +107,7 @@ class Problem:
         
 
 
-        poly_obj = polynom_linearized(variable_of_monomial, self.objective)
+        poly_obj = polynom_linearized(variable_of_monomial, self.objective, rules)
 
         # 5. Solve the SDP (Solver.solve)
         #        - solver.py
