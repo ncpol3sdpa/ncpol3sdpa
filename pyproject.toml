@@ -35,3 +35,5 @@ skip-magic-trailing-comma = false
 
 [tool.mypy]
 strict = true
+exclude = ["main.py"]
+follow_untyped_imports = true
