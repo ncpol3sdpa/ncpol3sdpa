@@ -10,7 +10,8 @@
 
 ## Alain
 
-- [ ] solver.py
+- [ ] constraints & substitution (constraints.py
+- [ ] )
 
 ## Yann
 
@@ -20,4 +21,6 @@
 ## Mathis
 
 - [ ] rules.py
+- [ ] moment matrix
+
 
