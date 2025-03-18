@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import List, Dict, Any
 import sympy as sp
+
 # from sympy.ntheory import generate
 
 from ncpol3sdpa.rules import Rule, apply_rule_to_polynom
@@ -13,7 +14,7 @@ from ncpol3sdpa.constraints import Constraint
 def polynom_linearized(
         variable_of_monomial : Dict[Any,Any],
         polynom : sp.Poly,
-    rules
+    rules : Dict[sp.Symbol, Any]
     ) -> sp.Expr:
     dict_monoms : Dict[Any,Any]
     polynom = apply_rule_to_polynom(polynom, rules)
