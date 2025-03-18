@@ -80,6 +80,7 @@
 - (Yann)
   * Add sphinx to the project
   * Clean, refactor and add type annotations to the code
+- (Nazar) Comancer de faire un nouvau type de donnés pour mieux representer des SDPs sur la la branche better-sdp-representation.
 - (All) 
   * Meeting with Peter Brown
   * Discuss the next steps
