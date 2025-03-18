@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import List, Tuple, Dict, Any
 from ncpol3sdpa.constraints import Constraint
-from sympy import rem, poly, Symbol
+from sympy import rem, poly, Poly
 # from sympy.ntheory import qs
 
 class Rule:
@@ -34,7 +34,7 @@ class Rule:
         )
 
     @classmethod
-    def of_constraints(cls, constraints : List[Constraint]) -> Dict[Symbol, Any]:
+    def of_constraints(cls, constraints : List[Constraint]) -> Dict[Poly, Any]:
         """return the rules that represent a list of constraint
         exemple : of_constraints([x²-x-1=0, x*y²+3=0]) = {x²->x+1, x*y²->-3}"""
         return dict([
