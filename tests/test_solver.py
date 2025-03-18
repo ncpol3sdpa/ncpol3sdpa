@@ -1,14 +1,15 @@
 from ncpol3sdpa.solver import Solver
-from sympy import symbols, Symbol # type: ignore
+from sympy import symbols, poly, Poly # type: ignore
+from typing import List
 
 def test_1() -> None:
-    y1: Symbol
-    y2: Symbol
-    y3: Symbol
-    y4: Symbol
-    y5: Symbol
-    y6: Symbol
-    y1, y2, y3, y4, y5, y6 = symbols("y1 y2 y3 y4 y5 y6")
+    # poly 
+    y1: Poly = (symbols("y1"))
+    y2: Poly = (symbols("y2"))
+    y3: Poly = (symbols("y3"))
+    y4: Poly = (symbols("y4"))
+    y5: Poly = (symbols("y5"))
+    y6: Poly = (symbols("y6"))
     p_obj = 2*y5 
     constraint2 = [[y4-y2]]
     constraint3 = [[-y6+y3+0.25*y1]]
@@ -20,8 +21,11 @@ def test_1() -> None:
     constraint_zero = [constraint2]
     constraint_positiv = [constraint3]
 
-    solution : float = Solver.solve(
+    solution : float = Solver.solve_cvxpy(
         p_obj,3, moment_matrix, constraint_positiv, constraint_zero
     )
     assert(abs(solution - 2.414) <= 0.1)
 
+
+if __name__ == "__main__":
+    test_1()

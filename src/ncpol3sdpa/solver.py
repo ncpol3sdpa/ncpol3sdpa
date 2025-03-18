@@ -1,16 +1,16 @@
-from typing import List
+from typing import List, Dict, Any
 from numbers import Number
-
 # import sympy
-from sympy import Symbol
-import cvxpy
+from sympy import Symbol, Poly, Expr
+# import cvxpy
+from cvxpy import Variable, vstack, hstack, Maximize, Problem
 
 
 class Solver:
 
     @classmethod
-    def solve(cls, 
-            polynome_obj,
+    def solve_cvxpy(cls, 
+            polynome_obj : Expr,
             k : int,
             moment_matrix : List[List[Symbol]],
             list_matrix_positive : List[List[List[Symbol]]],
@@ -20,16 +20,16 @@ class Solver:
 
         moment_matrix_cvxpy = [[0 for _ in range(k)] for _ in range(k)]
         
-        sympy_to_cvxpy = {}
+        sympy_to_cvxpy : Dict[Symbol, Variable] = {}
         for i in range(k):
             for j in range(k):
                 if moment_matrix[i][j] not in sympy_to_cvxpy.keys():                
-                    temp = cvxpy.Variable(name=moment_matrix[i][j].name)
+                    temp = Variable(name=moment_matrix[i][j].name)
                     sympy_to_cvxpy[moment_matrix[i][j]] = temp
                 
                 moment_matrix_cvxpy[i][j] = sympy_to_cvxpy[moment_matrix[i][j]]
         
-        moment_matrix_cvxpy2 = cvxpy.vstack([cvxpy.hstack(row) for row in moment_matrix_cvxpy])
+        moment_matrix_cvxpy2 = vstack([hstack(row) for row in moment_matrix_cvxpy])
 
         constraints = [
             moment_matrix_cvxpy2 == moment_matrix_cvxpy2.T,
@@ -46,7 +46,7 @@ class Solver:
                     for key,value in d.items():
                         matrix_constraint_cvxpy[i][j] += value * sympy_to_cvxpy[key] 
             
-            matrix_constraint_cvxpy2 = cvxpy.vstack([cvxpy.hstack(row) for row in matrix_constraint_cvxpy])
+            matrix_constraint_cvxpy2 = vstack([hstack(row) for row in matrix_constraint_cvxpy])
             constraints.append(matrix_constraint_cvxpy2 == matrix_constraint_cvxpy2.T)
             constraints.append(matrix_constraint_cvxpy2>>0)
 
@@ -60,14 +60,14 @@ class Solver:
                         combination += value * sympy_to_cvxpy[key] 
                     constraints.append(combination == 0)
 
-                                                                                    
+        print(f"{sympy_to_cvxpy = }")                                                       
         d = polynome_obj.as_coefficients_dict()
         combination = 0
         for key,value in d.items():
             combination += value * sympy_to_cvxpy[key] 
 
-        obj = cvxpy.Maximize(combination)
-        prob = cvxpy.Problem(obj, constraints)
-        prob.solve()
+        obj = Maximize(combination)
+        prob = Problem(obj, constraints)
+        prob.solve() # type: ignore
 
-        return prob.value
+        return prob.value # type: ignore
