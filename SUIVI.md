@@ -77,3 +77,9 @@
 # 18/03/2024 
 
 - (Mathis) debug + test
+- (Yann)
+  * Add sphinx to the project
+  * Clean, refactor and add type annotations to the code
+- (All) 
+  * Meeting with Peter Brown
+  * Discuss the next steps
