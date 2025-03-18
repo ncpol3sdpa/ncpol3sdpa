@@ -3,7 +3,7 @@ from ncpol3sdpa.constraints import Constraint
 from ncpol3sdpa.rules import Rule, apply_rule
 
 
-def test_rule_of_constraint():
+def test_rule_of_constraint() -> None:
     x, y = sp.symbols("x y")
     pol1 = sp.poly(x**2 - x - 1)
     pol2 = sp.poly(3 * x * y**2 - 6 * x**2 + 12 * y)
