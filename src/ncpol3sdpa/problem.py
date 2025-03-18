@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Set
 import sympy as sp
-from sympy import Expr
+from sympy import Expr, Symbol, Basic, S
 
 # from sympy.ntheory import generate
 
@@ -14,16 +14,16 @@ from ncpol3sdpa.constraints import Constraint
 
 def polynom_linearized(
         variable_of_monomial : Dict[Any,Any],
-        polynom : sp.Poly,
+        polynom : Expr,
         rules : Dict[Expr,Expr]
     ) -> Expr:
     """Return the linearized polynom"""
     # 2*X*Y -> 2 Y_(i,j)
 
-    dict_monoms : Dict[Any,Any]
     polynom = apply_rule_to_polynom(polynom, rules)
+    dict_monoms : Dict[Any,Any]
     dict_monoms = polynom.expand().as_coefficients_dict()
-    combination = 0
+    combination : Expr = S.Zero
     for key, value in dict_monoms.items():
         combination += value * variable_of_monomial[key]
     return combination
@@ -44,7 +44,8 @@ class Problem:
         # Assumes that no extra symbols in the objectives, for now
 
 
-        all_symbols = self.objective.free_symbols
+        # all_symbols : List[Expr] = list(map(Expr, self.objective.free_symbols))
+        all_symbols : List[Expr] = list(self.objective.free_symbols) # type: ignore
 
         all_monomials = generate_monomials_commutative(
             all_symbols, relaxation_order
@@ -112,7 +113,11 @@ class Problem:
         
 
 
-        poly_obj = polynom_linearized(variable_of_monomial, self.objective, rules)
+        poly_obj = polynom_linearized(
+            variable_of_monomial, 
+            self.objective, 
+            rules
+        )
 
         # 5. Solve the SDP (Solver.solve)
         #        - solver.py

@@ -1,11 +1,11 @@
 from __future__ import annotations
 from typing import List, Tuple, Dict, Any
-import sympy as sp
+from sympy import Expr, symbols, expand
 from ncpol3sdpa.rules import apply_rule, apply_rule_to_polynom
 
 
 
-def needed_monomials(monomials : List[sp.Poly], rules : Dict[sp.Poly, Any]) -> List[sp.Poly]:
+def needed_monomials(monomials : List[Expr], rules : Dict[Expr,Expr]) -> List[Expr]:
     """Filter the monomials according to the rules"""
     # ex: needed_monomials([x, x**2], {x : ...}) = [x**2]
     return [
@@ -14,7 +14,7 @@ def needed_monomials(monomials : List[sp.Poly], rules : Dict[sp.Poly, Any]) -> L
         if monomial not in rules.keys()
     ]
 
-def create_moment_matrix(monomials : List[sp.Poly]) -> List[List[sp.Poly]]:
+def create_moment_matrix(monomials : List[Expr]) -> List[List[Expr]]:
     """Create the moment matrix of the monomials"""
     return [
         [ x*y for x in monomials ] 
@@ -22,10 +22,10 @@ def create_moment_matrix(monomials : List[sp.Poly]) -> List[List[sp.Poly]]:
     ]
 
 def create_constraints_matrix(
-    monomials : List[sp.Poly],
-    Q : sp.Poly,
-    q : sp.Poly
-) -> List[List[sp.Poly]]:
+    monomials : List[Expr],
+    Q : Expr,
+    q : Expr
+) -> List[List[Expr]]:
     """Create the matrix of constraints
     The constraints are of the form Q(X,Y) < q
     """
@@ -36,21 +36,21 @@ def create_constraints_matrix(
 
 
 def create_moment_matrix_cvxpy(
-        monomials : List[sp.Poly], 
-        rules : Dict[sp.Expr, sp.Expr]
-    ) -> Tuple[List[List[sp.Poly]], Dict[sp.Poly, Any]]:
+        monomials : List[Expr], 
+        rules : Dict[Expr, Expr]
+    ) -> Tuple[List[List[Expr]], Dict[Expr, Any]]:
     """Return a moment matrix whith cvxpy variables"""
 
     n : int = len(monomials)
     index_var : int = 0
-    variable_of_monomial : Dict[sp.Poly, Any] = {}
-    moment_matrix : List[List[sp.Poly]] = [[0 for _ in range(n)] for _ in range(n)]
+    variable_of_monomial : Dict[Expr, Any] = {}
+    moment_matrix : List[List[Expr]] = [[0 for _ in range(n)] for _ in range(n)]
 
     for i, monom1 in enumerate(monomials):
         for j, monom2 in enumerate(monomials):
-            monom : sp.Poly = apply_rule(monom1 * monom2, rules)
+            monom : Expr = apply_rule(monom1 * monom2, rules)
             if monom not in variable_of_monomial:
-                variable_of_monomial[monom] = sp.symbols(f"y{index_var}")
+                variable_of_monomial[monom] = symbols(f"y{index_var}")
                 index_var += 1
             moment_matrix[i][j] = variable_of_monomial[monom]
 
@@ -58,20 +58,20 @@ def create_moment_matrix_cvxpy(
 
 
 def create_constraints_matrix_cvxpy(
-        variable_of_monomial : Dict[sp.Poly, Any],
-        monomials : List[sp.Poly], 
-        polynom : sp.Poly,
-        rules : Dict[sp.Poly, Any]
-    ) -> List[List[sp.Poly]]:
+        variable_of_monomial : Dict[Expr, Any],
+        monomials : List[Expr], 
+        polynom : Expr,
+        rules : Dict[Expr, Any]
+    ) -> List[List[Expr]]:
     """return the matrix of contraint with cvxpy variables"""
 
     n = len(monomials)
-    matrix : List[List[sp.Poly]] = [[0 for _ in range(n)] for _ in range(n)]
+    matrix : List[List[Expr]] = [[0 for _ in range(n)] for _ in range(n)]
 
     for i, monom1 in enumerate(monomials):
         for j, monom2 in enumerate(monomials):
-            moment_coeff : sp.Poly = apply_rule_to_polynom(monom1 * monom2 * polynom, rules)
-            constraints_dict = sp.expand(moment_coeff).as_coefficients_dict()
+            moment_coeff : Expr = expand(apply_rule_to_polynom(monom1 * monom2 * polynom, rules))
+            constraints_dict = moment_coeff.as_coefficients_dict()
             for term, coeff in constraints_dict.items():
                 matrix[i][j] += coeff * variable_of_monomial[term]
                 
@@ -79,7 +79,7 @@ def create_constraints_matrix_cvxpy(
 
 
 class MomentMatrix:
-    def __init__(self, polynom : sp.Poly, monomials : List[sp.Poly]) -> None:
+    def __init__(self, polynom : Expr, monomials : List[Expr]) -> None:
         self.optimized = None
         self.constraints = None
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from functools import cmp_to_key
-from typing import List, Dict, Any, TypeVar
+from typing import List, Dict, Any, TypeVar, Iterable
 import sympy as sp
 
 class Monomial:
@@ -27,9 +27,9 @@ def list_increment(degrees: List[int], k: int) -> bool:
 
 
 def generate_monomials_commutative(
-    symbols: List[Any], relaxation_order: int
+    symbols: Iterable[Any], relaxation_order: int
 ) -> List[Any]:
-    """returns a list of all monomials that have degree less or equal to k"""
+    """returns a list of all monomials that have degree less or equal to the relaxation_order"""
     current_degres = [0 for _ in symbols]
     res = []
 

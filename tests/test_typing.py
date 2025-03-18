@@ -1,4 +1,4 @@
-from sympy import Symbol, poly, Poly # type: ignore
+from sympy import Symbol, poly, Poly
 # from typing import List
 from typeguard import typechecked
 # check_type

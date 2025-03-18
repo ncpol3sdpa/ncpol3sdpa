@@ -1,15 +1,14 @@
 from ncpol3sdpa.solver import Solver
-from sympy import symbols, Symbol # type: ignore
+from sympy import symbols, Symbol
 # from typing import List
 
 def test_1() -> None:
-    # : Poly = poly() 
-    y1: Symbol = (symbols("y1"))
-    y2: Symbol = (symbols("y2"))
-    y3: Symbol = (symbols("y3"))
-    y4: Symbol = (symbols("y4"))
-    y5: Symbol = (symbols("y5"))
-    y6: Symbol = (symbols("y6"))
+    y1: Symbol = symbols("y1")
+    y2: Symbol = symbols("y2")
+    y3: Symbol = symbols("y3")
+    y4: Symbol = symbols("y4")
+    y5: Symbol = symbols("y5")
+    y6: Symbol = symbols("y6")
     p_obj = 2*y5 
     constraint2 = [[y4-y2]]
     constraint3 = [[-y6+y3+0.25*y1]]

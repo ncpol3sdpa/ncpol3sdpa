@@ -1,6 +1,6 @@
 from typing import List, Dict
 # import sympy
-from sympy import Symbol, Expr
+from sympy import Expr, Symbol
 # import cvxpy
 from cvxpy import Variable, vstack, hstack, Maximize, Problem
 
@@ -11,9 +11,9 @@ class Solver:
     def solve_cvxpy(cls, 
             polynome_obj : Expr,
             k : int,
-            moment_matrix : List[List[Symbol]],
-            list_matrix_positive : List[List[List[Symbol]]],
-            list_matrix_zero : List[List[List[Symbol]]]
+            moment_matrix : List[List[Expr]],
+            list_matrix_positive : List[List[List[Expr]]],
+            list_matrix_zero : List[List[List[Expr]]]
         ) -> float:
         """Solve the SDP problem with cvxpy"""
 
@@ -67,7 +67,7 @@ class Solver:
 
         obj = Maximize(combination)
         prob = Problem(obj, constraints)
-        prob.solve(solver="CLARABEL",verbose=True) # type: ignore
+        prob.solve(solver="CLARABEL",verbose=False) # type: ignore
         # prob.solve(solver="SCS",verbose=True) # type: ignore
         # solver mosics ?
 
