@@ -6,8 +6,8 @@ class Problem: ...
 
 class Constraints: ...
 
-
-def main():
+# type : ignore
+def main() -> None:
     x = Variable("x")
     y = Variable("y")
 

@@ -1,7 +1,6 @@
-from typing import List, Dict, Any
-from numbers import Number
+from typing import List, Dict
 # import sympy
-from sympy import Symbol, Poly, Expr
+from sympy import Symbol, Expr
 # import cvxpy
 from cvxpy import Variable, vstack, hstack, Maximize, Problem
 
@@ -68,6 +67,8 @@ class Solver:
 
         obj = Maximize(combination)
         prob = Problem(obj, constraints)
-        prob.solve() # type: ignore
+        prob.solve(solver="CLARABEL",verbose=True) # type: ignore
+        # prob.solve(solver="SCS",verbose=True) # type: ignore
+        # solver mosics ?
 
         return prob.value # type: ignore

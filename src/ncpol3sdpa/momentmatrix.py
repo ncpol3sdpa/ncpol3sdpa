@@ -37,7 +37,7 @@ def create_constraints_matrix(
 
 def create_moment_matrix_cvxpy(
         monomials : List[sp.Poly], 
-        rules : Dict[sp.Poly, Any]
+        rules : Dict[sp.Expr, sp.Expr]
     ) -> Tuple[List[List[sp.Poly]], Dict[sp.Poly, Any]]:
     """Return a moment matrix whith cvxpy variables"""
 

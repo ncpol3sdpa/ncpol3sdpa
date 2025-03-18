@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import List, Dict, Any
 import sympy as sp
+from sympy import Expr
 
 # from sympy.ntheory import generate
 
@@ -14,8 +15,11 @@ from ncpol3sdpa.constraints import Constraint
 def polynom_linearized(
         variable_of_monomial : Dict[Any,Any],
         polynom : sp.Poly,
-    rules : Dict[sp.Symbol, Any]
-    ) -> sp.Expr:
+        rules : Dict[Expr,Expr]
+    ) -> Expr:
+    """Return the linearized polynom"""
+    # 2*X*Y -> 2 Y_(i,j)
+
     dict_monoms : Dict[Any,Any]
     polynom = apply_rule_to_polynom(polynom, rules)
     dict_monoms = polynom.expand().as_coefficients_dict()
@@ -26,9 +30,9 @@ def polynom_linearized(
 
 
 class Problem:
-    def __init__(self, obj : sp.Symbol) -> None:
+    def __init__(self, obj : Expr) -> None:
         self.constraints : List[Constraint] = []
-        self.objective = obj
+        self.objective : Expr = obj
 
     def add_constraint(self, constraint : Constraint) -> None:
         self.constraints.append(constraint)
