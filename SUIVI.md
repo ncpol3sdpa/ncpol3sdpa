@@ -73,3 +73,7 @@
 - (Yann) 
   * Clean and refactor the code
   * Add typing annotations.
+
+# 18/03/2024 
+
+- (Mathis) debug + test
