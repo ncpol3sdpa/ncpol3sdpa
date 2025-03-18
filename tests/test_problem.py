@@ -35,16 +35,14 @@ def test_3():
     assert(abs(p.solve(3)-10) <= 0.001)
 
 
-"""
-Issue with cvxpy ??
+#Issue with cvxpy ??
 def test_4():
     obj = y*(-x**2 + 2)
-    c1 = Constraint.EqualityConstraint(y - 10, substitution=False)
+    c1 = Constraint.EqualityConstraint(y - 10, substitution=True)
     p = Problem(obj)
     p.add_constraint(c1)
     assert(abs(p.solve(2)-20) <= 0.1)
     assert(abs(p.solve(3)-20) <= 0.001)
-"""
 
 def test_1_sub():
     obj = 2*x*y
