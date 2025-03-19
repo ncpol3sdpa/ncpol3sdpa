@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import List, Tuple, Dict, Any
-from sympy import Expr, symbols, expand
+from sympy import Expr, Symbol, symbols, expand, S
 from ncpol3sdpa.rules import apply_rule, apply_rule_to_polynom
 
 
@@ -38,21 +38,22 @@ def create_constraints_matrix(
 def create_moment_matrix_cvxpy(
         monomials : List[Expr], 
         rules : Dict[Expr, Expr]
-    ) -> Tuple[List[List[Expr]], Dict[Expr, Any]]:
+    ) -> Tuple[List[List[Symbol]], Dict[Expr, Any]]:
     """Return a moment matrix whith cvxpy variables"""
 
     n : int = len(monomials)
     index_var : int = 0
     variable_of_monomial : Dict[Expr, Any] = {}
-    moment_matrix : List[List[Expr]] = [[0 for _ in range(n)] for _ in range(n)]
+    moment_matrix : List[List[Symbol]] = []
 
     for i, monom1 in enumerate(monomials):
-        for j, monom2 in enumerate(monomials):
+        moment_matrix.append([])
+        for monom2 in monomials:
             monom : Expr = apply_rule(monom1 * monom2, rules)
             if monom not in variable_of_monomial:
                 variable_of_monomial[monom] = symbols(f"y{index_var}")
                 index_var += 1
-            moment_matrix[i][j] = variable_of_monomial[monom]
+            moment_matrix[i].append(variable_of_monomial[monom])
 
     return moment_matrix, variable_of_monomial
 
@@ -66,7 +67,10 @@ def create_constraints_matrix_cvxpy(
     """return the matrix of contraint with cvxpy variables"""
 
     n = len(monomials)
-    matrix : List[List[Expr]] = [[0 for _ in range(n)] for _ in range(n)]
+    matrix : List[List[Expr]] = [
+        [S.Zero for _ in range(n)] 
+        for _ in range(n)
+    ]
 
     for i, monom1 in enumerate(monomials):
         for j, monom2 in enumerate(monomials):

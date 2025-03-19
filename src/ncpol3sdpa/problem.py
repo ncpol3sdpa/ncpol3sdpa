@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import List, Dict, Any, Set
+from typing import List, Dict, Any
 import sympy as sp
-from sympy import Expr, Symbol, Basic, S
+from sympy import Expr, S
 
 # from sympy.ntheory import generate
 
@@ -38,71 +38,75 @@ class Problem:
         self.constraints.append(constraint)
 
     def solve(self, relaxation_order: int = 1) -> float:
-        """Return the solution of the problem"""
+        """Solve the polynomial optimization problem using SDP relaxation.
 
-        # 1. Generates all monomials
-        # Assumes that no extra symbols in the objectives, for now
+        This function implements the Lasserre hierarchy to solve polynomial optimization
+        problems through the following steps:
+        1. Generate substitution rules from equality constraints
+        2. Generate monomials for the moment matrix
+        3. Build the moment matrix
+        4. Construct constraint matrices for both equality and inequality constraints
+        5. Linearize objective function
+        6. Solve the resulting SDP problem
 
+        Args:
+            relaxation_order (int): The order of relaxation in Lasserre hierarchy.
+                Higher orders give better approximations but increase complexity.
+                Defaults to 1.
 
-        # all_symbols : List[Expr] = list(map(Expr, self.objective.free_symbols))
-        all_symbols : List[Expr] = list(self.objective.free_symbols) # type: ignore
+        Returns:
+            float: The optimal value of the objective function
 
-        all_monomials = generate_monomials_commutative(
-            all_symbols, relaxation_order
-        )
-
+        Example:
+            >>> problem = Problem(x**2 + y**2)  # minimize x^2 + y^2
+            >>> problem.add_constraint(Constraint(x**2 + y**2 - 1))  # subject to x^2 + y^2 >= 1
+            >>> result = problem.solve(relaxation_order=2)
+        """
+        # Step 1: Handle substitution rules
         rules = Rule.of_constraints([
             constraint 
             for constraint in self.constraints 
             if constraint.substitution
         ])
 
-        for monom in rules:
-            if monom in all_monomials:
-                all_monomials.remove(monom)
+        # Step 2: Generate monomials
+        all_symbols = list(self.objective.free_symbols)
+        all_monomials : List[Expr] = [
+            monom
+            for monom in generate_monomials_commutative(
+                all_symbols, relaxation_order
+            )
+            if monom not in rules
+        ]
 
-        # 2. Substitute the equality constraints
-        #        - rules.py ?
-        # skip for now, we create constraint matrix = 0 for now
-
-        # 3. Build the moment matrix
-        #        - momentmatrix.py
-
+        # Step 3: Build moment matrix
         moment_matrix, variable_of_monomial = create_moment_matrix_cvxpy(
             all_monomials, rules
         )
 
-
-
-        # 4. Build constraints matrices
-        #        - momentmatrix.py
-
+        # Step 4: Build constraint matrices
+        # 4a. Equality constraints
         constraint_maricies_equal = [
             create_constraints_matrix_cvxpy(
                 variable_of_monomial,
                 generate_monomials_commutative(
                     self.objective.free_symbols,
-                    int(
-                        relaxation_order
-                        - (sp.total_degree(self.constraints[i].polynom) / 2)
-                    ),
+                    int(relaxation_order - (sp.total_degree(constraint.polynom) / 2)),
                 ),
-                self.constraints[i].polynom,
+                constraint.polynom,
                 rules,
             )
-            for i in range(len(self.constraints))
-            if self.constraints[i].is_equality_constraint and (not self.constraints[i].substitution)
+            for constraint in self.constraints
+            if constraint.is_equality_constraint and not constraint.substitution
         ]
 
+        # 4b. Inequality (positivity) constraints
         constraint_maricies_positiv = [
             create_constraints_matrix_cvxpy(
                 variable_of_monomial,
                 generate_monomials_commutative(
                     self.objective.free_symbols,
-                    int(
-                        relaxation_order
-                        - (sp.total_degree(self.constraints[i].polynom) / 2)
-                    ),
+                    int(relaxation_order - (sp.total_degree(self.constraints[i].polynom) / 2)),
                 ),
                 self.constraints[i].polynom,
                 rules,
@@ -110,19 +114,15 @@ class Problem:
             for i in range(len(self.constraints))
             if not self.constraints[i].is_equality_constraint
         ]
-        
 
-
+        # Step 5: Linearize objective function
         poly_obj = polynom_linearized(
             variable_of_monomial, 
             self.objective, 
             rules
         )
 
-        # 5. Solve the SDP (Solver.solve)
-        #        - solver.py
-        # CF ex3_cvxpy.py
-
+        # Step 6: Solve SDP
         return Solver.solve_cvxpy(
             poly_obj,
             len(moment_matrix),

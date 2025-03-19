@@ -1,9 +1,6 @@
+
 class Variable: ...
-
-
 class Problem: ...
-
-
 class Constraints: ...
 
 # type : ignore

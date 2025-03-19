@@ -11,7 +11,7 @@ class Solver:
     def solve_cvxpy(cls, 
             polynome_obj : Expr,
             k : int,
-            moment_matrix : List[List[Expr]],
+            moment_matrix : List[List[Symbol]],
             list_matrix_positive : List[List[List[Expr]]],
             list_matrix_zero : List[List[List[Expr]]]
         ) -> float:
