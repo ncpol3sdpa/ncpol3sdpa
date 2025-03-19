@@ -31,8 +31,6 @@ variables:
 image:
   name: $IMAGE
   entrypoint: [""]
-  variables:
-    UV_CACHE_DIR: .uv-cache
 
 # Script to be executed before each stage 
 before_script:
