@@ -41,7 +41,6 @@ def create_moment_matrix_cvxpy(
     ) -> Tuple[List[List[Symbol]], Dict[Expr, Any]]:
     """Return a moment matrix whith cvxpy variables"""
 
-    n : int = len(monomials)
     index_var : int = 0
     variable_of_monomial : Dict[Expr, Any] = {}
     moment_matrix : List[List[Symbol]] = []
@@ -74,8 +73,8 @@ def create_constraints_matrix_cvxpy(
 
     for i, monom1 in enumerate(monomials):
         for j, monom2 in enumerate(monomials):
-            moment_coeff : Expr = expand(apply_rule_to_polynom(monom1 * monom2 * polynom, rules))
-            constraints_dict = moment_coeff.as_coefficients_dict()
+            moment_coeff : Expr = expand(apply_rule_to_polynom(monom1 * monom2 * polynom, rules))  # type: ignore
+            constraints_dict = moment_coeff.as_coefficients_dict()  # type: ignore
             for term, coeff in constraints_dict.items():
                 matrix[i][j] += coeff * variable_of_monomial[term]
                 

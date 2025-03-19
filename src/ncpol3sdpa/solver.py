@@ -1,9 +1,9 @@
 from typing import List, Dict
-# import sympy
 from sympy import Expr, Symbol
-# import cvxpy
-from cvxpy import Variable, vstack, hstack, Maximize, Problem
-
+from cvxpy import Variable, Maximize, Problem
+from cvxpy.atoms.affine.vstack import vstack
+from cvxpy.atoms.affine.hstack import hstack
+from ncpol3sdpa.funs import coefficients_dict
 
 class Solver:
 
@@ -19,7 +19,7 @@ class Solver:
 
         moment_matrix_cvxpy = [[0 for _ in range(k)] for _ in range(k)]
         
-        sympy_to_cvxpy : Dict[Symbol, Variable] = {}
+        sympy_to_cvxpy : Dict[Expr, Variable] = {}
         for i in range(k):
             for j in range(k):
                 if moment_matrix[i][j] not in sympy_to_cvxpy.keys():                
@@ -41,7 +41,7 @@ class Solver:
             matrix_constraint_cvxpy = [[0 for _ in range(ki)] for _ in range(ki)]
             for i in range(len(matrix_constraint)):
                 for j in range(len(matrix_constraint)):
-                    d = matrix_constraint[i][j].as_coefficients_dict()
+                    d = coefficients_dict(matrix_constraint[i][j])
                     for key,value in d.items():
                         matrix_constraint_cvxpy[i][j] += value * sympy_to_cvxpy[key] 
             
@@ -53,14 +53,14 @@ class Solver:
             ki = len(matrix_constraint)
             for i in range(len(matrix_constraint)):
                 for j in range (len(matrix_constraint)):
-                    d = matrix_constraint[i][j].as_coefficients_dict()
+                    d = coefficients_dict(matrix_constraint[i][j])
                     combination = 0
                     for key,value in d.items():
                         combination += value * sympy_to_cvxpy[key] 
                     constraints.append(combination == 0)
 
         print(f"{sympy_to_cvxpy = }")                                                       
-        d = polynome_obj.as_coefficients_dict()
+        d = coefficients_dict(polynome_obj)
         combination = 0
         for key,value in d.items():
             combination += value * sympy_to_cvxpy[key] 
@@ -71,4 +71,4 @@ class Solver:
         # prob.solve(solver="SCS",verbose=True) # type: ignore
         # solver mosics ?
 
-        return prob.value # type: ignore
+        return float(prob.value)

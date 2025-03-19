@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Tuple, Dict, cast
+from typing import List, Tuple, Dict
 from ncpol3sdpa.constraints import Constraint
 from sympy import rem, poly, Expr, S
 
@@ -54,7 +54,7 @@ def apply_rule(monom : Expr, rules : Dict[Expr, Expr]) -> Expr:
 
 def apply_rule_to_polynom(polynom : Expr, rules : Dict[Expr, Expr]) -> Expr:
     """Apply a rule to a polynom"""
-    poly_dict : Dict[Expr, int] = polynom.as_coefficients_dict()
+    poly_dict : Dict[Expr, int] = polynom.as_coefficients_dict()   # type: ignore
     res : Expr = S.Zero
     for monom,coeff in poly_dict.items():
         res += coeff * apply_rule(monom, rules)
