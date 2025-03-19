@@ -17,22 +17,42 @@
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
 stages:          # List of stages for jobs, and their order of execution
+  # - publish
   - build
   - test
   - deploy
+
+variables:  
+  PYTHON_VERSION: "3.13"  
+  UV_VERSION: "0.5.5"  
+  # With the following variables, we tell uv how to publish our package.
+  # Gitlab has built in usernames and passwords for publish packages. This means you don't need to change them!
+  UV_PUBLISH_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi"  
+  UV_PUBLISH_USERNAME: "gitlab-ci-token"  
+  UV_PUBLISH_PASSWORD: "${CI_JOB_TOKEN}"  
+
+# Before we do anything else, we need to install uv
+# before_script:  
+#   - echo "Installing uv..."
+#   - pip install uv==${UV_VERSION}
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Compiling the code..."
+    - echo "Installing uv..."
+    - pip install uv==${UV_VERSION}
+    - echo "Building uv..."
+    - uv build
     - echo "Compile complete."
 
 pytest-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
   script:
-    - echo "Running unit tests... This will make `uv run pytest`"
+    - echo "Running Pytest..."
+    - curl -LsSf https://astral.sh/uv/install.sh | sh
     - uv run pytest
-    - echo "Pytest end"
+    - echo "Pytest complete"
 
 lint-test-job:   # This job also runs in the test stage.
   stage: test    # It can run at the same time as unit-test-job (in parallel).
