@@ -73,9 +73,6 @@ pip install sphinx
 Then, you can build the documentation by executing the following command:
 
 ```bash
-make html
-````
-or
-```bash
-make latexpdf
+make html -C docs
+make latexpdf -C docs
 ```
