@@ -42,11 +42,11 @@ uv-install:
   variables:
     UV_CACHE_DIR: .uv-cache
   cache:
-    - key:
+    key:
       files:
         - uv.lock
-      paths:
-        - $UV_CACHE_DIR
+    paths:
+      - $UV_CACHE_DIR
   script:
     - uv cache prune --ci
 
