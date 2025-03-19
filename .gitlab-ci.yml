@@ -16,7 +16,7 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
-stages:          # List of stages for jobs, and their order of execution
+stages:
   - build
   - test
   - deploy
@@ -27,9 +27,20 @@ variables:
   BASE_LAYER: bookworm-slim
   IMAGE: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
 
+# Define the image to use for the entire pipeline
+image:
+  name: $IMAGE
+  entrypoint: [""]
+  variables:
+    UV_CACHE_DIR: .uv-cache
+
+# Script to be executed before each stage 
+before_script:
+  - echo "Setting up the environment..."
+  - python3 --version
+
 uv-install:
   stage: build
-  image: $IMAGE
   variables:
     UV_CACHE_DIR: .uv-cache
   cache:
@@ -41,26 +52,23 @@ uv-install:
   script:
     - uv cache prune --ci
 
-pytest-job:
+pytest:
   stage: test
-  image: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
   script:
     - echo "Running Pytest..."
     - uv run pytest
     - echo "Pytest complete"
 
-mypy-job:
+mypy:
   stage: test
-  image: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
   script:
     - echo "Running Mypy..."
     - uv run mypy src
     - echo "Mypy complete"
   allow_failure: true
 
-ruff-check-job:
+ruff-check:
   stage: test
-  image: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
   script:
     - echo "Running Ruff..."
     - uvx ruff check
