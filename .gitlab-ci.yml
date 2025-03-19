@@ -26,16 +26,6 @@ variables:
   UV_VERSION: "0.5.5"  
   BASE_LAYER: bookworm-slim
 
-# build-job:       # This job runs in the build stage, which runs first.
-#   stage: build
-#   script:
-#     - echo "Compiling the code..."
-#     - echo "Installing uv..."
-#     - pip install uv==${UV_VERSION}
-#     - echo "Building uv..."
-#     - uv build
-#     - echo "Compile complete."
-
 uv-install:
   stage: build
   image: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
@@ -52,6 +42,7 @@ uv-install:
 
 pytest-job:
   stage: test
+  image: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
   script:
     - echo "Running Pytest..."
     - uv run pytest
@@ -59,6 +50,7 @@ pytest-job:
 
 mypy-job:
   stage: test
+  image: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
   script:
     - echo "Running Mypy..."
     - uv run mypy src
@@ -66,6 +58,7 @@ mypy-job:
 
 ruff-check-job:
   stage: test
+  image: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
   script:
     - echo "Running Ruff..."
     - uvx ruff check
