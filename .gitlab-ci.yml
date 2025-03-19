@@ -50,23 +50,29 @@ uv-install:
   script:
     - uv cache prune --ci
 
-pytest-job:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+pytest-job:
+  stage: test
   script:
     - echo "Running Pytest..."
-    - curl -LsSf https://astral.sh/uv/install.sh | sh
     - uv run pytest
     - echo "Pytest complete"
 
-lint-test-job:   # This job also runs in the test stage.
-  stage: test    # It can run at the same time as unit-test-job (in parallel).
+mypy-job:
+  stage: test
   script:
-    - echo "Linting code... This will take about 5 seconds."
-    - sleep 5
-    - echo "No lint issues found."
+    - echo "Running Mypy..."
+    - uv run mypy src
+    - echo "Mypy complete"
 
-deploy-job:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+ruff-check-job:
+  stage: test
+  script:
+    - echo "Running Ruff..."
+    - uvx ruff check
+    - echo "Ruff complete"
+
+deploy-job:
+  stage: deploy
   environment: production
   script:
     - echo "Deploying application..."
