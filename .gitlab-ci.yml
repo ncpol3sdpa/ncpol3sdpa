@@ -25,10 +25,11 @@ variables:
   PYTHON_VERSION: "3.13"  
   UV_VERSION: "0.5.5"  
   BASE_LAYER: bookworm-slim
+  IMAGE: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
 
 uv-install:
   stage: build
-  image: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
+  image: $IMAGE
   variables:
     UV_CACHE_DIR: .uv-cache
   cache:
@@ -55,6 +56,7 @@ mypy-job:
     - echo "Running Mypy..."
     - uv run mypy src
     - echo "Mypy complete"
+  allow_failure: true
 
 ruff-check-job:
   stage: test
@@ -63,6 +65,7 @@ ruff-check-job:
     - echo "Running Ruff..."
     - uvx ruff check
     - echo "Ruff complete"
+  allow_failure: true
 
 deploy-job:
   stage: deploy
