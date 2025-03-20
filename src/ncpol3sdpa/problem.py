@@ -8,6 +8,7 @@ from ncpol3sdpa.momentmatrix import create_moment_matrix_cvxpy, create_constrain
 from ncpol3sdpa.monomial import generate_monomials_commutative
 from ncpol3sdpa.solver import Solver
 from ncpol3sdpa.constraints import Constraint
+from semidefinite_program_repr import ProblemSDP
 
 
 def polynom_linearized(
@@ -30,12 +31,51 @@ class Problem:
     def add_constraint(self, constraint : Constraint) -> None:
         self.constraints.append(constraint)
 
+    def relax_to_sdp(self, relaxation_order : int) -> ProblemSDP:
+        # # 1. Generates all monomials
+        # # Assumes that no extra symbols in the objectives, for now
+        # all_symbols = self.objective.free_symbols
+
+        # all_monomials = generate_monomials_commutative(
+        #     all_symbols, relaxation_order
+        # )
+
+        # # 2. Substitute the equality constraints
+        # #        - rules.py ?
+        # # skip for now, we create constraint matrix = 0 for now
+        # rules = Rule.of_constraints([
+        #     constraint 
+        #     for constraint in self.constraints 
+        #     if constraint.substitution
+        # ])
+
+        # for monom in rules:
+        #     if monom in all_monomials:
+        #         all_monomials.remove(monom)
+
+        # # 3. Start to build the  SDP relaxation
+
+        # n : int = len(all_monomials)
+        # index_var : int = 0
+        # variable_of_monomial : Dict[sp.Poly, Any] = {}
+        # moment_matrix : List[List[sp.Poly]] = [[0 for _ in range(n)] for _ in range(n)]
+
+        # for i, monom1 in enumerate(all_monomials):
+        #     for j, monom2 in enumerate(all_monomials):
+        #         monom : sp.Poly = apply_rule(monom1 * monom2, rules)
+        #         if monom not in variable_of_monomial:
+        #             variable_of_monomial[monom] = sp.symbols(f"y{index_var}")
+        #             index_var += 1
+        #         moment_matrix[i][j] = variable_of_monomial[monom]
+
+        # return moment_matrix, variable_of_monomial
+        
+
     def solve(self, relaxation_order: int = 1) -> float:
         """Return the solution of the problem"""
 
         # 1. Generates all monomials
         # Assumes that no extra symbols in the objectives, for now
-
 
         all_symbols = self.objective.free_symbols
 
@@ -43,6 +83,9 @@ class Problem:
             all_symbols, relaxation_order
         )
 
+        # 2. Substitute the equality constraints
+        #        - rules.py ?
+        # skip for now, we create constraint matrix = 0 for now
         rules = Rule.of_constraints([
             constraint 
             for constraint in self.constraints 
@@ -52,10 +95,6 @@ class Problem:
         for monom in rules:
             if monom in all_monomials:
                 all_monomials.remove(monom)
-
-        # 2. Substitute the equality constraints
-        #        - rules.py ?
-        # skip for now, we create constraint matrix = 0 for now
 
         # 3. Build the moment matrix
         #        - momentmatrix.py
@@ -88,7 +127,7 @@ class Problem:
             if self.constraints[i].is_equality_constraint and (not self.constraints[i].substitution)
         ]
 
-        constraint_maricies_positiv = [
+        constraint_matrices_positive = [
             create_constraints_matrix_cvxpy(
                 variable_of_monomial,
                 generate_monomials_commutative(
@@ -104,8 +143,6 @@ class Problem:
             for i in range(len(self.constraints))
             if not self.constraints[i].is_equality_constraint
         ]
-        
-
 
         poly_obj = polynom_linearized(variable_of_monomial, self.objective)
 
@@ -117,6 +154,6 @@ class Problem:
             poly_obj,
             len(moment_matrix),
             moment_matrix,
-            constraint_maricies_positiv,
+            constraint_matrices_positive,
             constraint_maricies_equal,
         )

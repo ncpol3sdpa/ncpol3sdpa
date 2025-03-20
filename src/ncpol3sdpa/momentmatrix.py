@@ -4,7 +4,6 @@ import sympy as sp
 from ncpol3sdpa.rules import apply_rule, apply_rule_to_polynom
 
 
-
 def needed_monomials(monomials : List[sp.Poly], rules : Dict[sp.Poly, Any]) -> List[sp.Poly]:
     """Filter the monomials according to the rules"""
     # ex: needed_monomials([x, x**2], {x : ...}) = [x**2]
@@ -43,7 +42,6 @@ def create_moment_matrix_cvxpy(
 
     n : int = len(monomials)
     index_var : int = 0
-    variable_of_monomial : Dict[sp.Poly, Any] = {}
     moment_matrix : List[List[sp.Poly]] = [[0 for _ in range(n)] for _ in range(n)]
 
     for i, monom1 in enumerate(monomials):
