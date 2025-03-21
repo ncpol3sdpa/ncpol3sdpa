@@ -1,7 +1,7 @@
 from __future__ import annotations
 from functools import cmp_to_key
 from typing import List, Dict, Any, TypeVar, Iterable
-import sympy as sp
+from sympy import total_degree
 
 class Monomial:
     def __init__(self) -> None: ...
@@ -37,7 +37,7 @@ def generate_monomials_commutative(
         expr = 1
         for i, symbol in enumerate(symbols):
             expr *= symbol ** current_degres[i]
-        if sp.total_degree(expr) <= relaxation_order:
+        if total_degree(expr) <= relaxation_order:
             res.append(expr)
 
         if list_increment(current_degres, relaxation_order + 1):
@@ -46,7 +46,7 @@ def generate_monomials_commutative(
     return sorted(
         res,
         key=cmp_to_key(
-            lambda item1, item2: sp.total_degree(item1) - sp.total_degree(item2)
+            lambda item1, item2: total_degree(item1) - total_degree(item2)
         ),
     )
 

@@ -54,3 +54,12 @@ def test_1_sub() -> None:
     assert(abs(p.solve(1) - 2.4142) <= 0.01)
     assert(abs(p.solve(2) - 2.4142) <= 0.01)
     assert(abs(p.solve(3) - 2.4142) <= 0.01)
+
+
+if __name__ == "__main__":
+    test_1()
+    test_2()
+    test_3()
+    test_4()
+    test_1_sub()
+    print("Everything passed")

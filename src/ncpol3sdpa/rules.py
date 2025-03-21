@@ -47,6 +47,9 @@ class Rule:
 
 def apply_rule(monom : Expr, rules : Dict[Expr, Expr]) -> Expr:
     """Apply a rule to a monom"""
+
+    print(f"APPLYING RULE {type(monom) = } \t {monom = }")
+
     for key in rules.keys():
         if rem(monom, key) == 0:
             return apply_rule(monom*rules[key]/key, rules) 
@@ -54,6 +57,9 @@ def apply_rule(monom : Expr, rules : Dict[Expr, Expr]) -> Expr:
 
 def apply_rule_to_polynom(polynom : Expr, rules : Dict[Expr, Expr]) -> Expr:
     """Apply a rule to a polynom"""
+
+    print(f"APPLYING RULE {type(polynom) = } \t {polynom = }")
+
     poly_dict : Dict[Expr, int] = polynom.as_coefficients_dict()   # type: ignore
     res : Expr = S.Zero
     for monom,coeff in poly_dict.items():

@@ -1,11 +1,11 @@
 from __future__ import annotations
-import sympy as sp
+from sympy import Expr
 
 class Constraint:
     def __init__(
             self, 
             is_equality_constraint : bool, 
-            polynom : sp.Expr, 
+            polynom : Expr, 
             substitution : bool = False
         ) -> None:
         """ 
@@ -13,14 +13,14 @@ class Constraint:
         polynom : sympy polynom
         """
         self.is_equality_constraint : bool = is_equality_constraint  # is the constraint an equality or not ?
-        self.polynom : sp.Expr = polynom  # the constraint has the form p >= 0 or p = 0
+        self.polynom : Expr = polynom  # the constraint has the form p >= 0 or p = 0
         self.substitution : bool = substitution  # do we use substitution technique for this constraint ?
 
 
     @classmethod
     def EqualityConstraint(
         cls, 
-        polynom : sp.Expr,
+        polynom : Expr,
         substitution : bool = False
     ) -> Constraint:
         return cls(True, polynom, substitution)
@@ -28,7 +28,7 @@ class Constraint:
     @classmethod
     def InequalityConstraint(
         cls, 
-        polynom : sp.Expr,
+        polynom : Expr,
         substitution : bool = False
     ) -> Constraint:
         return cls(False, polynom, substitution)

@@ -1,9 +1,6 @@
 from __future__ import annotations
 from typing import List, Dict, Any
-import sympy as sp
-from sympy import Expr, S
-
-# from sympy.ntheory import generate
+from sympy import Expr, S, total_degree
 
 from ncpol3sdpa.rules import Rule, apply_rule_to_polynom
 from ncpol3sdpa.momentmatrix import create_moment_matrix_cvxpy, create_constraints_matrix_cvxpy
@@ -91,7 +88,7 @@ class Problem:
                 variable_of_monomial,
                 generate_monomials_commutative(
                     self.objective.free_symbols,
-                    int(relaxation_order - (sp.total_degree(constraint.polynom) / 2)),
+                    int(relaxation_order - (total_degree(constraint.polynom) / 2)),
                 ),
                 constraint.polynom,
                 rules,
@@ -106,7 +103,7 @@ class Problem:
                 variable_of_monomial,
                 generate_monomials_commutative(
                     self.objective.free_symbols,
-                    int(relaxation_order - (sp.total_degree(self.constraints[i].polynom) / 2)),
+                    int(relaxation_order - (total_degree(self.constraints[i].polynom) / 2)),
                 ),
                 self.constraints[i].polynom,
                 rules,
