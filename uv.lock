@@ -217,6 +217,7 @@ source = { editable = "." }
 dependencies = [
     { name = "cvxpy" },
     { name = "mypy" },
+    { name = "pytest" },
     { name = "sphinx" },
     { name = "sympy" },
 ]
@@ -230,6 +231,7 @@ dev = [
 requires-dist = [
     { name = "cvxpy", specifier = ">=1.6.3" },
     { name = "mypy", specifier = ">=1.15.0" },
+    { name = "pytest", specifier = ">=8.3.4" },
     { name = "sphinx", specifier = ">=8.2.3" },
     { name = "sympy", specifier = ">=1.13.3" },
 ]
