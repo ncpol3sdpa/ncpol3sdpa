@@ -16,11 +16,9 @@ class Rule:
 
         # leader_monom expressed with variables
         leader_monomial_expressed : Expr = S.One
-        # for i, monomial in poly(constraint.polynom).gens:
-        for monom_index in range(len(poly(constraint.polynom).gens)):
+        for i, monomial in enumerate(poly(constraint.polynom).gens):
             leader_monomial_expressed *= (
-                # monomial ** leader_monomial[0][i]
-                poly(constraint.polynom).gens[monom_index] ** leader_monomial[0][monom_index]
+                monomial ** leader_monomial[0][i]
             )
         assert isinstance(leader_monomial_expressed, Expr)
 

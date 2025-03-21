@@ -1,6 +1,6 @@
 from __future__ import annotations
 from functools import cmp_to_key
-from typing import List, Dict, Any, TypeVar, Iterable
+from typing import List, Dict, Set, Any, TypeVar, Iterable
 from sympy import total_degree
 
 class Monomial:
@@ -9,8 +9,82 @@ class Monomial:
     def __add__(self, other: Monomial) -> Monomial:
         raise NotImplementedError
 
-    def simplify(self) -> None: ...
+    def __mul__(self, other: Monomial) -> Monomial:
+        raise NotImplementedError
+    
+    def __repr__(self) -> str:
+        raise NotImplementedError
+    
+    def __eq__(self, other: object) -> bool:
+        raise NotImplementedError
+    
 
+    @classmethod
+    def symbols(cls, name : str) -> Monomial:
+        """returns a monomial that represents a symbol"""
+        raise NotImplementedError
+    
+    @classmethod
+    def Zero(cls) -> Monomial:
+        raise NotImplementedError
+    
+    @classmethod
+    def One(cls) -> Monomial:
+        raise NotImplementedError
+    
+
+    def expand(self) -> Monomial:
+        """Expand an expression"""
+        raise NotImplementedError
+    
+    def total_degree(self) -> int:
+        """Return the total_degree in the given variables"""
+        raise NotImplementedError
+    
+    def rem(self, other: Monomial) -> Monomial:
+        """
+        Compute polynomial remainder
+        Could be replace by substitution
+        """
+
+        raise NotImplementedError
+    
+    def poly(self) -> Monomial:
+        """Not used"""
+        raise NotImplementedError
+    
+    def terms(self) -> List[Monomial]:
+        """Returns all non-zero terms from ``f`` in lex order.
+
+        Examples
+        ========
+        >>> Poly(x**2 + 2*x*y**2 + x*y + 3*y, x, y).terms()
+        [((2, 0), 1), ((1, 2), 2), ((1, 1), 1), ((0, 1), 3)]"""
+        raise NotImplementedError
+    
+    def gens(self) -> List[Monomial]:
+        """Returns the generators of the polynomial
+        
+        Examples
+        ========
+        >>> Poly(x**2 + 2*x*y**2 + x*y + 3*y, x, y).gens()
+        [x, y]"""
+
+        raise NotImplementedError
+    
+    def as_coefficients_dict(self) -> Dict[Monomial, Any]:
+        """Return the dictionary of the polynomial's coefficients
+        
+        Examples
+        ========
+        >>> Poly(x**2 + 2*x*y**2 + x*y + 3*y, x, y).as_coefficients_dict()
+        {x**2: 1, x*y**2: 2, x*y: 1, y: 3}"""
+        raise NotImplementedError
+    
+    def free_symbols(self) -> Set[Monomial]:
+        """Return the free symbols of the polynomial
+        same as gens"""
+        raise NotImplementedError
 
 
 def list_increment(degrees: List[int], k: int) -> bool:
