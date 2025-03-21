@@ -14,12 +14,20 @@ release = '1.0'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    # 'sphinx.ext.autosny',
+    # 'sphinx.ext.napoleon',
+]
 
 templates_path = ['_templates']
-exclude_patterns = []
+exclude_patterns = [
+'.DS_Store',
+]
 
-
+# Mock imports that might cause issues during documentation building
+autodoc_mock_imports = ['cvxpy']
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

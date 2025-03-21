@@ -6,10 +6,50 @@
 ncpol3sdpa documentation
 ========================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+**ncpol3sdpa** is a Python package for solving noncommutative polynomial optimization problems using the SDPA family of semidefinite programming solvers.
 
+.. note::
+
+   This documentation is under construction.
+
+.. note::
+
+   The project is under development and is not yet ready for use.
+
+Installation
+------------
+
+.. code-block:: console
+
+   (docs) $ make html
+
+MomentMatrix
+------------
+
+.. toctree::
+   momentmatrix
+
+Rules
+-----
+.. toctree::
+   rules
+
+Solver
+------
+.. toctree::
+   solver
+   
+Problem
+--------
+.. toctree::
+   problem
+
+
+you can use the ``src.ncpol3sdpa.momentmatrix.needed_monomials``.
+
+
+End
+---
 
 .. toctree::
    :maxdepth: 2
