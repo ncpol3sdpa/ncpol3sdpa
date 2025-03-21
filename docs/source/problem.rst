@@ -1,9 +1,10 @@
 Problem
 -------
 
-The :mod:`ncpol3sdpa.problem` module provides the :class:`Problem` class, which is the main interface for defining and solving noncommutative polynomial optimization problems.
+The :mod:`ncpol3sdpa.problem` module provides the :class:`Problem` class.
 
-.. automodule:: ncpol3sdpa.rules
+.. automodule:: ncpol3sdpa.problem
    :members:
    :undoc-members:
    :show-inheritance:
+   :special-members: __init__

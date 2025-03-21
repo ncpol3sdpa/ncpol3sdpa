@@ -10,10 +10,6 @@ ncpol3sdpa documentation
 
 .. note::
 
-   This documentation is under construction.
-
-.. note::
-
    The project is under development and is not yet ready for use.
 
 Installation
@@ -23,35 +19,23 @@ Installation
 
    (docs) $ make html
 
-MomentMatrix
-------------
-
-.. toctree::
-   momentmatrix
-
-Rules
------
-.. toctree::
-   rules
-
-Solver
-------
-.. toctree::
-   solver
-   
-Problem
---------
-.. toctree::
-   problem
-
 
 you can use the ``src.ncpol3sdpa.momentmatrix.needed_monomials``.
 
 
-End
----
+Project Structure
+-----------------
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+
+   Home <self>
+   
+   constraints
+   funs
+   momentmatrix
+   monomial
+   problem
+   rules
+   solver
 
