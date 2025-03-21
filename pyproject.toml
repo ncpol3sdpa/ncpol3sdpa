@@ -9,7 +9,6 @@ dependencies = [
     "mypy>=1.15.0",
     "sphinx>=8.2.3",
     "sympy>=1.13.3",
-    "typeguard>=4.4.2",
 ]
 
 [dependency-groups]
@@ -38,3 +37,4 @@ skip-magic-trailing-comma = false
 strict = true
 exclude = ["main.py"]
 follow_untyped_imports = true
+files = ["src/ncpol3sdpa","tests"]
