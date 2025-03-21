@@ -1,15 +1,14 @@
 from __future__ import annotations
 from functools import cmp_to_key
-from typing import List, Dict, Set, Any, TypeVar, Iterable
+from typing import List, Dict, Set, Any, Iterable
 from sympy import total_degree
 
-class Monomial:
-    def __init__(self) -> None: ...
+class Poly:
 
-    def __add__(self, other: Monomial) -> Monomial:
+    def __add__(self, other: Poly) -> Poly:
         raise NotImplementedError
 
-    def __mul__(self, other: Monomial) -> Monomial:
+    def __mul__(self, other: Poly) -> Poly:
         raise NotImplementedError
     
     def __repr__(self) -> str:
@@ -20,20 +19,20 @@ class Monomial:
     
 
     @classmethod
-    def symbols(cls, name : str) -> Monomial:
-        """returns a monomial that represents a symbol"""
+    def symbols(cls, name : str) -> Poly:
+        """returns a Poly that represents a symbol"""
         raise NotImplementedError
     
     @classmethod
-    def Zero(cls) -> Monomial:
+    def Zero(cls) -> Poly:
         raise NotImplementedError
     
     @classmethod
-    def One(cls) -> Monomial:
+    def One(cls) -> Poly:
         raise NotImplementedError
     
 
-    def expand(self) -> Monomial:
+    def expand(self) -> Poly:
         """Expand an expression"""
         raise NotImplementedError
     
@@ -41,7 +40,7 @@ class Monomial:
         """Return the total_degree in the given variables"""
         raise NotImplementedError
     
-    def rem(self, other: Monomial) -> Monomial:
+    def rem(self, other: Poly) -> Poly:
         """
         Compute polynomial remainder
         Could be replace by substitution
@@ -49,11 +48,11 @@ class Monomial:
 
         raise NotImplementedError
     
-    def poly(self) -> Monomial:
+    def poly(self) -> Poly:
         """Not used"""
         raise NotImplementedError
     
-    def terms(self) -> List[Monomial]:
+    def terms(self) -> List[Poly]:
         """Returns all non-zero terms from ``f`` in lex order.
 
         Examples
@@ -62,7 +61,7 @@ class Monomial:
         [((2, 0), 1), ((1, 2), 2), ((1, 1), 1), ((0, 1), 3)]"""
         raise NotImplementedError
     
-    def gens(self) -> List[Monomial]:
+    def gens(self) -> List[Poly]:
         """Returns the generators of the polynomial
         
         Examples
@@ -72,7 +71,7 @@ class Monomial:
 
         raise NotImplementedError
     
-    def as_coefficients_dict(self) -> Dict[Monomial, Any]:
+    def as_coefficients_dict(self) -> Dict[Poly, Any]:
         """Return the dictionary of the polynomial's coefficients
         
         Examples
@@ -81,10 +80,11 @@ class Monomial:
         {x**2: 1, x*y**2: 2, x*y: 1, y: 3}"""
         raise NotImplementedError
     
-    def free_symbols(self) -> Set[Monomial]:
+    def free_symbols(self) -> Set[Poly]:
         """Return the free symbols of the polynomial
         same as gens"""
-        raise NotImplementedError
+        
+        return set(self.gens())
 
 
 def list_increment(degrees: List[int], k: int) -> bool:
@@ -123,10 +123,3 @@ def generate_monomials_commutative(
             lambda item1, item2: total_degree(item1) - total_degree(item2)
         ),
     )
-
-T = TypeVar("T")
-def create_backward_dictionary(monomials: List[T]) -> Dict[T, int]:
-    """returns a dictionary that maps monomials to their index in the list"""
-    return {
-        monomial: i for i, monomial in enumerate(monomials)
-    }
