@@ -62,3 +62,20 @@ Then, you can check for formatting issues by executing the following command:
 uvx ruff format
 ```
 
+### Build Documentation
+
+For the documentation, we use `sphinx`. You can install it by running the following command:
+
+```bash
+pip install sphinx
+```
+
+Then, you can build the documentation by executing the following command:
+
+```bash
+make html
+````
+or
+```bash
+make latexpdf
+```
