@@ -1,6 +1,6 @@
 from sympy import Symbol, poly, Poly
 # from typing import List
-from typeguard import typechecked
+# from typeguard import typechecked
 # check_type
 
 def salutation(prenom : str) -> str:
@@ -17,10 +17,10 @@ def type_test() -> None:
 	# print(f"{isinstance([x,x],List[Symbol])}")
 	# check_type('variablename', [x,x],List[Symbol])
 
-@typechecked
+# @typechecked
 def int_fun(x : int) -> None:
 	print(f"int_fun : {isinstance(x,int)=}")
-@typechecked
+# @typechecked
 def poly_fun(x : Poly) -> None:
 	print(f"int_fun : {isinstance(x,Poly)=}")
 
