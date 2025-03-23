@@ -13,11 +13,11 @@ import ncpol3sdpa.semidefinite_program_repr as sdp_repr
 import ncpol3sdpa.momentmatrix as momentmatrix
 from ncpol3sdpa.semidefinite_program_repr import ProblemSDP, MomentMatrixSDP
 
-def algebra_to_SDP_inequality_constraint(
+def algebra_to_SDP_add_inequality_constraint(
     problem: ProblemSDP, 
     algebra : momentmatrix.AlgebraSDP,
     constraint_moment_matrix : List[List[sympy.Poly]]
-) -> sdp_repr.EqConstraint :
+) -> None :
     """Adds the translation of an inequality constraint"""
     constraint_matrix_size = len(constraint_moment_matrix)
     moment_matrix_size = problem.variable_sizes[problem.MOMENT_MATRIX_VAR_NUM]
@@ -39,7 +39,8 @@ def algebra_to_SDP_inequality_constraint(
                 a_0[x][y] += 0.5*coef
                 a_0[y][x] += 0.5*coef
     
-    return sdp_repr.EqConstraint([(problem.MOMENT_MATRIX_VAR_NUM, a_0), (new_var, a_k)])
+            constraint = sdp_repr.EqConstraint([(problem.MOMENT_MATRIX_VAR_NUM, a_0), (new_var, a_k)])
+            problem.constraints.append(constraint)
 
 
 def algebra_to_SDP(algebra : momentmatrix.AlgebraSDP) -> ProblemSDP:
@@ -75,8 +76,8 @@ def algebra_to_SDP(algebra : momentmatrix.AlgebraSDP) -> ProblemSDP:
     # Translate Inequality constrains
 
     for constraint_matrix in algebra.constraint_moment_matrices:
-        result_SDP.constraints.append(algebra_to_SDP_inequality_constraint(\
-            result_SDP, algebra, constraint_matrix))
+        algebra_to_SDP_add_inequality_constraint(\
+                    result_SDP, algebra, constraint_matrix)
 
     return result_SDP 
 
@@ -120,10 +121,29 @@ class Problem:
         algebra = momentmatrix.AlgebraSDP(self.objective, relaxation_order, rules)
         algebra.add_constraints(normal_constraints)
 
+        #debugging
+        print("Algebra:")
+        print("constraint_moment_matrices: " , algebra.constraint_moment_matrices)
+        print("equality_constraints: " , algebra.equality_constraints)
+        print("moment_matrix: " , algebra.moment_matrix)
+        print("monomial_to_positions: " , algebra.monomial_to_positions)
+        print("monomials: " , algebra.monomials)
+        print("relaxation_order: " , algebra.relaxation_order)
+        print("substitution_rules: " , algebra.substitution_rules)
+
         # 2. Translate to SDP
         problemSDP = algebra_to_SDP(algebra)
 
-        # 3. 
+        #debugging
+        print("SDP translation:")
+        print(".objective: ", problemSDP.objective)
+        print(".variable_sizes: ", problemSDP.variable_sizes)
+        print("Moment matrix:")
+        print("    .moment_matrix.size: ", problemSDP.moment_matrix.size)
+        print("    .moment_matrix.eq_classes: ", problemSDP.moment_matrix.eq_classes)
+        print(".constraints: ", [c.constraints for c in problemSDP.constraints])
+
+        # 3. Solve the SDP
 
         return Solver.solve_cvxpy(problemSDP)
 
