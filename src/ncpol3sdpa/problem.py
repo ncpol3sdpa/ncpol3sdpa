@@ -1,5 +1,6 @@
 from __future__ import annotations
 import sympy
+import numpy as np
 from typing import List, Dict, Any
 # from sympy.ntheory import generate
 
@@ -9,9 +10,8 @@ from ncpol3sdpa.monomial import generate_monomials_commutative
 from ncpol3sdpa.solver import Solver
 from ncpol3sdpa.constraints import Constraint
 import ncpol3sdpa.semidefinite_program_repr as sdp_repr
-import numpy as np
-import momentmatrix
-from semidefinite_program_repr import ProblemSDP
+import ncpol3sdpa.momentmatrix as momentmatrix
+from ncpol3sdpa.semidefinite_program_repr import ProblemSDP
 
 def algebra_to_SDP_inequality_constraint(
     problem: ProblemSDP, 

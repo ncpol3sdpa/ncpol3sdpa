@@ -3,7 +3,7 @@ from typing import List, Dict, Any
 import cvxpy
 import sympy
 from sympy import Symbol
-import semidefinite_program_repr as sdp_repr
+import ncpol3sdpa.semidefinite_program_repr as sdp_repr
 
 def cvxpy_dot_prod(a : Any, b : Any) -> Any:
     return cvxpy.sum(cvxpy.multiply)
