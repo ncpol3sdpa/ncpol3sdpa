@@ -123,13 +123,13 @@ class Problem:
 
         #debugging
         print("Algebra:")
-        print("constraint_moment_matrices: " , algebra.constraint_moment_matrices)
-        print("equality_constraints: " , algebra.equality_constraints)
-        print("moment_matrix: " , algebra.moment_matrix)
-        print("monomial_to_positions: " , algebra.monomial_to_positions)
-        print("monomials: " , algebra.monomials)
         print("relaxation_order: " , algebra.relaxation_order)
+        print("monomials: " , algebra.monomials)
+        print("moment_matrix: " , algebra.moment_matrix)
         print("substitution_rules: " , algebra.substitution_rules)
+        print("monomial_to_positions: " , algebra.monomial_to_positions)
+        print("equality_constraints: " , algebra.equality_constraints)
+        print("constraint_moment_matrices: " , algebra.constraint_moment_matrices)
 
         # 2. Translate to SDP
         problemSDP = algebra_to_SDP(algebra)
