@@ -15,8 +15,8 @@ class Solver:
         """Solve the SDP problem with cvxpy"""
 
         moment_matrix_size = problem.variable_sizes[problem.MOMENT_MATRIX_VAR_NUM]
-        G = cvxpy.Variable((moment_matrix_size, moment_matrix_size))
-        constraints = [G == G.T, G >> 0, G[0,0] == 1]
+        G = cvxpy.Variable((moment_matrix_size, moment_matrix_size), PSD=True)
+        constraints = [G[0,0] == 1]
 
         
         # Moment matrix structure
@@ -27,10 +27,8 @@ class Solver:
                 constraints.append(G[i,j] == G[x,y])
         
         # Variables
-        sdp_vars = [cvxpy.Variable((size, size)) for size in problem.variable_sizes]
-        for var in sdp_vars:
-            constraints.append(var.T == var)
-            constraints.append(var >> 0)
+        sdp_vars = [cvxpy.Variable((size, size), PSD=True) \
+                    for size in problem.variable_sizes]
 
         # Constraints
         for constraint in problem.constraints:
