@@ -160,10 +160,8 @@ class AlgebraSDP:
             #inequality constraint
             # p.10 of Semidefinite programming relaxations for quantum correlations
             
-            print(constraint.polynom)
-            print(type(constraint.polynom))
             k_i = math.floor(self.relaxation_order - sp.degree(constraint.polynom)/2) 
-            assert k_i >= 1, "Insufficient relaxation order to capture the constraint {constraint.polynom}"
+            assert k_i >= 0, "Insufficient relaxation order to capture the constraint {constraint.polynom}"
             
             # TODO This is redundant work, does this matter?
             constraint_monomials = needed_monomials( \
