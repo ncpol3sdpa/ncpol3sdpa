@@ -5,8 +5,8 @@ import sympy
 from sympy import Symbol
 import ncpol3sdpa.semidefinite_program_repr as sdp_repr
 
-def cvxpy_dot_prod(a : Any, b : Any) -> Any:
-    return cvxpy.sum(cvxpy.multiply)
+def cvxpy_dot_prod(c : Any, x : Any) -> Any:
+    return cvxpy.sum(cvxpy.multiply(c, x))
 
 class Solver:
 
@@ -16,7 +16,7 @@ class Solver:
 
         moment_matrix_size =problem.variable_sizes[problem.MOMENT_MATRIX_VAR_NUM]
         G = cvxpy.Variable((moment_matrix_size, moment_matrix_size))
-        constraints = [G == G.T, G >> 0]
+        constraints = [G == G.T, G >> 0, G[0,0] == 1]
 
         
         # Moment matrix structure

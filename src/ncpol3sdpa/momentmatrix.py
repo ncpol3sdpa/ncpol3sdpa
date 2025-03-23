@@ -148,15 +148,18 @@ class AlgebraSDP:
     
     def add_constraint(self, constraint : Constraint) -> None:
         # validation
-        for variable in constraint.polynom.free_symbols():
+        for variable in constraint.polynom.free_symbols:
             # TODO Is this reasonable? Can be modified
-            assert variable in self.objective.free_symbols() 
+            assert variable in self.objective.free_symbols
 
         if constraint.is_equality_constraint:
             self.equality_constraints.append(constraint.polynom)
         else:
             #inequality constraint
             # p.10 of Semidefinite programming relaxations for quantum correlations
+            
+            print(constraint.polynom)
+            print(type(constraint.polynom))
             k_i = math.floor(self.relaxation_order - constraint.polynom.degree()/2) 
             assert k_i >= 1, "Insufficient relaxation order to capture the constraint {constraint.polynom}"
             

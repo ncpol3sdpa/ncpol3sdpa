@@ -1,7 +1,7 @@
 from __future__ import annotations
 import sympy
 import numpy as np
-from typing import List, Dict, Any
+from typing import List, Dict, Tuple, Any
 # from sympy.ntheory import generate
 
 from ncpol3sdpa.rules import Rule
@@ -11,7 +11,7 @@ from ncpol3sdpa.solver import Solver
 from ncpol3sdpa.constraints import Constraint
 import ncpol3sdpa.semidefinite_program_repr as sdp_repr
 import ncpol3sdpa.momentmatrix as momentmatrix
-from ncpol3sdpa.semidefinite_program_repr import ProblemSDP
+from ncpol3sdpa.semidefinite_program_repr import ProblemSDP, MomentMatrixSDP
 
 def algebra_to_SDP_inequality_constraint(
     problem: ProblemSDP, 
@@ -32,7 +32,7 @@ def algebra_to_SDP_inequality_constraint(
             a_k[j][i] -= 0.5
 
             a_0 = np.zeros(shape = (moment_matrix_size,moment_matrix_size))
-            for monomial, coef in poly.as_coefficients_dict():
+            for monomial, coef in poly.as_coefficients_dict().items():
                 assert monomial in algebra.monomial_to_positions
                 assert 0 < len(algebra.monomial_to_positions[monomial])
                 x,y = algebra.monomial_to_positions[monomial][0]
@@ -49,7 +49,7 @@ def algebra_to_SDP(algebra : momentmatrix.AlgebraSDP) -> ProblemSDP:
 
     # Convert objective
     objective = np.zeros(shape = (moment_matrix_size, moment_matrix_size))
-    for monomial, coef in algebra.objective.as_coefficients_dict():
+    for monomial, coef in algebra.objective.as_coefficients_dict().items():
         assert monomial in algebra.monomial_to_positions
         assert 0 < len(algebra.monomial_to_positions[monomial])
         #       v List of all the positions of this monomial in the matrix.
@@ -63,7 +63,7 @@ def algebra_to_SDP(algebra : momentmatrix.AlgebraSDP) -> ProblemSDP:
     
     # Moment matrix
     equiv_classes : List[List[Tuple[int, int]]] = \
-        algebra.monomial_to_positions.values()
+        list(algebra.monomial_to_positions.values())
     
     moment_matrix_repr = MomentMatrixSDP(moment_matrix_size, equiv_classes)
      
@@ -102,7 +102,7 @@ class Problem:
         self.constraints.append(constraint)
     
 
-    def solve2(self, relaxation_order: int = 1) -> float:
+    def solve(self, relaxation_order: int = 1) -> float:
         # 0. Separate constraint types 
         rules = Rule.of_constraints([
             constraint 
@@ -125,11 +125,10 @@ class Problem:
 
         # 3. 
 
-        return Solver.solve2(problemSDP)
+        return Solver.solve_cvxpy(problemSDP)
 
-        return 0
 
-    def solve(self, relaxation_order: int = 1) -> float:
+    def solve0(self, relaxation_order: int = 1) -> float:
         """Return the solution of the problem"""
 
         # 1. Generates all monomials

@@ -13,7 +13,7 @@ class Constraint:
         polynom : sympy polynom
         """
         self.is_equality_constraint = is_equality_constraint  # is the constraint an equality or not ?
-        self.polynom = polynom  # the constraint has the form p >= 0 or p = 0
+        self.polynom : sp.Poly = polynom  # the constraint has the form p >= 0 or p = 0
         self.substitution = substitution  # do we use substitution technique for this constraint ?
 
 
