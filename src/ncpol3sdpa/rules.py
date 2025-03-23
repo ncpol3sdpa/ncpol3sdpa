@@ -2,12 +2,13 @@ from __future__ import annotations
 from typing import List, Tuple, Dict, Any
 from ncpol3sdpa.constraints import Constraint
 from sympy import rem, poly, Symbol
+import sympy
 # from sympy.ntheory import qs
 
 class Rule:
 
     @classmethod
-    def _of_constraint(cls, constraint : Constraint) -> Tuple[Any]:
+    def _of_constraint(cls, constraint : Constraint) -> Tuple[Any, Any]:
         """Private methode creating a Tuple of equivalence"""
 
         # express polynom as a list of monom
@@ -42,13 +43,13 @@ class Rule:
             for constraint in constraints
         ])
 
-def apply_rule(monom, rules):
+def apply_rule(monom : sympy.Poly, rules : Dict[sympy.Poly, sympy.Poly]) -> sympy.Poly:
     for key in rules.keys():
         if rem(monom, key) == 0:
             return apply_rule(monom*rules[key]/key, rules) 
     return monom
 
-def apply_rule_to_polynom(polynom, rules):
+def apply_rule_to_polynom(polynom : sympy.Poly, rules: Dict[sympy.Poly, sympy.Poly]) -> sympy.Poly:
     poly_dict = polynom.as_coefficients_dict()
     res = 0
     for monom,coeff in poly_dict.items():

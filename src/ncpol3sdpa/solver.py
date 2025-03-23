@@ -1,26 +1,69 @@
-from typing import List
-from numbers import Number
-
-# import sympy
-from sympy import Symbol
+from typing import List, Dict, Any
+# from numbers import Number
 import cvxpy
+import sympy
+from sympy import Symbol
+import semidefinite_program_repr as sdp_repr
 
+def cvxpy_dot_prod(a : Any, b : Any) -> Any:
+    return cvxpy.sum(cvxpy.multiply)
 
 class Solver:
 
     @classmethod
+    def solve_cvxpy(self, problem : sdp_repr.ProblemSDP) -> Any:
+        """Solve the SDP problem with cvxpy"""
+
+        moment_matrix_size =problem.variable_sizes[problem.MOMENT_MATRIX_VAR_NUM]
+        G = cvxpy.Variable((moment_matrix_size, moment_matrix_size))
+        constraints = [G == G.T, G >> 0]
+
+        
+        # Moment matrix structure
+        for eq_class in problem.moment_matrix.eq_classes:
+            assert len(eq_class) > 0
+            (i,j) = eq_class.pop() 
+            for (x,y) in eq_class:
+                constraints.append(G[i,j] == G[x,y])
+        
+        # Variables
+        sdp_vars = [cvxpy.Variable((size, size)) for size in problem.variable_sizes]
+        for var in sdp_vars:
+            constraints.append(var.T == var)
+            constraints.append(var >> 0)
+
+        # Constraints
+        for constraint in problem.constraints:
+            # c : List[Tuple[int, NDArray[np.float64]]] = constraint.constraints
+            expression = 0
+            for var_num, matrix in constraint.constraints:
+                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
+            constraint.append(0 == expression)
+
+        # tr(A.T x G)
+        objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
+        
+
+        prob = cvxpy.Problem(objective, constraints)
+        prob.solve()  # Returns the optimal value.
+        print("status:", prob.status)
+        print("optimal value", prob.value)
+        print("optimal var", G.value)
+        return prob.value
+ 
+    @classmethod
     def solve(cls, 
-            polynome_obj,
+            polynome_obj : sympy.Poly,
             k : int,
             moment_matrix : List[List[Symbol]],
             list_matrix_positive : List[List[List[Symbol]]],
             list_matrix_zero : List[List[List[Symbol]]]
-        ) -> Number:
+        ) -> float:
         """Solve the SDP problem with cvxpy"""
 
         moment_matrix_cvxpy = [[0 for _ in range(k)] for _ in range(k)]
         
-        sympy_to_cvxpy = {}
+        sympy_to_cvxpy : Dict[sympy.Poly, sympy.Poly] = {}
         for i in range(k):
             for j in range(k):
                 if moment_matrix[i][j] not in sympy_to_cvxpy.keys():                
@@ -71,3 +114,4 @@ class Solver:
         prob.solve()
 
         return prob.value
+        # return 0

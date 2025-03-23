@@ -4,6 +4,7 @@ import sympy as sp
 from ncpol3sdpa.rules import apply_rule, apply_rule_to_polynom
 from ncpol3sdpa.monomial import generate_monomials_commutative
 from ncpol3sdpa.constraints import Constraint
+import math
 
 def needed_monomials(monomials : List[sp.Poly], rules : Dict[sp.Poly, Any]) -> List[sp.Poly]:
     """Filter the monomials according to the rules"""
@@ -44,13 +45,13 @@ def create_constraint_matrix(
         for y in monomials
     ]
 
-def create_constraints_matrix_commutative(
-    monomials : List[sp.Poly], 
+def create_constraint_matrix_commutative(
+    monomials : List[sp.Poly],
     constraint_polynomial : sp.Poly,
     rules : Dict[sp.Poly, Any] 
 ) -> List[List[sp.Poly]]:
     """Create the matrix of constraints
-    The constraints are of the form constraint_polynomial >= 0
+    The constraints are of the form `constraint_polynomial >= 0`
     """
 
     n = len(monomials)
@@ -126,14 +127,14 @@ class AlgebraSDP:
         )
 
         # In the commutative case, the moment matrix is symmetric
-        self.symbolic_moment_matrix = create_moment_matrix_commutative(self.monomials, self.substitution_rules)
-        matrix_size = len (self.symbolic_moment_matrix)
+        self.moment_matrix = create_moment_matrix_commutative(self.monomials, self.substitution_rules)
+        matrix_size = len (self.moment_matrix)
 
         # equivalence classes of equal coefficients
         self.monomial_to_positions : Dict[sp.Poly,List[Tuple[int, int]]]= {}
         for i in range(matrix_size):
             for j in range(i+1):
-                monomial = self.symbolic_moment_matrix[i][j]
+                monomial = self.moment_matrix[i][j]
                 if monomial in self.monomial_to_positions.keys():
                     self.monomial_to_positions[monomial].append((i,j))
                 else:
@@ -146,12 +147,27 @@ class AlgebraSDP:
         self.equality_constraints : List[sp.poly] = []
     
     def add_constraint(self, constraint : Constraint) -> None:
+        # validation
+        for variable in constraint.polynom.free_symbols():
+            # TODO Is this reasonable? Can be modified
+            assert variable in self.objective.free_symbols() 
+
         if constraint.is_equality_constraint:
             self.equality_constraints.append(constraint.polynom)
         else:
             #inequality constraint
+            # p.10 of Semidefinite programming relaxations for quantum correlations
+            k_i = math.floor(self.relaxation_order - constraint.polynom.degree()/2) 
+            assert k_i >= 1, "Insufficient relaxation order to capture the constraint {constraint.polynom}"
+            
+            # TODO This is redundant work, does this matter?
+            constraint_monomials = needed_monomials( \
+                generate_monomials_commutative(self.objective.free_symbols, k_i), \
+                self.substitution_rules\
+            )
+
             self.constraint_moment_matrices.append( \
-                create_moment_matrix_commutative(self.monomials, self.substitution_rules))
+                create_constraint_matrix_commutative(constraint_monomials, constraint.polynom, self.substitution_rules))
 
     def add_constraints(self, constraints : List[Constraint]) -> None:
         for constraint in constraints:
