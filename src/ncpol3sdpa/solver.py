@@ -38,7 +38,7 @@ class Solver:
             expression = 0
             for var_num, matrix in constraint.constraints:
                 expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
-            constraint.append(0 == expression)
+            constraints.append(0 == expression)
 
         # tr(A.T x G)
         objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))

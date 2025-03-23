@@ -33,7 +33,7 @@ def algebra_to_SDP_inequality_constraint(
 
             a_0 = np.zeros(shape = (moment_matrix_size,moment_matrix_size))
             for monomial, coef in poly.as_coefficients_dict().items():
-                assert monomial in algebra.monomial_to_positions
+                assert monomial in algebra.monomial_to_positions.keys()
                 assert 0 < len(algebra.monomial_to_positions[monomial])
                 x,y = algebra.monomial_to_positions[monomial][0]
                 a_0[x][y] += 0.5*coef
@@ -75,7 +75,7 @@ def algebra_to_SDP(algebra : momentmatrix.AlgebraSDP) -> ProblemSDP:
     # Translate Inequality constrains
 
     for constraint_matrix in algebra.constraint_moment_matrices:
-        algebra.add_constraint(algebra_to_SDP_inequality_constraint(\
+        result_SDP.constraints.append(algebra_to_SDP_inequality_constraint(\
             result_SDP, algebra, constraint_matrix))
 
     return result_SDP 

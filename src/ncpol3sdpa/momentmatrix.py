@@ -55,7 +55,9 @@ def create_constraint_matrix_commutative(
     """
 
     n = len(monomials)
-    return [[apply_rule_to_polynom(monomials[i] * monomials[j] * constraint_polynomial, rules) \
+    return [[apply_rule_to_polynom(
+                            sp.expand(monomials[i] * monomials[j] * constraint_polynomial), \
+                            rules) \
             for j in range(i+1)] for i in range(n)]
 
 
@@ -160,7 +162,7 @@ class AlgebraSDP:
             
             print(constraint.polynom)
             print(type(constraint.polynom))
-            k_i = math.floor(self.relaxation_order - constraint.polynom.degree()/2) 
+            k_i = math.floor(self.relaxation_order - sp.degree(constraint.polynom)/2) 
             assert k_i >= 1, "Insufficient relaxation order to capture the constraint {constraint.polynom}"
             
             # TODO This is redundant work, does this matter?
