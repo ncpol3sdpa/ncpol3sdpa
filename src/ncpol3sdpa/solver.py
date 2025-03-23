@@ -14,7 +14,7 @@ class Solver:
     def solve_cvxpy(self, problem : sdp_repr.ProblemSDP) -> Any:
         """Solve the SDP problem with cvxpy"""
 
-        moment_matrix_size =problem.variable_sizes[problem.MOMENT_MATRIX_VAR_NUM]
+        moment_matrix_size = problem.variable_sizes[problem.MOMENT_MATRIX_VAR_NUM]
         G = cvxpy.Variable((moment_matrix_size, moment_matrix_size))
         constraints = [G == G.T, G >> 0, G[0,0] == 1]
 
