@@ -7,7 +7,7 @@ from sympy.abc import x, y
 def test_1():
     obj = 2*x*y
     p = Problem(obj)
-    c1 = Constraint.EqualityConstraint(x*x-x, substitution = True)
+    c1 = Constraint.EqualityConstraint(x*x-x)
     c2 = Constraint.InequalityConstraint(-y*y + y + 0.25)
     p.add_constraint(c1)
     p.add_constraint(c2)

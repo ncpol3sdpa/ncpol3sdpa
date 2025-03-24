@@ -29,7 +29,6 @@ class Solver:
 
         # Constraints
         for constraint in problem.constraints:
-            # c : List[Tuple[int, NDArray[np.float64]]] = constraint.constraints
             expression = 0
             for var_num, matrix in constraint.constraints:
                 expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])

@@ -172,6 +172,17 @@ class AlgebraSDP:
             self.constraint_moment_matrices.append( \
                 create_constraint_matrix_commutative(constraint_monomials, constraint.polynom, self.substitution_rules))
 
+    def expand_eq_constraint(self, constraint : sp.Poly) -> List[sp.Poly]:
+        """Generate a list of polynomials {p = m * constraint | m : monomial & degre(p) <= 2*k } 
+            where k is the relaxation order. 2k are monomials that "fit inside" the moment matrix.
+            Used for equality constraints."""
+        res1 = [apply_rule_to_polynom(sp.expand(monomial * constraint), self.substitution_rules) \
+                for monomial in self.monomials]
+
+        # It is better to filter after expanding and substituting, maybe substitution rules can reduce the degree
+        return [poly for poly in res1 \
+                     if sp.Poly(poly).total_degree() <= 2*self.relaxation_order]
+
     def add_constraints(self, constraints : List[Constraint]) -> None:
         for constraint in constraints:
             self.add_constraint(constraint)

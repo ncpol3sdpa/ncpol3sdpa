@@ -13,6 +13,28 @@ import ncpol3sdpa.semidefinite_program_repr as sdp_repr
 import ncpol3sdpa.momentmatrix as momentmatrix
 from ncpol3sdpa.semidefinite_program_repr import ProblemSDP, MomentMatrixSDP
 
+def algebra_to_SDP_add_equality_constraint(
+    problem: ProblemSDP, 
+    algebra : momentmatrix.AlgebraSDP,
+    eq_constraint : sympy.Poly
+) -> None :
+    moment_matrix_size = problem.variable_sizes[problem.MOMENT_MATRIX_VAR_NUM]
+
+    implied_constraints = algebra.expand_eq_constraint(eq_constraint)
+    for implied_constraint in implied_constraints:
+        #constraint matrix
+        a_0 = np.zeros(shape = (moment_matrix_size, moment_matrix_size))
+        #TODO: factor this code into a function
+        for monomial, coef in implied_constraint.as_coefficients_dict().items():
+            assert monomial in algebra.monomial_to_positions.keys()
+            assert 0 < len(algebra.monomial_to_positions[monomial])
+            monomial_x, monomial_y = algebra.monomial_to_positions[monomial][0]
+            a_0[monomial_x][monomial_y] += 0.5*coef
+            a_0[monomial_y][monomial_x] += 0.5*coef
+        
+        constraint = sdp_repr.EqConstraint([(problem.MOMENT_MATRIX_VAR_NUM, a_0)])
+        problem.constraints.append(constraint)
+
 def algebra_to_SDP_add_inequality_constraint(
     problem: ProblemSDP, 
     algebra : momentmatrix.AlgebraSDP,
@@ -71,7 +93,9 @@ def algebra_to_SDP(algebra : momentmatrix.AlgebraSDP) -> ProblemSDP:
     result_SDP = ProblemSDP(moment_matrix_repr, objective)
 
     # Translate Equality constraints
-    #TODO
+    
+    for eq_constraint in algebra.equality_constraints:
+        algebra_to_SDP_add_equality_constraint(result_SDP, algebra, eq_constraint)
 
     # Translate Inequality constrains
 
