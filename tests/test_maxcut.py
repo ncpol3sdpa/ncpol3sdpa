@@ -2,6 +2,9 @@ import sympy
 from typing import List
 import numpy as np
 
+from ncpol3sdpa.problem import Problem
+from ncpol3sdpa.funs import generate_variables
+
 
 def gen_random_matrix(n : int):
     """ Returns a random numpy symmetric matrix, with constant diagonals """
