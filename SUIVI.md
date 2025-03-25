@@ -94,3 +94,4 @@
 - (Yann) Migrate the branch
 - (Nazar) Comancer ecrire des tests pour le nouvau code
 - (Allain) Comancer d'implementaer une application: Max Cut
+- (Mathis) Lecture et compréhension de la nouvelle implémentation du solveur
