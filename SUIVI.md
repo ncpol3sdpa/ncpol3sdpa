@@ -85,6 +85,12 @@
   * Meeting with Peter Brown
   * Discuss the next steps
 
+# 23-24/03/2025
+- (Nazar) Ecritre le nouvau representation du SDP. Restructuration complet du code
+
 # 25/03/2025
 
 - (Thomas) begin sos problem: https://www.princeton.edu/~aaa/Public/Teaching/ORF523/ORF523_Lec15.pdf ,useful link for the sos theory
+- (Yann) Migrate the branch
+- (Nazar) Comancer ecrire des tests pour le nouvau code
+- (Allain) Comancer d'implementaer une application: Max Cut
