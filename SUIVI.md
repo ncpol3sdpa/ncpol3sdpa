@@ -55,32 +55,36 @@
   * update pyproject.toml for mypy dependency
   * add new test for typing functionality
 
-# 12/03/2024
+# 12/03/2025
 
 - (Mathis) 
   * ajout de test pour la partie solver.py
   * debug de solver.py
 
-# 14/03/2024
+# 14/03/2025
 
 - (Mathis)
   * debug de problem.py
   * ajout de la substitution dans le code général (ne marche pas mais ne créer pas d'autre bug (on peut ne pas activer les substitutions))
 
-# 15/03/2024
+# 15/03/2025
 
 - (Mathis) debug
 - (Yann) 
   * Clean and refactor the code
   * Add typing annotations.
 
-# 18/03/2024 
+# 18/03/2025 
 
 - (Mathis) debug + test
 - (Yann)
   * Add sphinx to the project
   * Clean, refactor and add type annotations to the code
-- (Nazar) Comancer de faire un nouvau type de donnés pour mieux representer des SDPs sur la la branche better-sdp-representation.
+- (Nazar) Commencer à faire un nouvau type de données pour mieux representer des SDPs sur la branche better-sdp-representation.
 - (All) 
   * Meeting with Peter Brown
   * Discuss the next steps
+
+# 25/03/2025
+
+- (Thomas) begin sos problem: https://www.princeton.edu/~aaa/Public/Teaching/ORF523/ORF523_Lec15.pdf ,useful link for the sos theory
