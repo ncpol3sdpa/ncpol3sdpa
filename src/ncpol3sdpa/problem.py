@@ -148,27 +148,9 @@ class Problem:
         algebra = momentmatrix.AlgebraSDP(needed_symbols, self.objective, relaxation_order, rules)
         algebra.add_constraints(normal_constraints)
 
-        #debugging TODO
-        print("Algebra:")
-        print("relaxation_order: " , algebra.relaxation_order)
-        print("monomials: " , algebra.monomials)
-        print("moment_matrix: " , algebra.moment_matrix)
-        print("substitution_rules: " , algebra.substitution_rules)
-        print("monomial_to_positions: " , algebra.monomial_to_positions)
-        print("equality_constraints: " , algebra.equality_constraints)
-        print("constraint_moment_matrices: " , algebra.constraint_moment_matrices)
-
         # 2. Translate to SDP
-        problemSDP = algebra_to_SDP(algebra)
 
-        #debugging TODO
-        print("SDP translation:")
-        print(".objective: ", problemSDP.objective)
-        print(".variable_sizes: ", problemSDP.variable_sizes)
-        print("Moment matrix:")
-        print("    .moment_matrix.size: ", problemSDP.moment_matrix.size)
-        print("    .moment_matrix.eq_classes: ", problemSDP.moment_matrix.eq_classes)
-        print(".constraints: ", [c.constraints for c in problemSDP.constraints])
+        problemSDP = algebra_to_SDP(algebra)
 
         # 3. Solve the SDP
 
@@ -206,9 +188,6 @@ class Problem:
             all_monomials, rules
         )
 
-        print(rules)
-        print(variable_of_monomial)
-        print(moment_matrix)
 
         # 4. Build constraints matrices
         #        - momentmatrix.py

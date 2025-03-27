@@ -122,4 +122,13 @@ class ProblemSDP:
         moment_matrix : NDArray[np.float64] = variable_instances[self.MOMENT_MATRIX_VAR_NUM]
         res = np.sum(np.multiply(self.objective, moment_matrix))
         assert isinstance(res,np.float64)
-        return res # type : ignore
+        return res
+        
+    def __str__(self) -> str:
+        return f"SDP translation:\n\
+.objective: \n\ {self.objective}\n\
+.variable_sizes: {self.variable_sizes}\n\
+Moment matrix: \n\
+    .moment_matrix.size: \n\ {self.moment_matrix.size}\n\
+    .moment_matrix.eq_classes: \n\ {self.moment_matrix.eq_classes}\n\
+.constraints: \n\ {[c.constraints for c in self.constraints]}"

@@ -193,3 +193,23 @@ class AlgebraSDP:
     def add_constraints(self, constraints : List[Constraint]) -> None:
         for constraint in constraints:
             self.add_constraint(constraint)
+
+    def __string__(self) -> str:
+        """return String representatio for debugging"""
+        
+        # The print on the moment matrix is not very good
+        return f"Algebra:\
+\n\
+relaxation_order: {self.relaxation_order}\n\
+monomials\n\
+{self.monomials}\n\
+moment_matrix\n\
+{self.moment_matrix}\n\
+substitution_rules\n\
+{self.substitution_rules}\n\
+monomial_to_positions\n\
+{self.monomial_to_positions}\n\
+equality_constraints\n\
+{self.equality_constraints}\n\
+constraint_moment_matrices\n\
+{self.constraint_moment_matrices}\n"
