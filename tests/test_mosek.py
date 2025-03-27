@@ -12,7 +12,7 @@
 #         task.optimize()                           # Optimize
 
 #         return task.getxx(soltype.itr)               # Get solution
-    
+
 
 # def test_func() -> None:
 #     assert (func() == 2 or func() == 2.0)

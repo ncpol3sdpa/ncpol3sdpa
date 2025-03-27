@@ -3,7 +3,7 @@ from ncpol3sdpa import monomial
 from typing import List
 
 
-def calculate_number_from_list(digits : List[int], base : int) -> int:
+def calculate_number_from_list(digits: List[int], base: int) -> int:
     res = 0
     power = 1
     for digit in digits:
@@ -12,8 +12,7 @@ def calculate_number_from_list(digits : List[int], base : int) -> int:
     return res
 
 
-def list_increment_on_test_inputs(nums : List[int], k : int) -> None:
-
+def list_increment_on_test_inputs(nums: List[int], k: int) -> None:
     assert isinstance(k, int)
 
     for digit in nums:
@@ -26,7 +25,9 @@ def list_increment_on_test_inputs(nums : List[int], k : int) -> None:
         assert overflow
     else:
         assert not overflow
-        assert calculate_number_from_list(nums, k) + 1 == calculate_number_from_list(nums_cp, k)
+        assert calculate_number_from_list(nums, k) + 1 == calculate_number_from_list(
+            nums_cp, k
+        )
 
 
 def test_list_increment():
