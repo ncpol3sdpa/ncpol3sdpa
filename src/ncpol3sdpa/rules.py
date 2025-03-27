@@ -55,6 +55,3 @@ def apply_rule_to_polynom(polynom: Expr, rules: Dict[Expr, Expr]) -> Expr:
     for monom, coef in poly_dict.items():
         res += coef * apply_rule(monom, rules)
     return res
-
-
-def solve_equality_constraints() -> None: ...
