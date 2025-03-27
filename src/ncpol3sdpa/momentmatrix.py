@@ -103,6 +103,18 @@ def create_constraints_matrix_cvxpy(
                 
     return matrix
 
+def generate_needed_symbols(polynomials : List[sp.poly]) -> List[sp.Symbol]:
+    sum : sp.Poly = 1
+    for p in polynomials:
+        sum += p
+    
+    # Type check
+    for s in sum.free_symbols:
+        assert isinstance(s, sp.Symbol)
+    res : List[sp.Symbol] = sum.free_symbols
+    
+    return res
+
 class MomentMatrix:
     def __init__(self, polynom : sp.Poly, monomials : List[sp.Poly]) -> None:
         self.optimized = None
@@ -118,13 +130,13 @@ class MomentMatrix:
         raise NotImplementedError
 
 class AlgebraSDP:
-    def __init__(self, objective : sp.Poly, relaxation_order : int, substitution_rules : Dict[sp.Poly, sp.Poly]) -> None:
+    def __init__(self, needed_variables : List[sp.Symbol] , objective : sp.Poly, relaxation_order : int, substitution_rules : Dict[sp.Poly, sp.Poly]) -> None:
         """ Construct the symbolic Moment Matrices and soundings data structures. Works for the commutative case """ 
         self.objective = objective
         self.relaxation_order = relaxation_order
         self.substitution_rules = substitution_rules
         self.monomials : List[sp.Poly] = needed_monomials( \
-                generate_monomials_commutative(objective.free_symbols, relaxation_order), \
+                generate_monomials_commutative(needed_variables, relaxation_order), \
                 substitution_rules\
         )
 
@@ -149,11 +161,6 @@ class AlgebraSDP:
         self.equality_constraints : List[sp.poly] = []
     
     def add_constraint(self, constraint : Constraint) -> None:
-        # validation
-        for variable in constraint.polynom.free_symbols:
-            # TODO Is this reasonable? Can be modified
-            assert variable in self.objective.free_symbols
-
         if constraint.is_equality_constraint:
             self.equality_constraints.append(constraint.polynom)
         else:

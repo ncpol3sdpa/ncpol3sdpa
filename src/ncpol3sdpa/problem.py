@@ -142,10 +142,13 @@ class Problem:
         ]
 
         # 1. Build algebraic formulation
-        algebra = momentmatrix.AlgebraSDP(self.objective, relaxation_order, rules)
+
+        all_constraint_polynomials = [c.polynom for c in self.constraints] + [self.objective]
+        needed_symbols = momentmatrix.generate_needed_symbols(all_constraint_polynomials) 
+        algebra = momentmatrix.AlgebraSDP(needed_symbols, self.objective, relaxation_order, rules)
         algebra.add_constraints(normal_constraints)
 
-        #debugging
+        #debugging TODO
         print("Algebra:")
         print("relaxation_order: " , algebra.relaxation_order)
         print("monomials: " , algebra.monomials)
@@ -158,7 +161,7 @@ class Problem:
         # 2. Translate to SDP
         problemSDP = algebra_to_SDP(algebra)
 
-        #debugging
+        #debugging TODO
         print("SDP translation:")
         print(".objective: ", problemSDP.objective)
         print(".variable_sizes: ", problemSDP.variable_sizes)
