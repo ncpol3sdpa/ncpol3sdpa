@@ -13,7 +13,9 @@ class Constraint:
         self.is_equality_constraint: bool = (
             is_equality_constraint  # is the constraint an equality or not ?
         )
-        self.polynomial: Expr = polynomial  # the constraint has the form p >= 0 or p = 0
+        self.polynomial: Expr = (
+            polynomial  # the constraint has the form p >= 0 or p = 0
+        )
         self.substitution: bool = (
             substitution  # do we use substitution technique for this constraint ?
         )

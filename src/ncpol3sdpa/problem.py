@@ -43,7 +43,9 @@ def algebra_to_SDP_add_equality_constraint(
 ) -> None:
     implied_constraints = algebra.expand_eq_constraint(eq_constraint)
     for implied_constraint in implied_constraints:
-        implied_constraint = apply_rule_to_polynomial(implied_constraint, algebra.substitution_rules)
+        implied_constraint = apply_rule_to_polynomial(
+            implied_constraint, algebra.substitution_rules
+        )
 
         # constraint matrix
         a_0 = polynomial_to_matrix(algebra, implied_constraint)
@@ -91,7 +93,7 @@ def algebra_to_SDP(algebra: algebra.AlgebraSDP) -> ProblemSDP:
 
     moment_matrix_repr = sdp_repr.MomentMatrixSDP(moment_matrix_size, equiv_classes)
 
-    result_SDP =sdp_repr.ProblemSDP(moment_matrix_repr, objective)
+    result_SDP = sdp_repr.ProblemSDP(moment_matrix_repr, objective)
 
     # Translate Equality constraints
 
@@ -157,11 +159,10 @@ class Problem:
 
         # 1. Build algebraic formulation
 
-        all_constraint_polynomials = [c.polynomial for c in self.constraints] + \
-                                     [self.objective]
-        needed_symbols = algebra.generate_needed_symbols(
-            all_constraint_polynomials
-        )
+        all_constraint_polynomials = [c.polynomial for c in self.constraints] + [
+            self.objective
+        ]
+        needed_symbols = algebra.generate_needed_symbols(all_constraint_polynomials)
         algebraSDP = algebra.AlgebraSDP(
             needed_symbols, self.objective, relaxation_order, rules
         )

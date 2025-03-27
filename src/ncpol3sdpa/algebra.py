@@ -28,6 +28,7 @@ def create_moment_matrix_commutative(
         for i in range(matrix_size)
     ]
 
+
 def create_constraint_matrix_commutative(
     monomials: List[sp.Expr], constraint_polynomial: sp.Expr, rules: Dict[sp.Expr, Any]
 ) -> List[List[sp.Expr]]:
@@ -45,6 +46,7 @@ def create_constraint_matrix_commutative(
         ]
         for i in range(n)
     ]
+
 
 def generate_needed_symbols(polynomials: List[sp.Expr]) -> List[sp.Symbol]:
     sum: sp.Expr = 1
@@ -74,7 +76,9 @@ class AlgebraSDP:
             generate_monomials_commutative(needed_variables, relaxation_order),
             substitution_rules,
         )
-        self.objective = apply_rule_to_polynomial(sp.expand(objective), substitution_rules)
+        self.objective = apply_rule_to_polynomial(
+            sp.expand(objective), substitution_rules
+        )
 
         # In the commutative case, the moment matrix is symmetric
         self.moment_matrix = create_moment_matrix_commutative(
@@ -105,7 +109,9 @@ class AlgebraSDP:
             # inequality constraint
             # p.10 of Semidefinite programming relaxations for quantum correlations
 
-            k_i = math.floor(self.relaxation_order - sp.degree(constraint.polynomial) / 2)
+            k_i = math.floor(
+                self.relaxation_order - sp.degree(constraint.polynomial) / 2
+            )
             assert k_i >= 0, (
                 "Insufficient relaxation order to capture the constraint {constraint.polynomial}"
             )

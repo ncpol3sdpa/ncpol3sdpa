@@ -10,7 +10,9 @@ class Rule:
         """Private method creating a Tuple of equivalence"""
 
         # express polynomial as a list of monomial
-        polynomial: List[Tuple[Tuple[int, ...], int]] = poly(constraint.polynomial).terms()
+        polynomial: List[Tuple[Tuple[int, ...], int]] = poly(
+            constraint.polynomial
+        ).terms()
 
         leader_monomial = max(polynomial, key=lambda monomial: sum(monomial[0]))
 
@@ -43,6 +45,7 @@ def apply_rule(monomial: Expr, rules: Dict[Expr, Expr]) -> Expr:
         if rem(monomial, key) == 0:
             return apply_rule(monomial * rules[key] / key, rules)
     return monomial
+
 
 def apply_rule_to_polynomial(polynomial: Expr, rules: Dict[Expr, Expr]) -> Expr:
     """Apply a rule to a polynomial"""
