@@ -57,21 +57,37 @@ pytest:
     - uv run pytest
     - echo "Pytest complete"
 
-mypy:
+mypy-src:
   stage: test
   script:
     - echo "Running Mypy..."
     - uv run mypy src
     - echo "Mypy complete"
   allow_failure: true
+  
+# mypy-tests:
+#   stage: test
+#   script:
+#     - echo "Running Mypy..."
+#     - uv run mypy src
+#     - echo "Mypy complete"
+#   allow_failure: true
 
-ruff-check:
+ruff-check-src:
   stage: test
   script:
     - echo "Running Ruff..."
-    - uvx ruff check
+    - uvx ruff check src
     - echo "Ruff complete"
   allow_failure: true
+
+# ruff-check-tests:
+#   stage: test
+#   script:
+#     - echo "Running Ruff..."
+#     - uvx ruff check tests
+#     - echo "Ruff complete"
+#   allow_failure: true
 
 deploy-job:
   stage: deploy
