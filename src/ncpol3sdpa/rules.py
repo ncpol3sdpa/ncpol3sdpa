@@ -44,9 +44,7 @@ class Rule:
         ])
 
 def apply_rule(monom : Expr, rules : Dict[Expr, Expr]) -> Expr:
-    """Apply a rule to a monom"""
-
-    print(f"APPLYING RULE {type(monom) = } \t {monom = }")
+    """Apply a rule to a monomial"""
 
     for key in rules.keys():
         if rem(monom, key) == 0:
@@ -54,14 +52,14 @@ def apply_rule(monom : Expr, rules : Dict[Expr, Expr]) -> Expr:
     return monom
 
 def apply_rule_to_polynom(polynom : Expr, rules : Dict[Expr, Expr]) -> Expr:
-    """Apply a rule to a polynom"""
-
-    print(f"APPLYING RULE {type(polynom) = } \t {polynom = }")
+    """Apply a rule to a polynomial"""
 
     poly_dict : Dict[Expr, int] = polynom.as_coefficients_dict()   # type: ignore
     res : Expr = S.Zero
-    for monom,coeff in poly_dict.items():
-        res += coeff * apply_rule(monom, rules)
+
+    res = 0
+    for monom,coef in poly_dict.items():
+        res += coef * apply_rule(monom, rules)
     return res
 
 def solve_equality_constraints() -> None: ...

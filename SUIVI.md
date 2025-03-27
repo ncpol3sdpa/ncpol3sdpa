@@ -36,13 +36,11 @@
 - (Nazar) fonction pour generer tous les monomes   
 - (Yann) ajout du gestionnaire uv
 
-# 06/03/2025
+## 06/03/2025
+ - (Nazar) Ajouter les appels de fonction dans problem.py. ajouter fonction dictionaire dans monmial.py
+ - (Mathis) ajout de la fonction create_moment_matrix + tests
 
-- (Nazar) Ajouter les appels de fonction dans problem.py. ajouter fonction dictionaire dans monmial.py
-- (Mathis) ajout de la fonction create_moment_matrix + tests
-
-# 11/03/2025
-
+## 11/03/2025
 - (Nazar et Thomas) première version du solveur utilisant cvxpy
 - (Mathis) 
   * correction de logique dans la création des matrices de moments (changement de variable)
@@ -55,26 +53,25 @@
   * update pyproject.toml for mypy dependency
   * add new test for typing functionality
 
-# 12/03/2025
-
+## 12/03/2024
 - (Mathis) 
   * ajout de test pour la partie solver.py
   * debug de solver.py
 
-# 14/03/2025
+## 14/03/2025
 
 - (Mathis)
   * debug de problem.py
   * ajout de la substitution dans le code général (ne marche pas mais ne créer pas d'autre bug (on peut ne pas activer les substitutions))
 
-# 15/03/2025
+## 15/03/2025
 
 - (Mathis) debug
 - (Yann) 
   * Clean and refactor the code
   * Add typing annotations.
 
-# 18/03/2025 
+## 18/03/2025 
 
 - (Mathis) debug + test
 - (Yann)
@@ -85,10 +82,10 @@
   * Meeting with Peter Brown
   * Discuss the next steps
 
-# 23-24/03/2025
+## 23-24/03/2025
 - (Nazar) Ecritre le nouvau representation du SDP. Restructuration complet du code
 
-# 25/03/2025
+## 25/03/2025
 
 - (Thomas) begin sos problem: https://www.princeton.edu/~aaa/Public/Teaching/ORF523/ORF523_Lec15.pdf ,useful link for the sos theory
 - (Yann) Migrate the branch
