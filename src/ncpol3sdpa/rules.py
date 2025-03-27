@@ -51,9 +51,8 @@ def apply_rule_to_polynomial(polynomial: Expr, rules: Dict[Expr, Expr]) -> Expr:
     """Apply a rule to a polynomial"""
 
     poly_dict: Dict[Expr, int] = polynomial.as_coefficients_dict()  # type: ignore
-    res: Expr = S.Zero
 
-    res = 0
+    res: Expr = S.Zero
     for monomial, coef in poly_dict.items():
         res += coef * apply_rule(monomial, rules)
     return res

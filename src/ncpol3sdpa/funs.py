@@ -6,6 +6,6 @@ def coefficients_dict(expr: Expr) -> Dict[Expr, int]:
     return expr.as_coefficients_dict()  # type: ignore
 
 
-def generate_n_variables(n: int) -> Tuple[Symbol]:
+def generate_n_variables(n: int) -> Tuple[Symbol, ...]:
     """returns n variables in a tuple, indexed (x0, x1, ... x{n-1})"""
-    return symbols(f"x0:{n}")
+    return tuple(symbols(f"x0:{n}"))

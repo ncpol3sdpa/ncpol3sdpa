@@ -1,23 +1,23 @@
-from typing import List, Dict, Any
-from sympy import Expr, Symbol
-import sympy
-from cvxpy import Variable, Maximize, Problem
+from typing import Any #,List, Dict
+# from sympy import Expr, Symbol
+# import sympy
+# from cvxpy import Variable, Maximize, Problem
+# from cvxpy.atoms.affine.vstack import vstack
+# from cvxpy.atoms.affine.hstack import hstack
 import cvxpy
-from cvxpy.atoms.affine.vstack import vstack
-from cvxpy.atoms.affine.hstack import hstack
 
-from ncpol3sdpa.funs import coefficients_dict
+# from ncpol3sdpa.funs import coefficients_dict
 import ncpol3sdpa.semidefinite_program_repr as sdp_repr
 
 
 def cvxpy_dot_prod(c: Any, x: Any) -> Any:
-    return cvxpy.trace(c @ x)
+    return cvxpy.trace(c @ x) # type: ignore
     # return cvxpy.sum(cvxpy.multiply(c, x))
 
 
 class Solver:
     @classmethod
-    def solve_cvxpy(self, problem: sdp_repr.ProblemSDP) -> Any:
+    def solve_cvxpy(self, problem: sdp_repr.ProblemSDP) -> float:
         """Solve the SDP problem with cvxpy"""
         # Variables
         sdp_vars = [
@@ -47,8 +47,9 @@ class Solver:
         objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
 
         prob = cvxpy.Problem(objective, constraints)
-        prob.solve()  # Returns the optimal value.
+        # Returns the optimal value.
+        prob.solve()  # type: ignore
         print("status:", prob.status)
         print("optimal value", prob.value)
         print("optimal var", G.value)
-        return prob.value
+        return prob.value # type: ignore

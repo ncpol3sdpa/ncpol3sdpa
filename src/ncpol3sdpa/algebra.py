@@ -40,7 +40,7 @@ def create_constraint_matrix_commutative(
     return [
         [
             apply_rule_to_polynomial(
-                sp.expand(monomials[i] * monomials[j] * constraint_polynomial), rules
+                sp.expand(monomials[i] * monomials[j] * constraint_polynomial), rules # type: ignore
             )
             for j in range(i + 1)
         ]
@@ -49,16 +49,15 @@ def create_constraint_matrix_commutative(
 
 
 def generate_needed_symbols(polynomials: List[sp.Expr]) -> List[sp.Symbol]:
-    sum: sp.Expr = 1
+    total: sp.Expr = sp.S.One
     for p in polynomials:
-        sum += p
+        total += p
 
-    # Type check
-    for s in sum.free_symbols:
+    # Type check (useless ???)
+    for s in total.free_symbols:
         assert isinstance(s, sp.Symbol)
-    res: List[sp.Symbol] = list(sum.free_symbols)
 
-    return res
+    return list(total.free_symbols) # type: ignore
 
 
 class AlgebraSDP:
@@ -77,7 +76,7 @@ class AlgebraSDP:
             substitution_rules,
         )
         self.objective = apply_rule_to_polynomial(
-            sp.expand(objective), substitution_rules
+            sp.expand(objective), substitution_rules # type: ignore
         )
 
         # In the commutative case, the moment matrix is symmetric
@@ -134,7 +133,8 @@ class AlgebraSDP:
         Used for equality constraints."""
         res1 = [
             apply_rule_to_polynomial(
-                sp.expand(monomial * constraint), self.substitution_rules
+                sp.expand(monomial * constraint),  # type: ignore
+                self.substitution_rules
             )
             for monomial in self.monomials
         ]
@@ -143,7 +143,7 @@ class AlgebraSDP:
         return [
             poly
             for poly in res1
-            if sp.Poly(poly).total_degree() <= 2 * self.relaxation_order
+            if sp.Poly(poly).total_degree() <= 2 * self.relaxation_order # type: ignore
         ]
 
     def add_constraints(self, constraints: List[Constraint]) -> None:

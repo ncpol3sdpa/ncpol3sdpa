@@ -93,11 +93,11 @@ class ProblemSDP:
 
         # the structure of the equality constraints is star:
         # s0= s1, s0 = s2, s0 = s3, ...
-        # TODO/Idea: What if it was a chain(s0 = s1, s1 = s2, s2 = s3, ...) or a balanced tree?
+        # TODO/Idea: What if it was a chain(s0 = s1, s1 = s2, s2 = s3, ...) or a balanced tree or a Union-Find structure?
 
     # --- Validation ---
     def constraint_verified(
-        self, constraint: EqConstraint, variable_instances: List[NDArray]
+        self, constraint: EqConstraint, variable_instances: List[NDArray[np.float64]]
     ) -> bool:
         """Verify if a constraint is satisfied"""
         sum = 0
@@ -143,10 +143,12 @@ class ProblemSDP:
         return res
 
     def __str__(self) -> str:
-        return f"SDP translation:\n\
-.objective: \n\ {self.objective}\n\
-.variable_sizes: {self.variable_sizes}\n\
-Moment matrix: \n\
-    .moment_matrix.size: \n\ {self.moment_matrix.size}\n\
-    .moment_matrix.eq_classes: \n\ {self.moment_matrix.eq_classes}\n\
-.constraints: {[c.constraints for c in self.constraints]}"
+        return (
+            "SDP translation:\n" +
+            f".objective: \n\ {self.objective}\n" +
+            f".variable_sizes: {self.variable_sizes}\n" +
+            "Moment matrix: \n" +
+            f"    .moment_matrix.size: \n\ {self.moment_matrix.size}\n" +
+            f"    .moment_matrix.eq_classes: \n\ {self.moment_matrix.eq_classes}\n" +
+            f".constraints: {[c.constraints for c in self.constraints]}"
+        )

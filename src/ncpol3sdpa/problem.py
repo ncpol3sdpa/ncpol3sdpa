@@ -1,5 +1,5 @@
 from __future__ import annotations
-from sympy import Expr, S, total_degree
+from sympy import Expr, S
 import sympy
 import numpy as np
 from typing import List, Dict, Tuple, Any
@@ -24,7 +24,7 @@ def polynomial_to_matrix(
         and deg(poly) <= 2*algebra.relaxation_order"""
     moment_matrix_size = len(algebra.moment_matrix)
     a_0 = np.zeros(shape=(moment_matrix_size, moment_matrix_size))
-    for monomial, coef in poly.as_coefficients_dict().items():
+    for monomial, coef in poly.as_coefficients_dict().items(): # type: ignore
         assert monomial in algebra.monomial_to_positions.keys()
         assert 0 < len(algebra.monomial_to_positions[monomial])
         # The 0 is arbitrary (?) could be any other element of the list.
