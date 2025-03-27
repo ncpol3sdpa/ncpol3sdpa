@@ -9,6 +9,7 @@ dependencies = [
     "mypy>=1.15.0",
     "sphinx>=8.2.3",
     "sympy>=1.13.3",
+    "tach>=0.28.4",
 ]
 
 [dependency-groups]

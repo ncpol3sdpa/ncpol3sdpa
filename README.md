@@ -76,3 +76,13 @@ Then, you can build the documentation by executing the following command:
 make html -C docs
 make latexpdf -C docs
 ```
+
+### Build Dependencies Graph
+
+We use `tach` to build the dependencies graph. 
+
+```bash
+uv run tach mod
+uv run tach sync
+uv run tach show --web
+```
