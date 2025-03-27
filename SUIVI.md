@@ -33,11 +33,11 @@
  - (Nazar) fonction pour generer tous les monomes   
  - (Yann) ajout du gestionnaire uv
 
-# 06/03/2025
+## 06/03/2025
  - (Nazar) Ajouter les appels de fonction dans problem.py. ajouter fonction dictionaire dans monmial.py
  - (Mathis) ajout de la fonction create_moment_matrix + tests
 
-# 11/03/2025
+## 11/03/2025
 - (Nazar et Thomas) première version du solveur utilisant cvxpy
 - (Mathis) 
     * correction de logique dans la création des matrices de moments (changement de variable)
@@ -50,17 +50,17 @@
     * update pyproject.toml for mypy dependency
     * add new test for typing functionality
 
-# 12/03/2024
+## 12/03/2024
 - (Mathis) 
     * ajout de test pour la partie solver.py
     * debug de solver.py
 
-# 14/03/2024
+## 14/03/2024
  - (Mathis)
     * debug de problem.py
     * ajout de la substitution dans le code général (ne marche pas mais ne créer pas d'autre bug (on peut ne pas activer les substitutions))
 
-# 15/03/2024 
+## 15/03/2024 
  - (Mathis) debug
  - (Yann) 
     * Clean and refactor the code
