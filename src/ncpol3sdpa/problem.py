@@ -6,7 +6,7 @@ from typing import List, Dict, Tuple, Any
 from numpy.typing import NDArray
 # from sympy.ntheory import generate
 
-from ncpol3sdpa.rules import Rule, apply_rule_to_polynom
+from ncpol3sdpa.rules import Rule, apply_rule_to_polynomial
 from ncpol3sdpa.solver import Solver
 from ncpol3sdpa.constraints import Constraint
 import ncpol3sdpa.semidefinite_program_repr as sdp_repr
@@ -43,7 +43,7 @@ def algebra_to_SDP_add_equality_constraint(
 ) -> None:
     implied_constraints = algebra.expand_eq_constraint(eq_constraint)
     for implied_constraint in implied_constraints:
-        implied_constraint = apply_rule_to_polynom(implied_constraint, algebra.substitution_rules)
+        implied_constraint = apply_rule_to_polynomial(implied_constraint, algebra.substitution_rules)
 
         # constraint matrix
         a_0 = polynomial_to_matrix(algebra, implied_constraint)
@@ -106,17 +106,17 @@ def algebra_to_SDP(algebra: algebra.AlgebraSDP) -> ProblemSDP:
     return result_SDP
 
 
-def polynom_linearized(
-    variable_of_monomial: Dict[Any, Any], polynom: Expr, rules: Dict[Expr, Expr]
+def polynomial_linearized(
+    variable_of_monomial: Dict[Any, Any], polynomial: Expr, rules: Dict[Expr, Expr]
 ) -> Expr:
-    """Return the linearized polynom"""
+    """Return the linearized polynomial"""
     # 2*X*Y -> 2 Y_(i,j)
 
-    polynom = apply_rule_to_polynom(polynom, rules)
-    dict_monoms: Dict[Any, Any]
-    dict_monoms = polynom.expand().as_coefficients_dict()
+    polynomial = apply_rule_to_polynomial(polynomial, rules)
+    dict_monomials: Dict[Any, Any]
+    dict_monomials = polynomial.expand().as_coefficients_dict()
     combination: Expr = S.Zero
-    for key, value in dict_monoms.items():
+    for key, value in dict_monomials.items():
         combination += value * variable_of_monomial[key]
     return combination
 
@@ -157,7 +157,7 @@ class Problem:
 
         # 1. Build algebraic formulation
 
-        all_constraint_polynomials = [c.polynom for c in self.constraints] + \
+        all_constraint_polynomials = [c.polynomial for c in self.constraints] + \
                                      [self.objective]
         needed_symbols = algebra.generate_needed_symbols(
             all_constraint_polynomials

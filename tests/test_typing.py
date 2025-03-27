@@ -8,8 +8,8 @@ def salutation(prenom: str) -> str:
     return "salut" + prenom
 
 
-# def test_poly(polynom : Poly) -> None:
-#    print(f"test_poly {type(polynom)}  ({isinstance(polynom,Poly)})")
+# def test_poly(polynomial : Poly) -> None:
+#    print(f"test_poly {type(polynomial)}  ({isinstance(polynomial,Poly)})")
 
 
 def type_test() -> None:

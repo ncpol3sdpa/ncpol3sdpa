@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import List, Tuple, Dict, Any
 from sympy import Expr
 import sympy as sp
-from ncpol3sdpa.rules import apply_rule, apply_rule_to_polynom
+from ncpol3sdpa.rules import apply_rule, apply_rule_to_polynomial
 from ncpol3sdpa.monomial import generate_monomials_commutative
 from ncpol3sdpa.constraints import Constraint
 import math
@@ -38,7 +38,7 @@ def create_constraint_matrix_commutative(
     n = len(monomials)
     return [
         [
-            apply_rule_to_polynom(
+            apply_rule_to_polynomial(
                 sp.expand(monomials[i] * monomials[j] * constraint_polynomial), rules
             )
             for j in range(i + 1)
@@ -74,7 +74,7 @@ class AlgebraSDP:
             generate_monomials_commutative(needed_variables, relaxation_order),
             substitution_rules,
         )
-        self.objective = apply_rule_to_polynom(sp.expand(objective), substitution_rules)
+        self.objective = apply_rule_to_polynomial(sp.expand(objective), substitution_rules)
 
         # In the commutative case, the moment matrix is symmetric
         self.moment_matrix = create_moment_matrix_commutative(
@@ -100,14 +100,14 @@ class AlgebraSDP:
 
     def add_constraint(self, constraint: Constraint) -> None:
         if constraint.is_equality_constraint:
-            self.equality_constraints.append(constraint.polynom)
+            self.equality_constraints.append(constraint.polynomial)
         else:
             # inequality constraint
             # p.10 of Semidefinite programming relaxations for quantum correlations
 
-            k_i = math.floor(self.relaxation_order - sp.degree(constraint.polynom) / 2)
+            k_i = math.floor(self.relaxation_order - sp.degree(constraint.polynomial) / 2)
             assert k_i >= 0, (
-                "Insufficient relaxation order to capture the constraint {constraint.polynom}"
+                "Insufficient relaxation order to capture the constraint {constraint.polynomial}"
             )
 
             # TODO This is redundant work, does this matter?
@@ -118,7 +118,7 @@ class AlgebraSDP:
 
             self.constraint_moment_matrices.append(
                 create_constraint_matrix_commutative(
-                    constraint_monomials, constraint.polynom, self.substitution_rules
+                    constraint_monomials, constraint.polynomial, self.substitution_rules
                 )
             )
 
@@ -127,7 +127,7 @@ class AlgebraSDP:
         where k is the relaxation order. 2k are monomials that "fit inside" the moment matrix.
         Used for equality constraints."""
         res1 = [
-            apply_rule_to_polynom(
+            apply_rule_to_polynomial(
                 sp.expand(monomial * constraint), self.substitution_rules
             )
             for monomial in self.monomials
