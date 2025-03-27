@@ -107,6 +107,15 @@ wheels = [
 ]
 
 [[package]]
+name = "dot"
+version = "0.3.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/73/e8/5ba9dff611eaa0d43c961271fe51c668db760a47cca482bc2b4125523a7b/dot-0.3.0.tar.gz", hash = "sha256:3543921eefa82923870fc752ebdadc593962e0d0db507d27daab9528c05ceb58", size = 2534 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d2/68/d5828abbce964cc42e5134104f00cb57f78cf4cdcedef050548a2402bc8e/dot-0.3.0-py3-none-any.whl", hash = "sha256:9f43c4ed466315803a354908486c67a7f981b10f1fdb55cb45aeac6ddd2dd0de", size = 3130 },
+]
+
+[[package]]
 name = "gitdb"
 version = "4.0.12"
 source = { registry = "https://pypi.org/simple" }
@@ -261,6 +270,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "cvxpy" },
+    { name = "dot" },
     { name = "mypy" },
     { name = "sphinx" },
     { name = "sympy" },
@@ -275,6 +285,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "cvxpy", specifier = ">=1.6.3" },
+    { name = "dot", specifier = ">=0.3.0" },
     { name = "mypy", specifier = ">=1.15.0" },
     { name = "sphinx", specifier = ">=8.2.3" },
     { name = "sympy", specifier = ">=1.13.3" },

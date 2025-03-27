@@ -84,5 +84,12 @@ We use `tach` to build the dependencies graph.
 ```bash
 uv run tach mod
 uv run tach sync
+```
+
+```bash
 uv run tach show --web
+```
+```bash
+uv run tach show 
+uv run dot -Tpdf tach_module_graph.dot -o tach_graph.pdf
 ```

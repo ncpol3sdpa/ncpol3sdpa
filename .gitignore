@@ -3,4 +3,5 @@
 **/.DS_Store
 **/__pycache__
 venv
-tach_module_graph.dot
+**/*.dot
+**/*.pdf
