@@ -92,3 +92,7 @@
 - (Nazar) Comancer ecrire des tests pour le nouvau code
 - (Allain) Comancer d'implementaer une application: Max Cut
 - (Mathis) Lecture et compréhension de la nouvelle implémentation du solveur
+
+## 27/03/2025
+
+- (Nazar) Refacturation du code. Merge un changement important
