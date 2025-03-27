@@ -2,6 +2,7 @@ from __future__ import annotations
 import sympy
 import numpy as np
 from typing import List, Dict, Tuple, Any
+from numpy.typing import NDArray
 # from sympy.ntheory import generate
 
 from ncpol3sdpa.rules import Rule
@@ -13,24 +14,36 @@ import ncpol3sdpa.semidefinite_program_repr as sdp_repr
 import ncpol3sdpa.momentmatrix as momentmatrix
 from ncpol3sdpa.semidefinite_program_repr import ProblemSDP, MomentMatrixSDP
 
+def polynomial_to_matrix(algebra : momentmatrix.AlgebraSDP, poly : sympy.Poly) -> NDArray[np.float64]:
+    """Returns a symmetric A matrix such that poly = Tr(A.T @ G) where G is the moment matrix. In other
+    words express poly as a linear combination of the coefficients of G. 
+    Requires that all monomials of poly exist within the moment matrix: 
+        poly.free_vars included in algebra.moment_matrix free_vars
+        and deg(poly) <= 2*algebra.relaxation_order"""
+    moment_matrix_size = len(algebra.moment_matrix)
+    a_0 = np.zeros(shape = (moment_matrix_size, moment_matrix_size))
+    for monomial, coef in poly.as_coefficients_dict().items():
+        assert monomial in algebra.monomial_to_positions.keys()
+        assert 0 < len(algebra.monomial_to_positions[monomial])
+        # The 0 is arbitrary (?) could be any other element of the list. 
+        # TODO/Idea What happens if we chose other than 0? at random?
+        monomial_x, monomial_y = algebra.monomial_to_positions[monomial][0]
+
+        # The matrices must be symmetric
+        a_0[monomial_x][monomial_y] += 0.5*coef
+        a_0[monomial_y][monomial_x] += 0.5*coef
+
+    return a_0
+
 def algebra_to_SDP_add_equality_constraint(
     problem: ProblemSDP, 
     algebra : momentmatrix.AlgebraSDP,
     eq_constraint : sympy.Poly
 ) -> None :
-    moment_matrix_size = problem.variable_sizes[problem.MOMENT_MATRIX_VAR_NUM]
-
     implied_constraints = algebra.expand_eq_constraint(eq_constraint)
     for implied_constraint in implied_constraints:
         #constraint matrix
-        a_0 = np.zeros(shape = (moment_matrix_size, moment_matrix_size))
-        #TODO: factor this code into a function
-        for monomial, coef in implied_constraint.as_coefficients_dict().items():
-            assert monomial in algebra.monomial_to_positions.keys()
-            assert 0 < len(algebra.monomial_to_positions[monomial])
-            monomial_x, monomial_y = algebra.monomial_to_positions[monomial][0]
-            a_0[monomial_x][monomial_y] += 0.5*coef
-            a_0[monomial_y][monomial_x] += 0.5*coef
+        a_0 = polynomial_to_matrix(algebra, implied_constraint)
         
         constraint = sdp_repr.EqConstraint([(problem.MOMENT_MATRIX_VAR_NUM, a_0)])
         problem.constraints.append(constraint)
@@ -42,7 +55,6 @@ def algebra_to_SDP_add_inequality_constraint(
 ) -> None :
     """Adds the translation of an inequality constraint"""
     constraint_matrix_size = len(constraint_moment_matrix)
-    moment_matrix_size = problem.variable_sizes[problem.MOMENT_MATRIX_VAR_NUM]
 
     new_var = len(problem.variable_sizes)
     problem.variable_sizes.append(constraint_matrix_size)
@@ -53,14 +65,7 @@ def algebra_to_SDP_add_inequality_constraint(
             a_k[i][j] -= 0.5
             a_k[j][i] -= 0.5
 
-            a_0 = np.zeros(shape = (moment_matrix_size,moment_matrix_size))
-            for monomial, coef in poly.as_coefficients_dict().items():
-                assert monomial in algebra.monomial_to_positions.keys()
-                assert 0 < len(algebra.monomial_to_positions[monomial])
-                x,y = algebra.monomial_to_positions[monomial][0]
-                a_0[x][y] += 0.5*coef
-                a_0[y][x] += 0.5*coef
-    
+            a_0 = polynomial_to_matrix(algebra, poly)
             constraint = sdp_repr.EqConstraint([(problem.MOMENT_MATRIX_VAR_NUM, a_0), (new_var, a_k)])
             problem.constraints.append(constraint)
 
@@ -71,18 +76,7 @@ def algebra_to_SDP(algebra : momentmatrix.AlgebraSDP) -> ProblemSDP:
     moment_matrix_size = len(algebra.moment_matrix)
 
     # Convert objective
-    objective = np.zeros(shape = (moment_matrix_size, moment_matrix_size))
-    for monomial, coef in algebra.objective.as_coefficients_dict().items():
-        assert monomial in algebra.monomial_to_positions
-        assert 0 < len(algebra.monomial_to_positions[monomial])
-        #       v List of all the positions of this monomial in the matrix.
-        (i,j) = algebra.monomial_to_positions[monomial][0]
-        # The 0 is arbitrary (?) could be any other element of the list. 
-        # TODO/Idea What happens if we chose other than 0? at random?
-        
-        # The objective must be symmetric
-        objective[i][j] += 0.5 * coef
-        objective[j][i] += 0.5 * coef
+    objective = polynomial_to_matrix(algebra, algebra.objective)
     
     # Moment matrix
     equiv_classes : List[List[Tuple[int, int]]] = \

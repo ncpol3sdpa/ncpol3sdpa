@@ -131,4 +131,4 @@ class ProblemSDP:
 Moment matrix: \n\
     .moment_matrix.size: \n\ {self.moment_matrix.size}\n\
     .moment_matrix.eq_classes: \n\ {self.moment_matrix.eq_classes}\n\
-.constraints: \n\ {[c.constraints for c in self.constraints]}"
+.constraints: \n {[c.constraints for c in self.constraints]}"
