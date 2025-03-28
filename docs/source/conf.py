@@ -34,3 +34,10 @@ autodoc_mock_imports = ['cvxpy']
 
 html_theme = 'alabaster'
 html_static_path = ['_static']
+
+# -- Options for LaTeX output ------------------------------------------------
+
+
+# -- Script to generate the documentation -----------------------------------
+
+print("Generating documentation...")
