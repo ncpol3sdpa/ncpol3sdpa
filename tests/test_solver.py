@@ -1,30 +1,28 @@
 from ncpol3sdpa.solver import Solver
-from sympy import symbols, Symbol
+from ncpol3sdpa.semidefinite_program_repr import MomentMatrixSDP, ProblemSDP
+import numpy as np
 # from typing import List
 
 
-def test_1() -> None:
-    pass
-    # TODO Redo this test with new solve_cvxpy
 
-    # y1: Symbol = symbols("y1")
-    # y2: Symbol = symbols("y2")
-    # y3: Symbol = symbols("y3")
-    # y4: Symbol = symbols("y4")
-    # y5: Symbol = symbols("y5")
-    # y6: Symbol = symbols("y6")
-    # p_obj = 2 * y5
-    # constraint2 = [[y4 - y2]]
-    # constraint3 = [[-y6 + y3 + 0.25 * y1]]
-    # moment_matrix = [[y1, y2, y3], [y2, y4, y5], [y3, y5, y6]]
-    # constraint_zero = [constraint2]
-    # constraint_positiv = [constraint3]
+def test_1x1() -> None:
+    # essentially, maximize -x with x >= 0 and x == 1 and x in R^1
+    moment_matrix = MomentMatrixSDP(1, [[(0,0)]])
+    p = ProblemSDP(moment_matrix, np.array([[-1]]))
 
-    # solution: float = Solver.solve_cvxpy_old(
-    #     p_obj, 3, moment_matrix, constraint_positiv, constraint_zero
-    # )
-    # assert abs(solution - 2.414) <= 0.1
+    result = Solver.solve_cvxpy(p)
+    assert np.abs(-1 - result) <= 0.001 # result should be -1
 
+def test_2x2() -> None:
+    # Arithmetic - Geometric inequality
+    moment_matrix = MomentMatrixSDP(2, [[(0,0), (1,1)], [(1,0)]])
+    # [ 1 a ]
+    # [ a 1 ]
+    p = ProblemSDP(moment_matrix, np.array([[0,-1],\
+                                            [-1,0]]))
+    # maximize -2a, optimal for a = -1, and objective = 2
+    #x2 -2axy + y2 >= 0, because SDP
 
-if __name__ == "__main__":
-    test_1()
+    result = Solver.solve_cvxpy(p)
+    assert np.abs(2 - result) <= 0.001 # result should be 2
+
