@@ -1,18 +1,13 @@
 from typing import Any #,List, Dict
-# from sympy import Expr, Symbol
-# import sympy
-# from cvxpy import Variable, Maximize, Problem
-# from cvxpy.atoms.affine.vstack import vstack
-# from cvxpy.atoms.affine.hstack import hstack
 import cvxpy
 
-# from ncpol3sdpa.funs import coefficients_dict
 import ncpol3sdpa.semidefinite_program_repr as sdp_repr
 
 
 def cvxpy_dot_prod(c: Any, x: Any) -> Any:
-    return cvxpy.trace(c @ x) # type: ignore
-    # return cvxpy.sum(cvxpy.multiply(c, x))
+    # TODO: Fix the typing of this. 
+    # Should be c: NDArray, x : cvxpy PSD variable, result : cvxpy expression(?)
+    return cvxpy.sum(cvxpy.multiply(c, x))
 
 
 class Solver:
@@ -48,7 +43,7 @@ class Solver:
 
         prob = cvxpy.Problem(objective, constraints)
         # Returns the optimal value.
-        prob.solve()  # type: ignore
+        prob.solve()
         print("status:", prob.status)
         print("optimal value", prob.value)
         print("optimal var", G.value)
