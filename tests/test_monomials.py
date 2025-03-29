@@ -30,7 +30,7 @@ def list_increment_on_test_inputs(nums: List[int], k: int) -> None:
         )
 
 
-def test_list_increment():
+def test_list_increment() -> None:
     list_increment_on_test_inputs([9, 2, 2, 2, 1, 3, 5], 10)
     list_increment_on_test_inputs([2, 2, 2, 2, 2], 10)
     list_increment_on_test_inputs([9, 9, 9, 9], 10)
@@ -38,7 +38,7 @@ def test_list_increment():
     # random tests TODO
 
 
-def test_generate_monomials_commutative():
+def test_generate_monomials_commutative() -> None:
     x, y, z = sympy.symbols("x y z")
 
     assert [1] == monomial.generate_monomials_commutative([x], 0)

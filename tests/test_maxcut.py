@@ -1,12 +1,13 @@
 import sympy
 from typing import List
 import numpy as np
+from numpy.typing import NDArray
 
 from ncpol3sdpa.problem import Problem
-# from ncpol3sdpa.funs import generate_variables
+from ncpol3sdpa.funs import generate_n_variables
 
 
-def gen_random_matrix(n: int):
+def gen_random_matrix(n: int) -> NDArray[np.float64]:
     """Returns a random numpy symmetric matrix, with constant diagonals"""
     W = np.zeros((n, n))
     for k in range(1, n):
