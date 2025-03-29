@@ -86,7 +86,7 @@ class Poly:
 
 
 def list_increment(degrees: List[int], k: int) -> bool:
-    """increment l as a base k number. returns True if overflows, False otherwirse"""
+    """increment l as a base k number. returns True if overflows, False otherwise"""
 
     for i, x in enumerate(degrees):
         if x < k - 1:
@@ -102,17 +102,17 @@ def generate_monomials_commutative(
     symbols: Iterable[Any], relaxation_order: int
 ) -> List[Any]:
     """returns a list of all monomials that have degree less or equal to the relaxation_order"""
-    current_degres = [0 for _ in symbols]
+    current_degrees = [0 for _ in symbols]
     res = []
 
     while True:
         expr = 1
         for i, symbol in enumerate(symbols):
-            expr *= symbol ** current_degres[i]
+            expr *= symbol ** current_degrees[i]
         if total_degree(expr) <= relaxation_order:
             res.append(expr)
 
-        if list_increment(current_degres, relaxation_order + 1):
+        if list_increment(current_degrees, relaxation_order + 1):
             break
 
     return sorted(

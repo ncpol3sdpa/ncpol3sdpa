@@ -25,7 +25,7 @@ def test_rules_of_constraints() -> None:
     assert Rule.of_constraints([c1, c2]) == {x**2: x + 1, x * y**2: 2 * x**2 - 4 * y}
 
 
-def test_apply_rule() -> None:
+def test_apply_rule():
     x, y = sp.symbols("x y")
     rules = {x**2: x}
     p1 = x * y
