@@ -106,22 +106,7 @@ def algebra_to_SDP(algebra: algebra.AlgebraSDP) -> ProblemSDP:
         algebra_to_SDP_add_inequality_constraint(result_SDP, algebra, constraint_matrix)
 
     return result_SDP
-
-
-def polynomial_linearized(
-    variable_of_monomial: Dict[Any, Any], polynomial: Expr, rules: Dict[Expr, Expr]
-) -> Expr:
-    """Return the linearized polynomial"""
-    # 2*X*Y -> 2 Y_(i,j)
-
-    polynomial = apply_rule_to_polynomial(polynomial, rules)
-    dict_monomials: Dict[Any, Any]
-    dict_monomials = polynomial.expand().as_coefficients_dict()
-    combination: Expr = S.Zero
-    for key, value in dict_monomials.items():
-        combination += value * variable_of_monomial[key]
-    return combination
-
+    
 
 class Problem:
     def __init__(self, obj: sympy.Symbol) -> None:
