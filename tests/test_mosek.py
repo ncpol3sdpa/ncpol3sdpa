@@ -1,4 +1,12 @@
-# from mosek import *
+
+def test_mosek() -> None:
+    """Test if MOSEK is installed and working."""
+    try:
+        import mosek # type: ignore[import]
+    except ImportError:
+        raise ImportError("MOSEK is not installed. Please install MOSEK to run this test.")
+    
+#  from mosek import *
 # from typing import Any
 
 # def func() -> Any:
