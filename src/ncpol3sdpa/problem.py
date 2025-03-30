@@ -24,9 +24,12 @@ def polynomial_to_matrix(
         and deg(poly) <= 2*algebra.relaxation_order"""
     moment_matrix_size = len(algebra.moment_matrix)
     a_0 = np.zeros(shape=(moment_matrix_size, moment_matrix_size))
-    for monomial, coef in poly.as_coefficients_dict().items(): # type: ignore
+
+    for monomial, coef in sympy.expand(poly).as_coefficients_dict().items(): # type: ignore
+
         assert monomial in algebra.monomial_to_positions.keys()
         assert 0 < len(algebra.monomial_to_positions[monomial])
+        
         # The 0 is arbitrary (?) could be any other element of the list.
         # TODO/Idea What happens if we chose other than 0? at random?
         monomial_x, monomial_y = algebra.monomial_to_positions[monomial][0]
