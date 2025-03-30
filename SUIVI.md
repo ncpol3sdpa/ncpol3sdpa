@@ -96,3 +96,7 @@
 ## 27/03/2025
 
 - (Nazar) Refacturation du code. Merge un changement important
+
+## 30/03/2025
+- (Nazar) Recherche sur util pre-commit(pre-commit.com)
+- (Nazar) Commencer de implementer du "property based testing" avec bibliothèque hypothesis(hypothesis.works) 
