@@ -54,6 +54,11 @@ pytest:
   stage: test
   script:
     - echo "Running Pytest..."
+    - echo "HOME is $HOME"
+    - mkdir $HOME/mosek
+    - touch $HOME/mosek/mosek.lic
+    - echo "$MSK_LICENSE" >> $HOME/mosek/mosek.lic
+    - echo "Mosek license file created at $HOME/mosek/mosek.lic\n"
     - uv run pytest
     - echo "Pytest complete"
 
