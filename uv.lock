@@ -174,6 +174,20 @@ wheels = [
 ]
 
 [[package]]
+name = "mosek"
+version = "11.0.13"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/70/fa/a5bf46a3d0583dae3424757e2cab195c422ee833cf7540aba6c3e128c0d9/mosek-11.0.13-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:7dfc9fee27cbaaea87e0759feff44762579c75868ff540ab2b7a800780eefe25", size = 8335884 },
+    { url = "https://files.pythonhosted.org/packages/ed/80/696a6d29b97f92e1a6723fb510301fdba8a31ae54550d94ce40212b4896a/mosek-11.0.13-cp39-abi3-manylinux2014_x86_64.whl", hash = "sha256:40caf8c43dab47f57dad2a6c1f9bcf13a8c33c29d46b3d22ffb63c08c64a4599", size = 14715106 },
+    { url = "https://files.pythonhosted.org/packages/d0/22/3320707145e637d5795323d75b09844fb16f04d5facf9f4c4c0a4ae733ad/mosek-11.0.13-cp39-abi3-manylinux_2_29_aarch64.whl", hash = "sha256:e34e8b6a57f7b812e218ae7dde37dd584e9d82c3507f3dab2885c9a4b53dbe0f", size = 10607204 },
+    { url = "https://files.pythonhosted.org/packages/97/14/d0afcb4a09c19131521cca08b2375bded63f2aee8a35b9cf3544a677dcd0/mosek-11.0.13-cp39-abi3-win_amd64.whl", hash = "sha256:36f869016cb9331e2ce7643cec2a5841fdb99136779c589b60cd3268d4ca0bba", size = 10638207 },
+]
+
+[[package]]
 name = "mpmath"
 version = "1.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -216,6 +230,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "cvxpy" },
+    { name = "mosek" },
     { name = "mypy" },
     { name = "pytest" },
     { name = "sphinx" },
@@ -230,6 +245,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "cvxpy", specifier = ">=1.6.3" },
+    { name = "mosek", specifier = ">=11.0.13" },
     { name = "mypy", specifier = ">=1.15.0" },
     { name = "pytest", specifier = ">=8.3.4" },
     { name = "sphinx", specifier = ">=8.2.3" },
