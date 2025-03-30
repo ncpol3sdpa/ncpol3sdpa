@@ -144,11 +144,11 @@ class ProblemSDP:
 
     def __str__(self) -> str:
         return (
-            "SDP translation:\n" +
-            f".objective: \n\ {self.objective}\n" +
-            f".variable_sizes: {self.variable_sizes}\n" +
-            "Moment matrix: \n" +
-            f"    .moment_matrix.size: \n\ {self.moment_matrix.size}\n" +
-            f"    .moment_matrix.eq_classes: \n\ {self.moment_matrix.eq_classes}\n" +
-            f".constraints: {[c.constraints for c in self.constraints]}"
+            "SDP translation:\n"
+            + f".objective: \n {self.objective}\n"
+            + f".variable_sizes: {self.variable_sizes}\n"
+            + "Moment matrix: \n"
+            + f"    .moment_matrix.size: \n {self.moment_matrix.size}\n"
+            + f"    .moment_matrix.eq_classes: \n {self.moment_matrix.eq_classes}\n"
+            + f".constraints: {[c.constraints for c in self.constraints]}"
         )
