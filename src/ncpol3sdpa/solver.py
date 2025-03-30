@@ -1,7 +1,7 @@
 from typing import Any #,List, Dict
 import cvxpy
 
-import ncpol3sdpa.semidefinite_program_repr as sdp_repr
+import ncpol3sdpa.sdp_repr as sdp_repr
 
 
 def cvxpy_dot_prod(c: Any, x: Any) -> Any:

@@ -9,9 +9,9 @@ from numpy.typing import NDArray
 from ncpol3sdpa.rules import Rule, apply_rule_to_polynomial
 from ncpol3sdpa.solver import Solver
 from ncpol3sdpa.constraints import Constraint
-import ncpol3sdpa.semidefinite_program_repr as sdp_repr
+from ncpol3sdpa.sdp_repr import ProblemSDP
+import ncpol3sdpa.sdp_repr as sdp_repr
 import ncpol3sdpa.algebra as algebra
-from ncpol3sdpa.semidefinite_program_repr import ProblemSDP
 
 
 def polynomial_to_matrix(

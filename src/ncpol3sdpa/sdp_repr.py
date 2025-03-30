@@ -93,10 +93,11 @@ class ProblemSDP:
 
         # the structure of the equality constraints is star:
         # s0= s1, s0 = s2, s0 = s3, ...
-        # TODO/Idea: What if it was a chain(s0 = s1, s1 = s2, s2 = s3, ...) or a balanced tree or a Union-Find structure?
+        # TODO/Idea: What if it was a chain(s0 = s1, s1 = s2, s2 = s3, ...) 
+        # or a balanced tree or a Union-Find structure?
 
     # --- Validation ---
-    def constraint_verified(
+    def is_constraint_verified(
         self, constraint: EqConstraint, variable_instances: List[NDArray[np.float64]]
     ) -> bool:
         """Verify if a constraint is satisfied"""
@@ -127,7 +128,7 @@ class ProblemSDP:
                     return False
 
         for constraint in self.constraints:
-            self.constraint_verified(constraint, variable_instances)
+            self.is_constraint_verified(constraint, variable_instances)
 
         return True
 
@@ -135,11 +136,13 @@ class ProblemSDP:
         self, variable_instances: List[NDArray[np.float64]]
     ) -> np.float64:
         """Calculate the objective function at a given point"""
+
         moment_matrix: NDArray[np.float64] = variable_instances[
             self.MOMENT_MATRIX_VAR_NUM
         ]
-        res = np.sum(np.multiply(self.objective, moment_matrix))
+        res: np.float64 = np.sum(np.multiply(self.objective, moment_matrix))
         assert isinstance(res, np.float64)
+
         return res
 
     def __str__(self) -> str:

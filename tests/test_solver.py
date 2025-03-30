@@ -1,5 +1,5 @@
 from ncpol3sdpa.solver import Solver
-from ncpol3sdpa.semidefinite_program_repr import MomentMatrixSDP, ProblemSDP
+from ncpol3sdpa.sdp_repr import MomentMatrixSDP, ProblemSDP
 import numpy as np
 # from typing import List
 
