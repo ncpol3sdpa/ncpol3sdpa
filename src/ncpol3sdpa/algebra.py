@@ -69,13 +69,13 @@ class AlgebraSDP:
         substitution_rules: Dict[sp.Expr, sp.Expr],
     ) -> None:
         """Construct the symbolic Moment Matrices and soundings data structures. Works for the commutative case"""
-        self.relaxation_order = relaxation_order
-        self.substitution_rules = substitution_rules
+        self.relaxation_order: int = relaxation_order
+        self.substitution_rules: Dict[sp.Expr, sp.Expr] = substitution_rules
         self.monomials: List[sp.Expr] = needed_monomials(
             generate_monomials_commutative(needed_variables, relaxation_order),
             substitution_rules,
         )
-        self.objective = apply_rule_to_polynomial(
+        self.objective:sp.Expr = apply_rule_to_polynomial(
             sp.expand(objective), substitution_rules # type: ignore
         )
 
@@ -83,7 +83,7 @@ class AlgebraSDP:
         self.moment_matrix = create_moment_matrix_commutative(
             self.monomials, self.substitution_rules
         )
-        matrix_size = len(self.moment_matrix)
+        matrix_size: int = len(self.moment_matrix)
 
         # equivalence classes of equal coefficients
         self.monomial_to_positions: Dict[sp.Expr, List[Tuple[int, int]]] = {}
@@ -102,6 +102,10 @@ class AlgebraSDP:
         self.equality_constraints: List[sp.Expr] = []
 
     def add_constraint(self, constraint: Constraint) -> None:
+        """Add a constraint to the algebra
+
+        Save the constraint if it is an equality constraint,   
+        otherwise update the moment matrix for the inequality constraint"""
         if constraint.is_equality_constraint:
             self.equality_constraints.append(constraint.polynomial)
         else:
@@ -127,45 +131,54 @@ class AlgebraSDP:
                 )
             )
 
-    def expand_eq_constraint(self, constraint: sp.Expr) -> List[sp.Expr]:
-        """Generate a list of polynomials {p = m * constraint | m : monomial & degre(p) <= 2*k }
-        where k is the relaxation order. 2k are monomials that "fit inside" the moment matrix.
-        Used for equality constraints."""
-        res1 = [
-            apply_rule_to_polynomial(
-                sp.expand(monomial * constraint),  # type: ignore
-                self.substitution_rules
-            )
-            for monomial in self.monomials
-        ]
-
-        # It is better to filter after expanding and substituting, maybe substitution rules can reduce the degree
-        return [
-            poly
-            for poly in res1
-            if sp.Poly(poly).total_degree() <= 2 * self.relaxation_order # type: ignore
-        ]
-
     def add_constraints(self, constraints: List[Constraint]) -> None:
         for constraint in constraints:
             self.add_constraint(constraint)
 
-    def __string__(self) -> str:
-        """return String representation for debugging"""
+    def expand_eq_constraint(self, constraint: sp.Expr) -> List[sp.Expr]:
+        """
+        Generate a list of polynomials {p = m * constraint | m : monomial & degre(p) <= 2*k } 
+        where k is the relaxation order. 2k are monomials that "fit inside" the moment matrix.
 
-        # The print on the moment matrix is not very good
-        return f"Algebra:\
-\n\
-relaxation_order: {self.relaxation_order}\n\
-monomials\n\
-{self.monomials}\n\
-moment_matrix\n\
-{self.moment_matrix}\n\
-substitution_rules\n\
-{self.substitution_rules}\n\
-monomial_to_positions\n\
-{self.monomial_to_positions}\n\
-equality_constraints\n\
-{self.equality_constraints}\n\
-constraint_moment_matrices\n\
-{self.constraint_moment_matrices}\n"
+        Used for equality constraints.
+        """
+        
+        # Map and filter are lazy
+        # so intermediate lists are not created
+        ruled_monomials: map[sp.Expr] = map(
+            lambda monomial: apply_rule(
+                monomial * constraint, 
+                self.substitution_rules
+            ),
+            self.monomials
+        )
+        ruled_filtered_monomials: filter[sp.Expr] = filter(
+            lambda monomial: sp.poly(monomial).total_degree() <= 2 * self.relaxation_order,
+            ruled_monomials
+        )
+        
+        return list(ruled_filtered_monomials)
+
+    def __str__(self) -> str:
+        """Return a string representation of the algebra for debugging."""
+
+        return f"""Algebra:
+    relaxation_order: {self.relaxation_order}
+    monomials:
+        {self.monomials}
+    moment_matrix:
+        {self.moment_matrix}
+    substitution_rules:
+        {self.substitution_rules}
+    monomial_to_positions:
+        {self.monomial_to_positions}
+    equality_constraints:
+        {self.equality_constraints}
+    constraint_moment_matrices:
+        {self.constraint_moment_matrices}"""
+
+    def __repr__(self) -> str:
+        """Return a string representation of the algebra for debugging."""
+        return self.__str__()
+    
+
