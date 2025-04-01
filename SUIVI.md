@@ -108,3 +108,7 @@
 ## 01/04/2025
 - (Yann)
   * Add documentation with sphinx
+- (Mathis)
+  * Start to implement the non commutative part of the problem
+    + create a function generate_monomials_non_commutative that returns a list of all monomials of a degree less than the relaxation parameter that are non commutative
+    + implement a new function apply_rule_non_commutative that is a generalisation of the function apply_rule for non commutative monomials
