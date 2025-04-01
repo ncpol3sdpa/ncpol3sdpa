@@ -15,6 +15,8 @@ ncpol3sdpa documentation
 Installation
 ------------
 
+You will need a mosek license to use the solver. You can get a free academic license from the [Mosek website](https://www.mosek.com/).
+
 .. code-block:: console
 
    (docs) $ make html
