@@ -100,7 +100,7 @@
 ## 30/03/2025
 - (Nazar) Recherche sur util pre-commit(pre-commit.com)
 - (Nazar) Commencer de implementer du "property based testing" avec bibliothèque hypothesis(hypothesis.works) 
-- (Mathis) Apprentissage de mosek pour une implémentation future + apprentissage du nouveau code (surtout la partie solver SDP donc output du reste)
+- (Mathis) Apprentissage de mosek pour sa futur implémentation + apprentissage du nouveau code (surtout sur la partie solver SDP donc output de ce qui précède)
 
 ## 31/03/2025
-- (Mathis)  Add the mosek solver to solve the SDP, include tests with Mosek and a functionnality to choose which solver use. [A more detailed explanation of the changes on the MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/4)
+- (Mathis) Add the mosek solver to solve the SDP, include tests with Mosek and a functionnality to choose which solver use. [A more detailed explanation of the MR can be found here](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/4)
