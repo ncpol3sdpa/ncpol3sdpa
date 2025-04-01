@@ -36,13 +36,11 @@
 - (Nazar) fonction pour generer tous les monomes   
 - (Yann) ajout du gestionnaire uv
 
-# 06/03/2025
+## 06/03/2025
+ - (Nazar) Ajouter les appels de fonction dans problem.py. ajouter fonction dictionaire dans monmial.py
+ - (Mathis) ajout de la fonction create_moment_matrix + tests
 
-- (Nazar) Ajouter les appels de fonction dans problem.py. ajouter fonction dictionaire dans monmial.py
-- (Mathis) ajout de la fonction create_moment_matrix + tests
-
-# 11/03/2025
-
+## 11/03/2025
 - (Nazar et Thomas) première version du solveur utilisant cvxpy
 - (Mathis) 
   * correction de logique dans la création des matrices de moments (changement de variable)
@@ -55,32 +53,54 @@
   * update pyproject.toml for mypy dependency
   * add new test for typing functionality
 
-# 12/03/2024
-
+## 12/03/2024
 - (Mathis) 
   * ajout de test pour la partie solver.py
   * debug de solver.py
 
-# 14/03/2024
+## 14/03/2025
 
 - (Mathis)
   * debug de problem.py
   * ajout de la substitution dans le code général (ne marche pas mais ne créer pas d'autre bug (on peut ne pas activer les substitutions))
 
-# 15/03/2024
+## 15/03/2025
 
 - (Mathis) debug
 - (Yann) 
   * Clean and refactor the code
   * Add typing annotations.
 
-# 18/03/2024 
+## 18/03/2025 
 
 - (Mathis) debug + test
 - (Yann)
   * Add sphinx to the project
   * Clean, refactor and add type annotations to the code
-- (Nazar) Comancer de faire un nouvau type de donnés pour mieux representer des SDPs sur la la branche better-sdp-representation.
+- (Nazar) Commencer à faire un nouvau type de données pour mieux representer des SDPs sur la branche better-sdp-representation.
 - (All) 
   * Meeting with Peter Brown
   * Discuss the next steps
+
+## 23-24/03/2025
+- (Nazar) Ecritre le nouvau representation du SDP. Restructuration complet du code
+
+## 25/03/2025
+
+- (Thomas) begin sos problem: https://www.princeton.edu/~aaa/Public/Teaching/ORF523/ORF523_Lec15.pdf ,useful link for the sos theory
+- (Yann) Migrate the branch
+- (Nazar) Comancer ecrire des tests pour le nouvau code
+- (Allain) Comancer d'implementaer une application: Max Cut
+- (Mathis) Lecture et compréhension de la nouvelle implémentation du solveur
+
+## 27/03/2025
+
+- (Nazar) Refacturation du code. Merge un changement important
+
+## 30/03/2025
+- (Nazar) Recherche sur util pre-commit(pre-commit.com)
+- (Nazar) Commencer de implementer du "property based testing" avec bibliothèque hypothesis(hypothesis.works) 
+- (Mathis) Apprentissage de mosek pour sa futur implémentation + apprentissage du nouveau code (surtout sur la partie solver SDP donc output de ce qui précède)
+
+## 31/03/2025
+- (Mathis) Add the mosek solver to solve the SDP, include tests with Mosek and a functionnality to choose which solver use. [A more detailed explanation of the MR can be found here](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/4)

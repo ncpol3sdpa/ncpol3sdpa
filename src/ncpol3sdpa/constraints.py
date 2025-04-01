@@ -1,34 +1,33 @@
 from __future__ import annotations
-import sympy as sp
+from sympy import Expr
+
 
 class Constraint:
     def __init__(
-            self, 
-            is_equality_constraint : bool, 
-            polynom : sp.Expr, 
-            substitution : bool = False
-        ) -> None:
-        """ 
-        is_equality_constraint : boolean indicating whether the constraint is >= or ==
-        polynom : sympy polynom
+        self, is_equality_constraint: bool, polynomial: Expr, substitution: bool = False
+    ) -> None:
         """
-        self.is_equality_constraint : bool = is_equality_constraint  # is the constraint an equality or not ?
-        self.polynom : sp.Expr = polynom  # the constraint has the form p >= 0 or p = 0
-        self.substitution : bool = substitution  # do we use substitution technique for this constraint ?
-
+        is_equality_constraint : boolean indicating whether the constraint is >= or ==
+        polynomial : sympy polynomial
+        """
+        self.is_equality_constraint: bool = (
+            is_equality_constraint  # is the constraint an equality or not ?
+        )
+        self.polynomial: Expr = (
+            polynomial  # the constraint has the form p >= 0 or p = 0
+        )
+        self.substitution: bool = (
+            substitution  # do we use substitution technique for this constraint ?
+        )
 
     @classmethod
     def EqualityConstraint(
-        cls, 
-        polynom : sp.Expr,
-        substitution : bool = False
+        cls, polynomial: Expr, substitution: bool = False
     ) -> Constraint:
-        return cls(True, polynom, substitution)
-    
+        return cls(True, polynomial, substitution)
+
     @classmethod
     def InequalityConstraint(
-        cls, 
-        polynom : sp.Expr,
-        substitution : bool = False
+        cls, polynomial: Expr, substitution: bool = False
     ) -> Constraint:
-        return cls(False, polynom, substitution)
+        return cls(False, polynomial, substitution)

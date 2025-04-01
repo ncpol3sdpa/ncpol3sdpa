@@ -11,6 +11,8 @@ dependencies = [
     "sphinx>=8.2.3",
     "sympy>=1.13.3",
     "tach>=0.28.4",
+    "pytest>=8.3.4",
+    "mosek>=11.0.13",
 ]
 
 [dependency-groups]
@@ -40,3 +42,12 @@ strict = true
 exclude = ["main.py"]
 follow_untyped_imports = true
 files = ["src/ncpol3sdpa","tests"]
+
+[tool.pytest.ini_options]
+pythonpath = [
+    ".",
+    "src"
+]
+testpaths = [
+    "tests"
+]

@@ -1,74 +1,181 @@
-from typing import List, Dict
-from sympy import Expr, Symbol
-from cvxpy import Variable, Maximize, Problem
-from cvxpy.atoms.affine.vstack import vstack
-from cvxpy.atoms.affine.hstack import hstack
-from ncpol3sdpa.funs import coefficients_dict
+from typing import Any, Tuple, List
+from numpy.typing import NDArray
+import numpy as np
+import cvxpy
+import mosek
+import ncpol3sdpa.sdp_repr as sdp_repr
+import warnings
+
+
+def cvxpy_dot_prod(c: Any, x: Any) -> Any:
+    # TODO: Fix the typing of this.
+    # Should be c: NDArray, x : cvxpy PSD variable, result : cvxpy expression(?)
+    return cvxpy.sum(cvxpy.multiply(c, x))
+
+
+def to_sparse_symmetric(
+    matrix: NDArray[np.float64],
+) -> Tuple[List[float], List[int], List[int]]:
+    """
+    Return the sparse form of a symmetric matrix (only lower triangle is given)
+    Exemple:
+    >>> to_sparse([
+    ... [a, 0, b],
+    ... [0, 0, c],
+    ... [b, c, 0]
+    ... ])
+    [
+    [a, b, c],
+    [0, 2, 2],
+    [0, 0, 1]
+    ]
+    """
+    n = len(matrix)
+    val = []
+    rows = []
+    cols = []
+    for i in range(n):
+        for j in range(i + 1):
+            if matrix[i][j] != 0:
+                val.append(matrix[i][j])
+                rows.append(i)
+                cols.append(j)
+    return val, rows, cols
+
 
 class Solver:
-
     @classmethod
-    def solve_cvxpy(cls, 
-            polynome_obj : Expr,
-            k : int,
-            moment_matrix : List[List[Symbol]],
-            list_matrix_positive : List[List[List[Expr]]],
-            list_matrix_zero : List[List[List[Expr]]]
-        ) -> float:
+    def solve_cvxpy(self, problem: sdp_repr.ProblemSDP) -> float:
         """Solve the SDP problem with cvxpy"""
-
-        moment_matrix_cvxpy = [[0 for _ in range(k)] for _ in range(k)]
-        
-        sympy_to_cvxpy : Dict[Expr, Variable] = {}
-        for i in range(k):
-            for j in range(k):
-                if moment_matrix[i][j] not in sympy_to_cvxpy.keys():                
-                    temp = Variable(name=moment_matrix[i][j].name)
-                    sympy_to_cvxpy[moment_matrix[i][j]] = temp
-                
-                moment_matrix_cvxpy[i][j] = sympy_to_cvxpy[moment_matrix[i][j]]
-        
-        moment_matrix_cvxpy2 = vstack([hstack(row) for row in moment_matrix_cvxpy])
-
-        constraints = [
-            moment_matrix_cvxpy2 == moment_matrix_cvxpy2.T,
-            moment_matrix_cvxpy2>>0,
-            moment_matrix_cvxpy2[0,0]== 1
+        # Variables
+        sdp_vars = [
+            cvxpy.Variable((size, size), PSD=True) for size in problem.variable_sizes
         ]
 
-        for matrix_constraint in list_matrix_positive :
-            ki = len(matrix_constraint)
-            matrix_constraint_cvxpy = [[0 for _ in range(ki)] for _ in range(ki)]
-            for i in range(len(matrix_constraint)):
-                for j in range(len(matrix_constraint)):
-                    d = coefficients_dict(matrix_constraint[i][j])
-                    for key,value in d.items():
-                        matrix_constraint_cvxpy[i][j] += value * sympy_to_cvxpy[key] 
-            
-            matrix_constraint_cvxpy2 = vstack([hstack(row) for row in matrix_constraint_cvxpy])
-            constraints.append(matrix_constraint_cvxpy2 == matrix_constraint_cvxpy2.T)
-            constraints.append(matrix_constraint_cvxpy2>>0)
+        # Moment matrix structure
+        G = sdp_vars[problem.MOMENT_MATRIX_VAR_NUM]
+        constraints = [G[0, 0] == 1]
+        for eq_class in problem.moment_matrix.eq_classes:
+            assert len(eq_class) > 0
+            (i, j) = eq_class.pop()
+            for x, y in eq_class:
+                constraints.append(G[i, j] == G[x, y])
 
-        for matrix_constraint in list_matrix_zero :
-            ki = len(matrix_constraint)
-            for i in range(len(matrix_constraint)):
-                for j in range (len(matrix_constraint)):
-                    d = coefficients_dict(matrix_constraint[i][j])
-                    combination = 0
-                    for key,value in d.items():
-                        combination += value * sympy_to_cvxpy[key] 
-                    constraints.append(combination == 0)
+        # Constraints
+        for constraint in problem.constraints:
+            expression = 0
+            for var_num, matrix in constraint.constraints:
+                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
+            constraints.append(0 == expression)
 
-        print(f"{sympy_to_cvxpy = }")                                                       
-        d = coefficients_dict(polynome_obj)
-        combination = 0
-        for key,value in d.items():
-            combination += value * sympy_to_cvxpy[key] 
+        # tr(A.T x G)
+        objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
 
-        obj = Maximize(combination)
-        prob = Problem(obj, constraints)
-        prob.solve(solver="CLARABEL",verbose=False) # type: ignore
-        # prob.solve(solver="SCS",verbose=True) # type: ignore
-        # solver mosics ?
+        prob = cvxpy.Problem(objective, constraints)
+        # Returns the optimal value.
+        prob.solve()
+        return prob.value  # type: ignore
 
-        return float(prob.value)
+    @classmethod
+    def solve_mosek(self, problem: sdp_repr.ProblemSDP) -> float:
+        """Solve the SDP problem with mosek"""
+
+        # Convert constraints inside the moment matrix to primal form constraints
+        problem.compile_moment_matrix_to_constraints()
+
+        # Define a stream printer to grab output from MOSEK
+        def stream_printer(text: str) -> None:
+            # sys.stdout.write(text)
+            # sys.stdout.flush()
+            pass
+
+        def mosek_task() -> float:
+            # Create a task object and attach log stream printer
+            with mosek.Task() as task:
+                task.set_Stream(mosek.streamtype.log, stream_printer)
+
+                # Append #problem.variable_sizes symmetric variables of dimension problem.variable_sizes
+                task.appendbarvars(problem.variable_sizes)
+
+                # objective function
+                val_obj, rows_obj, cols_obj = to_sparse_symmetric(problem.objective)
+                task.putbarcblocktriplet(
+                    [problem.MOMENT_MATRIX_VAR_NUM] * len(val_obj),
+                    rows_obj,
+                    cols_obj,
+                    val_obj,
+                )
+                # Append the contraints
+                number_of_constraints = len(problem.constraints)
+                task.appendcons(number_of_constraints + 1)
+
+                # Adds the normalisation constraint
+                task.putbarablocktriplet(
+                    [0], [problem.MOMENT_MATRIX_VAR_NUM], [0], [0], [1]
+                )
+
+                # Adds constraints
+                for i in range(number_of_constraints):
+                    which_constraint = []
+                    which_SDP = []
+                    constraint_k = []
+                    constraint_l = []
+                    constraint_v = []
+                    for var_num, matrix in problem.constraints[i].constraints:
+                        val_m, rows_m, cols_m = to_sparse_symmetric(matrix)
+                        which_constraint += [1 + i] * len(val_m)
+                        which_SDP += [var_num] * len(val_m)
+                        constraint_k += rows_m
+                        constraint_l += cols_m
+                        constraint_v += val_m
+                    task.putbarablocktriplet(
+                        which_constraint,
+                        which_SDP,
+                        constraint_k,
+                        constraint_l,
+                        constraint_v,
+                    )
+
+                # Set bounds for constraints
+                task.putconboundlist(
+                    list(range(number_of_constraints + 1)),
+                    [mosek.boundkey.fx for _ in range(number_of_constraints + 1)],
+                    [1] + [0 for _ in range(number_of_constraints)],
+                    [1] + [0 for _ in range(number_of_constraints)],
+                )
+
+                # Optimize
+                task.putobjsense(mosek.objsense.maximize)
+                task.optimize()
+
+                # Get solution status
+                solution_status = task.getsolsta(mosek.soltype.itr)
+
+                # Handle solution cases
+                if solution_status == mosek.solsta.optimal:
+                    return task.getprimalobj(mosek.soltype.itr)  # Return optimal value
+
+                elif solution_status in [
+                    mosek.solsta.dual_infeas_cer,
+                    mosek.solsta.prim_infeas_cer,
+                ]:
+                    print("Infeasible")
+                    return float(
+                        "inf"
+                    )  # Primal or dual infeasibility certificate found
+                elif solution_status == mosek.solsta.unknown:
+                    print("Unknown solution status")
+                    return float("nan")  # Unknown solution status
+
+                else:
+                    print("Other solution status: ", solution_status)
+                    return float("nan")  # Other solution status
+
+        try:
+            return mosek_task()
+        except mosek.MosekException as e:
+            warnings.warn("Mosek exception : %s" % e)
+            return float("nan")
+        except Exception as e:
+            print("Other exception : %s" % e)
+            return float("nan")

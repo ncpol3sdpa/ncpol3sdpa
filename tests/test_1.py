@@ -10,6 +10,6 @@ def test_2() -> None:
 
     assert c is not None
 
-def f(n : int) -> int:
-    return n + 1
 
+def f(n: int) -> int:
+    return n + 1
