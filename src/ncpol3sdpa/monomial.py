@@ -119,3 +119,22 @@ def generate_monomials_commutative(
         res,
         key=cmp_to_key(lambda item1, item2: total_degree(item1) - total_degree(item2)),
     )
+
+
+def generate_monomials_non_commutative(
+    symbols: Iterable[Any], relaxation_order: int
+) -> List[Any]:
+    """returns a list of all monomials (non commutative) that have degree less or equal to the relaxation_order"""
+    res = [1]
+    def dfs(i, curr_monomials, pred_monomials):
+        if i > relaxation_order:
+            return 
+        for monomial in pred_monomials:
+            for symbol in symbols:
+                if symbol != 1:
+                    res.append(monomial*symbol)
+                    curr_monomials.append(monomial*symbol)
+        dfs(i+1, [], curr_monomials)
+
+    dfs(0, [1], [])
+    return res

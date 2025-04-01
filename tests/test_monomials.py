@@ -68,3 +68,12 @@ def test_generate_monomials_commutative() -> None:
     assert y**2 in xy2
     assert x**2 in xy2
     assert x * y in xy2
+
+
+def test_generate_monomials_non_commutative() -> None:
+    x, y, z = sympy.symbols("x y z", commutative=False)
+    assert((monomial.generate_monomials_non_commutative([x, y], 2)) == [1, x, y, x**2, x*y, y*x, y**2])
+    assert(monomial.generate_monomials_non_commutative([x, y, z], 2) == [1, x, y, z, x**2, x*y, x*z, y*x, y**2, y*z, z*x, z*y, z**2])
+    assert((monomial.generate_monomials_non_commutative([1, x, y], 3)) == [1, x, y, x**2, x*y, y*x, y**2, x**3, x**2*y, x*y*x, x*y**2, y*x**2, y*x*y, y**2*x, y**3])
+
+
