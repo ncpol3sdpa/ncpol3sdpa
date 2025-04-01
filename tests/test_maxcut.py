@@ -5,7 +5,7 @@ from numpy.typing import NDArray
 
 from ncpol3sdpa.problem import Problem
 from ncpol3sdpa.funs import generate_n_variables
-
+from ncpol3sdpa.constraints import Constraint
 
 def gen_random_matrix(n: int) -> NDArray[np.float64]:
     """Returns a random numpy symmetric matrix, with constant diagonals"""
@@ -26,15 +26,15 @@ W0 = W = (
 )
 W0 = W0 + W0.T
 
-def test_maxcut(n : int, M=None):
+def test_maxcut(n=8, M=None) -> None:
     """ Max-Cut example; if M is None, gen_random_matrix is called """
     if M is None:
         M = gen_random_matrix(n)
     x = generate_n_variables(n)
 
-    maxcut_constraints = [xi**2 - xi for xi in x]  # equality : xi in {0, 1}
+    maxcut_constraints = [Constraint.EqualityConstraint(xi**2 - xi) for xi in x]  # equality : xi in {0, 1}
     e = np.ones(n)
-    maxcut_objective = np.dot(x, np.dot(M, e - x.transpose()))
+    maxcut_objective = np.dot(x, np.dot(M, e - np.transpose(x)))
 
     maxcut = Problem(maxcut_objective)
     maxcut.add_constraints(maxcut_constraints)

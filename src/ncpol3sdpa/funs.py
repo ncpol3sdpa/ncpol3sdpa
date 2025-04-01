@@ -8,4 +8,4 @@ def coefficients_dict(expr: Expr) -> Dict[Expr, int]:
 
 def generate_n_variables(n: int) -> Tuple[Symbol, ...]:
     """returns n variables in a tuple, indexed (x0, x1, ... x{n-1})"""
-    return tuple(symbols(f"x0:{n}"))
+    return list(symbols(f"x0:{n}"))
