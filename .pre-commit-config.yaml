@@ -22,13 +22,14 @@ repos:
 
 #There are still typing errors coming from dependencies, activate this later
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: ''
+    rev: v1.15.0
     hooks:
     -   id: mypy
 
 - repo: local
   hooks:
   - id: pytest
+    stages: [pre-push]
     name: pytest
     entry: uv run pytest tests
     language: system
