@@ -104,3 +104,7 @@
 
 ## 31/03/2025
 - (Mathis) Add the mosek solver to solve the SDP, include tests with Mosek and a functionnality to choose which solver use. [A more detailed explanation of the MR can be found here](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/4)
+
+## 01/04/2025
+- (Yann)
+  * Add documentation with sphinx
