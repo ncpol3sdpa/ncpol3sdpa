@@ -1,10 +1,10 @@
 from __future__ import annotations
-from sympy import Expr, S
+from sympy import Expr
 import sympy
 import numpy as np
-from typing import List, Dict, Tuple, Any
+from typing import List, Tuple
 from numpy.typing import NDArray
-# from sympy.ntheory import generate
+from enum import Enum
 
 from ncpol3sdpa.rules import Rule, apply_rule_to_polynomial
 from ncpol3sdpa.solver import Solver
@@ -12,6 +12,11 @@ from ncpol3sdpa.constraints import Constraint
 from ncpol3sdpa.sdp_repr import ProblemSDP
 import ncpol3sdpa.sdp_repr as sdp_repr
 import ncpol3sdpa.algebra as algebra
+
+
+class AvailableSolvers(Enum):
+    CVXPY = 0
+    MOSEK = 1
 
 
 def polynomial_to_matrix(
@@ -25,11 +30,10 @@ def polynomial_to_matrix(
     moment_matrix_size = len(algebra.moment_matrix)
     a_0 = np.zeros(shape=(moment_matrix_size, moment_matrix_size))
 
-    for monomial, coef in sympy.expand(poly).as_coefficients_dict().items(): # type: ignore
-
+    for monomial, coef in sympy.expand(poly).as_coefficients_dict().items():  # type: ignore
         assert monomial in algebra.monomial_to_positions.keys()
         assert 0 < len(algebra.monomial_to_positions[monomial])
-        
+
         # The 0 is arbitrary (?) could be any other element of the list.
         # TODO/Idea What happens if we chose other than 0? at random?
         monomial_x, monomial_y = algebra.monomial_to_positions[monomial][0]
@@ -109,10 +113,10 @@ def algebra_to_SDP(algebra: algebra.AlgebraSDP) -> ProblemSDP:
         algebra_to_SDP_add_inequality_constraint(result_SDP, algebra, constraint_matrix)
 
     return result_SDP
-    
+
 
 class Problem:
-    def __init__(self, obj: sympy.Symbol) -> None:
+    def __init__(self, obj: sympy.Expr) -> None:
         self.constraints: List[Constraint] = []
         self.objective: Expr = obj
 
@@ -123,7 +127,11 @@ class Problem:
         for c in constraints:
             self.add_constraint(c)
 
-    def solve(self, relaxation_order: int = 1) -> float:
+    def solve(
+        self,
+        relaxation_order: int = 1,
+        solver: AvailableSolvers = AvailableSolvers.CVXPY,
+    ) -> float:
         """Solve the polynomial optimization problem using SDP relaxation.
 
         Args:
@@ -166,4 +174,11 @@ class Problem:
 
         # 3. Solve the SDP
 
-        return Solver.solve_cvxpy(problemSDP)
+        match solver:
+            case AvailableSolvers.CVXPY:
+                return Solver.solve_cvxpy(problemSDP)
+            case AvailableSolvers.MOSEK:
+                return Solver.solve_mosek(problemSDP)
+            case _:
+                print("This solver isn't supported")
+                return 0.0
