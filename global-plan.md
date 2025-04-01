@@ -1,6 +1,6 @@
 # Plan for the project
 
-## How it's work
+## How it works
 
 Algebra step : simplify polynomial
 Build moment matrix constraint by constraint

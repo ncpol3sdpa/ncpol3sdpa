@@ -119,6 +119,10 @@ class Problem:
     def add_constraint(self, constraint: Constraint) -> None:
         self.constraints.append(constraint)
 
+    def add_constraints(self, constraints: List[Constraint]) -> None:
+        for c in constraints:
+            self.add_constraint(c)
+
     def solve(self, relaxation_order: int = 1) -> float:
         """Solve the polynomial optimization problem using SDP relaxation.
 

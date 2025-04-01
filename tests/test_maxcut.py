@@ -25,3 +25,19 @@ W0 = W = (
     + np.diag([1], 8)
 )
 W0 = W0 + W0.T
+
+def test_maxcut(n : int, M=None):
+    """ Max-Cut example; if M is None, gen_random_matrix is called """
+    if M is None:
+        M = gen_random_matrix(n)
+    x = generate_n_variables(n)
+
+    maxcut_constraints = [xi**2 - xi for xi in x]  # equality : xi in {0, 1}
+    e = np.ones(n)
+    maxcut_objective = np.dot(x, np.dot(M, e - x.transpose()))
+
+    maxcut = Problem(maxcut_objective)
+    maxcut.add_constraints(maxcut_constraints)
+
+    maxcut.solve()
+
