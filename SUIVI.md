@@ -104,6 +104,7 @@
 
 ## 31/03/2025
 - (Mathis) Add the mosek solver to solve the SDP, include tests with Mosek and a functionnality to choose which solver use. [A more detailed explanation of the MR can be found here](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/4)
+- (Nazar) Review the Mathis's merge_requests and sugest changes.
 
 ## 01/04/2025
 - (Yann)
@@ -112,3 +113,4 @@
   * Start to implement the non commutative part of the problem
     + create a function generate_monomials_non_commutative that returns a list of all monomials of a degree less than the relaxation parameter that are non commutative
     + implement a new function apply_rule_non_commutative that is a generalisation of the function apply_rule for non commutative monomials
+- (Nazar) Merge the [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/4). Add a merge request for the pre-commit tool: [!2](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/6)
