@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Tuple
 
-from sympy import Expr, S, poly, rem
+from sympy import Expr, S, poly, rem, Mul, Pow
 
 from ncpol3sdpa.constraints import Constraint
 
@@ -40,6 +40,16 @@ class Rule:
         exemple : of_constraints([x²-x-1=0, x*y²+3=0]) = {x²->x+1, x*y²->-3}"""
         return dict([Rule._of_constraint(constraint) for constraint in constraints])
 
+def list_of_monomial(monomial : Expr) -> List[Expr]:
+    """return a list of the factor a a monomial non commutative"""
+    res = []
+    for factor in monomial.as_ordered_factors():
+        if isinstance(factor, Pow):
+            base, exp = factor.as_base_exp()
+            res.extend([base] * exp)
+        else:
+            res.append(factor)
+    return res
 
 def apply_rule(
     monomial: Expr, rules: Dict[Expr, Expr], commutative: bool = True
@@ -48,18 +58,18 @@ def apply_rule(
     if commutative:
         for key in rules.keys():
             if rem(monomial, key) == 0:
-                return apply_rule(monomial * rules[key] / key, rules)
+                return apply_rule(monomial * rules[key] / key, rules, commutative)
         return monomial
     else:
+        to_change_monomial = list_of_monomial(monomial)
         for key in rules.keys():
-            to_change_monomial = monomial.as_ordered_factors()
-            rule_monomial = key.as_ordered_factors()
+            rule_monomial = list_of_monomial(key)
             for i in range(len(to_change_monomial) - len(rule_monomial) + 1):
                 if to_change_monomial[i : i + len(rule_monomial)] == rule_monomial:
                     return apply_rule(
-                        to_change_monomial[: max(0, i - 1)]
+                        Mul(*(to_change_monomial[: max(0, i)]))
                         * rules[key]
-                        * to_change_monomial[(i + len(rule_monomial)) :]
+                        * Mul(*to_change_monomial[(i + len(rule_monomial)) :]), rules, commutative
                     )
         return monomial
 
