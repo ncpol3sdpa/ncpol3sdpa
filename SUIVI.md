@@ -117,3 +117,7 @@
     + implement a new function apply_rule_non_commutative that is a generalisation of the function apply_rule for non commutative monomials
 - (Nazar) Merge the [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/4). Add a merge request for the pre-commit tool: [!2](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/6)
 
+## 02/04/2025 
+- (Mathis)
+  * Correct apply_rule for the non commutative case
+  * add tests for apply_rule
