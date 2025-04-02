@@ -3,10 +3,14 @@ def test_mosek() -> None:
     """Test if MOSEK is installed and working."""
     try:
         import mosek
-        print(f"{mosek.__version__ = }")
+
+        mosek.Task()
 
     except ImportError:
         raise ImportError("MOSEK is not installed. Please install MOSEK to run this test.")
+    
+    except Exception as e:
+        raise RuntimeError(f"MOSEK is installed but not working. Error: {e}")
     
     # TODO: Find a way to not run other tests 
     # if MOSEK is not installed
