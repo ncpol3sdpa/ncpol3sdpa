@@ -15,6 +15,7 @@ dependencies = [
     "mosek>=11.0.13",
     "pyvis>=0.3.2",
     "networkx>=3.4.2",
+    "pydeps>=3.0.1",
 ]
 
 [dependency-groups]
