@@ -79,7 +79,7 @@ make latexpdf -C docs
 
 ### Build Dependencies Graph
 
-We use `tach` to build the dependencies graph. 
+We use `tach` to build the dependencies graph of modules. 
 
 ```bash
 uv run tach mod
@@ -93,3 +93,9 @@ uv run tach show --web
 uv run tach show 
 uv run dot -Tpdf tach_module_graph.dot -o tach_graph.pdf
 ```
+
+We use `pydeps` to build the dependencies graph of functions.
+
+```bash
+uv run pydeps src/ncpol3sdpa -o docs/graph.svg
+````
