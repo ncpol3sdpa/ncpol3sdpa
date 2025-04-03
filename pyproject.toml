@@ -3,7 +3,7 @@ name = "ncpol3sdpa"
 version = "0.1.0"
 description = "Python package for solving polynomial optimization problems"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "cvxpy>=1.6.3",
     "dot>=0.3.0",
