@@ -121,3 +121,4 @@
 - (Mathis)
   * Correct apply_rule for the non commutative case
   * add tests for apply_rule
+- (Nazar) Cogérer des erreurs de type un peut partout. Écrire . Recherche sur max-cut et algorithme de William Go
