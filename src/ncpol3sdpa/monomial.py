@@ -98,43 +98,41 @@ def list_increment(degrees: List[int], k: int) -> bool:
     return True
 
 
-def generate_monomials_commutative(
-    symbols: Iterable[Any], relaxation_order: int
+def generate_monomials(
+    symbols: Iterable[Any], relaxation_order: int, commutative: bool = True
 ) -> List[Any]:
     """returns a list of all monomials that have degree less or equal to the relaxation_order"""
-    current_degrees = [0 for _ in symbols]
-    res = []
+    if commutative:
+        current_degrees = [0 for _ in symbols]
+        res = []
 
-    while True:
-        expr = 1
-        for i, symbol in enumerate(symbols):
-            expr *= symbol ** current_degrees[i]
-        if total_degree(expr) <= relaxation_order:
-            res.append(expr)
+        while True:
+            expr = 1
+            for i, symbol in enumerate(symbols):
+                expr *= symbol ** current_degrees[i]
+            if total_degree(expr) <= relaxation_order:
+                res.append(expr)
 
-        if list_increment(current_degrees, relaxation_order + 1):
-            break
+            if list_increment(current_degrees, relaxation_order + 1):
+                break
 
-    return sorted(
-        res,
-        key=cmp_to_key(lambda item1, item2: total_degree(item1) - total_degree(item2)),
-    )
+        return sorted(
+            res,
+            key=cmp_to_key(lambda item1, item2: total_degree(item1) - total_degree(item2)),
+        )
+    else:
+        res = [1]
+        def dfs(i, curr_monomials, pred_monomials):
+            if i > relaxation_order:
+                return 
+            for monomial in pred_monomials:
+                for symbol in symbols:
+                    if symbol != 1:
+                        res.append(monomial*symbol)
+                        curr_monomials.append(monomial*symbol)
+            dfs(i+1, [], curr_monomials)
+
+        dfs(0, [1], [])
+        return res
 
 
-def generate_monomials_non_commutative(
-    symbols: Iterable[Any], relaxation_order: int
-) -> List[Any]:
-    """returns a list of all monomials (non commutative) that have degree less or equal to the relaxation_order"""
-    res = [1]
-    def dfs(i, curr_monomials, pred_monomials):
-        if i > relaxation_order:
-            return 
-        for monomial in pred_monomials:
-            for symbol in symbols:
-                if symbol != 1:
-                    res.append(monomial*symbol)
-                    curr_monomials.append(monomial*symbol)
-        dfs(i+1, [], curr_monomials)
-
-    dfs(0, [1], [])
-    return res

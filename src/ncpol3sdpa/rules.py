@@ -42,6 +42,8 @@ class Rule:
 
 def list_of_monomial(monomial : Expr) -> List[Expr]:
     """return a list of the factor a a monomial non commutative"""
+    if isinstance(monomial, int):
+        return [monomial]
     res = []
     for factor in monomial.as_ordered_factors():
         if isinstance(factor, Pow):
