@@ -122,3 +122,15 @@
   * Correct apply_rule for the non commutative case
   * add tests for apply_rule
 - (Nazar) Cogérer des erreurs de type un peut partout. Écrire un fichier interface des types pour la bibliothèque mosek(qui n'en a pas par défaut). Recherche sur max-cut et algorithme de Goemans-Williamson
+
+## 03/04/2025
+- (Mathis)
+  * Continue to implement the nc case 
+    + add the function degree_of_polynomial that calculate the degree of a commutative or non commutative polynomial (sympy doesn't handle the nc cases so we had to reimplement a degree function)
+
+## 04/04/2025
+- (Mathis)
+  * Continue / finish to implement the non commutative case (not working because the SDP solver can't solve the given SDp thus the issue is perhaps on the relaxation)
+  * Debug the non commutative case 
+    + for the nc case, we have to double the relaxation_factor for the moement matrix (not the relaxation_factor in general) because if we don't extend the size of the moment matrix, we don't capture every monomials (eg: for the commutative case, x*y = y*x thus with monomials = (1, x, y) we generate x*y and y*x because x*y = y*x but for the non commutative case, we only capture x*y or y*x, so we have to extend the moment matrix to capture x*y and y*x by using more monomials (1, x, y, x**2, x*y, y*x, y**2) )
+  * add a test for the non commutative case in test_problem.py
