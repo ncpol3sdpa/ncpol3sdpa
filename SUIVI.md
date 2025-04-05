@@ -144,3 +144,4 @@
     + Fix miscellaneous small type errors in the code 
     + Remove as many # type: ignore annotations as possible 
     + Write typing stubs for dependencies in src/typing_stubs. I first auto generated a template with mypy's stubgen script. Then eddied the types of functions we use in the code. The typing stubs themselves should not be typechecked
+- (Alain) added functions in maxcut_example for testing efficiency of the relaxation (naive solving + bipartite graphs case)
