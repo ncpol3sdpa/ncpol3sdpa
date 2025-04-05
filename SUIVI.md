@@ -78,6 +78,7 @@
   * Add sphinx to the project
   * Clean, refactor and add type annotations to the code
 - (Nazar) Commencer à faire un nouvau type de données pour mieux representer des SDPs sur la branche better-sdp-representation.
+- (Alain) completer funs.py + debug
 - (All) 
   * Meeting with Peter Brown
   * Discuss the next steps
@@ -90,7 +91,7 @@
 - (Thomas) begin sos problem: https://www.princeton.edu/~aaa/Public/Teaching/ORF523/ORF523_Lec15.pdf ,useful link for the sos theory
 - (Yann) Migrate the branch
 - (Nazar) Comancer ecrire des tests pour le nouvau code
-- (Allain) Comancer d'implementaer une application: Max Cut
+- (Alain) Commencer d'implementer l'application Max Cut
 - (Mathis) Lecture et compréhension de la nouvelle implémentation du solveur
 
 ## 27/03/2025
@@ -116,6 +117,7 @@
     + create a function generate_monomials_non_commutative that returns a list of all monomials of a degree less than the relaxation parameter that are non commutative
     + implement a new function apply_rule_non_commutative that is a generalisation of the function apply_rule for non commutative monomials
 - (Nazar) Merge the [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/4). Add a merge request for the pre-commit tool: [!2](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/6)
+- (Alain) implemented + debug de Max cut; randomized test + [example on ncpol2sdpa](https://ncpol2sdpa.readthedocs.io/en/stable/exampleshtml.html#example-1-max-cut)
 
 ## 02/04/2025 
 - (Mathis)
