@@ -1,0 +1,3 @@
+from cvxpy.expressions.variable import Variable as Variable
+
+def cummax_canon(expr, args): ...

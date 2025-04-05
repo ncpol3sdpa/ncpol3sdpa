@@ -1,0 +1,9 @@
+from sympy.core.function import Function as Function
+from sympy.functions import Piecewise as Piecewise, exp as exp
+from sympy.tensor.indexed import Idx as Idx, Indexed as Indexed
+from sympy.utilities import sift as sift
+
+class IndexConformanceException(Exception): ...
+
+def get_indices(expr): ...
+def get_contraction_structure(expr): ...

@@ -1,0 +1,26 @@
+from sympy.core.intfunc import igcd as igcd
+from sympy.core.mul import Mul as Mul
+from sympy.core.singleton import S as S
+from sympy.functions.elementary.exponential import log as log
+from sympy.functions.elementary.miscellaneous import sqrt as sqrt
+from sympy.physics.quantum.gate import Gate as Gate
+from sympy.physics.quantum.qapply import qapply as qapply
+from sympy.physics.quantum.qexpr import QuantumError as QuantumError
+from sympy.physics.quantum.qft import QFT as QFT
+from sympy.physics.quantum.qubit import Qubit as Qubit, measure_partial_oneshot as measure_partial_oneshot
+from sympy.utilities.iterables import variations as variations
+
+class OrderFindingException(QuantumError): ...
+
+class CMod(Gate):
+    @property
+    def t(self): ...
+    @property
+    def a(self): ...
+    @property
+    def N(self): ...
+
+def shor(N): ...
+def getr(x, y, N): ...
+def ratioize(list, N): ...
+def period_find(a, N): ...

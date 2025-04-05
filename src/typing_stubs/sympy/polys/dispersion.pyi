@@ -1,0 +1,6 @@
+from _typeshed import Incomplete
+from sympy.core import S as S
+from sympy.polys import Poly as Poly
+
+def dispersionset(p, q: Incomplete | None = None, *gens, **args): ...
+def dispersion(p, q: Incomplete | None = None, *gens, **args): ...

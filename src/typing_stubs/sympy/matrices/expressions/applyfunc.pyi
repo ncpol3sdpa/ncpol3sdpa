@@ -1,0 +1,16 @@
+from sympy.core.expr import ExprBuilder as ExprBuilder
+from sympy.core.function import Function as Function, FunctionClass as FunctionClass, Lambda as Lambda
+from sympy.core.symbol import Dummy as Dummy
+from sympy.core.sympify import sympify as sympify
+from sympy.matrices.expressions import MatrixExpr as MatrixExpr
+from sympy.matrices.matrixbase import MatrixBase as MatrixBase
+
+class ElementwiseApplyFunction(MatrixExpr):
+    def __new__(cls, function, expr): ...
+    @property
+    def function(self): ...
+    @property
+    def expr(self): ...
+    @property
+    def shape(self): ...
+    def doit(self, **hints): ...

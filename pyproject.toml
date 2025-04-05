@@ -29,7 +29,7 @@ packages = ["src/ncpol3sdpa"]
 
 [tool.ruff]
 indent-width = 4
-exclude = ["Exercises"]
+exclude = ["Exercises", "src/typing_stubs"]
 
 [tool.ruff.lint]
 ignore = []
@@ -44,6 +44,8 @@ strict = true
 exclude = ["main.py"]
 follow_untyped_imports = true
 files = ["src/ncpol3sdpa","tests"]
+python_executable = ".venv/bin/python"
+mypy_path = "src/typing_stubs"
 
 [tool.pytest.ini_options]
 pythonpath = [

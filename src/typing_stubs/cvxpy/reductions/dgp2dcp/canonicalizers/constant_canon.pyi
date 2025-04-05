@@ -1,0 +1,3 @@
+from cvxpy.expressions.constants.constant import Constant as Constant
+
+def constant_canon(expr, args): ...

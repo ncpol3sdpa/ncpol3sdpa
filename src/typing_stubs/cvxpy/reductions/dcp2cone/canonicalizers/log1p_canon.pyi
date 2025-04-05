@@ -1,0 +1,3 @@
+from cvxpy.reductions.dcp2cone.canonicalizers.log_canon import log_canon as log_canon
+
+def log1p_canon(expr, args): ...

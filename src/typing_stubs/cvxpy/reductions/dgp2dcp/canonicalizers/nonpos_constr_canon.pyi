@@ -1,0 +1,3 @@
+from cvxpy.constraints.nonpos import NonPos as NonPos
+
+def nonpos_constr_canon(expr, args): ...

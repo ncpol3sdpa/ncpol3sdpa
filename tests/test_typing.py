@@ -1,4 +1,4 @@
-from sympy import Symbol, poly, Poly
+from sympy import Symbol, poly, Poly, Expr
 # from typing import List
 # from typeguard import typechecked
 # check_type
@@ -25,7 +25,7 @@ def int_fun(x: int) -> None:
 
 
 # @typechecked
-def poly_fun(x: Poly) -> None:
+def poly_fun(x: Expr | Poly) -> None:
     print(f"int_fun : {isinstance(x,Poly)=}")
 
 
@@ -44,4 +44,5 @@ if __name__ == "__main__":
 
     y = Symbol("y")
     poly_fun(poly(y**2 + 2 * y + 1))
-    poly_fun(Symbol("x"))
+    x = Symbol("x")
+    poly_fun(x)

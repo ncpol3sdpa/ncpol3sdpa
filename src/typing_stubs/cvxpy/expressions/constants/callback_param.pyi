@@ -1,0 +1,9 @@
+from cvxpy.expressions.constants.parameter import Parameter as Parameter
+from typing import Callable
+
+class CallbackParam(Parameter):
+    def __init__(self, callback: Callable, shape: int | tuple[int, ...] = (), **kwargs) -> None: ...
+    @property
+    def value(self): ...
+    @value.setter
+    def value(self, _val) -> None: ...

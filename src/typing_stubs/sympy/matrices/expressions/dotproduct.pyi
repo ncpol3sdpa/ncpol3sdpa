@@ -1,0 +1,6 @@
+from sympy.core import Basic as Basic, Expr as Expr
+from sympy.matrices.expressions.transpose import transpose as transpose
+
+class DotProduct(Expr):
+    def __new__(cls, arg1, arg2): ...
+    def doit(self, expand: bool = False, **hints): ...

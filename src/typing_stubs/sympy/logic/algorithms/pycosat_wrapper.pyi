@@ -1,0 +1,3 @@
+from sympy.assumptions.cnf import EncodedCNF as EncodedCNF
+
+def pycosat_satisfiable(expr, all_models: bool = False): ...
