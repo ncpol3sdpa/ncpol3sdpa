@@ -1,0 +1,19 @@
+import sympy.plotting.backends.base_backend as base_backend
+from _typeshed import Incomplete
+from sympy.core.basic import Basic as Basic
+from sympy.external import import_module as import_module
+from sympy.printing.latex import latex as latex
+
+class MatplotlibBackend(base_backend.Plot):
+    matplotlib: Incomplete
+    plt: Incomplete
+    cm: Incomplete
+    LineCollection: Incomplete
+    aspect: Incomplete
+    def __init__(self, *series, **kwargs) -> None: ...
+    @staticmethod
+    def get_segments(x, y, z: Incomplete | None = None): ...
+    def process_series(self) -> None: ...
+    def show(self) -> None: ...
+    def save(self, path) -> None: ...
+    def close(self) -> None: ...

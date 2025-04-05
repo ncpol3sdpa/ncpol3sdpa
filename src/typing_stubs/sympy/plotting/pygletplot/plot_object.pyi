@@ -1,0 +1,3 @@
+class PlotObject:
+    visible: bool
+    def draw(self) -> None: ...

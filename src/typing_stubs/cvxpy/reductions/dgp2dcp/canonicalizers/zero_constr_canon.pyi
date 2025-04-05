@@ -1,0 +1,3 @@
+from cvxpy.constraints.zero import Zero as Zero
+
+def zero_constr_canon(expr, args): ...

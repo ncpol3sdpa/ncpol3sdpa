@@ -1,0 +1,6 @@
+from _typeshed import Incomplete
+
+__all__ = ['minimal_polynomial', 'minpoly']
+
+def minimal_polynomial(ex, x: Incomplete | None = None, compose: bool = True, polys: bool = False, domain: Incomplete | None = None): ...
+def minpoly(ex, x: Incomplete | None = None, compose: bool = True, polys: bool = False, domain: Incomplete | None = None): ...

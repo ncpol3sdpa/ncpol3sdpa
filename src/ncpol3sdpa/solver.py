@@ -1,16 +1,17 @@
-from typing import Any, Tuple, List
+from typing import Tuple, List
 from numpy.typing import NDArray
 import numpy as np
 import cvxpy
+from cvxpy.expressions.expression import Expression as CVXPY_Expr
 import mosek
 import ncpol3sdpa.sdp_repr as sdp_repr
 import warnings
 
 
-def cvxpy_dot_prod(c: Any, x: Any) -> Any:
-    # TODO: Fix the typing of this.
-    # Should be c: NDArray, x : cvxpy PSD variable, result : cvxpy expression(?)
-    return cvxpy.sum(cvxpy.multiply(c, x))
+def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:
+    rt = cvxpy.sum(cvxpy.multiply(c, x))
+    assert isinstance(rt, CVXPY_Expr)
+    return rt
 
 
 def to_sparse_symmetric(
@@ -54,7 +55,7 @@ class Solver:
 
         # Moment matrix structure
         G = sdp_vars[problem.MOMENT_MATRIX_VAR_NUM]
-        constraints = [G[0, 0] == 1]
+        constraints: List[cvxpy.Constraint] = [G[0, 0] == 1]
         for eq_class in problem.moment_matrix.eq_classes:
             assert len(eq_class) > 0
             (i, j) = eq_class.pop()
@@ -63,10 +64,10 @@ class Solver:
 
         # Constraints
         for constraint in problem.constraints:
-            expression = 0
+            expression: cvxpy.Expression = cvxpy.Constant(0)
             for var_num, matrix in constraint.constraints:
                 expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
-            constraints.append(0 == expression)
+            constraints.append(cvxpy.Constant(0) == expression)
 
         # tr(A.T x G)
         objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
@@ -74,7 +75,8 @@ class Solver:
         prob = cvxpy.Problem(objective, constraints)
         # Returns the optimal value.
         prob.solve()
-        return prob.value  # type: ignore
+        assert isinstance(prob.value, float)
+        return prob.value
 
     @classmethod
     def solve_mosek(self, problem: sdp_repr.ProblemSDP) -> float:
@@ -140,7 +142,7 @@ class Solver:
                 task.putconboundlist(
                     list(range(number_of_constraints + 1)),
                     [mosek.boundkey.fx for _ in range(number_of_constraints + 1)],
-                    [1] + [0 for _ in range(number_of_constraints)],
+                    [1.0] + [0.0 for _ in range(number_of_constraints)],
                     [1] + [0 for _ in range(number_of_constraints)],
                 )
 
@@ -153,22 +155,26 @@ class Solver:
 
                 # Handle solution cases
                 if solution_status == mosek.solsta.optimal:
-                    return task.getprimalobj(mosek.soltype.itr)  # Return optimal value
+                    optimal = task.getprimalobj(
+                        mosek.soltype.itr
+                    )  # Return optimal value
+                    assert isinstance(optimal, float)
+                    return optimal
 
                 elif solution_status in [
                     mosek.solsta.dual_infeas_cer,
                     mosek.solsta.prim_infeas_cer,
                 ]:
-                    print("Infeasible")
+                    warnings.warn("Infeasible")
                     return float(
                         "inf"
                     )  # Primal or dual infeasibility certificate found
                 elif solution_status == mosek.solsta.unknown:
-                    print("Unknown solution status")
+                    warnings.warn("Unknown solution status")
                     return float("nan")  # Unknown solution status
 
                 else:
-                    print("Other solution status: ", solution_status)
+                    warnings.warn("Other solution status: ", solution_status)
                     return float("nan")  # Other solution status
 
         try:
@@ -177,5 +183,5 @@ class Solver:
             warnings.warn("Mosek exception : %s" % e)
             return float("nan")
         except Exception as e:
-            print("Other exception : %s" % e)
+            warnings.warn("Other exception : %s" % e)
             return float("nan")

@@ -1,6 +1,6 @@
 # from sympy.polys import monomials
-import sympy as sp
 from sympy import Expr, Symbol, symbols
+from sympy.core.numbers import One as SymOne
 
 from ncpol3sdpa.constraints import Constraint
 from ncpol3sdpa.rules import Rule
@@ -20,7 +20,8 @@ def test_needed_monomials() -> None:
     c2 = Constraint.EqualityConstraint(pol2)
     rules = Rule.of_constraints([c1, c2])
     monomials_list: List[Expr] = [
-        1,
+        # TODO fix this typing error
+        SymOne(),
         x,
         x**2,
         y,

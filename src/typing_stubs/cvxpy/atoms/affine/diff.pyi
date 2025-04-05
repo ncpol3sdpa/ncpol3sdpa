@@ -1,0 +1,3 @@
+from cvxpy.expressions.expression import Expression as Expression
+
+def diff(x, k: int = 1, axis: int = 0): ...

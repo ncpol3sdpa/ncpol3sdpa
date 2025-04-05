@@ -1,0 +1,3 @@
+from .cartan_type import CartanType as CartanType
+
+def DynkinDiagram(t): ...

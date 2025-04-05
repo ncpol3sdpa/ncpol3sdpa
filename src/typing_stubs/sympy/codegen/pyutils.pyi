@@ -1,0 +1,3 @@
+from sympy.printing.pycode import PythonCodePrinter as PythonCodePrinter
+
+def render_as_module(content, standard: str = 'python3'): ...

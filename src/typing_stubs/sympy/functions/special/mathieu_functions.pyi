@@ -1,0 +1,26 @@
+from sympy.core.function import ArgumentIndexError as ArgumentIndexError, Function as Function
+from sympy.functions.elementary.miscellaneous import sqrt as sqrt
+from sympy.functions.elementary.trigonometric import cos as cos, sin as sin
+
+class MathieuBase(Function):
+    unbranched: bool
+
+class mathieus(MathieuBase):
+    def fdiff(self, argindex: int = 1): ...
+    @classmethod
+    def eval(cls, a, q, z): ...
+
+class mathieuc(MathieuBase):
+    def fdiff(self, argindex: int = 1): ...
+    @classmethod
+    def eval(cls, a, q, z): ...
+
+class mathieusprime(MathieuBase):
+    def fdiff(self, argindex: int = 1): ...
+    @classmethod
+    def eval(cls, a, q, z): ...
+
+class mathieucprime(MathieuBase):
+    def fdiff(self, argindex: int = 1): ...
+    @classmethod
+    def eval(cls, a, q, z): ...

@@ -1,0 +1,3 @@
+__all__ = ['together']
+
+def together(expr, deep: bool = False, fraction: bool = True): ...

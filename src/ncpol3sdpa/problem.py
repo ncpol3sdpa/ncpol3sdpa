@@ -30,7 +30,7 @@ def polynomial_to_matrix(
     moment_matrix_size = len(algebra.moment_matrix)
     a_0 = np.zeros(shape=(moment_matrix_size, moment_matrix_size))
 
-    for monomial, coef in sympy.expand(poly).as_coefficients_dict().items():  # type: ignore
+    for monomial, coef in sympy.expand(poly).as_coefficients_dict().items():
         assert monomial in algebra.monomial_to_positions.keys()
         assert 0 < len(algebra.monomial_to_positions[monomial])
 

@@ -1,0 +1,3 @@
+from cvxpy.expressions.constants.parameter import Parameter as Parameter
+
+def parameter_canon(expr, args): ...
