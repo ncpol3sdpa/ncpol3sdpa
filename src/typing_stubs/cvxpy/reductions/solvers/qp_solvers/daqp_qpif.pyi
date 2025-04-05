@@ -1,0 +1,13 @@
+from _typeshed import Incomplete
+from cvxpy.reductions.solution import Solution as Solution, failure_solution as failure_solution
+from cvxpy.reductions.solvers.qp_solvers.qp_solver import QpSolver as QpSolver
+
+class DAQP(QpSolver):
+    REQUIRES_CONSTR: bool
+    BOUNDED_VARIABLES: bool
+    STATUS_MAP: Incomplete
+    ALLOWED_SOLVER_OPTS: Incomplete
+    def name(self): ...
+    def import_solver(self) -> None: ...
+    def invert(self, solution, inverse_data): ...
+    def solve_via_data(self, data, warm_start: bool, verbose: bool, solver_opts, solver_cache: Incomplete | None = None): ...

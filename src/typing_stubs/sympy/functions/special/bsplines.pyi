@@ -1,0 +1,9 @@
+from sympy.core import S as S, sympify as sympify
+from sympy.core.symbol import Dummy as Dummy, symbols as symbols
+from sympy.functions import Piecewise as Piecewise, piecewise_fold as piecewise_fold
+from sympy.logic.boolalg import And as And
+from sympy.sets.sets import Interval as Interval
+
+def bspline_basis(d, knots, n, x): ...
+def bspline_basis_set(d, knots, x): ...
+def interpolating_spline(d, x, X, Y): ...

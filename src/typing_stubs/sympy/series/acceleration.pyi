@@ -1,0 +1,6 @@
+from sympy.core.numbers import Integer as Integer
+from sympy.core.singleton import S as S
+from sympy.functions.combinatorial.factorials import factorial as factorial
+
+def richardson(A, k, n, N): ...
+def shanks(A, k, n, m: int = 1): ...

@@ -63,22 +63,13 @@ pytest:
     - uv run pytest
     - echo "Pytest complete"
 
-mypy-src:
+mypy:
   stage: test
   script:
     - echo "Running Mypy..."
-    - uv run mypy src
+    - uv run mypy
     - echo "Mypy complete"
-  allow_failure: true
-  
-# mypy-tests:
-#   stage: test
-#   script:
-#     - echo "Running Mypy..."
-#     - uv run mypy src
-#     - echo "Mypy complete"
-#   allow_failure: true
-
+  allow_failure: false
 
 # - name: Setup MOSEK & Run Tests
 #    env:

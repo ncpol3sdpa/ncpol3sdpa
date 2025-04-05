@@ -93,7 +93,7 @@ class ProblemSDP:
 
         # the structure of the equality constraints is star:
         # s0= s1, s0 = s2, s0 = s3, ...
-        # TODO/Idea: What if it was a chain(s0 = s1, s1 = s2, s2 = s3, ...) 
+        # TODO/Idea: What if it was a chain(s0 = s1, s1 = s2, s2 = s3, ...)
         # or a balanced tree or a Union-Find structure?
 
     # --- Validation ---

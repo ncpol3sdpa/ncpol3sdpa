@@ -1,0 +1,3 @@
+from cvxpy.atoms.elementwise.log import log as log
+
+def log_canon(expr, args): ...

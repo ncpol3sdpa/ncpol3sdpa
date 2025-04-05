@@ -1,0 +1,49 @@
+from _typeshed import Incomplete
+from sympy.physics.quantum.qexpr import QExpr
+
+__all__ = ['Operator', 'HermitianOperator', 'UnitaryOperator', 'IdentityOperator', 'OuterProduct', 'DifferentialOperator']
+
+class Operator(QExpr):
+    is_hermitian: bool | None
+    is_unitary: bool | None
+    @classmethod
+    def default_args(self): ...
+    def matrix_element(self, *args) -> None: ...
+    def inverse(self): ...
+    inv = inverse
+    def __mul__(self, other): ...
+
+class HermitianOperator(Operator):
+    is_hermitian: bool
+
+class UnitaryOperator(Operator):
+    is_unitary: bool
+
+class IdentityOperator(Operator):
+    is_hermitian: bool
+    is_unitary: bool
+    @property
+    def dimension(self): ...
+    @classmethod
+    def default_args(self): ...
+    N: Incomplete
+    def __init__(self, *args, **hints) -> None: ...
+    def __mul__(self, other): ...
+
+class OuterProduct(Operator):
+    is_commutative: bool
+    def __new__(cls, *args, **old_assumptions): ...
+    @property
+    def ket(self): ...
+    @property
+    def bra(self): ...
+
+class DifferentialOperator(Operator):
+    @property
+    def variables(self): ...
+    @property
+    def function(self): ...
+    @property
+    def expr(self): ...
+    @property
+    def free_symbols(self): ...

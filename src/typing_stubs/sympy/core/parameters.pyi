@@ -1,0 +1,19 @@
+from .cache import clear_cache as clear_cache
+from _typeshed import Incomplete
+from collections.abc import Generator
+from threading import local
+
+class _global_parameters(local):
+    def __init__(self, **kwargs) -> None: ...
+    def __setattr__(self, name, value): ...
+
+global_parameters: Incomplete
+
+class evaluate:
+    x: Incomplete
+    old: Incomplete
+    def __init__(self, x) -> None: ...
+    def __enter__(self) -> None: ...
+    def __exit__(self, exc_type: type[BaseException] | None, exc_val: BaseException | None, exc_tb: types.TracebackType | None) -> None: ...
+
+def distribute(x) -> Generator[None]: ...
