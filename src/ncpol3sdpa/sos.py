@@ -8,14 +8,11 @@ import ncpol3sdpa.sdp_repr as sdp_repr
 import warnings
 
 
-#def solve_dual(P :ProblemSDP):
 
-
-def cvxpy_dot_prod(c: Any, x: Any) -> Any:
-    # TODO: Fix the typing of this.
-    # Should be c: NDArray, x : cvxpy PSD variable, result : cvxpy expression(?)
-    return cvxpy.sum(cvxpy.multiply(c, x))
-
+def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:
+    rt = cvxpy.sum(cvxpy.multiply(c, x))
+    assert isinstance(rt, CVXPY_Expr)
+    return rt
 
 class Sos:   
 
