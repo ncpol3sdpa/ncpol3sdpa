@@ -158,4 +158,4 @@
 
 - (Thomas)
   * Begin the implementation of the SOS problem by finding the solutions of the dual problem for each constraint of the primal problem with the solver cvxpy
-  * test the code: errors remain
+  * Test the code: errors remain
