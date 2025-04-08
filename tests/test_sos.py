@@ -8,8 +8,8 @@ import cvxpy as cp
 
 def test_dual_constraints_cvxpy() -> None:
     moment_matrix = MomentMatrixSDP(1, [[(0, 0)]])
-    p = ProblemSDP(moment_matrix, np.array([[-1]]))
-    dual_constraints = Sos.dual_constraints_cvxpy(p)
+    problem = ProblemSDP(moment_matrix, np.array([[-1]]))
+    dual_constraints = Sos.dual_constraints_cvxpy(problem)
 
     x = cp.Variable()
     constraints = [ x <= 1, x>= 1,x>=0 ]
