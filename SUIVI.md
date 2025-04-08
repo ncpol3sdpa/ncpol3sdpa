@@ -118,6 +118,8 @@
     + implement a new function apply_rule_non_commutative that is a generalisation of the function apply_rule for non commutative monomials
 - (Nazar) Merge the [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/4). Add a merge request for the pre-commit tool: [!2](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/6)
 - (Alain) implemented + debug de Max cut; randomized test + [example on ncpol2sdpa](https://ncpol2sdpa.readthedocs.io/en/stable/exampleshtml.html#example-1-max-cut)
+- (Thomas) learn the theory of the SOS with Peter Brown
+
 
 ## 02/04/2025 
 - (Mathis)
@@ -155,4 +157,5 @@
   * Merge MR 
 
 - (Thomas)
- Begin the implementation of the SOS problem by finding the solutions of the dual problem with cvxpy
+ * Begin the implementation of the SOS problem by finding the solutions of the dual problem for each constraint of the primal problem with the solver cvxpy
+ * test the code: errors remain
