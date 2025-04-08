@@ -153,3 +153,6 @@
 ## 08/04/2025
 - (Yann)
   * Merge MR 
+
+- (Thomas)
+ Begin the implementation of the SOS problem by finding the solutions of the dual problem with cvxpy
