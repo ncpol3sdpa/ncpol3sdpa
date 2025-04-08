@@ -56,6 +56,6 @@ class Sos:
         return dual_problem
     
 
-    def from_dual_constraints_to_sos(self, problem: sdp_repr.ProblemSDP)
+   # def from_dual_constraints_to_sos(self, problem: sdp_repr.ProblemSDP):
 
 
