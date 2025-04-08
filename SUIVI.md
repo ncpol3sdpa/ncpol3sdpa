@@ -165,6 +165,8 @@
   * Tentative de debug de l'ajout de la partie de résolution non commutative 
     + finalement, il ne faut pas augmenter la taille de la moment matrix (*2) car sinon le problème n'est pas solvable
     + je ne comprends pas un point sur le papier de recherche pour l'implémentation de la partie non commutative, je vais voir avec Peter Brown pour mieux comprendre un point qui me pose problème
+    + finalement, j'ai compris ce qui n'allait pas, j'ai oublié les daggers dans la formule
+    
 - (Nazar) Cogérer des erreurs de type un peut partout. Écrire . Recherche sur max-cut et algorithme de William Go
 - (Nazar) Cogérer des erreurs de type un peut partout. Écrire un fichier interface des types pour la bibliothèque mosek(qui n'en a pas par défaut). Recherche sur max-cut et algorithme de Goemans-Williamson
   * Merge MR 
