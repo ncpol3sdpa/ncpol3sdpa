@@ -16,6 +16,7 @@ def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:
 
 class Sos:   
 
+    @classmethod
     def dual_constraints_cvxpy(self, problem: sdp_repr.ProblemSDP) -> list:
         """Solve the SDP problem with cvxpy"""
         # Variables
