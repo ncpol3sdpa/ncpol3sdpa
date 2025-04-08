@@ -19,7 +19,7 @@ def cvxpy_dot_prod(c: Any, x: Any) -> Any:
 
 class Sos:   
 
-    def dual_constraints_cvxpy(self, problem: sdp_repr.ProblemSDP) -> list of float:
+    def dual_constraints_cvxpy(self, problem: sdp_repr.ProblemSDP) -> list:
         """Solve the SDP problem with cvxpy"""
         # Variables
         sdp_vars = [
@@ -51,7 +51,7 @@ class Sos:
         
         dual_problem = []
         for constraint in constraints:
-              dual_problem.add(constraint.dual_value)
+              dual_problem.append(constraint.dual_value)
         
         return dual_problem
     
