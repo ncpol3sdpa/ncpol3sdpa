@@ -1,7 +1,7 @@
 from __future__ import annotations
 from functools import cmp_to_key
 from typing import List, Dict, Set, Any, Iterable
-from sympy import total_degree
+from sympy import total_degree, sympify
 
 
 class Poly:
@@ -121,7 +121,7 @@ def generate_monomials(
             key=cmp_to_key(lambda item1, item2: total_degree(item1) - total_degree(item2)),
         )
     else:
-        res = [1]
+        res = [sympify(1)]
         def dfs(i, curr_monomials, pred_monomials):
             if i > relaxation_order:
                 return 

@@ -37,7 +37,7 @@ def create_moment_matrix(
     matrix_size = len(monomials)
     return [
         [
-            apply_rule(monomials[i] * monomials[j], substitution_rules, commutative)
+            apply_rule(( monomials[j] if commutative else monomials[j].adjoint() ) * monomials[i], substitution_rules, commutative)
             for j in range(i + 1)
         ]
         for i in range(matrix_size)
@@ -55,7 +55,7 @@ def create_constraint_matrix(
     return [
         [
             apply_rule_to_polynomial(
-                sp.expand(monomials[i] * constraint_polynomial * monomials[j]), rules, commutative # type: ignore
+                sp.expand((monomials[j] if commutative else monomials[j].adjoint()) * constraint_polynomial * monomials[i]), rules, commutative # type: ignore
             )
             for j in range(i + 1)
         ]
@@ -69,8 +69,8 @@ def generate_needed_symbols(polynomials: List[sp.Expr]) -> List[sp.Symbol]:
         total += p
 
     # Type check (useless ???)
-    for s in total.free_symbols:
-        assert isinstance(s, sp.Symbol)
+    #for s in total.free_symbols:
+    #    assert isinstance(s, sp.Symbol)
 
     return list(total.free_symbols) # type: ignore
 
@@ -89,7 +89,7 @@ class AlgebraSDP:
         self.substitution_rules: Dict[sp.Expr, sp.Expr] = substitution_rules
         self.commutative = commutative
         self.monomials: List[sp.Expr] = needed_monomials(
-            generate_monomials(needed_variables, relaxation_order if commutative else 2*relaxation_order, commutative),
+            generate_monomials(needed_variables, relaxation_order, commutative),
             substitution_rules,
         )
         self.objective:sp.Expr = apply_rule_to_polynomial(

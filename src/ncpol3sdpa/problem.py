@@ -6,6 +6,8 @@ from typing import List, Tuple
 from numpy.typing import NDArray
 from enum import Enum
 
+from sympy.polys import monomials
+
 from ncpol3sdpa.rules import Rule, apply_rule_to_polynomial
 from ncpol3sdpa.solver import Solver
 from ncpol3sdpa.constraints import Constraint
@@ -174,7 +176,6 @@ class Problem:
         problemSDP = algebra_to_SDP(algebraSDP)
 
         # 3. Solve the SDP
-
         match solver:
             case AvailableSolvers.CVXPY:
                 return Solver.solve_cvxpy(problemSDP)
