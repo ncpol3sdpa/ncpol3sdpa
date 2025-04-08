@@ -48,5 +48,3 @@ def test_dual_constraints_cvxpy_2() -> None:
     assert (dual_constraints == cvxpy_dual_constraints)
 
 
-
-    
