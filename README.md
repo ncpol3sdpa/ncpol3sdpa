@@ -90,12 +90,12 @@ uv run tach sync
 uv run tach show --web
 ```
 ```bash
-uv run tach show 
-uv run dot -Tpdf tach_module_graph.dot -o tach_graph.pdf
+uv run tach show -o docs/graphs/tach_graph.dot
+uv run dot -Tpdf docs/graphs/tach_graph.dot -o docs/graphs/tach_graph.pdf
 ```
 
 We use `pydeps` to build the dependencies graph of functions.
 
 ```bash
-uv run pydeps src/ncpol3sdpa -o docs/graph.svg
+uv run pydeps src/ncpol3sdpa
 ````
