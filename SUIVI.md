@@ -145,3 +145,11 @@
     + Remove as many # type: ignore annotations as possible 
     + Write typing stubs for dependencies in src/typing_stubs. I first auto generated a template with mypy's stubgen script. Then eddied the types of functions we use in the code. The typing stubs themselves should not be typechecked
 - (Alain) added functions in maxcut_example for testing efficiency of the relaxation (naive solving + bipartite graphs case)
+- (Yann)
+  * Read documentation about uv [link](https://docs.astral.sh/uv/concepts/projects/dependencies/#platform-specific-sources)
+  * Read documentation for organize tests
+  * Read documentation about pre-commit
+
+## 08/04/2025
+- (Yann)
+  * Merge MR 
