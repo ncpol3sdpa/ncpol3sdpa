@@ -154,7 +154,8 @@
 
 ## 08/04/2025
 - (Yann)
-  * Merge MR 
+  * Ended up to fix the branch `pydeps`
+  * Try to merge
 
 - (Thomas)
   * Begin the implementation of the SOS problem by finding the solutions of the dual problem for each constraint of the primal problem with the solver cvxpy
