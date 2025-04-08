@@ -1,0 +1,17 @@
+strict digraph {
+"ncpol3sdpa.momentmatrix";
+"ncpol3sdpa.rules";
+"ncpol3sdpa.constraints";
+"ncpol3sdpa.solver";
+"ncpol3sdpa.funs";
+"ncpol3sdpa.problem";
+"ncpol3sdpa.monomial";
+"ncpol3sdpa.momentmatrix" -> "ncpol3sdpa.rules";
+"ncpol3sdpa.rules" -> "ncpol3sdpa.constraints";
+"ncpol3sdpa.solver" -> "ncpol3sdpa.funs";
+"ncpol3sdpa.problem" -> "ncpol3sdpa.constraints";
+"ncpol3sdpa.problem" -> "ncpol3sdpa.rules";
+"ncpol3sdpa.problem" -> "ncpol3sdpa.solver";
+"ncpol3sdpa.problem" -> "ncpol3sdpa.monomial";
+"ncpol3sdpa.problem" -> "ncpol3sdpa.momentmatrix";
+}
