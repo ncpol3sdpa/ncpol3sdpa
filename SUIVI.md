@@ -118,6 +118,8 @@
     + implement a new function apply_rule_non_commutative that is a generalisation of the function apply_rule for non commutative monomials
 - (Nazar) Merge the [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/4). Add a merge request for the pre-commit tool: [!2](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/6)
 - (Alain) implemented + debug de Max cut; randomized test + [example on ncpol2sdpa](https://ncpol2sdpa.readthedocs.io/en/stable/exampleshtml.html#example-1-max-cut)
+- (Thomas) learn the theory of the SOS with Peter Brown
+
 
 ## 02/04/2025 
 - (Mathis)
@@ -145,3 +147,15 @@
     + Remove as many # type: ignore annotations as possible 
     + Write typing stubs for dependencies in src/typing_stubs. I first auto generated a template with mypy's stubgen script. Then eddied the types of functions we use in the code. The typing stubs themselves should not be typechecked
 - (Alain) added functions in maxcut_example for testing efficiency of the relaxation (naive solving + bipartite graphs case)
+- (Yann)
+  * Read documentation about uv [link](https://docs.astral.sh/uv/concepts/projects/dependencies/#platform-specific-sources)
+  * Read documentation for organize tests
+  * Read documentation about pre-commit
+
+## 08/04/2025
+- (Yann)
+  * Merge MR 
+
+- (Thomas)
+  * Begin the implementation of the SOS problem by finding the solutions of the dual problem for each constraint of the primal problem with the solver cvxpy
+  * Test the code: errors remain
