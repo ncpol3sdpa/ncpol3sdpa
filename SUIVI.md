@@ -168,3 +168,6 @@
 - (Nazar) Cogérer des erreurs de type un peut partout. Écrire . Recherche sur max-cut et algorithme de William Go
 - (Nazar) Cogérer des erreurs de type un peut partout. Écrire un fichier interface des types pour la bibliothèque mosek(qui n'en a pas par défaut). Recherche sur max-cut et algorithme de Goemans-Williamson
   * Merge MR 
+
+- (Thomas)
+ Begin the implementation of the SOS problem by finding the solutions of the dual problem with cvxpy
