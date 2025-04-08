@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, Any
 from numpy.typing import NDArray
 import numpy as np
 import cvxpy
@@ -17,7 +17,7 @@ def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:
 class Sos:   
 
     @classmethod
-    def dual_constraints_cvxpy(self, problem: sdp_repr.ProblemSDP) -> list:
+    def dual_constraints_cvxpy(self, problem: sdp_repr.ProblemSDP) -> List[Any]:
         """Solve the SDP problem with cvxpy"""
         # Variables
         sdp_vars = [
@@ -56,4 +56,17 @@ class Sos:
 
    # def from_dual_constraints_to_sos(self, problem: sdp_repr.ProblemSDP):
 
+"""
 
+Il faudrait typer les fonctions:
+
+List[cvxpy.Expression]
+
+src/ncpol3sdpa/sos.py:40: error: Incompatible types in assignment (expression has type "Expression", variable has type "int")  [assignment]
+src/ncpol3sdpa/sos.py:41: error: Argument 1 to "append" of "list" has incompatible type "bool"; expected "Equality"  [arg-type]
+src/ncpol3sdpa/sos.py:46: error: Argument 2 to "Problem" has incompatible type "list[Equality]"; expected "list[Constraint] | None"  [arg-type]
+src/ncpol3sdpa/sos.py:46: note: "List" is invariant -- see https://mypy.readthedocs.io/en/stable/common_issues.html#variance
+src/ncpol3sdpa/sos.py:46: note: Consider using "Sequence" instead, which is covariant
+src/ncpol3sdpa/sos.py:51: error: Incompatible types in assignment (expression has type "Equality", variable has type "EqConstraint")  [assignment]
+src/ncpol3sdpa/sos.py:52: error: "EqConstraint" has no attribute "dual_value"  [attr-defined]
+"""

@@ -1,7 +1,7 @@
 def test_mosek() -> None:
     """Test if MOSEK is installed and working."""
     try:
-        import mosek # type: ignore
+        import mosek
 
         mosek.Task()
 
