@@ -52,3 +52,10 @@ pythonpath = [
 testpaths = [
     "tests"
 ]
+
+[tool.pydeps]
+# fname = "src"
+output = "docs/graphs/pydeps_graph.svg"
+verbose = 2
+cluster = true
+no_show = true
