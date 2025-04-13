@@ -83,6 +83,14 @@ def test_1_nc() -> None:
     p.add_constraint(c2)
     assert abs(p.solve(2) - 1/8) <= 0.1
 
+def test_2_nc() -> None:
+    a, b = HermitianOperator("a"), HermitianOperator("b")
+    obj = a*b + b*a 
+    p = Problem(obj, commutative=False)
+    c1 = Constraint.InequalityConstraint(1 - a**2 - b**2)
+    p.add_constraint(c1)
+    assert abs(p.solve(2) - 1) <= 0.1
+
 if __name__ == "__main__":
     test_1()
     test_2()
@@ -91,4 +99,3 @@ if __name__ == "__main__":
     test_1_sub()
     print("Everything passed")
     
-
