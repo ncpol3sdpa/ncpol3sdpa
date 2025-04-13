@@ -180,3 +180,11 @@
 - (Thomas)
  * Begin the implementation of the SOS problem by finding the solutions of the dual problem for each constraint of the primal problem with the solver cvxpy
  * test the code: errors remain
+
+## 13/04/2025
+
+- (Yann)
+  * Read documentation about organizing tests
+  * Think about the structure of the project
+    + Read documentation about organizing files in a project
+    + Read docs about template files / ports
