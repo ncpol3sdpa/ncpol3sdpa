@@ -1,0 +1,9 @@
+from cvxpy import problems as problems
+from cvxpy.constraints.psd import PSD as PSD
+from cvxpy.constraints.second_order import SOC as SOC
+from cvxpy.reductions.reduction import Reduction as Reduction
+
+class SOC2PSD(Reduction):
+    def accepts(self, problem): ...
+    def apply(self, problem): ...
+    def invert(self, solution, inverse_data): ...

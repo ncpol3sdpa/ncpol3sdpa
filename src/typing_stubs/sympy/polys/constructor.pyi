@@ -1,0 +1,3 @@
+__all__ = ['construct_domain']
+
+def construct_domain(obj, **args): ...

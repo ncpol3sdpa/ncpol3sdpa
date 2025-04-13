@@ -1,0 +1,9 @@
+from .matexpr import MatrixExpr as MatrixExpr
+from sympy.core.singleton import S as S
+from sympy.polys.polytools import Poly as Poly
+
+class CompanionMatrix(MatrixExpr):
+    def __new__(cls, poly): ...
+    @property
+    def shape(self): ...
+    def as_explicit(self): ...

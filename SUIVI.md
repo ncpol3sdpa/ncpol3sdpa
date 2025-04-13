@@ -78,6 +78,7 @@
   * Add sphinx to the project
   * Clean, refactor and add type annotations to the code
 - (Nazar) Commencer à faire un nouvau type de données pour mieux representer des SDPs sur la branche better-sdp-representation.
+- (Alain) completer funs.py + debug
 - (All) 
   * Meeting with Peter Brown
   * Discuss the next steps
@@ -90,7 +91,7 @@
 - (Thomas) begin sos problem: https://www.princeton.edu/~aaa/Public/Teaching/ORF523/ORF523_Lec15.pdf ,useful link for the sos theory
 - (Yann) Migrate the branch
 - (Nazar) Comancer ecrire des tests pour le nouvau code
-- (Allain) Comancer d'implementaer une application: Max Cut
+- (Alain) Commencer d'implementer l'application Max Cut
 - (Mathis) Lecture et compréhension de la nouvelle implémentation du solveur
 
 ## 27/03/2025
@@ -116,4 +117,62 @@
     + create a function generate_monomials_non_commutative that returns a list of all monomials of a degree less than the relaxation parameter that are non commutative
     + implement a new function apply_rule_non_commutative that is a generalisation of the function apply_rule for non commutative monomials
 - (Nazar) Merge the [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/4). Add a merge request for the pre-commit tool: [!2](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/6)
+- (Alain) implemented + debug de Max cut; randomized test + [example on ncpol2sdpa](https://ncpol2sdpa.readthedocs.io/en/stable/exampleshtml.html#example-1-max-cut)
+- (Thomas) learn the theory of the SOS with Peter Brown
 
+
+## 02/04/2025 
+- (Mathis)
+  * Correct apply_rule for the non commutative case
+  * add tests for apply_rule
+
+## 03/04/2025
+- (Mathis)
+  * Continue to implement the nc case 
+    + add the function degree_of_polynomial that calculate the degree of a commutative or non commutative polynomial (sympy doesn't handle the nc cases so we had to reimplement a degree function)
+- (Nazar) Cogérer des erreurs de type un peut partout. Écrire un fichier interface des types pour la bibliothèque mosek(qui n'en a pas par défaut). Recherche sur max-cut et algorithme de Goemans-Williamson
+
+## 04/04/2025
+- (Mathis)
+  * Continue / finish to implement the non commutative case (not working because the SDP solver can't solve the given SDp thus the issue is perhaps on the relaxation)
+  * Debug the non commutative case 
+    + for the nc case, we have to double the relaxation_factor for the moement matrix (not the relaxation_factor in general) because if we don't extend the size of the moment matrix, we don't capture every monomials (eg: for the commutative case, x*y = y*x thus with monomials = (1, x, y) we generate x*y and y*x because x*y = y*x but for the non commutative case, we only capture x*y or y*x, so we have to extend the moment matrix to capture x*y and y*x by using more monomials (1, x, y, x**2, x*y, y*x, y**2) )
+  * add a test for the non commutative case in test_problem.py
+- (Nazar) Ecrire des interfaces de type pour les bibliothèque qu'on utilise et qui n'ont pas(cvxpy, sympy, mosek). Il sont dans la repertoire `src/typing_stubs`. Ourir un Merge Request liés aux types: !8.
+
+## 05/04/2025
+- (Mathis)
+  * Review + Merge MR [!8](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/8) that does :
+    + Fix miscellaneous small type errors in the code 
+    + Remove as many # type: ignore annotations as possible 
+    + Write typing stubs for dependencies in src/typing_stubs. I first auto generated a template with mypy's stubgen script. Then eddied the types of functions we use in the code. The typing stubs themselves should not be typechecked
+- (Alain) added functions in maxcut_example for testing efficiency of the relaxation (naive solving + bipartite graphs case)
+- (Yann)
+  * Read documentation about uv [link](https://docs.astral.sh/uv/concepts/projects/dependencies/#platform-specific-sources)
+  * Read documentation for organize tests
+  * Read documentation about pre-commit
+
+## 08/04/2025
+- (Yann)
+  * Ended up to fix the branch `pydeps`
+  * Try to merge
+
+- (Thomas)
+  * Begin the implementation of the SOS problem by finding the solutions of the dual problem for each constraint of the primal problem with the solver cvxpy
+  * Test the code: errors remain
+
+- (Mathis)
+  * Tentative de debug de l'ajout de la partie de résolution non commutative 
+    + finalement, il ne faut pas augmenter la taille de la moment matrix (*2) car sinon le problème n'est pas solvable
+    + je ne comprends pas un point sur le papier de recherche pour l'implémentation de la partie non commutative, je vais voir avec Peter Brown pour mieux comprendre un point qui me pose problème
+    + finalement, j'ai compris ce qui n'allait pas, j'ai oublié les daggers dans la formule
+  * Debug (qui marche) de la partie non commutative (le problème était que je n'appliquais pas l'adjoint sur certaines variables de la moment matrix).
+  * Ajout de test dans le cas d'opérateurs hermitiens
+    
+- (Nazar) Cogérer des erreurs de type un peut partout. Écrire . Recherche sur max-cut et algorithme de William Go
+- (Nazar) Cogérer des erreurs de type un peut partout. Écrire un fichier interface des types pour la bibliothèque mosek(qui n'en a pas par défaut). Recherche sur max-cut et algorithme de Goemans-Williamson
+  * Merge MR 
+
+- (Thomas)
+ * Begin the implementation of the SOS problem by finding the solutions of the dual problem for each constraint of the primal problem with the solver cvxpy
+ * test the code: errors remain

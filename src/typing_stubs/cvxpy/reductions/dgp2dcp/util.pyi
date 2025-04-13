@@ -1,0 +1,3 @@
+from cvxpy.atoms.affine.vec import vec as vec
+
+def explicit_sum(expr): ...

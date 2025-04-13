@@ -68,11 +68,8 @@ def generate_needed_symbols(polynomials: List[sp.Expr]) -> List[sp.Symbol]:
     for p in polynomials:
         total += p
 
-    # Type check (useless ???)
-    #for s in total.free_symbols:
-    #    assert isinstance(s, sp.Symbol)
 
-    return list(total.free_symbols) # type: ignore
+    return list(total.free_symbols)
 
 
 class AlgebraSDP:
@@ -92,8 +89,9 @@ class AlgebraSDP:
             generate_monomials(needed_variables, relaxation_order, commutative),
             substitution_rules,
         )
-        self.objective:sp.Expr = apply_rule_to_polynomial(
-            sp.expand(objective), substitution_rules # type: ignore
+        self.objective: sp.Expr = apply_rule_to_polynomial(
+            sp.expand(objective),
+            substitution_rules,
         )
 
         # In the commutative case, the moment matrix is symmetric
@@ -121,7 +119,7 @@ class AlgebraSDP:
     def add_constraint(self, constraint: Constraint) -> None:
         """Add a constraint to the algebra
 
-        Save the constraint if it is an equality constraint,   
+        Save the constraint if it is an equality constraint,
         otherwise update the moment matrix for the inequality constraint"""
         if constraint.is_equality_constraint:
             self.equality_constraints.append(constraint.polynomial)
@@ -139,6 +137,7 @@ class AlgebraSDP:
             # TODO This is redundant work, does this matter?
             constraint_monomials = needed_monomials(
                 generate_monomials(self.objective.free_symbols, k_i, self.commutative),
+
                 self.substitution_rules,
             )
 
@@ -154,26 +153,24 @@ class AlgebraSDP:
 
     def expand_eq_constraint(self, constraint: sp.Expr) -> List[sp.Expr]:
         """
-        Generate a list of polynomials {p = m * constraint | m : monomial & degre(p) <= 2*k } 
+        Generate a list of polynomials {p = m * constraint | m : monomial & degre(p) <= 2*k }
         where k is the relaxation order. 2k are monomials that "fit inside" the moment matrix.
 
         Used for equality constraints.
         """
-        
+
         # Map and filter are lazy
         # so intermediate lists are not created
         ruled_monomials: map[sp.Expr] = map(
-            lambda monomial: apply_rule(
-                monomial * constraint, 
-                self.substitution_rules
-            ),
-            self.monomials
+            lambda monomial: apply_rule(monomial * constraint, self.substitution_rules),
+            self.monomials,
         )
         ruled_filtered_monomials: filter[sp.Expr] = filter(
-            lambda monomial: sp.poly(monomial).total_degree() <= 2 * self.relaxation_order,
-            ruled_monomials
+            lambda monomial: sp.poly(monomial).total_degree()
+            <= 2 * self.relaxation_order,
+            ruled_monomials,
         )
-        
+
         return list(ruled_filtered_monomials)
 
     def __str__(self) -> str:
@@ -197,5 +194,3 @@ class AlgebraSDP:
     def __repr__(self) -> str:
         """Return a string representation of the algebra for debugging."""
         return self.__str__()
-    
-

@@ -1,0 +1,133 @@
+from _typeshed import Incomplete
+from sympy.physics.quantum.operator import HermitianOperator, UnitaryOperator
+
+__all__ = ['Gate', 'CGate', 'UGate', 'OneQubitGate', 'TwoQubitGate', 'IdentityGate', 'HadamardGate', 'XGate', 'YGate', 'ZGate', 'TGate', 'PhaseGate', 'SwapGate', 'CNotGate', 'CNOT', 'SWAP', 'H', 'X', 'Y', 'Z', 'T', 'S', 'Phase', 'normalized', 'gate_sort', 'gate_simp', 'random_circuit', 'CPHASE', 'CGateS']
+
+def normalized(normalize) -> None: ...
+
+class Gate(UnitaryOperator):
+    gate_name: str
+    gate_name_latex: str
+    @property
+    def nqubits(self): ...
+    @property
+    def min_qubits(self): ...
+    @property
+    def targets(self): ...
+    @property
+    def gate_name_plot(self): ...
+    def get_target_matrix(self, format: str = 'sympy') -> None: ...
+    def plot_gate(self, axes, gate_idx, gate_grid, wire_grid) -> None: ...
+
+class CGate(Gate):
+    gate_name: str
+    gate_name_latex: str
+    control_value: Incomplete
+    simplify_cgate: bool
+    @property
+    def nqubits(self): ...
+    @property
+    def min_qubits(self): ...
+    @property
+    def targets(self): ...
+    @property
+    def controls(self): ...
+    @property
+    def gate(self): ...
+    def get_target_matrix(self, format: str = 'sympy'): ...
+    def eval_controls(self, qubit): ...
+    def decompose(self, **options): ...
+    def plot_gate(self, circ_plot, gate_idx) -> None: ...
+
+class CGateS(CGate):
+    simplify_cgate: bool
+
+class UGate(Gate):
+    gate_name: str
+    gate_name_latex: str
+    @property
+    def targets(self): ...
+    def get_target_matrix(self, format: str = 'sympy'): ...
+    def plot_gate(self, circ_plot, gate_idx) -> None: ...
+
+class OneQubitGate(Gate):
+    nqubits: Incomplete
+    def plot_gate(self, circ_plot, gate_idx) -> None: ...
+
+class TwoQubitGate(Gate):
+    nqubits: Incomplete
+
+class IdentityGate(OneQubitGate):
+    is_hermitian: bool
+    gate_name: str
+    gate_name_latex: str
+    def get_target_matrix(self, format: str = 'sympy'): ...
+
+class HadamardGate(HermitianOperator, OneQubitGate):
+    gate_name: str
+    gate_name_latex: str
+    def get_target_matrix(self, format: str = 'sympy'): ...
+
+class XGate(HermitianOperator, OneQubitGate):
+    gate_name: str
+    gate_name_latex: str
+    def get_target_matrix(self, format: str = 'sympy'): ...
+    def plot_gate(self, circ_plot, gate_idx) -> None: ...
+    def plot_gate_plus(self, circ_plot, gate_idx) -> None: ...
+
+class YGate(HermitianOperator, OneQubitGate):
+    gate_name: str
+    gate_name_latex: str
+    def get_target_matrix(self, format: str = 'sympy'): ...
+
+class ZGate(HermitianOperator, OneQubitGate):
+    gate_name: str
+    gate_name_latex: str
+    def get_target_matrix(self, format: str = 'sympy'): ...
+
+class PhaseGate(OneQubitGate):
+    is_hermitian: bool
+    gate_name: str
+    gate_name_latex: str
+    def get_target_matrix(self, format: str = 'sympy'): ...
+
+class TGate(OneQubitGate):
+    is_hermitian: bool
+    gate_name: str
+    gate_name_latex: str
+    def get_target_matrix(self, format: str = 'sympy'): ...
+H = HadamardGate
+X = XGate
+Y = YGate
+Z = ZGate
+T = TGate
+Phase = PhaseGate
+S = PhaseGate
+
+class CNotGate(HermitianOperator, CGate, TwoQubitGate):
+    gate_name: str
+    gate_name_latex: str
+    simplify_cgate: bool
+    @property
+    def min_qubits(self): ...
+    @property
+    def targets(self): ...
+    @property
+    def controls(self): ...
+    @property
+    def gate(self): ...
+
+class SwapGate(TwoQubitGate):
+    is_hermitian: bool
+    gate_name: str
+    gate_name_latex: str
+    def get_target_matrix(self, format: str = 'sympy'): ...
+    def decompose(self, **options): ...
+    def plot_gate(self, circ_plot, gate_idx) -> None: ...
+CNOT = CNotGate
+SWAP = SwapGate
+
+def CPHASE(a, b): ...
+def gate_simp(circuit): ...
+def gate_sort(circuit): ...
+def random_circuit(ngates, nqubits, gate_space=...): ...

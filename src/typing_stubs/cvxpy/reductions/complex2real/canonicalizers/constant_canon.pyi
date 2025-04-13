@@ -1,0 +1,3 @@
+from cvxpy.expressions.constants import Constant as Constant
+
+def constant_canon(expr, real_args, imag_args, real2imag): ...

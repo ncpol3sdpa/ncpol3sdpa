@@ -13,7 +13,7 @@ class Rule:
         """Private method creating a Tuple of equivalence"""
 
         # express polynomial as a list of monomial
-        polynomial: List[Tuple[Tuple[int, ...], int]] = poly(
+        polynomial: List[Tuple[Tuple[int, ...], float]] = poly(
             constraint.polynomial
         ).terms()
 
@@ -79,7 +79,7 @@ def apply_rule(
 def apply_rule_to_polynomial(polynomial: Expr, rules: Dict[Expr, Expr], commutative: bool = True) -> Expr:
     """Apply a rule to a polynomial"""
 
-    poly_dict: Dict[Expr, int] = polynomial.as_coefficients_dict()  # type: ignore
+    poly_dict: Dict[Expr, float] = polynomial.as_coefficients_dict()
 
     res: Expr = S.Zero
     for monomial, coef in poly_dict.items():

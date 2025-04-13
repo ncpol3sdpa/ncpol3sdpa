@@ -1,0 +1,3 @@
+from cvxpy.atoms import abs as abs, pnorm as pnorm, reshape as reshape, vstack as vstack
+
+def abs_canon(expr, real_args, imag_args, real2imag): ...

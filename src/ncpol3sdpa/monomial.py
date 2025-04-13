@@ -2,6 +2,7 @@ from __future__ import annotations
 from functools import cmp_to_key
 from typing import List, Dict, Set, Any, Iterable
 from sympy import total_degree, sympify
+import sympy
 
 
 class Poly:
@@ -101,6 +102,7 @@ def list_increment(degrees: List[int], k: int) -> bool:
 def generate_monomials(
     symbols: Iterable[Any], relaxation_order: int, commutative: bool = True
 ) -> List[Any]:
+
     """returns a list of all monomials that have degree less or equal to the relaxation_order"""
     if commutative:
         current_degrees = [0 for _ in symbols]
@@ -134,5 +136,4 @@ def generate_monomials(
 
         dfs(0, [1], [])
         return res
-
 

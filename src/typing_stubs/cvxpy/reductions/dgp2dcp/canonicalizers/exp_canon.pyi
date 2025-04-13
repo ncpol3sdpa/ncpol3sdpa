@@ -1,0 +1,3 @@
+from cvxpy.atoms.elementwise.exp import exp as exp
+
+def exp_canon(expr, args): ...
