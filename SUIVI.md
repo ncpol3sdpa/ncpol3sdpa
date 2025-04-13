@@ -192,3 +192,5 @@
   * create a MR for the non commutative part, but the main was not clean so the CI/CD don't pass the MR after the merge with main (issue with mypy), need to debug it 
   * add tests for the non commutative part 
   * start to work on the complexe part 
+    + trying to understand how the complexe problems work, for which function ? (f(z, conjugate(z)) in R ?) 
+    + 
