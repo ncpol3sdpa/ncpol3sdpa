@@ -156,6 +156,10 @@
 - (Yann)
   * Ended up to fix the branch `pydeps`
   * Try to merge
+  * Read documentation
+    + about pre-commit
+    + about managing dependencies in uv
+    + about organizing tests
 
 - (Thomas)
   * Begin the implementation of the SOS problem by finding the solutions of the dual problem for each constraint of the primal problem with the solver cvxpy
