@@ -188,3 +188,7 @@
   * Think about the structure of the project
     + Read documentation about organizing files in a project
     + Read docs about template files / ports
+- (Mathis)
+  * create a MR for the non commutative part, but the main was not clean so the CI/CD don't pass the MR after the merge with main (issue with mypy), need to debug it 
+  * add tests for the non commutative part 
+  * start to work on the complexe part 
