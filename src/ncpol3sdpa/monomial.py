@@ -102,14 +102,13 @@ def list_increment(degrees: List[int], k: int) -> bool:
 def generate_monomials(
     symbols: Iterable[Any], relaxation_order: int, commutative: bool = True
 ) -> List[Any]:
-
     """returns a list of all monomials that have degree less or equal to the relaxation_order"""
     if commutative:
         current_degrees = [0 for _ in symbols]
         res = []
 
         while True:
-            expr = 1
+            expr = sympy.Float(1)
             for i, symbol in enumerate(symbols):
                 expr *= symbol ** current_degrees[i]
             if total_degree(expr) <= relaxation_order:
@@ -120,20 +119,22 @@ def generate_monomials(
 
         return sorted(
             res,
-            key=cmp_to_key(lambda item1, item2: total_degree(item1) - total_degree(item2)),
+            key=cmp_to_key(
+                lambda item1, item2: total_degree(item1) - total_degree(item2)
+            ),
         )
     else:
         res = [sympify(1)]
+
         def dfs(i, curr_monomials, pred_monomials):
             if i > relaxation_order:
-                return 
+                return
             for monomial in pred_monomials:
                 for symbol in symbols:
                     if symbol != 1:
-                        res.append(monomial*symbol)
-                        curr_monomials.append(monomial*symbol)
-            dfs(i+1, [], curr_monomials)
+                        res.append(monomial * symbol)
+                        curr_monomials.append(monomial * symbol)
+            dfs(i + 1, [], curr_monomials)
 
         dfs(0, [1], [])
         return res
-
