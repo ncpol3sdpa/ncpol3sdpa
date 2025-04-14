@@ -197,4 +197,4 @@
 ## 14/04/2025
 
 - (Mathis)
-  * Fix type and format errors in [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/14)
+  * Fix type and format errors in [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/14), (CI/CD ok)
