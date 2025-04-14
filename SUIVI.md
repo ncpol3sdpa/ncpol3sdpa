@@ -189,8 +189,12 @@
     + Read documentation about organizing files in a project
     + Read docs about template files / ports
 - (Mathis)
-  * create a MR for the non commutative part, but the main was not clean so the CI/CD don't pass the MR after the merge with main (issue with mypy), need to debug it 
+  * create a [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/14) for the non commutative part, but the main was not clean so the CI/CD don't pass the MR after the merge with main (issue with mypy), need to debug it 
   * add tests for the non commutative part 
   * start to work on the complexe part 
     + trying to understand how the complexe problems work, for which function ? (f(z, conjugate(z)) in R ?) 
-    + 
+    
+## 14/04/2025
+
+- (Mathis)
+  * Fix type and format errors in [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/14)
