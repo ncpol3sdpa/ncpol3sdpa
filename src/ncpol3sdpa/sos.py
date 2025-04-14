@@ -40,7 +40,7 @@ class Sos:
         # tr(A.T x G)
         objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
 
-        prob = cvxpy.Problem(objective, constraints)  # type: ignore
+        cvxpy.Problem(objective, constraints)  # type: ignore
 
         # Returns the values of the dual problem for each constraint.
 

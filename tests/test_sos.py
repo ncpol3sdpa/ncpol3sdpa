@@ -8,7 +8,7 @@ import cvxpy as cp
 def test_dual_constraints_cvxpy() -> None:
     moment_matrix = MomentMatrixSDP(1, [[(0, 0)]])
     problem = ProblemSDP(moment_matrix, np.array([[-1]]))
-    dual_constraints = Sos.dual_constraints_cvxpy(problem)
+    Sos.dual_constraints_cvxpy(problem)
 
     x = cp.Variable()
     constraints = [x <= 1, x >= 1, x >= 0]
@@ -32,7 +32,7 @@ def test_dual_constraints_cvxpy_2() -> None:
     # maximize -2a, optimal for a = -1, and objective = 2
     # x2 -2axy + y2 >= 0, because SDP
 
-    dual_constraints = Sos.dual_constraints_cvxpy(p)
+    Sos.dual_constraints_cvxpy(p)
 
     x = cp.Variable()
     y = cp.Variable()
