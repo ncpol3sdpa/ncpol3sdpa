@@ -40,11 +40,11 @@ def create_moment_matrix(
     return [
         [
             apply_rule(
-                (monomials[j] if commutative else monomials[j].adjoint())
+                (monomials[j] if commutative else monomials[j].adjoint())  # type: ignore
                 * monomials[i],
                 substitution_rules,
                 commutative,
-            )  # type: ignore
+            )  
             for j in range(i + 1)
         ]
         for i in range(matrix_size)
@@ -66,12 +66,12 @@ def create_constraint_matrix(
         [
             apply_rule_to_polynomial(
                 sp.expand(
-                    (monomials[j] if commutative else monomials[j].adjoint())
+                    (monomials[j] if commutative else monomials[j].adjoint())  # type: ignore
                     * constraint_polynomial
                     * monomials[i]
                 ),
                 rules,
-                commutative,  # type: ignore
+                commutative,
             )
             for j in range(i + 1)
         ]
