@@ -1,8 +1,7 @@
 from __future__ import annotations
 from functools import cmp_to_key
 from typing import List, Dict, Set, Any, Iterable
-from sympy import total_degree, sympify
-import sympy
+from sympy import Expr, total_degree, sympify
 
 
 class Poly:
@@ -35,9 +34,9 @@ class Poly:
         """Expand an expression"""
         raise NotImplementedError
 
-    def total_degree(self) -> int:
-        """Return the total_degree in the given variables"""
-        raise NotImplementedError
+    # def total_degree(self) -> int:
+    #     """Return the total_degree in the given variables"""
+    #     raise NotImplementedError
 
     def rem(self, other: Poly) -> Poly:
         """
@@ -108,7 +107,7 @@ def generate_monomials(
         res = []
 
         while True:
-            expr = sympy.Float(1)
+            expr = sympify(1)
             for i, symbol in enumerate(symbols):
                 expr *= symbol ** current_degrees[i]
             if total_degree(expr) <= relaxation_order:
@@ -120,13 +119,13 @@ def generate_monomials(
         return sorted(
             res,
             key=cmp_to_key(
-                lambda item1, item2: total_degree(item1) - total_degree(item2)
+                lambda item1, item2: total_degree(item1) - total_degree(item2)  # type: ignore
             ),
         )
     else:
         res = [sympify(1)]
 
-        def dfs(i, curr_monomials, pred_monomials):
+        def dfs(i: int, curr_monomials: List[Expr], pred_monomials: List[Expr]) -> None:
             if i > relaxation_order:
                 return
             for monomial in pred_monomials:
@@ -136,5 +135,5 @@ def generate_monomials(
                         curr_monomials.append(monomial * symbol)
             dfs(i + 1, [], curr_monomials)
 
-        dfs(0, [1], [])
+        dfs(0, [sympify(1)], [])
         return res

@@ -73,15 +73,54 @@ def test_generate_monomials() -> None:
 
 def test_generate_monomials_non_commutative() -> None:
     x, y, z = sympy.symbols("x y z", commutative=False)
-    assert((monomial.generate_monomials([x, y], 2, False)) == [1, x, y, x**2, x*y, y*x, y**2])
-    assert(monomial.generate_monomials([x, y, z], 2, False) == [1, x, y, z, x**2, x*y, x*z, y*x, y**2, y*z, z*x, z*y, z**2])
-    assert((monomial.generate_monomials([1, x, y], 3, False)) == [1, x, y, x**2, x*y, y*x, y**2, x**3, x**2*y, x*y*x, x*y**2, y*x**2, y*x*y, y**2*x, y**3])
+    assert (monomial.generate_monomials([x, y], 2, False)) == [
+        1,
+        x,
+        y,
+        x**2,
+        x * y,
+        y * x,
+        y**2,
+    ]
+    assert monomial.generate_monomials([x, y, z], 2, False) == [
+        1,
+        x,
+        y,
+        z,
+        x**2,
+        x * y,
+        x * z,
+        y * x,
+        y**2,
+        y * z,
+        z * x,
+        z * y,
+        z**2,
+    ]
+    assert (monomial.generate_monomials([1, x, y], 3, False)) == [
+        1,
+        x,
+        y,
+        x**2,
+        x * y,
+        y * x,
+        y**2,
+        x**3,
+        x**2 * y,
+        x * y * x,
+        x * y**2,
+        y * x**2,
+        y * x * y,
+        y**2 * x,
+        y**3,
+    ]
+
 
 def test_degree() -> None:
     x, y = sympy.symbols("x y", commutative=False)
-    p1 = x*y + x**2
-    p2 = x*y + y**2 
-    p3 = 10 + 3*x*y*x*y
-    assert degree_of_polynomial(p1) == 2 
+    p1 = x * y + x**2
+    p2 = x * y + y**2
+    p3 = 10 + 3 * x * y * x * y
+    assert degree_of_polynomial(p1) == 2
     assert degree_of_polynomial(p2) == 2
     assert degree_of_polynomial(p3) == 4

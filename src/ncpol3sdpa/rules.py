@@ -40,18 +40,20 @@ class Rule:
         exemple : of_constraints([x²-x-1=0, x*y²+3=0]) = {x²->x+1, x*y²->-3}"""
         return dict([Rule._of_constraint(constraint) for constraint in constraints])
 
-def list_of_monomial(monomial : Expr) -> List[Expr]:
+
+def list_of_monomial(monomial: Expr) -> List[Expr]:
     """return a list of the factor a a monomial non commutative"""
     if isinstance(monomial, int):
         return [monomial]
     res = []
     for factor in monomial.as_ordered_factors():
         if isinstance(factor, Pow):
-            base, exp = factor.as_base_exp()
+            base, exp = factor.as_base_exp()  # type: ignore
             res.extend([base] * exp)
         else:
             res.append(factor)
     return res
+
 
 def apply_rule(
     monomial: Expr, rules: Dict[Expr, Expr], commutative: bool = True
@@ -71,12 +73,16 @@ def apply_rule(
                     return apply_rule(
                         Mul(*(to_change_monomial[: max(0, i)]))
                         * rules[key]
-                        * Mul(*to_change_monomial[(i + len(rule_monomial)) :]), rules, commutative
+                        * Mul(*to_change_monomial[(i + len(rule_monomial)) :]),
+                        rules,
+                        commutative,
                     )
         return monomial
 
 
-def apply_rule_to_polynomial(polynomial: Expr, rules: Dict[Expr, Expr], commutative: bool = True) -> Expr:
+def apply_rule_to_polynomial(
+    polynomial: Expr, rules: Dict[Expr, Expr], commutative: bool = True
+) -> Expr:
     """Apply a rule to a polynomial"""
 
     poly_dict: Dict[Expr, float] = polynomial.as_coefficients_dict()

@@ -6,7 +6,6 @@ from typing import List, Tuple
 from numpy.typing import NDArray
 from enum import Enum
 
-from sympy.polys import monomials
 
 from ncpol3sdpa.rules import Rule, apply_rule_to_polynomial
 from ncpol3sdpa.solver import Solver
@@ -167,8 +166,7 @@ class Problem:
         ]
         needed_symbols = algebra.generate_needed_symbols(all_constraint_polynomials)
         algebraSDP = algebra.AlgebraSDP(
-            needed_symbols, self.objective, relaxation_order
-            , rules, self.commutative
+            needed_symbols, self.objective, relaxation_order, rules, self.commutative
         )
         algebraSDP.add_constraints(normal_constraints)
 

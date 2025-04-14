@@ -1,12 +1,9 @@
-from typing import Tuple, List, Any
+from typing import List, Any
 from numpy.typing import NDArray
 import numpy as np
 import cvxpy
 from cvxpy.expressions.expression import Expression as CVXPY_Expr
-import mosek
 import ncpol3sdpa.sdp_repr as sdp_repr
-import warnings
-
 
 
 def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:
@@ -14,8 +11,8 @@ def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:
     assert isinstance(rt, CVXPY_Expr)
     return rt
 
-class Sos:   
 
+class Sos:
     @classmethod
     def dual_constraints_cvxpy(self, problem: sdp_repr.ProblemSDP) -> List[Any]:
         """Solve the SDP problem with cvxpy"""
@@ -37,24 +34,24 @@ class Sos:
         for constraint in problem.constraints:
             expression = 0
             for var_num, matrix in constraint.constraints:
-                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
-            constraints.append(0 == expression)
+                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])  # type: ignore
+            constraints.append(0 == expression)  # type: ignore
 
         # tr(A.T x G)
         objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
 
-        prob = cvxpy.Problem(objective, constraints)
-        
-        # Returns the values of the dual problem for each constraint.
-        
-        dual_problem = []
-        for constraint in constraints:
-              dual_problem.append(constraint.dual_value)
-        
-        return dual_problem
-    
+        prob = cvxpy.Problem(objective, constraints)  # type: ignore
 
-   # def from_dual_constraints_to_sos(self, problem: sdp_repr.ProblemSDP):
+        # Returns the values of the dual problem for each constraint.
+
+        dual_problem = []
+        for constraint in constraints:  # type: ignore
+            dual_problem.append(constraint.dual_value)  # type: ignore
+
+        return dual_problem
+
+
+# def from_dual_constraints_to_sos(self, problem: sdp_repr.ProblemSDP):
 
 """
 

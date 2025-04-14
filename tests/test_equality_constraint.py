@@ -36,15 +36,15 @@ def test_apply_rule() -> None:
     assert apply_rule(p1, rules) == x * y
     assert apply_rule(p2, rules) == x * y
     assert apply_rule(p3, rules) == 5 * x * y**2
-    
-    #non commutative tests
+
+    # non commutative tests
     x, y = sp.symbols("x y", commutative=False)
-    rules = {x*y : x} 
-    p1 = x * y 
-    p2 = x**2 * y 
-    p3 = x*y*x*y 
-    p4 = x*y*y 
+    rules = {x * y: x}
+    p1 = x * y
+    p2 = x**2 * y
+    p3 = x * y * x * y
+    p4 = x * y * y
     assert apply_rule(p1, rules, False) == x
     assert apply_rule(p2, rules, False) == x**2
-    assert apply_rule(p3, rules, False) == x**2 
+    assert apply_rule(p3, rules, False) == x**2
     assert apply_rule(p4, rules, False) == x

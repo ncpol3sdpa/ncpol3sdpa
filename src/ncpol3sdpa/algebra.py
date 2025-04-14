@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import List, Tuple, Dict, Any
-from sympy import Expr, Sum, Pow, degree
+from sympy import Expr
 import sympy as sp
 from ncpol3sdpa.rules import apply_rule, apply_rule_to_polynomial
 from ncpol3sdpa.monomial import generate_monomials
@@ -8,20 +8,20 @@ from ncpol3sdpa.constraints import Constraint
 import math
 
 
-def degree_of_polynomial(polynomial : Expr) -> int:
+def degree_of_polynomial(polynomial: Expr) -> int:
     polynomial = polynomial.expand()
     terms = polynomial.as_ordered_terms()
     res = 0
     for term in terms:
         factors = term.as_ordered_factors()
-        deg = 0 
+        deg = 0
         for factor in factors:
             if not factor.is_number:
                 _, exp = factor.as_base_exp()
-                deg += exp 
+                deg += exp
         res = max(deg, res)
     return res
-                  
+
 
 def needed_monomials(monomials: List[Expr], rules: Dict[Expr, Expr]) -> List[Expr]:
     """Filter the monomials according to the rules"""
@@ -30,14 +30,21 @@ def needed_monomials(monomials: List[Expr], rules: Dict[Expr, Expr]) -> List[Exp
 
 
 def create_moment_matrix(
-    monomials: List[sp.Expr], substitution_rules: Dict[sp.Expr, Any], commutative: bool = True
+    monomials: List[sp.Expr],
+    substitution_rules: Dict[sp.Expr, Any],
+    commutative: bool = True,
 ) -> List[List[sp.Expr]]:
     """Create the moment matrix of the monomials"""
 
     matrix_size = len(monomials)
     return [
         [
-            apply_rule(( monomials[j] if commutative else monomials[j].adjoint() ) * monomials[i], substitution_rules, commutative)
+            apply_rule(
+                (monomials[j] if commutative else monomials[j].adjoint())
+                * monomials[i],
+                substitution_rules,
+                commutative,
+            )  # type: ignore
             for j in range(i + 1)
         ]
         for i in range(matrix_size)
@@ -45,7 +52,10 @@ def create_moment_matrix(
 
 
 def create_constraint_matrix(
-    monomials: List[sp.Expr], constraint_polynomial: sp.Expr, rules: Dict[sp.Expr, Any], commutative: bool = True
+    monomials: List[sp.Expr],
+    constraint_polynomial: sp.Expr,
+    rules: Dict[sp.Expr, Any],
+    commutative: bool = True,
 ) -> List[List[sp.Expr]]:
     """Create the matrix of constraints
     The constraints are of the form `constraint_polynomial >= 0`
@@ -55,7 +65,13 @@ def create_constraint_matrix(
     return [
         [
             apply_rule_to_polynomial(
-                sp.expand((monomials[j] if commutative else monomials[j].adjoint()) * constraint_polynomial * monomials[i]), rules, commutative # type: ignore
+                sp.expand(
+                    (monomials[j] if commutative else monomials[j].adjoint())
+                    * constraint_polynomial
+                    * monomials[i]
+                ),
+                rules,
+                commutative,  # type: ignore
             )
             for j in range(i + 1)
         ]
@@ -68,8 +84,7 @@ def generate_needed_symbols(polynomials: List[sp.Expr]) -> List[sp.Symbol]:
     for p in polynomials:
         total += p
 
-
-    return list(total.free_symbols)
+    return list(total.free_symbols)  # type: ignore
 
 
 class AlgebraSDP:
@@ -137,13 +152,15 @@ class AlgebraSDP:
             # TODO This is redundant work, does this matter?
             constraint_monomials = needed_monomials(
                 generate_monomials(self.objective.free_symbols, k_i, self.commutative),
-
                 self.substitution_rules,
             )
 
             self.constraint_moment_matrices.append(
                 create_constraint_matrix(
-                    constraint_monomials, constraint.polynomial, self.substitution_rules, self.commutative
+                    constraint_monomials,
+                    constraint.polynomial,
+                    self.substitution_rules,
+                    self.commutative,
                 )
             )
 
