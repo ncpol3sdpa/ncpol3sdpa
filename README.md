@@ -106,13 +106,14 @@ We use pre-commit hooks to ensure a automatically verify adherence to formatting
 
 ```
 uv sync # Make sure uv virtual environment is up to date
-uv run pre-commit install
+uv run pre-commit install --hook-type pre-commit --hook-type pre-push
 ```
 
 You can run every hook with :
 
 ```
-uv run pre-commit run --all-files
+uv run pre-commit run --all-files && \
+uv run pre-commit run --hook-stage pre-push
 ```
 
 To learn more about the details of pre-commit, the documentation is here : https://pre-commit.com/

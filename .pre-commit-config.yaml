@@ -36,8 +36,8 @@ repos:
 - repo: local
   hooks:
   - id: pytest
-    stages: [pre-push]
     name: pytest
+    stages: [pre-push]
     entry: uv run pytest tests
     language: system
     types: [python]
