@@ -1,7 +1,7 @@
 import picos
 
 P = picos.Problem()
-Y = picos.HermitianVariable("Y", 3) # Xi^dag = Xi 
+Y = picos.HermitianVariable("Y", 3) # Xi^dag = Xi
 #ro = picos.HermitianVariable("ro", 3)
 
 
@@ -15,4 +15,3 @@ P.add_constraint(Y >> 0)
 P.solve(solver="cvxopt")
 
 print(P)
-

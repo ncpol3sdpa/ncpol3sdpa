@@ -5,7 +5,6 @@ The :mod:`ncpol3sdpa.momentmatrix` module provides the :class:`MomentMatrix` cla
 
 .. automodule:: ncpol3sdpa.momentmatrix
    :members:
-   :undoc-members: 
+   :undoc-members:
    :show-inheritance:
    :special-members: __init__, __mul__
-

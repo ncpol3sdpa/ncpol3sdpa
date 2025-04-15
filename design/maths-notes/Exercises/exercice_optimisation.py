@@ -6,7 +6,7 @@ n = 6
 
 
 P = pc.Problem()
-Y = pc.SymmetricVariable("Y", (n, n)) 
+Y = pc.SymmetricVariable("Y", (n, n))
 
 P.maximize = 2*Y[1,2]
 
@@ -35,8 +35,7 @@ for i in range(3):
 
 P += M1 == 0, M2 >> 0, Y >> 0, Y[0,0] == 1
 
-P.maximize = 2*Y[1,2] 
+P.maximize = 2*Y[1,2]
 
 P.solve(solver="cvxopt")
 print(Y)
-

@@ -2,7 +2,7 @@
 
 ## 14/02/2025
 
-- (Nazar) Setup du git 
+- (Nazar) Setup du git
 - (Nazar) Organization des sources
 - (Tous) Prends en main de l'article revue (Tavakoli Pozas-Kerstjens Brown Ara\'ujo)
 - (Tous) faire les exercies envoyé par l'encadrant.
@@ -24,16 +24,16 @@
 
 ## 21/02/2025
 
-- (Mathis) 
+- (Mathis)
   * implémentation des fonctions rule_of_constraint et rule_of_constraints
   * ajout de fonctions de test avec pytest
 
 ## 04/03/2025
 
-- (Tous) RDV avec Peter Brown 
-- (Mathis) 
+- (Tous) RDV avec Peter Brown
+- (Mathis)
   * ajout de la fonction needed_monomials + tests
-- (Nazar) fonction pour generer tous les monomes   
+- (Nazar) fonction pour generer tous les monomes
 - (Yann) ajout du gestionnaire uv
 
 ## 06/03/2025
@@ -42,11 +42,11 @@
 
 ## 11/03/2025
 - (Nazar et Thomas) première version du solveur utilisant cvxpy
-- (Mathis) 
+- (Mathis)
   * correction de logique dans la création des matrices de moments (changement de variable)
-  * ajout de test pour le problème finale 
+  * ajout de test pour le problème finale
   * aide pour le solveur
-- (Yann) 
+- (Yann)
   * Reformat src
   * Reformat test
   * Add mypy and ruff integration details to README
@@ -54,7 +54,7 @@
   * add new test for typing functionality
 
 ## 12/03/2024
-- (Mathis) 
+- (Mathis)
   * ajout de test pour la partie solver.py
   * debug de solver.py
 
@@ -67,11 +67,11 @@
 ## 15/03/2025
 
 - (Mathis) debug
-- (Yann) 
+- (Yann)
   * Clean and refactor the code
   * Add typing annotations.
 
-## 18/03/2025 
+## 18/03/2025
 
 - (Mathis) debug + test
 - (Yann)
@@ -79,7 +79,7 @@
   * Clean, refactor and add type annotations to the code
 - (Nazar) Commencer à faire un nouvau type de données pour mieux representer des SDPs sur la branche better-sdp-representation.
 - (Alain) completer funs.py + debug
-- (All) 
+- (All)
   * Meeting with Peter Brown
   * Discuss the next steps
 
@@ -100,7 +100,7 @@
 
 ## 30/03/2025
 - (Nazar) Recherche sur util pre-commit(pre-commit.com)
-- (Nazar) Commencer de implementer du "property based testing" avec bibliothèque hypothesis(hypothesis.works) 
+- (Nazar) Commencer de implementer du "property based testing" avec bibliothèque hypothesis(hypothesis.works)
 - (Mathis) Apprentissage de mosek pour sa futur implémentation + apprentissage du nouveau code (surtout sur la partie solver SDP donc output de ce qui précède)
 
 ## 31/03/2025
@@ -121,21 +121,21 @@
 - (Thomas) learn the theory of the SOS with Peter Brown
 
 
-## 02/04/2025 
+## 02/04/2025
 - (Mathis)
   * Correct apply_rule for the non commutative case
   * add tests for apply_rule
 
 ## 03/04/2025
 - (Mathis)
-  * Continue to implement the nc case 
+  * Continue to implement the nc case
     + add the function degree_of_polynomial that calculate the degree of a commutative or non commutative polynomial (sympy doesn't handle the nc cases so we had to reimplement a degree function)
 - (Nazar) Cogérer des erreurs de type un peut partout. Écrire un fichier interface des types pour la bibliothèque mosek(qui n'en a pas par défaut). Recherche sur max-cut et algorithme de Goemans-Williamson
 
 ## 04/04/2025
 - (Mathis)
   * Continue / finish to implement the non commutative case (not working because the SDP solver can't solve the given SDp thus the issue is perhaps on the relaxation)
-  * Debug the non commutative case 
+  * Debug the non commutative case
     + for the nc case, we have to double the relaxation_factor for the moement matrix (not the relaxation_factor in general) because if we don't extend the size of the moment matrix, we don't capture every monomials (eg: for the commutative case, x*y = y*x thus with monomials = (1, x, y) we generate x*y and y*x because x*y = y*x but for the non commutative case, we only capture x*y or y*x, so we have to extend the moment matrix to capture x*y and y*x by using more monomials (1, x, y, x**2, x*y, y*x, y**2) )
   * add a test for the non commutative case in test_problem.py
 - (Nazar) Ecrire des interfaces de type pour les bibliothèque qu'on utilise et qui n'ont pas(cvxpy, sympy, mosek). Il sont dans la repertoire `src/typing_stubs`. Ourir un Merge Request liés aux types: !8.
@@ -143,8 +143,8 @@
 ## 05/04/2025
 - (Mathis)
   * Review + Merge MR [!8](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/8) that does :
-    + Fix miscellaneous small type errors in the code 
-    + Remove as many # type: ignore annotations as possible 
+    + Fix miscellaneous small type errors in the code
+    + Remove as many # type: ignore annotations as possible
     + Write typing stubs for dependencies in src/typing_stubs. I first auto generated a template with mypy's stubgen script. Then eddied the types of functions we use in the code. The typing stubs themselves should not be typechecked
 - (Alain) added functions in maxcut_example for testing efficiency of the relaxation (naive solving + bipartite graphs case)
 - (Yann)
@@ -166,16 +166,16 @@
   * Test the code: errors remain
 
 - (Mathis)
-  * Tentative de debug de l'ajout de la partie de résolution non commutative 
+  * Tentative de debug de l'ajout de la partie de résolution non commutative
     + finalement, il ne faut pas augmenter la taille de la moment matrix (*2) car sinon le problème n'est pas solvable
     + je ne comprends pas un point sur le papier de recherche pour l'implémentation de la partie non commutative, je vais voir avec Peter Brown pour mieux comprendre un point qui me pose problème
     + finalement, j'ai compris ce qui n'allait pas, j'ai oublié les daggers dans la formule
   * Debug (qui marche) de la partie non commutative (le problème était que je n'appliquais pas l'adjoint sur certaines variables de la moment matrix).
   * Ajout de test dans le cas d'opérateurs hermitiens
-    
+
 - (Nazar) Cogérer des erreurs de type un peut partout. Écrire . Recherche sur max-cut et algorithme de William Go
 - (Nazar) Cogérer des erreurs de type un peut partout. Écrire un fichier interface des types pour la bibliothèque mosek(qui n'en a pas par défaut). Recherche sur max-cut et algorithme de Goemans-Williamson
-  * Merge MR 
+  * Merge MR
 
 - (Thomas)
  * Begin the implementation of the SOS problem by finding the solutions of the dual problem for each constraint of the primal problem with the solver cvxpy
@@ -189,11 +189,11 @@
     + Read documentation about organizing files in a project
     + Read docs about template files / ports
 - (Mathis)
-  * create a [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/14) for the non commutative part, but the main was not clean so the CI/CD don't pass the MR after the merge with main (issue with mypy), need to debug it 
-  * add tests for the non commutative part 
-  * start to work on the complexe part 
-    + trying to understand how the complexe problems work, for which function ? (f(z, conjugate(z)) in R ?) 
-    
+  * create a [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/14) for the non commutative part, but the main was not clean so the CI/CD don't pass the MR after the merge with main (issue with mypy), need to debug it
+  * add tests for the non commutative part
+  * start to work on the complexe part
+    + trying to understand how the complexe problems work, for which function ? (f(z, conjugate(z)) in R ?)
+
 ## 14/04/2025
 
 - (Mathis)

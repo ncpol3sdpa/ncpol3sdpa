@@ -32,7 +32,7 @@ Project Structure
    :maxdepth: 2
 
    Home <self>
-   
+
    constraints
    funs
    momentmatrix
@@ -40,4 +40,3 @@ Project Structure
    problem
    rules
    solver
-

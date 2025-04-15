@@ -1,4 +1,4 @@
-import cvxpy as cp 
+import cvxpy as cp
 
 Y = cp.Variable((6, 6))
 
@@ -24,4 +24,3 @@ prob.solve()  # Returns the optimal value.
 print("status:", prob.status)
 print("optimal value", prob.value)
 print("optimal var", Y.value)
-

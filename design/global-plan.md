@@ -9,8 +9,8 @@ For each variable,
 - try to simplify with the constraints
 - add to the moment matrix
 
-Example of simplification:  
-if we get the constraint $X_0^2 - X_0 = 0$  
+Example of simplification:
+if we get the constraint $X_0^2 - X_0 = 0$
 $X_0^2$ is not added to the moment matrix
 
 ## Parts of the package
@@ -29,5 +29,5 @@ Their is a bug in polynomial simplification.
 
 ### Build from scratch
 
-Simple for commutative polynomials  
+Simple for commutative polynomials
 Harder for non commutative polynomials

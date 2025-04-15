@@ -19,7 +19,7 @@
 ## Yann
 
 - [ ] monomial.py
-- [ ] enhancing 
+- [ ] enhancing
 - [ ] complex version + nc
 
 ## Mathis

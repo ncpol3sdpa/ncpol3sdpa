@@ -44,7 +44,7 @@ def create_moment_matrix(
                 * monomials[i],
                 substitution_rules,
                 commutative,
-            )  
+            )
             for j in range(i + 1)
         ]
         for i in range(matrix_size)

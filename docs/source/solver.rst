@@ -7,4 +7,3 @@ The :mod:`ncpol3sdpa.solver` module provides the :class:`Solver` class, which is
    :members:
    :undoc-members:
    :show-inheritance:
-   

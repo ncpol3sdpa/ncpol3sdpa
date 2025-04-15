@@ -21,9 +21,9 @@ stages:
   - test
   - deploy
 
-variables:  
-  PYTHON_VERSION: "3.13"  
-  UV_VERSION: "0.5.5"  
+variables:
+  PYTHON_VERSION: "3.13"
+  UV_VERSION: "0.5.5"
   BASE_LAYER: bookworm-slim
   IMAGE: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
 
@@ -32,7 +32,7 @@ image:
   name: $IMAGE
   entrypoint: [""]
 
-# Script to be executed before each stage 
+# Script to be executed before each stage
 before_script:
   - echo "Setting up the environment..."
   - python3 --version
