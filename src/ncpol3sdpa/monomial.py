@@ -1,5 +1,4 @@
 from __future__ import annotations
-from functools import cmp_to_key
 from typing import List, Dict, Set, Any, Iterable
 from sympy import Expr, Symbol, total_degree, sympify, S
 
