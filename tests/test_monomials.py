@@ -40,7 +40,9 @@ def test_list_increment() -> None:
 
 
 def test_generate_monomials() -> None:
-    x, y, z = sympy.symbols("x y z")
+    x: sympy.Symbol = sympy.symbols("x")
+    y: sympy.Symbol = sympy.symbols("y")
+    z: sympy.Symbol = sympy.symbols("z")
 
     assert [1] == monomial.generate_monomials([x], 0)
     assert [1] == monomial.generate_monomials([x, y], 0)
@@ -97,7 +99,7 @@ def test_generate_monomials_non_commutative() -> None:
         z * y,
         z**2,
     ]
-    assert (monomial.generate_monomials([1, x, y], 3, False)) == [
+    assert (monomial.generate_monomials([sympy.S.One, x, y], 3, False)) == [
         1,
         x,
         y,
@@ -124,3 +126,11 @@ def test_degree() -> None:
     assert degree_of_polynomial(p1) == 2
     assert degree_of_polynomial(p2) == 2
     assert degree_of_polynomial(p3) == 4
+
+
+if __name__ == "__main__":
+    test_list_increment()
+    test_generate_monomials()
+    test_generate_monomials_non_commutative()
+    test_degree()
+    print("All tests passed!")

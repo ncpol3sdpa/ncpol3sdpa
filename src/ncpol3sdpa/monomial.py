@@ -1,7 +1,6 @@
 from __future__ import annotations
-from functools import cmp_to_key
 from typing import List, Dict, Set, Any, Iterable
-from sympy import Expr, total_degree, sympify
+from sympy import Expr, Symbol, total_degree, sympify, S
 
 
 class Poly:
@@ -99,15 +98,16 @@ def list_increment(degrees: List[int], k: int) -> bool:
 
 
 def generate_monomials(
-    symbols: Iterable[Any], relaxation_order: int, commutative: bool = True
-) -> List[Any]:
+    symbols: Iterable[Symbol], relaxation_order: int, commutative: bool = True
+) -> List[Expr]:
     """returns a list of all monomials that have degree less or equal to the relaxation_order"""
+    
     if commutative:
         current_degrees = [0 for _ in symbols]
-        res = []
+        res: List[Expr] = []
 
         while True:
-            expr = sympify(1)
+            expr = S.One
             for i, symbol in enumerate(symbols):
                 expr *= symbol ** current_degrees[i]
             if total_degree(expr) <= relaxation_order:
@@ -115,12 +115,10 @@ def generate_monomials(
 
             if list_increment(current_degrees, relaxation_order + 1):
                 break
-
+        
         return sorted(
             res,
-            key=cmp_to_key(
-                lambda item1, item2: total_degree(item1) - total_degree(item2)  # type: ignore
-            ),
+            key = total_degree
         )
     else:
         res = [sympify(1)]

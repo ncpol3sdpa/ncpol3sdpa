@@ -77,13 +77,13 @@ mypy:
 #    run: |
 #      pytest -sv
 
-testing-key:
-  stage: test
-  script:
-    - echo "Running Testing Key..."
-    - echo "$TestKey"
-    - echo "Testing Key complete"
-  allow_failure: true
+# testing-key:
+#   stage: test
+#   script:
+#     - echo "Running Testing Key..."
+#     - echo "$TestKey"
+#     - echo "Testing Key complete"
+#   allow_failure: true
 
 ruff-check-src:
   stage: test

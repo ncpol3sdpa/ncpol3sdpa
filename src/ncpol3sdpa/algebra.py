@@ -151,7 +151,7 @@ class AlgebraSDP:
 
             # TODO This is redundant work, does this matter?
             constraint_monomials = needed_monomials(
-                generate_monomials(self.objective.free_symbols, k_i, self.commutative),
+                generate_monomials(self.objective.free_symbols, k_i, self.commutative), # type: ignore
                 self.substitution_rules,
             )
 
