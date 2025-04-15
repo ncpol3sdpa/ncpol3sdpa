@@ -99,7 +99,7 @@ def test_generate_monomials_non_commutative() -> None:
         z * y,
         z**2,
     ]
-    assert (monomial.generate_monomials([1, x, y], 3, False)) == [
+    assert (monomial.generate_monomials([sympy.S.One, x, y], 3, False)) == [
         1,
         x,
         y,
