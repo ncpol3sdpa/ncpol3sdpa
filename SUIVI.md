@@ -202,3 +202,8 @@
 
 ## 15/04/2025
 - (Nazar et Yann) Merge [MR Pre-Commit](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/6)
+- (Yann)
+  * Merge [MR Enhencing](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/15)
+- (Mathis Yann Nazar)
+  * Discussion about the structure of the project
+  * Think about the use of a variable template instead of sympy variables
