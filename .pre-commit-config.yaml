@@ -25,6 +25,13 @@ repos:
     rev: v1.15.0
     hooks:
     -   id: mypy
+        args: ["--config-file", "pyproject.toml"]
+        exclude: |
+            (?x)^(
+                src/ncpol3sdpa/main.py|
+                src/typing_stubs/(.*)|
+                design/(.*)
+            )$
 
 - repo: local
   hooks:

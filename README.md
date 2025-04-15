@@ -79,7 +79,7 @@ make latexpdf -C docs
 
 ### Build Dependencies Graph
 
-We use `tach` to build the dependencies graph of modules. 
+We use `tach` to build the dependencies graph of modules.
 
 ```bash
 uv run tach mod
@@ -99,3 +99,20 @@ We use `pydeps` to build the dependencies graph of functions.
 ```bash
 uv run pydeps src/ncpol3sdpa
 ````
+
+### Pre-Commit
+
+We use pre-commit hooks to ensure a automatically verify adherence to formatting, linting, typing and tests.To use pre-commit hooks you must install them like this:
+
+```
+uv sync # Make sure uv virtual environment is up to date
+uv run pre-commit install
+```
+
+You can run every hook with :
+
+```
+uv run pre-commit run --all-files
+```
+
+To learn more about the details of pre-commit, the documentation is here : https://pre-commit.com/
