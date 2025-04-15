@@ -3,9 +3,24 @@ from typing import List, Tuple, Dict, Any
 from sympy import Expr
 import sympy as sp
 from ncpol3sdpa.rules import apply_rule, apply_rule_to_polynomial
-from ncpol3sdpa.monomial import generate_monomials_commutative
+from ncpol3sdpa.monomial import generate_monomials
 from ncpol3sdpa.constraints import Constraint
 import math
+
+
+def degree_of_polynomial(polynomial: Expr) -> int:
+    polynomial = polynomial.expand()
+    terms = polynomial.as_ordered_terms()
+    res = 0
+    for term in terms:
+        factors = term.as_ordered_factors()
+        deg = 0
+        for factor in factors:
+            if not factor.is_number:
+                _, exp = factor.as_base_exp()
+                deg += exp
+        res = max(deg, res)
+    return res
 
 
 def needed_monomials(monomials: List[Expr], rules: Dict[Expr, Expr]) -> List[Expr]:
@@ -14,23 +29,33 @@ def needed_monomials(monomials: List[Expr], rules: Dict[Expr, Expr]) -> List[Exp
     return [monomial for monomial in monomials if monomial not in rules.keys()]
 
 
-def create_moment_matrix_commutative(
-    monomials: List[sp.Expr], substitution_rules: Dict[sp.Expr, Any]
+def create_moment_matrix(
+    monomials: List[sp.Expr],
+    substitution_rules: Dict[sp.Expr, Any],
+    commutative: bool = True,
 ) -> List[List[sp.Expr]]:
-    """Create the moment matrix of the monomials for the commutative case"""
+    """Create the moment matrix of the monomials"""
 
     matrix_size = len(monomials)
     return [
         [
-            apply_rule(monomials[i] * monomials[j], substitution_rules)
+            apply_rule(
+                (monomials[j] if commutative else monomials[j].adjoint())  # type: ignore
+                * monomials[i],
+                substitution_rules,
+                commutative,
+            )  
             for j in range(i + 1)
         ]
         for i in range(matrix_size)
     ]
 
 
-def create_constraint_matrix_commutative(
-    monomials: List[sp.Expr], constraint_polynomial: sp.Expr, rules: Dict[sp.Expr, Any]
+def create_constraint_matrix(
+    monomials: List[sp.Expr],
+    constraint_polynomial: sp.Expr,
+    rules: Dict[sp.Expr, Any],
+    commutative: bool = True,
 ) -> List[List[sp.Expr]]:
     """Create the matrix of constraints
     The constraints are of the form `constraint_polynomial >= 0`
@@ -40,8 +65,13 @@ def create_constraint_matrix_commutative(
     return [
         [
             apply_rule_to_polynomial(
-                sp.expand(monomials[i] * monomials[j] * constraint_polynomial),
+                sp.expand(
+                    (monomials[j] if commutative else monomials[j].adjoint())  # type: ignore
+                    * constraint_polynomial
+                    * monomials[i]
+                ),
                 rules,
+                commutative,
             )
             for j in range(i + 1)
         ]
@@ -54,7 +84,7 @@ def generate_needed_symbols(polynomials: List[sp.Expr]) -> List[sp.Symbol]:
     for p in polynomials:
         total += p
 
-    return list(sp.poly(total).gens)
+    return list(total.free_symbols)  # type: ignore
 
 
 class AlgebraSDP:
@@ -64,12 +94,14 @@ class AlgebraSDP:
         objective: sp.Expr,
         relaxation_order: int,
         substitution_rules: Dict[sp.Expr, sp.Expr],
+        commutative: bool = True,
     ) -> None:
         """Construct the symbolic Moment Matrices and soundings data structures. Works for the commutative case"""
         self.relaxation_order: int = relaxation_order
         self.substitution_rules: Dict[sp.Expr, sp.Expr] = substitution_rules
+        self.commutative = commutative
         self.monomials: List[sp.Expr] = needed_monomials(
-            generate_monomials_commutative(needed_variables, relaxation_order),
+            generate_monomials(needed_variables, relaxation_order, commutative),
             substitution_rules,
         )
         self.objective: sp.Expr = apply_rule_to_polynomial(
@@ -78,8 +110,8 @@ class AlgebraSDP:
         )
 
         # In the commutative case, the moment matrix is symmetric
-        self.moment_matrix = create_moment_matrix_commutative(
-            self.monomials, self.substitution_rules
+        self.moment_matrix = create_moment_matrix(
+            self.monomials, self.substitution_rules, self.commutative
         )
         matrix_size: int = len(self.moment_matrix)
 
@@ -111,7 +143,7 @@ class AlgebraSDP:
             # p.10 of Semidefinite programming relaxations for quantum correlations
 
             k_i = math.floor(
-                self.relaxation_order - sp.degree(constraint.polynomial) / 2
+                self.relaxation_order - degree_of_polynomial(constraint.polynomial) / 2
             )
             assert k_i >= 0, (
                 "Insufficient relaxation order to capture the constraint {constraint.polynomial}"
@@ -119,13 +151,16 @@ class AlgebraSDP:
 
             # TODO This is redundant work, does this matter?
             constraint_monomials = needed_monomials(
-                generate_monomials_commutative(sp.poly(self.objective).gens, k_i),
+                generate_monomials(self.objective.free_symbols, k_i, self.commutative),
                 self.substitution_rules,
             )
 
             self.constraint_moment_matrices.append(
-                create_constraint_matrix_commutative(
-                    constraint_monomials, constraint.polynomial, self.substitution_rules
+                create_constraint_matrix(
+                    constraint_monomials,
+                    constraint.polynomial,
+                    self.substitution_rules,
+                    self.commutative,
                 )
             )
 

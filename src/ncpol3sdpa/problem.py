@@ -6,6 +6,7 @@ from typing import List, Tuple
 from numpy.typing import NDArray
 from enum import Enum
 
+
 from ncpol3sdpa.rules import Rule, apply_rule_to_polynomial
 from ncpol3sdpa.solver import Solver
 from ncpol3sdpa.constraints import Constraint
@@ -116,9 +117,10 @@ def algebra_to_SDP(algebra: algebra.AlgebraSDP) -> ProblemSDP:
 
 
 class Problem:
-    def __init__(self, obj: sympy.Expr) -> None:
+    def __init__(self, obj: sympy.Expr, commutative: bool = True) -> None:
         self.constraints: List[Constraint] = []
         self.objective: Expr = obj
+        self.commutative = commutative
 
     def add_constraint(self, constraint: Constraint) -> None:
         self.constraints.append(constraint)
@@ -164,16 +166,14 @@ class Problem:
         ]
         needed_symbols = algebra.generate_needed_symbols(all_constraint_polynomials)
         algebraSDP = algebra.AlgebraSDP(
-            needed_symbols, self.objective, relaxation_order, rules
+            needed_symbols, self.objective, relaxation_order, rules, self.commutative
         )
         algebraSDP.add_constraints(normal_constraints)
 
         # 2. Translate to SDP
-
         problemSDP = algebra_to_SDP(algebraSDP)
 
         # 3. Solve the SDP
-
         match solver:
             case AvailableSolvers.CVXPY:
                 return Solver.solve_cvxpy(problemSDP)

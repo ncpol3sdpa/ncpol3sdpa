@@ -3,6 +3,7 @@ from ncpol3sdpa.problem import Problem, AvailableSolvers
 from ncpol3sdpa.constraints import Constraint
 from sympy.abc import x, y
 from sympy import Expr
+from sympy.physics.quantum import HermitianOperator
 
 
 def test_1() -> None:
@@ -71,6 +72,26 @@ def test_1_sub() -> None:
     assert abs(p.solve(1, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
     assert abs(p.solve(2, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
     assert abs(p.solve(3, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
+
+
+def test_1_nc() -> None:
+    a, b = HermitianOperator("a"), HermitianOperator("b")  # type: ignore
+    obj = a**2 - 0.5 * a * b - 0.5 * b * a - a
+    p = Problem(obj, commutative=False)
+    c1 = Constraint.InequalityConstraint(a - a**2)
+    c2 = Constraint.InequalityConstraint(b - b**2)
+    p.add_constraint(c1)
+    p.add_constraint(c2)
+    assert abs(p.solve(2) - 1 / 8) <= 0.1
+
+
+def test_2_nc() -> None:
+    a, b = HermitianOperator("a"), HermitianOperator("b")  # type: ignore
+    obj = a * b + b * a
+    p = Problem(obj, commutative=False)
+    c1 = Constraint.InequalityConstraint(1 - a**2 - b**2)
+    p.add_constraint(c1)
+    assert abs(p.solve(2) - 1) <= 0.1
 
 
 if __name__ == "__main__":

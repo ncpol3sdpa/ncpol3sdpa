@@ -1,8 +1,7 @@
 from __future__ import annotations
 from functools import cmp_to_key
 from typing import List, Dict, Set, Any, Iterable
-from sympy import total_degree
-import sympy
+from sympy import Expr, total_degree, sympify
 
 
 class Poly:
@@ -35,9 +34,9 @@ class Poly:
         """Expand an expression"""
         raise NotImplementedError
 
-    def total_degree(self) -> int:
-        """Return the total_degree in the given variables"""
-        raise NotImplementedError
+    # def total_degree(self) -> int:
+    #     """Return the total_degree in the given variables"""
+    #     raise NotImplementedError
 
     def rem(self, other: Poly) -> Poly:
         """
@@ -99,27 +98,42 @@ def list_increment(degrees: List[int], k: int) -> bool:
     return True
 
 
-def generate_monomials_commutative(
-    symbols: Iterable[sympy.Symbol], relaxation_order: int
-) -> List[sympy.Expr]:
+def generate_monomials(
+    symbols: Iterable[Any], relaxation_order: int, commutative: bool = True
+) -> List[Any]:
     """returns a list of all monomials that have degree less or equal to the relaxation_order"""
-    current_degrees = [0 for _ in symbols]
-    res = []
+    if commutative:
+        current_degrees = [0 for _ in symbols]
+        res = []
 
-    while True:
-        expr: sympy.Expr = sympy.core.numbers.One()
-        for i, symbol in enumerate(symbols):
-            expr *= symbol ** current_degrees[i]
-        if total_degree(expr) <= relaxation_order:
-            res.append(expr)
+        while True:
+            expr = sympify(1)
+            for i, symbol in enumerate(symbols):
+                expr *= symbol ** current_degrees[i]
+            if total_degree(expr) <= relaxation_order:
+                res.append(expr)
 
-        if list_increment(current_degrees, relaxation_order + 1):
-            break
+            if list_increment(current_degrees, relaxation_order + 1):
+                break
 
-    def cmp(item1: sympy.Expr, item2: sympy.Expr) -> int:
-        return total_degree(item1) - total_degree(item2)
+        return sorted(
+            res,
+            key=cmp_to_key(
+                lambda item1, item2: total_degree(item1) - total_degree(item2)  # type: ignore
+            ),
+        )
+    else:
+        res = [sympify(1)]
 
-    return sorted(
-        res,
-        key=cmp_to_key(cmp),
-    )
+        def dfs(i: int, curr_monomials: List[Expr], pred_monomials: List[Expr]) -> None:
+            if i > relaxation_order:
+                return
+            for monomial in pred_monomials:
+                for symbol in symbols:
+                    if symbol != 1:
+                        res.append(monomial * symbol)
+                        curr_monomials.append(monomial * symbol)
+            dfs(i + 1, [], curr_monomials)
+
+        dfs(0, [sympify(1)], [])
+        return res
