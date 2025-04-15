@@ -207,3 +207,6 @@
 - (Mathis Yann Nazar)
   * Discussion about the structure of the project
   * Think about the use of a variable template instead of sympy variables
+- (Mathis)
+  * continue the implementation of the complex part 
+  * continue to search how to handle this case (not sure about the theory)
