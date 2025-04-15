@@ -84,7 +84,7 @@ def generate_needed_symbols(polynomials: List[sp.Expr]) -> List[sp.Symbol]:
     for p in polynomials:
         total += p
 
-    return list(total.free_symbols)  # type: ignore  Convertion from Basic to Symbol
+    return list(total.free_symbols)  # type: ignore
 
 
 class AlgebraSDP:
@@ -151,7 +151,7 @@ class AlgebraSDP:
 
             # TODO This is redundant work, does this matter?
             constraint_monomials = needed_monomials(
-                generate_monomials(self.objective.free_symbols, k_i, self.commutative),
+                generate_monomials(self.objective.free_symbols, k_i, self.commutative), # type: ignore
                 self.substitution_rules,
             )
 
