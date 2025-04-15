@@ -84,7 +84,7 @@ def generate_needed_symbols(polynomials: List[sp.Expr]) -> List[sp.Symbol]:
     for p in polynomials:
         total += p
 
-    return list(total.free_symbols)  # type: ignore
+    return list(total.free_symbols)  # type: ignore  Convertion from Basic to Symbol
 
 
 class AlgebraSDP:
