@@ -1,6 +1,7 @@
 from typing import Optional
 import numpy as np
 from numpy.typing import NDArray
+from sympy import Expr
 
 from ncpol3sdpa.problem import Problem
 from ncpol3sdpa.funs import generate_n_variables
@@ -44,19 +45,25 @@ def solve_maxcut_naive(g: NDArray[np.float64]) -> int:
     raise NotImplementedError
 
 
-def test_maxcut(n: int = 8, M: Optional[NDArray[np.float64]] = None) -> None:
+def test_maxcut(n: int = 8, M: NDArray[np.float64] | None = None) -> None:
     """Max-Cut example; if M is None, gen_random_matrix is called"""
+
     if M is None:
         M = gen_random_matrix(n)
-    x = generate_n_variables(n)
+
+    x = np.array(generate_n_variables(n))
 
     maxcut_constraints = [
         Constraint.EqualityConstraint(xi**2 - xi) for xi in x
     ]  # equality : xi in {0, 1}
-    e = np.ones(n)
-    # C'est enervant de typer ce type d'expression: il est mal typé.
-    # mais il n'est pas faux non plus. TODO
-    maxcut_objective = np.dot(x, np.dot(M, e - np.transpose(x)))  # type: ignore
+
+    maxcut_objective: Expr = np.dot(
+        x, 
+        np.dot(M, np.ones(n) - np.transpose(x))
+    )
+
+    print(f"{x[0] = }")
+    print(f"{type(x[0]) = }")
 
     maxcut = Problem(maxcut_objective)
     maxcut.add_constraints(maxcut_constraints)
@@ -73,3 +80,5 @@ if __name__ == "__main__":
         + np.diag([1], 8)
     )
     W0 = W0 + W0.T
+
+    test_maxcut(8)
