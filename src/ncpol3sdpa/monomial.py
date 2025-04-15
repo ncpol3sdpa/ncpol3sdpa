@@ -101,7 +101,7 @@ def generate_monomials(
     symbols: Iterable[Symbol], relaxation_order: int, commutative: bool = True
 ) -> List[Expr]:
     """returns a list of all monomials that have degree less or equal to the relaxation_order"""
-    
+
     if commutative:
         current_degrees = [0 for _ in symbols]
         res: List[Expr] = []
@@ -115,11 +115,8 @@ def generate_monomials(
 
             if list_increment(current_degrees, relaxation_order + 1):
                 break
-        
-        return sorted(
-            res,
-            key = total_degree
-        )
+
+        return sorted(res, key=total_degree)
     else:
         res = [sympify(1)]
 
