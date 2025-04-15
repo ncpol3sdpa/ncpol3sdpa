@@ -210,3 +210,5 @@
 - (Mathis)
   * continue the implementation of the complex part 
   * continue to search how to handle this case (not sure about the theory)
+- (Thomas) 
+  * Study the link between the solutions of the dual problem and the decomposition in the SOS form
