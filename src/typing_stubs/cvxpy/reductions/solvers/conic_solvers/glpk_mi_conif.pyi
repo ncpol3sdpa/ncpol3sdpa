@@ -1,0 +1,13 @@
+from _typeshed import Incomplete
+from cvxpy.reductions.solution import Solution as Solution, failure_solution as failure_solution
+from cvxpy.reductions.solvers.conic_solvers import GLPK as GLPK
+from cvxpy.reductions.solvers.conic_solvers.conic_solver import ConicSolver as ConicSolver
+
+class GLPK_MI(GLPK):
+    MIP_CAPABLE: bool
+    SUPPORTED_CONSTRAINTS: Incomplete
+    MI_SUPPORTED_CONSTRAINTS = SUPPORTED_CONSTRAINTS
+    def name(self): ...
+    def apply(self, problem): ...
+    def solve_via_data(self, data, warm_start: bool, verbose: bool, solver_opts, solver_cache: Incomplete | None = None): ...
+    def invert(self, solution, inverse_data): ...

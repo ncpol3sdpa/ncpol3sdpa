@@ -1,0 +1,3 @@
+from cvxpy.atoms.elementwise.minimum import minimum as minimum
+
+def neg(x): ...

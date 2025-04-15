@@ -76,3 +76,26 @@ Then, you can build the documentation by executing the following command:
 make html -C docs
 make latexpdf -C docs
 ```
+
+### Build Dependencies Graph
+
+We use `tach` to build the dependencies graph of modules. 
+
+```bash
+uv run tach mod
+uv run tach sync
+```
+
+```bash
+uv run tach show --web
+```
+```bash
+uv run tach show -o docs/graphs/tach_graph.dot
+uv run dot -Tpdf docs/graphs/tach_graph.dot -o docs/graphs/tach_graph.pdf
+```
+
+We use `pydeps` to build the dependencies graph of functions.
+
+```bash
+uv run pydeps src/ncpol3sdpa
+````

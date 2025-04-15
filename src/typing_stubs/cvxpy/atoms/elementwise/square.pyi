@@ -1,0 +1,3 @@
+from cvxpy.atoms.elementwise.power import power as power
+
+def square(x): ...

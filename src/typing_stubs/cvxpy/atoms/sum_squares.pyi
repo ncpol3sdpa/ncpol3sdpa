@@ -1,0 +1,3 @@
+from cvxpy.atoms.quad_over_lin import quad_over_lin as quad_over_lin
+
+def sum_squares(expr): ...

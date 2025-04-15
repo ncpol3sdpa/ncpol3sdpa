@@ -4,5 +4,6 @@
 **/__pycache__
 venv
 
-**/*.dot
-**/*.pdf
+# **/*.dot
+# **/*.pdf
+# **/*.svg

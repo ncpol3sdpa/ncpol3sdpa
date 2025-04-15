@@ -1,0 +1,3 @@
+from cvxpy.atoms.atom import Atom as Atom
+
+def partial_trace(expr, dims: tuple[int], axis: int | None = 0): ...

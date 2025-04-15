@@ -1,0 +1,3 @@
+from cvxpy.expressions.variable import Variable as Variable
+
+def cumsum_canon(expr, args): ...

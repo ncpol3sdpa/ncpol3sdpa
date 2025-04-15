@@ -1,4 +1,27 @@
-# from mosek import *
+def test_mosek() -> None:
+    """Test if MOSEK is installed and working."""
+    try:
+        import mosek
+
+        mosek.Task()
+
+    except ImportError:
+        raise ImportError(
+            "MOSEK is not installed. Please install MOSEK to run this test."
+        )
+
+    except Exception as e:
+        raise RuntimeError(f"MOSEK is installed but not working. Error: {e}")
+
+    # TODO: Find a way to not run other tests
+    # if MOSEK is not installed
+
+    # TODO: Add in readme how to install MOSEK
+
+    # TODO: add scs and sdpa solvers
+
+
+#  from mosek import *
 # from typing import Any
 
 # def func() -> Any:
@@ -18,5 +41,7 @@
 #     assert (func() == 2 or func() == 2.0)
 
 
-# if __name__ == '__main__':
-#     print(f"x = {func()}")
+if __name__ == "__main__":
+    # print(f"x = {func()}")
+
+    test_mosek()

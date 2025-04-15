@@ -1,0 +1,46 @@
+interfaces = []
+exclude = [
+    "**/*__pycache__",
+    "**/*egg-info",
+    "**/docs",
+    "**/tests",
+    "**/venv",
+]
+source_roots = [ "src",
+]
+
+[[modules]]
+path = "ncpol3sdpa"
+depends_on = []
+
+[[modules]]
+path = "ncpol3sdpa.momentmatrix"
+depends_on = ["ncpol3sdpa.rules"]
+
+[[modules]]
+path = "ncpol3sdpa.main"
+depends_on = []
+
+[[modules]]
+path = "ncpol3sdpa.rules"
+depends_on = ["ncpol3sdpa.constraints"]
+
+[[modules]]
+path = "ncpol3sdpa.solver"
+depends_on = ["ncpol3sdpa.funs"]
+
+[[modules]]
+path = "ncpol3sdpa.monomial"
+depends_on = []
+
+[[modules]]
+path = "ncpol3sdpa.funs"
+depends_on = []
+
+[[modules]]
+path = "ncpol3sdpa.problem"
+depends_on = ["ncpol3sdpa.constraints", "ncpol3sdpa.rules", "ncpol3sdpa.solver", "ncpol3sdpa.monomial", "ncpol3sdpa.momentmatrix"]
+
+[[modules]]
+path = "ncpol3sdpa.constraints"
+depends_on = []

@@ -3,14 +3,20 @@ name = "ncpol3sdpa"
 version = "0.1.0"
 description = "Python package for solving polynomial optimization problems"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "cvxpy>=1.6.3",
+    "dot>=0.3.0",
     "mypy>=1.15.0",
     "sphinx>=8.2.3",
     "sympy>=1.13.3",
+    "tach>=0.28.4",
     "pytest>=8.3.4",
     "pre-commit>=4.2.0",
+    "pydeps>=3.0.1",
+    "mosek>=11.0.13",
+    "pyvis>=0.3.2",
+    "networkx>=3.4.2",
 ]
 
 [dependency-groups]
@@ -25,7 +31,7 @@ packages = ["src/ncpol3sdpa"]
 
 [tool.ruff]
 indent-width = 4
-exclude = ["Exercises"]
+exclude = ["Exercises", "src/typing_stubs"]
 
 [tool.ruff.lint]
 ignore = []
@@ -40,6 +46,8 @@ strict = true
 exclude = ["main.py"]
 follow_untyped_imports = true
 files = ["src/ncpol3sdpa","tests"]
+python_executable = ".venv/bin/python"
+mypy_path = "src/typing_stubs"
 
 [tool.pytest.ini_options]
 pythonpath = [
@@ -49,3 +57,10 @@ pythonpath = [
 testpaths = [
     "tests"
 ]
+
+[tool.pydeps]
+# fname = "src"
+output = "docs/graphs/pydeps_graph.svg"
+verbose = 2
+cluster = true
+no_show = true

@@ -27,5 +27,3 @@
 - [ ] rules.py
 - [ ] moment matrix
 - [ ] complex + nc
-
-

@@ -1,0 +1,3 @@
+from cvxpy.atoms.atom import Atom as Atom
+
+def partial_transpose(expr, dims: tuple[int, ...], axis: int | None = 0): ...
