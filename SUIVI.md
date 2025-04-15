@@ -199,3 +199,6 @@
 - (Mathis)
   * Fix type and format errors in [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/14), (CI/CD ok)
 - (Nazar) Ajouter plus de generateurs pour les structures de donnes dans tests/draw_strategies
+
+## 15/04/2025
+- (Nazar et Yann) Merge [MR Pre-Commit](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/6)
