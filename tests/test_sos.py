@@ -46,3 +46,8 @@ def test_dual_constraints_cvxpy_2() -> None:
         cvxpy_dual_constraints.append(constraint.dual_value)
 
     # assert (dual_constraints == cvxpy_dual_constraints)
+
+
+if __name__ == "__main__":
+    test_dual_constraints_cvxpy()
+    test_dual_constraints_cvxpy_2()
