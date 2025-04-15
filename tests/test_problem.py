@@ -75,7 +75,9 @@ def test_1_sub() -> None:
 
 
 def test_1_nc() -> None:
-    a, b = HermitianOperator("a"), HermitianOperator("b")  # type: ignore
+    a: HermitianOperator = HermitianOperator("a")  # type: ignore
+    b: HermitianOperator = HermitianOperator("b")  # type: ignore
+
     obj = a**2 - 0.5 * a * b - 0.5 * b * a - a
     p = Problem(obj, commutative=False)
     c1 = Constraint.InequalityConstraint(a - a**2)
@@ -86,7 +88,9 @@ def test_1_nc() -> None:
 
 
 def test_2_nc() -> None:
-    a, b = HermitianOperator("a"), HermitianOperator("b")  # type: ignore
+    a: HermitianOperator = HermitianOperator("a")  # type: ignore
+    b: HermitianOperator = HermitianOperator("b")  # type: ignore
+
     obj = a * b + b * a
     p = Problem(obj, commutative=False)
     c1 = Constraint.InequalityConstraint(1 - a**2 - b**2)
