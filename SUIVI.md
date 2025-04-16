@@ -202,6 +202,7 @@
 
 ## 15/04/2025
 - (Nazar et Yann) Merge [MR Pre-Commit](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/6)
+- (Nazar) Corriger quelleque erreurs dans la configuration de pre-commit et introduire l'util au reste de l'equipe
 - (Yann)
   * Merge [MR Enhencing](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/15)
 - (Mathis Yann Nazar)
