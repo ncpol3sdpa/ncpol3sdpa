@@ -13,8 +13,13 @@ EPSILON = 0.001
 
 
 class EqConstraint:
-    def __init__(self, from_l: list[Tuple[int, NDArray[np.float64]]]) -> None:
-        """represents SUM over i < As[i].snd | G_g_j > = 0 where j = As[i].fs"""
+    """Represents a list of constraints
+
+    A tuple (k, A) represents the constraint :
+    sum_i < A[i] | G[k,i] > = 0
+    """
+
+    def __init__(self, from_l: List[Tuple[int, NDArray[np.float64]]]) -> None:
         self.constraints = from_l
 
 
@@ -27,7 +32,7 @@ class MomentMatrixSDP:
         self.eq_classes = eq_classes
 
         # Validation
-        once = set([])
+        once = set()
         for eq_class in eq_classes:
             for i, j in eq_class:
                 assert 0 <= i < size
