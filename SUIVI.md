@@ -213,3 +213,8 @@
   * continue to search how to handle this case (not sure about the theory)
 - (Thomas) 
   * Study the link between the solutions of the dual problem and the decomposition in the SOS form
+
+## 16/04/2025
+- (Mathis)
+  * continue the implementation of the complex part but it doesn't work because the matricies that represent the polynomials are not real so I sent an email to Peter Brown to have more informations about this part 
+  * Sent an email to Peter Brown to have a new appointment and about the progress of the project
