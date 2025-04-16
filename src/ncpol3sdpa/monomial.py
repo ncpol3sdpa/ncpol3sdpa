@@ -98,9 +98,15 @@ def list_increment(degrees: List[int], k: int) -> bool:
 
 
 def generate_monomials(
-    symbols: Iterable[Symbol], relaxation_order: int, commutative: bool = True
+    symbols: Iterable[Symbol], relaxation_order: int, commutative: bool = True, real: bool = True
 ) -> List[Expr]:
     """returns a list of all monomials that have degree less or equal to the relaxation_order"""
+    symbols = list(symbols)
+    if not real:
+        n = len(symbols)
+        for i in range(n):
+            symbols.append(symbols[i].conjugate())
+            
     
     if commutative:
         current_degrees = [0 for _ in symbols]

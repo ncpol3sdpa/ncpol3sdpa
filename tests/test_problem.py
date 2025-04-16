@@ -1,8 +1,9 @@
 # from numpy import format_float_scientific
+from sympy.polys.rings import add
 from ncpol3sdpa.problem import Problem, AvailableSolvers
 from ncpol3sdpa.constraints import Constraint
 from sympy.abc import x, y
-from sympy import Expr
+from sympy import Expr, symbols, I
 from sympy.physics.quantum import HermitianOperator
 
 
@@ -96,6 +97,21 @@ def test_2_nc() -> None:
     c1 = Constraint.InequalityConstraint(1 - a**2 - b**2)
     p.add_constraint(c1)
     assert abs(p.solve(2) - 1) <= 0.1
+
+
+def test_complex() -> None:
+    z = symbols("z", real=False)
+    obj = (z**2 - z.conjugate() ** 2) / (2 * I)
+    c1 = Constraint.InequalityConstraint(
+        (z + z.conjugate()) / 2 - ((z + z.conjugate()) / 2) ** 2
+    )
+    c2 = Constraint.InequalityConstraint(
+        (z - z.conjugate()) / (2 * I) - ((z - z.conjugate()) / (2 * I)) ** 2
+    )
+    p = Problem(obj, real=False)
+    p.add_constraint(c1)
+    p.add_constraint(c2)
+    assert abs(p.solve(2) - 2.414) <= 0.1
 
 
 if __name__ == "__main__":
