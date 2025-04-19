@@ -218,3 +218,10 @@
 - (Mathis)
   * continue the implementation of the complex part but it doesn't work because the matricies that represent the polynomials are not real so I sent an email to Peter Brown to have more informations about this part 
   * Sent an email to Peter Brown to have a new appointment and about the progress of the project
+
+## 19/04/2025
+- (Mathis)
+  * create issue(https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/issues/3) related to equality constraint in non commutative polynomial optimization problems.
+  * Fix [#3](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/issues/3) with [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/16) 
+    + the issue was that total_degree() doesn't handle non commutative polynomial, so I replace it with degree_of_polynomial that handle non commutative polynomial 
+    + The degree of relaxation was too low to capture every monomials
