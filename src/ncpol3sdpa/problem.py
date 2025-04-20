@@ -31,12 +31,16 @@ def polynomial_to_matrix(
     moment_matrix_size = len(algebra.moment_matrix)
     a_0 = np.zeros(shape=(moment_matrix_size, moment_matrix_size))
     print(algebra.monomial_to_positions.keys())
-    print("dic", sympy.expand(poly).as_coefficients_dict().items())
     for monomial, coef in sympy.expand(poly).as_coefficients_dict().items():
-        if sympy.I in monomial.atoms():   # monomial contains I
-            monomial /= sympy.I 
-            coef *= sympy.I
-        print("monomial", monomial)
+        if sympy.I in coef.atoms():  # type: ignore
+            coef /= sympy.I
+            coef = float(coef)
+            coef *= 1j  # type: ignore
+        if sympy.I in monomial.atoms():  # type: ignore
+            monomial /= sympy.I
+            coef = float(coef)
+            coef *= 1j  # type: ignore
+        print(monomial)
         assert monomial in algebra.monomial_to_positions.keys()
         assert 0 < len(algebra.monomial_to_positions[monomial])
 
@@ -45,10 +49,8 @@ def polynomial_to_matrix(
         monomial_x, monomial_y = algebra.monomial_to_positions[monomial][0]
 
         # The matrices must be symmetric
-        print("aaaa", coef)
         a_0[monomial_x][monomial_y] += 0.5 * coef
         a_0[monomial_y][monomial_x] += 0.5 * coef
-        print("qqqqqqqqqqqqqqqqqqq")
 
     return a_0
 
@@ -124,7 +126,9 @@ def algebra_to_SDP(algebra: algebra.AlgebraSDP) -> ProblemSDP:
 
 
 class Problem:
-    def __init__(self, obj: sympy.Expr, commutative: bool = True, real: bool = True) -> None:
+    def __init__(
+        self, obj: sympy.Expr, commutative: bool = True, real: bool = True
+    ) -> None:
         self.constraints: List[Constraint] = []
         self.objective: Expr = obj
         self.commutative = commutative
@@ -174,13 +178,18 @@ class Problem:
         ]
         needed_symbols = algebra.generate_needed_symbols(all_constraint_polynomials)
         algebraSDP = algebra.AlgebraSDP(
-            needed_symbols, self.objective, relaxation_order, rules, self.commutative, self.real
+            needed_symbols,
+            self.objective,
+            relaxation_order,
+            rules,
+            self.commutative,
+            self.real,
         )
         algebraSDP.add_constraints(normal_constraints)
 
         # 2. Translate to SDP
         problemSDP = algebra_to_SDP(algebraSDP)
-
+        print(problemSDP)
         # 3. Solve the SDP
         match solver:
             case AvailableSolvers.CVXPY:

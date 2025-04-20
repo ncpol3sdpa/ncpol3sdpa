@@ -1,4 +1,3 @@
-from typing import Optional
 import numpy as np
 from numpy.typing import NDArray
 from sympy import Expr
@@ -57,10 +56,7 @@ def test_maxcut(n: int = 8, M: NDArray[np.float64] | None = None) -> None:
         Constraint.EqualityConstraint(xi**2 - xi) for xi in x
     ]  # equality : xi in {0, 1}
 
-    maxcut_objective: Expr = np.dot(
-        x, 
-        np.dot(M, np.ones(n) - np.transpose(x))
-    )
+    maxcut_objective: Expr = np.dot(x, np.dot(M, np.ones(n) - np.transpose(x)))
 
     print(f"{x[0] = }")
     print(f"{type(x[0]) = }")
