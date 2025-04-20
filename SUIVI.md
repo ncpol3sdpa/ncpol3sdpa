@@ -225,3 +225,9 @@
   * Fix [#3](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/issues/3) with [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/16) 
     + the issue was that total_degree() doesn't handle non commutative polynomial, so I replace it with degree_of_polynomial that handle non commutative polynomial 
     + The degree of relaxation was too low to capture every monomials
+
+## 20/04/2025
+- (Mathis)
+  * continue to implement the complex part 
+    + new idea : convert the original problem into a complex SDP then convert the complex SDP into a real SDP at the end
+    + start to implement the idea above
