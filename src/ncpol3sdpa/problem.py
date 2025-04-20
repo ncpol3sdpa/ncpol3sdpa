@@ -10,7 +10,7 @@ from enum import Enum
 from ncpol3sdpa.rules import Rule, apply_rule_to_polynomial
 from ncpol3sdpa.solver import Solver
 from ncpol3sdpa.constraints import Constraint
-from ncpol3sdpa.sdp_repr import ProblemSDP
+from ncpol3sdpa.sdp_repr import ProblemSDP, complexSDP_to_realSDP
 import ncpol3sdpa.sdp_repr as sdp_repr
 import ncpol3sdpa.algebra as algebra
 
@@ -22,21 +22,33 @@ class AvailableSolvers(Enum):
 
 def polynomial_to_matrix(
     algebra: algebra.AlgebraSDP, poly: sympy.Expr
-) -> NDArray[np.float64]:
+) -> NDArray[np.float64] | NDArray[np.complex64]:
     """Returns a symmetric A matrix such that poly = Tr(A.T @ G) where G is the moment matrix. In other
     words express poly as a linear combination of the coefficients of G.
     Requires that all monomials of poly exist within the moment matrix:
         poly.free_vars included in algebra.moment_matrix free_vars
         and deg(poly) <= 2*algebra.relaxation_order"""
     moment_matrix_size = len(algebra.moment_matrix)
-    a_0 = np.zeros(shape=(moment_matrix_size, moment_matrix_size))
-    print(algebra.monomial_to_positions.keys())
-    print("dic", sympy.expand(poly).as_coefficients_dict().items())
+
+    if algebra.real:
+        a_0 = np.zeros(shape=(moment_matrix_size, moment_matrix_size))
+    else:
+        a_0 = np.zeros(
+            shape=(moment_matrix_size, moment_matrix_size), dtype=np.complex64
+        )
+
+    print("a", algebra.monomial_to_positions.keys())
+    print("b", sympy.expand(poly).as_coefficients_dict().items())
     for monomial, coef in sympy.expand(poly).as_coefficients_dict().items():
-        if sympy.I in monomial.atoms():   # monomial contains I
-            monomial /= sympy.I 
-            coef *= sympy.I
-        print("monomial", monomial)
+        if sympy.I in coef.atoms():  # type: ignore
+            coef /= sympy.I
+            coef = float(coef)
+            coef *= 1j  # type: ignore
+        if sympy.I in monomial.atoms():  # type: ignore
+            monomial /= sympy.I
+            coef = float(coef)
+            coef *= 1j  # type: ignore
+        print(monomial)
         assert monomial in algebra.monomial_to_positions.keys()
         assert 0 < len(algebra.monomial_to_positions[monomial])
 
@@ -44,11 +56,12 @@ def polynomial_to_matrix(
         # TODO/Idea What happens if we chose other than 0? at random?
         monomial_x, monomial_y = algebra.monomial_to_positions[monomial][0]
 
-        # The matrices must be symmetric
-        print("aaaa", coef)
-        a_0[monomial_x][monomial_y] += 0.5 * coef
-        a_0[monomial_y][monomial_x] += 0.5 * coef
-        print("qqqqqqqqqqqqqqqqqqq")
+        if algebra.real:
+            # The matrices must be symmetric
+            a_0[monomial_x][monomial_y] += 0.5 * coef
+            a_0[monomial_y][monomial_x] += 0.5 * coef
+        else:
+            a_0[monomial_x][monomial_y] += coef
 
     return a_0
 
@@ -124,7 +137,9 @@ def algebra_to_SDP(algebra: algebra.AlgebraSDP) -> ProblemSDP:
 
 
 class Problem:
-    def __init__(self, obj: sympy.Expr, commutative: bool = True, real: bool = True) -> None:
+    def __init__(
+        self, obj: sympy.Expr, commutative: bool = True, real: bool = True
+    ) -> None:
         self.constraints: List[Constraint] = []
         self.objective: Expr = obj
         self.commutative = commutative
@@ -174,13 +189,20 @@ class Problem:
         ]
         needed_symbols = algebra.generate_needed_symbols(all_constraint_polynomials)
         algebraSDP = algebra.AlgebraSDP(
-            needed_symbols, self.objective, relaxation_order, rules, self.commutative, self.real
+            needed_symbols,
+            self.objective,
+            relaxation_order,
+            rules,
+            self.commutative,
+            self.real,
         )
         algebraSDP.add_constraints(normal_constraints)
 
         # 2. Translate to SDP
         problemSDP = algebra_to_SDP(algebraSDP)
-
+        if not self.real:
+            problemSDP = complexSDP_to_realSDP(problemSDP)
+        print(problemSDP)
         # 3. Solve the SDP
         match solver:
             case AvailableSolvers.CVXPY:

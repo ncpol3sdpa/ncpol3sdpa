@@ -15,7 +15,7 @@ def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:
 
 
 def to_sparse_symmetric(
-    matrix: NDArray[np.float64],
+    matrix: NDArray[np.float64] | NDArray[np.complex64],
 ) -> Tuple[List[float], List[int], List[int]]:
     """
     Return the sparse form of a symmetric matrix (only lower triangle is given)
@@ -66,11 +66,11 @@ class Solver:
         for constraint in problem.constraints:
             expression: cvxpy.Expression = cvxpy.Constant(0)
             for var_num, matrix in constraint.constraints:
-                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
+                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])  # type: ignore
             constraints.append(cvxpy.Constant(0) == expression)
 
         # tr(A.T x G)
-        objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
+        objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))  # type: ignore
 
         prob = cvxpy.Problem(objective, constraints)
         # Returns the optimal value.
@@ -124,7 +124,7 @@ class Solver:
                     constraint_l = []
                     constraint_v = []
                     for var_num, matrix in problem.constraints[i].constraints:
-                        val_m, rows_m, cols_m = to_sparse_symmetric(matrix)
+                        val_m, rows_m, cols_m = to_sparse_symmetric(matrix)  # type
                         which_constraint += [1 + i] * len(val_m)
                         which_SDP += [var_num] * len(val_m)
                         constraint_k += rows_m
