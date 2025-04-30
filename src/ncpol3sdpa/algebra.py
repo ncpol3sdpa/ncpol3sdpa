@@ -183,7 +183,7 @@ class AlgebraSDP:
             self.monomials,
         )
         ruled_filtered_monomials: filter[sp.Expr] = filter(
-            lambda monomial: sp.poly(monomial).total_degree()
+            lambda monomial: degree_of_polynomial(monomial)
             <= 2 * self.relaxation_order,
             ruled_monomials,
         )
