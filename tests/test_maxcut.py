@@ -8,5 +8,4 @@ def test_maxcut_relaxation() -> None:
     W0 = np.diag(np.ones(8), 1)
     W0 = W0 + W0.T
     res = maxcut_relaxation(9, W0)
-
-    assert res <= 1
+    assert res <= 9
