@@ -248,3 +248,6 @@
   * Discuss of the social & environmental impact of the project
     + ...
   * Meeting with Peter Brown
+- (Mathis)
+  * Continue to try to implement the complex part
+  * discussion about how to solve it with the other members
