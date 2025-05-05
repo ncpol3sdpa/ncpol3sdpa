@@ -11,7 +11,7 @@ def generate_n_variables(n: int) -> List[Symbol]:
     return list(symbols(f"x0:{n}"))
 
 
-def ith_bit(N : int, i : int) -> int:
-    """ returns the i-th bit of N """
+def ith_bit(N: int, i: int) -> int:
+    """returns the i-th bit of N"""
     b = (N >> i) % 2
     return b
