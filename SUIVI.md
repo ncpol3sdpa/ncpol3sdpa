@@ -231,3 +231,8 @@
   * continue to implement the complex part 
     + new idea : convert the original problem into a complex SDP then convert the complex SDP into a real SDP at the end
     + start to implement the idea above
+    
+## 5/05/2025
+
+- (Alain)
+  * implement gen\_bipartite\_graph + solve\_maxcut\_bipartite for examples of applications of ncpolsdpa
