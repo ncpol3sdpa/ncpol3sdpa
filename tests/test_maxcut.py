@@ -7,6 +7,6 @@ def test_maxcut_relaxation() -> None:
     # coming soon
     W0 = np.diag(np.ones(8), 1)
     W0 = W0 + W0.T
-    res = maxcut_relaxation(8, W0)
+    res = maxcut_relaxation(9, W0)
 
     assert res <= 1
