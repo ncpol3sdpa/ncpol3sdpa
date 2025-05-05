@@ -231,13 +231,19 @@
   * continue to implement the complex part 
     + new idea : convert the original problem into a complex SDP then convert the complex SDP into a real SDP at the end
     + start to implement the idea above
+- (Yann)
+  * Read some papers 
+    + About the context of the problem
+    + About Lasserre's Hierarchy
     
 ## 5/05/2025
 
 - (Alain)
   * implement gen\_bipartite\_graph + solve\_maxcut\_bipartite for examples of applications of ncpolsdpa
   * implement solve\_maxcut\_naive (works for any graph; warning if the input is large)
-- (Yann)
-  * Read some papers 
-    + About the context of the problem
+- (Yann & Mathis)
+  * Discussion about Cros's theorem
+- (Thomas, Alain, Nazar, Yann, Mathis)
+  * Discuss of the social & environmental impact of the project
     + ...
+  * Meeting with Peter Brown
