@@ -51,7 +51,33 @@ def solve_maxcut_naive(g: NDArray[np.float64]) -> int:
     """Implements naive algorithm for maxcut
     Purpose is providing a check + testing relaxation efficiency"""
 
-    raise NotImplementedError
+    n = len(g)
+    if n > 20:  # a bit verbose ??
+        print("Warning : Maxcut-naive called with big arguments; do you want to continue ? ")
+        inp = input(" [y/no] ")
+        if not (inp.lower() in ["y", "", "\n"]):
+            print("Exiting maxcut-naive.")
+            return
+
+    def ith_bit(N, i):
+        # returns the i-th bit of N
+        b = (N >> i) % 2
+        return b
+
+    max_edges = 0
+    # we iterate over the 2^(n - 1) bipartitions
+    for bp in range(2**(n - 1)):
+        # i-th bit of bp indicates whether i is in the same part as (n - 1) or not
+        n_edges = 0
+        for s in range(n - 1):
+            for t in range(s + 1, n -1):
+                n_edges += g[s, t] * (ith_bit(bp, s) ^ ith_bit(bp, t))
+                # adds 1 iff s and t in different parts & {s, t} is an edge of g
+            if not ith_bit(bp, s):
+                n_edges += g[s, n - 1]
+    
+        max_edges = max(n_edges, max_edges)
+    return max_edges
 
 
 def test_maxcut(n: int = 8, M: NDArray[np.float64] | None = None) -> None:

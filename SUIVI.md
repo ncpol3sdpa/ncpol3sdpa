@@ -236,3 +236,4 @@
 
 - (Alain)
   * implement gen\_bipartite\_graph + solve\_maxcut\_bipartite for examples of applications of ncpolsdpa
+  * implement solve\_maxcut\_naive (works for any graph; warning if the input is large)
