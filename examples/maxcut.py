@@ -54,10 +54,6 @@ def solve_maxcut_naive(g: NDArray[np.float64]) -> int:
     n = len(g)
     if n > 20:  # a bit verbose ??
         print("Warning : Maxcut-naive called with big arguments; do you want to continue ? ")
-        inp = input(" [y/no] ")
-        if not (inp.lower() in ["y", "", "\n"]):
-            print("Exiting maxcut-naive.")
-            return
 
     max_edges = 0
     # we iterate over the 2^(n - 1) bipartitions
