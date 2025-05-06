@@ -239,6 +239,9 @@
 ## 3/05/2025
 - (Nazar) Travail sur les test (property based testing)
 
+## 4/05/2025
+- (Nazar) ouvrir l'issue #4
+
 ## 5/05/2025
 
 - (Alain)
@@ -259,3 +262,11 @@
   * Merge Request to merge property-based-tests branch: !17
   * Review MR de Yann sur la restructuration de code
 - (Thomas & Nazar) Discousion de comment implementer la decomposition SOS
+
+## 6/05/2025
+- (Nazar)
+  + Open some isues #5, #6
+  + Fix a bug in the test that caused them to take too long
+  + Open the sos-decomposition branch in preparation to rewrite of the the SOS part. Discuss organisation of upcoming work with Thomas
+  + Discuss failing tests in !17 with Mathis
+
