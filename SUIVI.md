@@ -258,7 +258,7 @@
   * Continue to try to implement the complex part
   * discussion about how to solve it with the other members
 - (Nazar) 
-  * Discouss slow code that was found by the tests
+  * Discuss slow code that was found by tests
   * Merge Request to merge property-based-tests branch: !17
   * Review MR de Yann sur la restructuration de code
 - (Thomas & Nazar) Discousion de comment implementer la decomposition SOS
