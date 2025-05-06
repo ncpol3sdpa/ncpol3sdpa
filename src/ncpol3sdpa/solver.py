@@ -1,11 +1,14 @@
 from typing import Tuple, List
 from numpy.typing import NDArray
+
+import warnings
 import numpy as np
 import cvxpy
 from cvxpy.expressions.expression import Expression as CVXPY_Expr
 import mosek
+
 import ncpol3sdpa.sdp_repr as sdp_repr
-import warnings
+from ncpol3sdpa import sdp_solution
 
 
 def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:
@@ -42,6 +45,16 @@ def to_sparse_symmetric(
                 rows.append(i)
                 cols.append(j)
     return val, rows, cols
+
+
+"""Interface class that other specific solver implementations inherit from"""
+
+
+class SolverInterface:
+    @classmethod
+    def solve(self, problem: sdp_repr.ProblemSDP) -> sdp_solution.Solution_SDP:  # type: ignore
+        """Solve an SDP problem"""
+        ...
 
 
 class Solver:
