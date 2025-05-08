@@ -268,5 +268,11 @@
   + Open some isues #5, #6
   + Fix a bug in the test that caused them to take too long
   + Open the sos-decomposition branch in preparation to rewrite of the the SOS part. Discuss organisation of upcoming work with Thomas
-  + Discuss failing tests in !17 with Mathis
+  + Discuss failing tests in !17 with Mathis 
+- (Mathis)
+  + Adapt the functions to handle hermitian matrices for the complex part instead of the symmetric matrices 
+
+## 08/05/2025
+- (Mathis)
+  + Change the function that generate monomials for the complex part. We no longer generate the conjugate of the variables because this create issue when we create hermitian matrices instead of symmetric matrices for the complex part
 
