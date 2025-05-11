@@ -276,3 +276,8 @@
 - (Mathis)
   + Change the function that generate monomials for the complex part. We no longer generate the conjugate of the variables because this create issue when we create hermitian matrices instead of symmetric matrices for the complex part
 
+## 11/05/2025
+- (Mathis)
+  + Finish the implementation of the complexSDP to realSDP.
+    * the tests pass but we need to do more tests on this function 
+    * The implementation of the different elements is messy, we will need to clean the code
