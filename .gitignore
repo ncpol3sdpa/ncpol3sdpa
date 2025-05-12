@@ -7,3 +7,8 @@ venv
 # **/*.dot
 # **/*.pdf
 # **/*.svg
+
+**/*.aux
+**/*.log
+**/*.out
+**/*.synctex.gz
