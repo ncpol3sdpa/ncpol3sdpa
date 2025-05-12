@@ -257,7 +257,7 @@
 - (Mathis)
   * Continue to try to implement the complex part
   * discussion about how to solve it with the other members
-- (Nazar) 
+- (Nazar)
   * Discuss slow code that was found by tests
   * Merge Request to merge property-based-tests branch: !17
   * Review MR de Yann sur la restructuration de code
@@ -271,9 +271,9 @@
   + Open some isues #5, #6
   + Fix a bug in the test that caused them to take too long
   + Open the sos-decomposition branch in preparation to rewrite of the the SOS part. Discuss organisation of upcoming work with Thomas
-  + Discuss failing tests in !17 with Mathis 
+  + Discuss failing tests in !17 with Mathis
 - (Mathis)
-  + Adapt the functions to handle hermitian matrices for the complex part instead of the symmetric matrices 
+  + Adapt the functions to handle hermitian matrices for the complex part instead of the symmetric matrices
 
 ## 08/05/2025
 - (Mathis)
@@ -282,10 +282,13 @@
 ## 11/05/2025
 - (Mathis)
   + Finish the implementation of the complexSDP to realSDP.
-    * the tests pass but we need to do more tests on this function 
+    * the tests pass but we need to do more tests on this function
     * The implementation of the different elements is messy, we will need to clean the code
-  
+
 ## 12/05/2025
 - (Yann)
   * Works on the MR 18 and projects structure
   * Works on the social and environmental impact of the project
+- (Alain)
+  * adds bibliography about other implementable examples
+  * continues the implementation of examples + tests on graph algorithms
