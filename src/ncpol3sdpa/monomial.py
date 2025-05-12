@@ -105,6 +105,7 @@ def generate_monomials(
 ) -> List[Expr]:
     """returns a list of all monomials that have degree less or equal to the relaxation_order"""
     symbols = list(symbols)
+
     if commutative:
         current_degrees = [0 for _ in symbols]
         res: List[Expr] = []

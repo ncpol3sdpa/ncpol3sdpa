@@ -39,6 +39,7 @@ def polynomial_to_matrix(
 
     print("a", algebra.monomial_to_positions.keys())
     print("b", sympy.expand(poly).as_coefficients_dict().items())
+
     for monomial, coef in sympy.expand(poly).as_coefficients_dict().items():
         if sympy.I in coef.atoms():  # type: ignore
             coef /= sympy.I
@@ -202,6 +203,7 @@ class Problem:
         problemSDP = algebra_to_SDP(algebraSDP)
         if not self.real:
             problemSDP = complexSDP_to_realSDP(problemSDP)
+
         print(problemSDP)
         # 3. Solve the SDP
         match solver:
