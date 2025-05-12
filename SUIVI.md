@@ -261,6 +261,9 @@
   * Discuss slow code that was found by tests
   * Merge Request to merge property-based-tests branch: !17
   * Review MR de Yann sur la restructuration de code
+- (Yann)
+  * Think about the [MR 18](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/18) about restructuration of the code
+  * Close the MR 18 because the restructuration of the code is not finished
 - (Thomas & Nazar) Discousion de comment implementer la decomposition SOS
 
 ## 6/05/2025
