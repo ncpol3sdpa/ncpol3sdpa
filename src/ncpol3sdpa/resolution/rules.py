@@ -4,7 +4,7 @@ from typing import Dict, List, Tuple
 
 from sympy import Expr, S, poly, rem, Mul, Pow
 
-from ncpol3sdpa.constraints import Constraint
+from .constraints import Constraint
 
 
 class Rule:

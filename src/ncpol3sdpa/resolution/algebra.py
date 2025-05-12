@@ -2,10 +2,11 @@ from __future__ import annotations
 from typing import List, Tuple, Dict, Any
 from sympy import Expr
 import sympy as sp
-from ncpol3sdpa.rules import apply_rule, apply_rule_to_polynomial
-from ncpol3sdpa.monomial import generate_monomials
-from ncpol3sdpa.constraints import Constraint
 import math
+
+from .rules import apply_rule, apply_rule_to_polynomial
+from .monomial import generate_monomials
+from .constraints import Constraint
 
 
 def degree_of_polynomial(polynomial: Expr) -> int:
