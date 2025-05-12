@@ -64,3 +64,5 @@ output = "docs/graphs/pydeps_graph.svg"
 verbose = 2
 cluster = true
 no_show = true
+# max_cluster_size=1000
+exclude = "sympy cvxpy numpy mosek"

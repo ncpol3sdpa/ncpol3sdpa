@@ -98,7 +98,7 @@ We use `pydeps` to build the dependencies graph of functions.
 
 ```bash
 uv run pydeps src/ncpol3sdpa
-````
+```
 
 ### Pre-Commit
 
