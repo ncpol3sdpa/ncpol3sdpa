@@ -1,10 +1,7 @@
 
-from .sdp_repr import (
-    ProblemSDP,
-    EqConstraint,
-    MomentMatrixSDP,
-    complexSDP_to_realSDP
-)
+from .eq_constraint import EqConstraint
+from .problem_SDP import ProblemSDP, complexSDP_to_realSDP
+from .moment_matrix_SDP import MomentMatrixSDP
 
 __all__ = [
     "ProblemSDP",
