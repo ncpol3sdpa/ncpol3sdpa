@@ -4,8 +4,8 @@ from sympy import Expr, symbols, I
 from sympy.physics.quantum import HermitianOperator
 
 from ncpol3sdpa.resolution import Constraint
-from ncpol3sdpa.problem import Problem, AvailableSolvers
-# from ncpol3sdpa.constraints import Constraint
+from ncpol3sdpa.problem import Problem
+from ncpol3sdpa.solvers import AvailableSolvers
 
 
 def test_1() -> None:
