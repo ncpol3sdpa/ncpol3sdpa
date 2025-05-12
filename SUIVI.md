@@ -318,3 +318,7 @@ ncpol3sdpa
   * continues the implementation of examples + tests on graph algorithms
 - (Thomas et Nazar)
   * implmentation of the sos, it remains the tests to make
+- (Mathis)
+  * debugging the optimization for complex polynomials
+  * add tests for the complex part
+  * create a [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/20) for the complex polynomials optimization
