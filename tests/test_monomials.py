@@ -2,7 +2,7 @@ import sympy
 from typing import List
 
 from ncpol3sdpa.resolution.monomial import list_increment, generate_monomials
-from ncpol3sdpa.resolution.algebra import degree_of_polynomial
+from ncpol3sdpa.resolution.utils import degree_of_polynomial
 
 
 def calculate_number_from_list(digits: List[int], base: int) -> int:
