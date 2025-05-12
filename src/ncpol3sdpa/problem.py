@@ -176,7 +176,7 @@ class Problem:
         # 3. Solve the SDP
         match solver:
             case AvailableSolvers.CVXPY:
-                return Solver.solve_cvxpy(problemSDP)
+                return Solver.solve_cvxpy(problemSDP).primal_objective_value
             case AvailableSolvers.MOSEK:
                 return Solver.solve_mosek(problemSDP)
             case _:

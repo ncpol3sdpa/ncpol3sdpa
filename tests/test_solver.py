@@ -9,7 +9,7 @@ def test_1x1() -> None:
     moment_matrix = MomentMatrixSDP(1, [[(0, 0)]])
     p = ProblemSDP(moment_matrix, np.array([[-1]]))
 
-    result = Solver.solve_cvxpy(p)
+    result = Solver.solve_cvxpy(p).primal_objective_value
     assert np.abs(-1 - result) <= 0.001  # result should be -1
 
 
@@ -22,5 +22,5 @@ def test_2x2() -> None:
     # maximize -2a, optimal for a = -1, and objective = 2
     # x2 -2axy + y2 >= 0, because SDP
 
-    result = Solver.solve_cvxpy(p)
+    result = Solver.solve_cvxpy(p).primal_objective_value
     assert np.abs(2 - result) <= 0.001  # result should be 2

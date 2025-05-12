@@ -59,13 +59,14 @@ class SolverInterface:
 
 class Solver:
     @classmethod
-    def solve_cvxpy(self, problem: sdp_repr.ProblemSDP) -> float:
+    def solve_cvxpy(self, problem: sdp_repr.ProblemSDP) -> sdp_solution.Solution_SDP:
         """Solve the SDP problem with cvxpy"""
         # Variables
         sdp_vars = [
-            cvxpy.Variable((size, size), PSD=True) for size in problem.variable_sizes
+            cvxpy.Variable((size, size), symmetric=True)
+            for size in problem.variable_sizes
         ]
-
+        psd_constraints: List[cvxpy.Constraint] = [x >> 0 for x in sdp_vars]
         # Moment matrix structure
         G = sdp_vars[problem.MOMENT_MATRIX_VAR_NUM]
         constraints: List[cvxpy.Constraint] = [G[0, 0] == 1]
@@ -85,11 +86,17 @@ class Solver:
         # tr(A.T x G)
         objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
 
-        prob = cvxpy.Problem(objective, constraints)
+        prob = cvxpy.Problem(objective, constraints + psd_constraints)
         # Returns the optimal value.
         prob.solve()
         assert isinstance(prob.value, float)
-        return prob.value
+
+        return sdp_solution.Solution_SDP(
+            prob.value,
+            [x.value for x in sdp_vars],  # type: ignore
+            constraints[0].dual_value,
+            [x.dual_value for x in psd_constraints],
+        )
 
     @classmethod
     def solve_mosek(self, problem: sdp_repr.ProblemSDP) -> float:
