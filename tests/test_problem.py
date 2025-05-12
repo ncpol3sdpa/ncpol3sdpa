@@ -3,9 +3,7 @@ from sympy.abc import x, y
 from sympy import Expr, symbols, I
 from sympy.physics.quantum import HermitianOperator
 
-from ncpol3sdpa.resolution import Constraint
-from ncpol3sdpa.problem import Problem
-from ncpol3sdpa.solvers import AvailableSolvers
+from ncpol3sdpa import Constraint, Problem, AvailableSolvers
 
 
 def test_1() -> None:

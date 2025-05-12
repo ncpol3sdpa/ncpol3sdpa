@@ -1,7 +1,7 @@
 import numpy as np
 # from typing import List
 
-from ncpol3sdpa.solvers import AvailableSolvers
+from ncpol3sdpa import AvailableSolvers
 from ncpol3sdpa.sdp_repr import MomentMatrixSDP, ProblemSDP
 
 
