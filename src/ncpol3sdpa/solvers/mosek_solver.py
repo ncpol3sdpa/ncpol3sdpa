@@ -6,7 +6,7 @@ import numpy as np
 import mosek
 
 from ncpol3sdpa.sdp_repr import ProblemSDP
-from ncpol3sdpa.solver import Solver
+from .solver import Solver
 
 
 def to_sparse_symmetric(

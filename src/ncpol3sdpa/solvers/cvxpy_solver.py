@@ -7,7 +7,7 @@ import cvxpy
 from cvxpy.expressions.expression import Expression as CVXPY_Expr
 
 from ncpol3sdpa.sdp_repr import ProblemSDP
-from ncpol3sdpa.solver import Solver
+from .solver import Solver
 
 
 def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:

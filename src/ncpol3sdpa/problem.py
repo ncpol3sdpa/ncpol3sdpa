@@ -6,8 +6,7 @@ import sympy
 import numpy as np
 from numpy.typing import NDArray
 
-from ncpol3sdpa.solver import Solver
-from ncpol3sdpa.solvers import CvxpySolver
+from ncpol3sdpa.solvers import AvailableSolvers
 from ncpol3sdpa.resolution import (
     Rule,
     Constraint,
@@ -159,7 +158,7 @@ class Problem:
     def solve(
         self,
         relaxation_order: int = 1,
-        solver: Solver = CvxpySolver(),
+        solver: AvailableSolvers = AvailableSolvers.CVXPY,
     ) -> float:
         """Solve the polynomial optimization problem using SDP relaxation.
 
@@ -208,5 +207,6 @@ class Problem:
             problemSDP = complexSDP_to_realSDP(problemSDP)
 
         print(problemSDP)
+
         # 3. Solve the SDP
         return solver.solve(problemSDP)
