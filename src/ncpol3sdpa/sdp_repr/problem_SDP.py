@@ -1,45 +1,13 @@
-import numpy as np
-from typing import Tuple, List
+from typing import List, Tuple
+
 from numpy.typing import NDArray
+import numpy as np
 
-# class ConstraintType(Enum):
-#     EqualZero = 1
-
-# TODO: switch the matrices to a sparse format, like scipy.sparse.coo_array
-# https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_array.html#scipy.sparse.coo_array
+from .moment_matrix_SDP import MomentMatrixSDP
+from .eq_constraint import EqConstraint
 
 # for validation
 EPSILON = 0.001
-
-
-class EqConstraint:
-    def __init__(
-        self, from_l: list[Tuple[int, NDArray[np.float64] | NDArray[np.complex64]]]
-    ) -> None:
-        """Represents a list of constraints
-
-        A tuple (k, A) represents the constraint :
-        sum_i < A[i] | G[k,i] > = 0
-        """
-
-        self.constraints = from_l
-
-
-class MomentMatrixSDP:
-    """This is an represents size x size symmetric positive
-    matrix variable. The coefficients in each equivalence class are considered to be equal"""
-
-    def __init__(self, size: int, eq_classes: List[List[Tuple[int, int]]]):
-        self.size = size
-        self.eq_classes = eq_classes
-
-        # Validation
-        once = set()
-        for eq_class in eq_classes:
-            for i, j in eq_class:
-                assert 0 <= i < size
-                assert (i, j) not in once
-                once.add((i, j))
 
 
 # high level sdp representation
