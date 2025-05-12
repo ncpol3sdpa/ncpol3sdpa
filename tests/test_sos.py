@@ -47,4 +47,3 @@ def test_dual_constraints_cvxpy_2() -> None:
 if __name__ == "__main__":
     test_dual_constraints_cvxpy()
     test_dual_constraints_cvxpy_2()
-"""

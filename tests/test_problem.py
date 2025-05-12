@@ -98,6 +98,21 @@ def test_2_nc() -> None:
     assert abs(p.solve(2) - 1) <= 0.1
 
 
+def test_3_nc() -> None:
+    a: HermitianOperator = HermitianOperator("a")  # type: ignore
+    b: HermitianOperator = HermitianOperator("b")  # type: ignore
+
+    obj = a**2 - 0.5 * a * b - 0.5 * b * a - a
+    p = Problem(obj, commutative=False)
+    c1 = Constraint.InequalityConstraint(a - a**2)
+    c2 = Constraint.InequalityConstraint(b - b**2)
+    c3 = Constraint.EqualityConstraint(a * b - b * a)
+    p.add_constraint(c1)
+    p.add_constraint(c2)
+    p.add_constraint(c3)
+    assert abs(p.solve(3)) <= 0.1
+
+
 def test_complex_1() -> None:
     z = symbols("z", real=False)
     obj = z + z.conjugate()
@@ -129,12 +144,3 @@ def test_complex_2() -> None:
     assert abs(p.solve(3) - 0.7071) <= 0.1
 
 
-"""
-if __name__ == "__main__":
-    test_1()
-    test_2()
-    test_3()
-    test_4()
-    test_1_sub()
-    print("Everything passed")
-"""
