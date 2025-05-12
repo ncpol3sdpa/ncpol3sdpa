@@ -6,9 +6,23 @@ from sympy import Expr, S, poly, rem, Mul, Pow
 from .constraints import Constraint
 
 
+def list_of_monomial(monomial: Expr) -> List[Expr]:
+    """return a list of the factor a a monomial non commutative"""
+    if isinstance(monomial, int):
+        return [monomial]
+    res = []
+    for factor in monomial.as_ordered_factors():
+        if isinstance(factor, Pow):
+            base, exp = factor.as_base_exp()  # type: ignore
+            res.extend([base] * exp)
+        else:
+            res.append(factor)
+    return res
+
+
 class Rule:
     @classmethod
-    def _of_constraint(cls, constraint: Constraint) -> Tuple[Expr, Expr]:
+    def of_single_constraint(cls, constraint: Constraint) -> Tuple[Expr, Expr]:
         """Private method creating a Tuple of equivalence"""
 
         # express polynomial as a list of monomial
@@ -37,56 +51,46 @@ class Rule:
     def of_constraints(cls, constraints: List[Constraint]) -> Dict[Expr, Expr]:
         """return the rules that represent a list of constraint
         exemple : of_constraints([x²-x-1=0, x*y²+3=0]) = {x²->x+1, x*y²->-3}"""
-        return dict([Rule._of_constraint(constraint) for constraint in constraints])
+        return dict(
+            [Rule.of_single_constraint(constraint) for constraint in constraints]
+        )
 
-
-def list_of_monomial(monomial: Expr) -> List[Expr]:
-    """return a list of the factor a a monomial non commutative"""
-    if isinstance(monomial, int):
-        return [monomial]
-    res = []
-    for factor in monomial.as_ordered_factors():
-        if isinstance(factor, Pow):
-            base, exp = factor.as_base_exp()  # type: ignore
-            res.extend([base] * exp)
-        else:
-            res.append(factor)
-    return res
-
-
-def apply_rule(
-    monomial: Expr, rules: Dict[Expr, Expr], commutative: bool = True
-) -> Expr:
-    """Apply a rule to a monomial"""
-    if commutative:
-        for key in rules.keys():
-            if rem(monomial, key) == 0:
-                return apply_rule(monomial * rules[key] / key, rules, commutative)
-        return monomial
-    else:
-        to_change_monomial = list_of_monomial(monomial)
-        for key in rules.keys():
-            rule_monomial = list_of_monomial(key)
-            for i in range(len(to_change_monomial) - len(rule_monomial) + 1):
-                if to_change_monomial[i : i + len(rule_monomial)] == rule_monomial:
-                    return apply_rule(
-                        Mul(*(to_change_monomial[: max(0, i)]))
-                        * rules[key]
-                        * Mul(*to_change_monomial[(i + len(rule_monomial)) :]),
-                        rules,
-                        commutative,
+    @classmethod
+    def apply_to_monomial(
+        cls, monomial: Expr, rules: Dict[Expr, Expr], commutative: bool = True
+    ) -> Expr:
+        """Apply a rule to a monomial"""
+        if commutative:
+            for key in rules.keys():
+                if rem(monomial, key) == 0:
+                    return Rule.apply_to_monomial(
+                        monomial * rules[key] / key, rules, commutative
                     )
-        return monomial
+            return monomial
+        else:
+            to_change_monomial = list_of_monomial(monomial)
+            for key in rules.keys():
+                rule_monomial = list_of_monomial(key)
+                for i in range(len(to_change_monomial) - len(rule_monomial) + 1):
+                    if to_change_monomial[i : i + len(rule_monomial)] == rule_monomial:
+                        return Rule.apply_to_monomial(
+                            Mul(*(to_change_monomial[: max(0, i)]))
+                            * rules[key]
+                            * Mul(*to_change_monomial[(i + len(rule_monomial)) :]),
+                            rules,
+                            commutative,
+                        )
+            return monomial
 
+    @classmethod
+    def apply_to_polynomial(
+        cls, polynomial: Expr, rules: Dict[Expr, Expr], commutative: bool = True
+    ) -> Expr:
+        """Apply a rule to a polynomial"""
 
-def apply_rule_to_polynomial(
-    polynomial: Expr, rules: Dict[Expr, Expr], commutative: bool = True
-) -> Expr:
-    """Apply a rule to a polynomial"""
+        poly_dict: Dict[Expr, float] = polynomial.as_coefficients_dict()
 
-    poly_dict: Dict[Expr, float] = polynomial.as_coefficients_dict()
-
-    res: Expr = S.Zero
-    for monomial, coef in poly_dict.items():
-        res += coef * apply_rule(monomial, rules, commutative)
-    return res
+        res: Expr = S.Zero
+        for monomial, coef in poly_dict.items():
+            res += coef * Rule.apply_to_monomial(monomial, rules, commutative)
+        return res

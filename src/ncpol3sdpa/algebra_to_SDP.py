@@ -4,7 +4,7 @@ import sympy
 import numpy as np
 from numpy.typing import NDArray
 
-from ncpol3sdpa.resolution import AlgebraSDP, apply_rule_to_polynomial
+from ncpol3sdpa.resolution import AlgebraSDP, Rule
 from ncpol3sdpa.sdp_repr import ProblemSDP, EqConstraint, MomentMatrixSDP
 
 
@@ -60,7 +60,7 @@ def algebra_to_SDP_add_equality_constraint(
 ) -> None:
     implied_constraints = algebra.expand_eq_constraint(eq_constraint)
     for implied_constraint in implied_constraints:
-        implied_constraint = apply_rule_to_polynomial(
+        implied_constraint = Rule.apply_to_polynomial(
             implied_constraint, algebra.substitution_rules
         )
 

@@ -4,7 +4,7 @@ from typing import List, Tuple, Dict
 import sympy as sp
 import math
 
-from .rules import apply_rule, apply_rule_to_polynomial
+from .rules import Rule
 from .monomial import generate_monomials
 from .constraints import Constraint
 from .utils import (
@@ -34,7 +34,7 @@ class AlgebraSDP:
             generate_monomials(needed_variables, relaxation_order, commutative, real),
             substitution_rules,
         )
-        self.objective: sp.Expr = apply_rule_to_polynomial(
+        self.objective: sp.Expr = Rule.apply_to_polynomial(
             sp.expand(objective),
             substitution_rules,
         )
@@ -127,7 +127,9 @@ class AlgebraSDP:
         # Map and filter are lazy
         # so intermediate lists are not created
         ruled_monomials: map[sp.Expr] = map(
-            lambda monomial: apply_rule(monomial * constraint, self.substitution_rules),
+            lambda monomial: Rule.apply_to_monomial(
+                monomial * constraint, self.substitution_rules
+            ),
             self.monomials,
         )
         ruled_filtered_monomials: filter[sp.Expr] = filter(

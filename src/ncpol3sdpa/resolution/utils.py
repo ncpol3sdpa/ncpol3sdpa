@@ -4,7 +4,7 @@ from typing import List, Dict, Any
 from sympy import Expr
 import sympy as sp
 
-from .rules import apply_rule, apply_rule_to_polynomial
+from .rules import Rule
 
 
 def degree_of_polynomial(polynomial: Expr) -> int:
@@ -39,7 +39,7 @@ def create_moment_matrix(
     matrix_size = len(monomials)
     return [
         [
-            apply_rule(
+            Rule.apply_to_monomial(
                 (
                     monomials[j]
                     if (commutative and real)
@@ -71,7 +71,7 @@ def create_constraint_matrix(
     n = len(monomials)
     return [
         [
-            apply_rule_to_polynomial(
+            Rule.apply_to_polynomial(
                 sp.expand(
                     (
                         monomials[j]
