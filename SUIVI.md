@@ -289,9 +289,32 @@
 - (Yann)
   * Works on the MR 18 and projects structure
   * Works on the social and environmental impact of the project
+  * New architecture :
+```
+ncpol3sdpa
+├─ __init__.py
+├─ problem.py
+├─ sos.py
+├─ sdp_repr               The structure of a problem
+│  ├─ __init__.py         ProblemSDP, EqConstraint, MomentMatrixSDP
+│  ├─ MomentMatrixSDP
+│  ├─ ProblemSDP
+│  └─ EqConstraint
+├─ resolution             The resolution of a problem
+│  ├─ __init__.py         Rule, apply_rule_to_polynomial, Constraint
+│  ├─ rules.py
+│  ├─ apply_rules.py
+│  ├─ constraints.py
+│  ├─ monomial.py
+│  └─ algebra.py          AlgebraSDP,
+├─ solvers                Implementation of the solvers
+│  ├─ __init__.py
+│  ├─ cvxpy_solver.py
+│  └─ mosek_solver.py
+└─ solver.py              Solver
+```
 - (Alain)
   * adds bibliography about other implementable examples
   * continues the implementation of examples + tests on graph algorithms
 - (Thomas et Nazar)
   * implmentation of the sos, it remains the tests to make
-  
