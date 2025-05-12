@@ -326,3 +326,4 @@ ncpol3sdpa
 ## 14/05/2025
 - (Yann)
   * Finish the [MR 22](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/22) about the project structure
+![The new structure of the project](docs/graphs/pydeps_graph4.svg)
