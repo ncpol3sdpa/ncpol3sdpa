@@ -10,10 +10,15 @@ from enum import Enum
 # from ncpol3sdpa.rules import Rule, apply_rule_to_polynomial
 from ncpol3sdpa.resolution import Rule, apply_rule_to_polynomial
 from ncpol3sdpa.solver import Solver
-from ncpol3sdpa.resolution import Constraint, AlgebraSDP
+from ncpol3sdpa.resolution import Constraint, AlgebraSDP, generate_needed_symbols
 
 # from ncpol3sdpa.constraints import Constraint
-from ncpol3sdpa.sdp_repr import ProblemSDP, complexSDP_to_realSDP
+from ncpol3sdpa.sdp_repr import (
+    ProblemSDP,
+    EqConstraint,
+    complexSDP_to_realSDP,
+    MomentMatrixSDP,
+)
 # import ncpol3sdpa.sdp_repr as sdp_repr
 # import ncpol3sdpa.algebra as algebra
 
@@ -24,7 +29,7 @@ class AvailableSolvers(Enum):
 
 
 def polynomial_to_matrix(
-    algebra: algebra.AlgebraSDP, poly: sympy.Expr
+    algebra: AlgebraSDP, poly: sympy.Expr
 ) -> NDArray[np.float64] | NDArray[np.complex64]:
     """Returns a symmetric A matrix such that poly = Tr(A.T @ G) where G is the moment matrix. In other
     words express poly as a linear combination of the coefficients of G.
@@ -71,7 +76,7 @@ def polynomial_to_matrix(
 
 
 def algebra_to_SDP_add_equality_constraint(
-    problem: ProblemSDP, algebra: algebra.AlgebraSDP, eq_constraint: sympy.Expr
+    problem: ProblemSDP, algebra: AlgebraSDP, eq_constraint: sympy.Expr
 ) -> None:
     implied_constraints = algebra.expand_eq_constraint(eq_constraint)
     for implied_constraint in implied_constraints:
@@ -82,13 +87,13 @@ def algebra_to_SDP_add_equality_constraint(
         # constraint matrix
         a_0 = polynomial_to_matrix(algebra, implied_constraint)
 
-        constraint = sdp_repr.EqConstraint([(problem.MOMENT_MATRIX_VAR_NUM, a_0)])
+        constraint = EqConstraint([(problem.MOMENT_MATRIX_VAR_NUM, a_0)])
         problem.constraints.append(constraint)
 
 
 def algebra_to_SDP_add_inequality_constraint(
     problem: ProblemSDP,
-    algebra: algebra.AlgebraSDP,
+    algebra: AlgebraSDP,
     constraint_moment_matrix: List[List[sympy.Expr]],
 ) -> None:
     """Adds the translation of an inequality constraint"""
@@ -104,13 +109,13 @@ def algebra_to_SDP_add_inequality_constraint(
             a_k[j][i] -= 0.5
 
             a_0 = polynomial_to_matrix(algebra, poly)
-            constraint = sdp_repr.EqConstraint(
+            constraint = EqConstraint(
                 [(problem.MOMENT_MATRIX_VAR_NUM, a_0), (new_var, a_k)]
             )
             problem.constraints.append(constraint)
 
 
-def algebra_to_SDP(algebra: algebra.AlgebraSDP) -> ProblemSDP:
+def algebra_to_SDP(algebra: AlgebraSDP) -> ProblemSDP:
     """Convert the algebraic representation to the numeric SDP representation"""
 
     moment_matrix_size = len(algebra.moment_matrix)
@@ -123,9 +128,9 @@ def algebra_to_SDP(algebra: algebra.AlgebraSDP) -> ProblemSDP:
         algebra.monomial_to_positions.values()
     )
 
-    moment_matrix_repr = sdp_repr.MomentMatrixSDP(moment_matrix_size, equiv_classes)
+    moment_matrix_repr = MomentMatrixSDP(moment_matrix_size, equiv_classes)
 
-    result_SDP = sdp_repr.ProblemSDP(moment_matrix_repr, objective)
+    result_SDP = ProblemSDP(moment_matrix_repr, objective)
 
     # Translate Equality constraints
 
@@ -191,8 +196,8 @@ class Problem:
         all_constraint_polynomials = [c.polynomial for c in self.constraints] + [
             self.objective
         ]
-        needed_symbols = algebra.generate_needed_symbols(all_constraint_polynomials)
-        algebraSDP = algebra.AlgebraSDP(
+        needed_symbols = generate_needed_symbols(all_constraint_polynomials)
+        algebraSDP = AlgebraSDP(
             needed_symbols,
             self.objective,
             relaxation_order,
