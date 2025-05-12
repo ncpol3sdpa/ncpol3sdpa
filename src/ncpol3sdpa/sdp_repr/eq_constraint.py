@@ -1,5 +1,6 @@
-import numpy as np
 from typing import Tuple, List
+
+import numpy as np
 from numpy.typing import NDArray
 
 # class ConstraintType(Enum):

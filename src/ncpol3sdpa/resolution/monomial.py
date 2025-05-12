@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import List, Dict, Set, Any, Iterable
+
 from sympy import Expr, Symbol, total_degree, sympify, S
 
 

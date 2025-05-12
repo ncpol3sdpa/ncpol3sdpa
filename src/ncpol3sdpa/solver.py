@@ -1,11 +1,13 @@
 from typing import Tuple, List
+import warnings
+
 from numpy.typing import NDArray
 import numpy as np
 import cvxpy
 from cvxpy.expressions.expression import Expression as CVXPY_Expr
 import mosek
-import ncpol3sdpa.sdp_repr as sdp_repr
-import warnings
+
+from ncpol3sdpa.sdp_repr import ProblemSDP
 
 
 def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:
@@ -46,7 +48,7 @@ def to_sparse_symmetric(
 
 class Solver:
     @classmethod
-    def solve_cvxpy(self, problem: sdp_repr.ProblemSDP) -> float:
+    def solve_cvxpy(self, problem: ProblemSDP) -> float:
         """Solve the SDP problem with cvxpy"""
         # Variables
         sdp_vars = [
@@ -79,7 +81,7 @@ class Solver:
         return prob.value
 
     @classmethod
-    def solve_mosek(self, problem: sdp_repr.ProblemSDP) -> float:
+    def solve_mosek(self, problem: ProblemSDP) -> float:
         """Solve the SDP problem with mosek"""
 
         # Convert constraints inside the moment matrix to primal form constraints

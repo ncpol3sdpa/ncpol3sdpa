@@ -1,26 +1,26 @@
 from __future__ import annotations
+from typing import List, Tuple
+from enum import Enum
+
 from sympy import Expr
 import sympy
 import numpy as np
-from typing import List, Tuple
 from numpy.typing import NDArray
-from enum import Enum
 
-
-# from ncpol3sdpa.rules import Rule, apply_rule_to_polynomial
-from ncpol3sdpa.resolution import Rule, apply_rule_to_polynomial
 from ncpol3sdpa.solver import Solver
-from ncpol3sdpa.resolution import Constraint, AlgebraSDP, generate_needed_symbols
-
-# from ncpol3sdpa.constraints import Constraint
+from ncpol3sdpa.resolution import (
+    Rule,
+    Constraint,
+    AlgebraSDP,
+    apply_rule_to_polynomial,
+    generate_needed_symbols,
+)
 from ncpol3sdpa.sdp_repr import (
     ProblemSDP,
     EqConstraint,
-    complexSDP_to_realSDP,
     MomentMatrixSDP,
+    complexSDP_to_realSDP,
 )
-# import ncpol3sdpa.sdp_repr as sdp_repr
-# import ncpol3sdpa.algebra as algebra
 
 
 class AvailableSolvers(Enum):
