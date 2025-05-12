@@ -322,3 +322,7 @@ ncpol3sdpa
   * debugging the optimization for complex polynomials
   * add tests for the complex part
   * create a [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/20) for the complex polynomials optimization
+
+## 14/05/2025
+- (Yann)
+  * Finish the [MR 22](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/22) about the project structure
