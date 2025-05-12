@@ -1,4 +1,5 @@
 from typing import Dict, List
+
 from sympy import Expr, Symbol, symbols
 
 

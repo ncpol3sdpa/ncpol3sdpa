@@ -1,12 +1,10 @@
-# from sympy.polys import monomials
 from sympy import Expr, Symbol, symbols
 from sympy.core.numbers import One as SymOne
 
-from ncpol3sdpa.constraints import Constraint
-from ncpol3sdpa.rules import Rule
-from ncpol3sdpa.algebra import (
-    needed_monomials,
-)
+
+from ncpol3sdpa import Constraint
+from ncpol3sdpa.resolution import Rule
+from ncpol3sdpa.resolution.utils import needed_monomials
 
 from typing import List
 

@@ -4,7 +4,9 @@ from sympy import Expr
 
 from ncpol3sdpa.problem import Problem
 from ncpol3sdpa.funs import generate_n_variables, ith_bit
-from ncpol3sdpa.constraints import Constraint
+
+# from ncpol3sdpa.constraints import Constraint
+from ncpol3sdpa.resolution import Constraint
 
 
 # TODO :

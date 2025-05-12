@@ -1,7 +1,8 @@
 import sympy
-from ncpol3sdpa import monomial
 from typing import List
-from ncpol3sdpa.algebra import degree_of_polynomial
+
+from ncpol3sdpa.resolution.monomial import list_increment, generate_monomials
+from ncpol3sdpa.resolution.utils import degree_of_polynomial
 
 
 def calculate_number_from_list(digits: List[int], base: int) -> int:
@@ -21,7 +22,7 @@ def list_increment_on_test_inputs(nums: List[int], k: int) -> None:
         assert 0 <= digit and digit < k
 
     nums_cp = nums.copy()
-    overflow = monomial.list_increment(nums_cp, k)
+    overflow = list_increment(nums_cp, k)
     if nums == [k - 1 for _ in nums]:
         assert overflow
     else:
@@ -44,26 +45,26 @@ def test_generate_monomials() -> None:
     y: sympy.Symbol = sympy.symbols("y")
     z: sympy.Symbol = sympy.symbols("z")
 
-    assert [1] == monomial.generate_monomials([x], 0)
-    assert [1] == monomial.generate_monomials([x, y], 0)
-    assert [1] == monomial.generate_monomials([x, y, z], 0)
+    assert [1] == generate_monomials([x], 0)
+    assert [1] == generate_monomials([x, y], 0)
+    assert [1] == generate_monomials([x, y, z], 0)
 
-    assert [1, x, x**2] == monomial.generate_monomials([x], 2)
+    assert [1, x, x**2] == generate_monomials([x], 2)
 
-    xy1 = monomial.generate_monomials([x, y], 1)
+    xy1 = generate_monomials([x, y], 1)
     assert len(xy1) == 3
     assert 1 in xy1
     assert x in xy1
     assert y in xy1
 
-    xyz1 = monomial.generate_monomials([x, y, z], 1)
+    xyz1 = generate_monomials([x, y, z], 1)
     assert len(xyz1) == 4
     assert 1 in xyz1
     assert x in xyz1
     assert y in xyz1
     assert z in xyz1
 
-    xy2 = monomial.generate_monomials([x, y], 2)
+    xy2 = generate_monomials([x, y], 2)
     assert len(xy2) == 6
     assert 1 in xy2
     assert x in xy2
@@ -75,7 +76,7 @@ def test_generate_monomials() -> None:
 
 def test_generate_monomials_non_commutative() -> None:
     x, y, z = sympy.symbols("x y z", commutative=False)
-    assert (monomial.generate_monomials([x, y], 2, False)) == [
+    assert (generate_monomials([x, y], 2, False)) == [
         1,
         x,
         y,
@@ -84,7 +85,7 @@ def test_generate_monomials_non_commutative() -> None:
         y * x,
         y**2,
     ]
-    assert monomial.generate_monomials([x, y, z], 2, False) == [
+    assert generate_monomials([x, y, z], 2, False) == [
         1,
         x,
         y,
@@ -99,7 +100,7 @@ def test_generate_monomials_non_commutative() -> None:
         z * y,
         z**2,
     ]
-    assert (monomial.generate_monomials([sympy.S.One, x, y], 3, False)) == [
+    assert (generate_monomials([sympy.S.One, x, y], 3, False)) == [
         1,
         x,
         y,
@@ -120,8 +121,8 @@ def test_generate_monomials_non_commutative() -> None:
 
 def test_generate_monomials_complex() -> None:
     z = sympy.symbols("z", real=False)
-    assert monomial.generate_monomials([z], 1, False, False) == [1, z]
-    assert set(monomial.generate_monomials([z], 2, False, False)) == set([1, z, z**2])
+    assert generate_monomials([z], 1, False, False) == [1, z]
+    assert set(generate_monomials([z], 2, False, False)) == set([1, z, z**2])
 
 
 def test_degree() -> None:

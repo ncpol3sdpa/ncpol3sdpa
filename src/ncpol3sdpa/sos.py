@@ -1,9 +1,11 @@
 from typing import List, Any
+
 from numpy.typing import NDArray
 import numpy as np
 import cvxpy
 from cvxpy.expressions.expression import Expression as CVXPY_Expr
-import ncpol3sdpa.sdp_repr as sdp_repr
+
+from ncpol3sdpa.sdp_repr import ProblemSDP
 
 
 def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:
@@ -16,7 +18,7 @@ class Sos:
     """Class to represent the SOS problem"""
 
     @classmethod
-    def dual_constraints_cvxpy(self, problem: sdp_repr.ProblemSDP) -> List[Any]:
+    def dual_constraints_cvxpy(self, problem: ProblemSDP) -> List[Any]:
         """Solve the SDP problem with cvxpy"""
 
         sdp_vars: List[cvxpy.Variable] = [
@@ -54,7 +56,7 @@ class Sos:
         return dual_problem
 
 
-# def from_dual_constraints_to_sos(self, problem: sdp_repr.ProblemSDP):
+# def from_dual_constraints_to_sos(self, problem: ProblemSDP):
 
 """
 

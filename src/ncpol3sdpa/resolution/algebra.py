@@ -1,106 +1,18 @@
 from __future__ import annotations
-from typing import List, Tuple, Dict, Any
-from sympy import Expr
+from typing import List, Tuple, Dict
+
 import sympy as sp
-from ncpol3sdpa.rules import apply_rule, apply_rule_to_polynomial
-from ncpol3sdpa.monomial import generate_monomials
-from ncpol3sdpa.constraints import Constraint
 import math
 
-
-def degree_of_polynomial(polynomial: Expr) -> int:
-    polynomial = polynomial.expand()
-    terms = polynomial.as_ordered_terms()
-    res = 0
-    for term in terms:
-        factors = term.as_ordered_factors()
-        deg = 0
-        for factor in factors:
-            if not factor.is_number:
-                _, exp = factor.as_base_exp()
-                deg += exp
-        res = max(deg, res)
-    return res
-
-
-def needed_monomials(monomials: List[Expr], rules: Dict[Expr, Expr]) -> List[Expr]:
-    """Filter the monomials according to the rules"""
-    # ex: needed_monomials([x, x**2], {x : ...}) = [x**2]
-    return [monomial for monomial in monomials if monomial not in rules.keys()]
-
-
-def create_moment_matrix(
-    monomials: List[sp.Expr],
-    substitution_rules: Dict[sp.Expr, Any],
-    commutative: bool = True,
-    real: bool = True,
-) -> List[List[sp.Expr]]:
-    """Create the moment matrix of the monomials"""
-
-    matrix_size = len(monomials)
-    return [
-        [
-            apply_rule(
-                (
-                    monomials[j]
-                    if (commutative and real)
-                    else (
-                        monomials[j].conjugate() if not real else monomials[j].adjoint()  # type: ignore
-                    )
-                )
-                * monomials[i],
-                substitution_rules,
-                commutative,
-            )
-            for j in range(i + 1)
-        ]
-        for i in range(matrix_size)
-    ]
-
-
-def create_constraint_matrix(
-    monomials: List[sp.Expr],
-    constraint_polynomial: sp.Expr,
-    rules: Dict[sp.Expr, Any],
-    commutative: bool = True,
-    real: bool = True,
-) -> List[List[sp.Expr]]:
-    """Create the matrix of constraints
-    The constraints are of the form `constraint_polynomial >= 0`
-    """
-
-    n = len(monomials)
-    return [
-        [
-            apply_rule_to_polynomial(
-                sp.expand(
-                    (
-                        monomials[j]
-                        if commutative and real
-                        else (
-                            monomials[j].conjugate()  # type: ignore
-                            if not real
-                            else monomials[j].adjoint()  # type: ignore
-                        )
-                    )
-                    * constraint_polynomial
-                    * monomials[i]
-                ),
-                rules,
-                commutative,
-            )
-            for j in range(i + 1)
-        ]
-        for i in range(n)
-    ]
-
-
-def generate_needed_symbols(polynomials: List[sp.Expr]) -> List[sp.Symbol]:
-    total: sp.Expr = sp.S.One
-    for p in polynomials:
-        total += p
-
-    return list(total.free_symbols)  # type: ignore
+from .rules import Rule
+from .monomial import generate_monomials
+from .constraints import Constraint
+from .utils import (
+    needed_monomials,
+    degree_of_polynomial,
+    create_constraint_matrix,
+    create_moment_matrix,
+)
 
 
 class AlgebraSDP:
@@ -122,7 +34,7 @@ class AlgebraSDP:
             generate_monomials(needed_variables, relaxation_order, commutative, real),
             substitution_rules,
         )
-        self.objective: sp.Expr = apply_rule_to_polynomial(
+        self.objective: sp.Expr = Rule.apply_to_polynomial(
             sp.expand(objective),
             substitution_rules,
         )
@@ -215,7 +127,9 @@ class AlgebraSDP:
         # Map and filter are lazy
         # so intermediate lists are not created
         ruled_monomials: map[sp.Expr] = map(
-            lambda monomial: apply_rule(monomial * constraint, self.substitution_rules),
+            lambda monomial: Rule.apply_to_monomial(
+                monomial * constraint, self.substitution_rules
+            ),
             self.monomials,
         )
         ruled_filtered_monomials: filter[sp.Expr] = filter(

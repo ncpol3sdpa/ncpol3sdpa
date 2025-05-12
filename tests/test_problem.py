@@ -1,9 +1,9 @@
 # from numpy import format_float_scientific
-from ncpol3sdpa.problem import Problem, AvailableSolvers
-from ncpol3sdpa.constraints import Constraint
 from sympy.abc import x, y
 from sympy import Expr, symbols, I
 from sympy.physics.quantum import HermitianOperator
+
+from ncpol3sdpa import Constraint, Problem, AvailableSolvers
 
 
 def test_1() -> None:
@@ -142,5 +142,3 @@ def test_complex_2() -> None:
     p.add_constraint(c3)
     p.add_constraint(c4)
     assert abs(p.solve(3) - 0.7071) <= 0.1
-
-
