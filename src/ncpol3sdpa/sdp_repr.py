@@ -13,13 +13,15 @@ EPSILON = 0.001
 
 
 class EqConstraint:
-    """Represents a list of constraints
+    def __init__(
+        self, from_l: list[Tuple[int, NDArray[np.float64] | NDArray[np.complex64]]]
+    ) -> None:
+        """Represents a list of constraints
 
-    A tuple (k, A) represents the constraint :
-    sum_i < A[i] | G[k,i] > = 0
-    """
+        A tuple (k, A) represents the constraint :
+        sum_i < A[i] | G[k,i] > = 0
+        """
 
-    def __init__(self, from_l: List[Tuple[int, NDArray[np.float64]]]) -> None:
         self.constraints = from_l
 
 
@@ -36,7 +38,6 @@ class MomentMatrixSDP:
         for eq_class in eq_classes:
             for i, j in eq_class:
                 assert 0 <= i < size
-                assert 0 <= j <= i
                 assert (i, j) not in once
                 once.add((i, j))
 
@@ -46,7 +47,9 @@ class ProblemSDP:
     """An efficient representation of an SDP that is easily translatable to SDP solvers."""
 
     def __init__(
-        self, moment_matrix: MomentMatrixSDP, objective: NDArray[np.float64]
+        self,
+        moment_matrix: MomentMatrixSDP,
+        objective: NDArray[np.float64] | NDArray[np.complex64],
     ) -> None:
         # The moment matrix should always be in position 0
         self.MOMENT_MATRIX_VAR_NUM = 0
@@ -55,7 +58,7 @@ class ProblemSDP:
         # The number of elements in this list is the number of variables.
         # Each variable is a positive semi-definite matrix
         self.variable_sizes = [moment_matrix.size]
-        self.objective: NDArray[np.float64] = objective
+        self.objective: NDArray[np.complex64] | NDArray[np.float64] = objective
         self.constraints: List[EqConstraint] = []
         assert objective.shape == (moment_matrix.size, moment_matrix.size)
 
@@ -151,12 +154,83 @@ class ProblemSDP:
         return res
 
     def __str__(self) -> str:
-        return (
+        s = (
             "SDP translation:\n"
             + f".objective: \n {self.objective}\n"
             + f".variable_sizes: {self.variable_sizes}\n"
             + "Moment matrix: \n"
             + f"    .moment_matrix.size: \n {self.moment_matrix.size}\n"
             + f"    .moment_matrix.eq_classes: \n {self.moment_matrix.eq_classes}\n"
-            + f".constraints: {[c.constraints for c in self.constraints]}"
+            + ".constraints:\n"
         )
+
+        for c in self.constraints:
+            for c2 in c.constraints:
+                s = s + str(c2[0]) + "\n" + str(c2[1]) + "\n"
+            s = s + "\n"
+
+        return s
+
+
+def complexMatrix_to_realMatrix(
+    X: NDArray[np.complex64] | NDArray[np.float64],
+) -> NDArray[np.float64]:
+    if X.shape[0] != X.shape[1]:
+        raise ValueError("The matrix must be square")
+
+    X_re = np.divide(np.real(X), 2)
+    X_im = np.divide(np.imag(X), 2)
+
+    upper = np.hstack([X_re, -X_im])
+    lower = np.hstack([X_im, X_re])
+
+    return np.vstack([upper, lower])
+
+
+def complexSDP_to_realSDP(sdp: ProblemSDP) -> ProblemSDP:
+    # creation of the real moment matrix [[Hr, -Hi], [Hi, Hr]]
+    real_eq_classes = []
+    size = sdp.moment_matrix.size
+    for eq_class in sdp.moment_matrix.eq_classes:
+        new_eq_class00 = []
+        new_eq_class01 = []
+        new_eq_class10 = []
+        for i, j in eq_class:
+            new_eq_class00.append((i, j))
+            new_eq_class00.append((i + size, j + size))
+            new_eq_class01.append((i, j + size))
+            new_eq_class10.append((i + size, j))
+        real_eq_classes.append(new_eq_class00)
+        real_eq_classes.append(new_eq_class01)
+        real_eq_classes.append(new_eq_class10)
+    real_moment_matrix = MomentMatrixSDP(2 * size, real_eq_classes)
+
+    # creation of the real objective
+    objective = complexMatrix_to_realMatrix(sdp.objective)
+
+    # creation of the real SDP
+    real_sdp = ProblemSDP(real_moment_matrix, objective)
+    real_sdp.variable_sizes = sdp.variable_sizes
+    real_sdp.variable_sizes[0] = 2 * size
+
+    # adding constraints
+    for constraint in sdp.constraints:
+        c = constraint.constraints
+
+        # equality constraint
+        if len(c) == 1:
+            matrix_constraint = complexMatrix_to_realMatrix(c[0][1])
+            real_sdp.constraints.append(
+                EqConstraint([(real_sdp.MOMENT_MATRIX_VAR_NUM, matrix_constraint)])
+            )
+
+        # inequality constraint
+        elif len(c) == 2:
+            matrix_constraint = complexMatrix_to_realMatrix(c[0][1])
+            real_sdp.constraints.append(
+                EqConstraint(
+                    [(real_sdp.MOMENT_MATRIX_VAR_NUM, matrix_constraint), c[1]]
+                )
+            )
+
+    return real_sdp

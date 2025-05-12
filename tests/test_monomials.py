@@ -118,6 +118,12 @@ def test_generate_monomials_non_commutative() -> None:
     ]
 
 
+def test_generate_monomials_complex() -> None:
+    z = sympy.symbols("z", real=False)
+    assert monomial.generate_monomials([z], 1, False, False) == [1, z]
+    assert set(monomial.generate_monomials([z], 2, False, False)) == set([1, z, z**2])
+
+
 def test_degree() -> None:
     x, y = sympy.symbols("x y", commutative=False)
     p1 = x * y + x**2

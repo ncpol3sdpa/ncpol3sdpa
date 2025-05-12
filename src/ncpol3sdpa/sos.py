@@ -37,11 +37,11 @@ class Sos:
         for constraint in problem.constraints:
             expression: cvxpy.Expression = cvxpy.Constant(0)
             for var_num, matrix in constraint.constraints:
-                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
+                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])  # type: ignore
             constraints.append(expression == 0)
 
         # Objective function
-        objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
+        objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))  # type: ignore
 
         cvxpy.Problem(objective, constraints)
 

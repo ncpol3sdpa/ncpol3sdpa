@@ -2,13 +2,13 @@
 from ncpol3sdpa.problem import Problem, AvailableSolvers
 from ncpol3sdpa.constraints import Constraint
 from sympy.abc import x, y
-from sympy import Expr
+from sympy import Expr, symbols, I
 from sympy.physics.quantum import HermitianOperator
 
 
 def test_1() -> None:
     obj = 2 * x * y
-    p = Problem(obj)
+    p = Problem(obj, real=True)
     c1 = Constraint.EqualityConstraint(x * x - x)
     c2 = Constraint.InequalityConstraint(-y * y + y + 0.25)
     p.add_constraint(c1)
@@ -113,10 +113,34 @@ def test_3_nc() -> None:
     assert abs(p.solve(3)) <= 0.1
 
 
-if __name__ == "__main__":
-    test_1()
-    test_2()
-    test_3()
-    test_4()
-    test_1_sub()
-    print("Everything passed")
+def test_complex_1() -> None:
+    z = symbols("z", real=False)
+    obj = z + z.conjugate()
+    p = Problem(obj, real=False)
+    c1 = Constraint.InequalityConstraint(-z * z.conjugate() + 1)
+    c2 = Constraint.EqualityConstraint(z - z.conjugate())
+    p.add_constraint(c1)
+    p.add_constraint(c2)
+    assert abs(p.solve(2) - 2) <= 0.1
+    assert abs(p.solve(3) - 2) <= 0.1
+
+
+def test_complex_2() -> None:
+    z1, z2 = symbols("z1 z2", real=False)
+    obj = (z1 + z1.conjugate()) / 2
+    p = Problem(obj, real=False)
+    c1 = Constraint.InequalityConstraint(-z1 * z1.conjugate() + 4)
+    c2 = Constraint.InequalityConstraint(-z2 * z2.conjugate() + 1)
+    c3 = Constraint.EqualityConstraint(
+        (z2 + z2.conjugate()) / 2 - (z2 - z2.conjugate()) / (2 * I)
+    )
+    c4 = Constraint.EqualityConstraint(
+        (z1 + z1.conjugate()) / 2 - (z2 + z2.conjugate()) / 2
+    )
+    p.add_constraint(c1)
+    p.add_constraint(c2)
+    p.add_constraint(c3)
+    p.add_constraint(c4)
+    assert abs(p.solve(3) - 0.7071) <= 0.1
+
+

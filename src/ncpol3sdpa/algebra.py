@@ -33,6 +33,7 @@ def create_moment_matrix(
     monomials: List[sp.Expr],
     substitution_rules: Dict[sp.Expr, Any],
     commutative: bool = True,
+    real: bool = True,
 ) -> List[List[sp.Expr]]:
     """Create the moment matrix of the monomials"""
 
@@ -40,7 +41,13 @@ def create_moment_matrix(
     return [
         [
             apply_rule(
-                (monomials[j] if commutative else monomials[j].adjoint())  # type: ignore
+                (
+                    monomials[j]
+                    if (commutative and real)
+                    else (
+                        monomials[j].conjugate() if not real else monomials[j].adjoint()  # type: ignore
+                    )
+                )
                 * monomials[i],
                 substitution_rules,
                 commutative,
@@ -56,6 +63,7 @@ def create_constraint_matrix(
     constraint_polynomial: sp.Expr,
     rules: Dict[sp.Expr, Any],
     commutative: bool = True,
+    real: bool = True,
 ) -> List[List[sp.Expr]]:
     """Create the matrix of constraints
     The constraints are of the form `constraint_polynomial >= 0`
@@ -66,7 +74,15 @@ def create_constraint_matrix(
         [
             apply_rule_to_polynomial(
                 sp.expand(
-                    (monomials[j] if commutative else monomials[j].adjoint())  # type: ignore
+                    (
+                        monomials[j]
+                        if commutative and real
+                        else (
+                            monomials[j].conjugate()  # type: ignore
+                            if not real
+                            else monomials[j].adjoint()  # type: ignore
+                        )
+                    )
                     * constraint_polynomial
                     * monomials[i]
                 ),
@@ -95,13 +111,15 @@ class AlgebraSDP:
         relaxation_order: int,
         substitution_rules: Dict[sp.Expr, sp.Expr],
         commutative: bool = True,
+        real: bool = True,
     ) -> None:
         """Construct the symbolic Moment Matrices and soundings data structures. Works for the commutative case"""
         self.relaxation_order: int = relaxation_order
         self.substitution_rules: Dict[sp.Expr, sp.Expr] = substitution_rules
         self.commutative = commutative
+        self.real = real
         self.monomials: List[sp.Expr] = needed_monomials(
-            generate_monomials(needed_variables, relaxation_order, commutative),
+            generate_monomials(needed_variables, relaxation_order, commutative, real),
             substitution_rules,
         )
         self.objective: sp.Expr = apply_rule_to_polynomial(
@@ -111,7 +129,7 @@ class AlgebraSDP:
 
         # In the commutative case, the moment matrix is symmetric
         self.moment_matrix = create_moment_matrix(
-            self.monomials, self.substitution_rules, self.commutative
+            self.monomials, self.substitution_rules, self.commutative, self.real
         )
         matrix_size: int = len(self.moment_matrix)
 
@@ -124,6 +142,12 @@ class AlgebraSDP:
                     self.monomial_to_positions[monomial].append((i, j))
                 else:
                     self.monomial_to_positions[monomial] = [(i, j)]
+                if not real and i != j:
+                    monomial = self.moment_matrix[i][j].conjugate()  # type: ignore
+                    if monomial in self.monomial_to_positions.keys():
+                        self.monomial_to_positions[monomial].append((j, i))
+                    else:
+                        self.monomial_to_positions[monomial] = [(j, i)]
 
         # This is the positive semi-definite matrices in the sdp
         #                                       v TODO Should this be a new type? discuss
@@ -142,16 +166,27 @@ class AlgebraSDP:
             # inequality constraint
             # p.10 of Semidefinite programming relaxations for quantum correlations
 
-            k_i = math.floor(
-                self.relaxation_order - degree_of_polynomial(constraint.polynomial) / 2
-            )
+            if self.real:
+                k_i = math.floor(
+                    self.relaxation_order
+                    - degree_of_polynomial(constraint.polynomial) / 2
+                )
+            else:
+                k_i = self.relaxation_order - degree_of_polynomial(
+                    constraint.polynomial
+                )
             assert k_i >= 0, (
                 "Insufficient relaxation order to capture the constraint {constraint.polynomial}"
             )
 
             # TODO This is redundant work, does this matter?
             constraint_monomials = needed_monomials(
-                generate_monomials(self.objective.free_symbols, k_i, self.commutative),  # type: ignore
+                generate_monomials(
+                    self.objective.free_symbols,  # type: ignore
+                    k_i,
+                    self.commutative,
+                    self.real,
+                ),
                 self.substitution_rules,
             )
 
@@ -161,6 +196,7 @@ class AlgebraSDP:
                     constraint.polynomial,
                     self.substitution_rules,
                     self.commutative,
+                    self.real,
                 )
             )
 
@@ -184,10 +220,9 @@ class AlgebraSDP:
         )
         ruled_filtered_monomials: filter[sp.Expr] = filter(
             lambda monomial: degree_of_polynomial(monomial)
-            <= 2 * self.relaxation_order,
+            <= (2 * self.relaxation_order if self.real else self.relaxation_order),
             ruled_monomials,
         )
-
         return list(ruled_filtered_monomials)
 
     def __str__(self) -> str:

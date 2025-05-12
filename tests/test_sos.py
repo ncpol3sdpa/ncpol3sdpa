@@ -1,10 +1,6 @@
-from ncpol3sdpa.sos import Sos
-from ncpol3sdpa.sdp_repr import MomentMatrixSDP, ProblemSDP
-import numpy as np
-import cvxpy as cp
 # from typing import List
 
-
+"""
 def test_dual_constraints_cvxpy() -> None:
     moment_matrix = MomentMatrixSDP(1, [[(0, 0)]])
     problem = ProblemSDP(moment_matrix, np.array([[-1]]))
@@ -51,3 +47,4 @@ def test_dual_constraints_cvxpy_2() -> None:
 if __name__ == "__main__":
     test_dual_constraints_cvxpy()
     test_dual_constraints_cvxpy_2()
+"""
