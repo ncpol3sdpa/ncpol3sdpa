@@ -1,6 +1,5 @@
 from __future__ import annotations
 from typing import List, Tuple
-from enum import Enum
 
 from sympy import Expr
 import sympy
@@ -8,6 +7,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from ncpol3sdpa.solver import Solver
+from ncpol3sdpa.solvers import CvxpySolver
 from ncpol3sdpa.resolution import (
     Rule,
     Constraint,
@@ -21,11 +21,6 @@ from ncpol3sdpa.sdp_repr import (
     MomentMatrixSDP,
     complexSDP_to_realSDP,
 )
-
-
-class AvailableSolvers(Enum):
-    CVXPY = 0
-    MOSEK = 1
 
 
 def polynomial_to_matrix(
@@ -164,7 +159,7 @@ class Problem:
     def solve(
         self,
         relaxation_order: int = 1,
-        solver: AvailableSolvers = AvailableSolvers.CVXPY,
+        solver: Solver = CvxpySolver(),
     ) -> float:
         """Solve the polynomial optimization problem using SDP relaxation.
 
@@ -214,11 +209,4 @@ class Problem:
 
         print(problemSDP)
         # 3. Solve the SDP
-        match solver:
-            case AvailableSolvers.CVXPY:
-                return Solver.solve_cvxpy(problemSDP)
-            case AvailableSolvers.MOSEK:
-                return Solver.solve_mosek(problemSDP)
-            case _:
-                print("This solver isn't supported")
-                return 0.0
+        return solver.solve(problemSDP)
