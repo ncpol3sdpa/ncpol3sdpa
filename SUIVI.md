@@ -292,3 +292,6 @@
 - (Alain)
   * adds bibliography about other implementable examples
   * continues the implementation of examples + tests on graph algorithms
+- (Thomas et Nazar)
+  * implmentation of the sos, it remains the tests to make
+  
