@@ -1,6 +1,9 @@
 import sympy as sp
-from ncpol3sdpa.constraints import Constraint
-from ncpol3sdpa.rules import Rule, apply_rule
+# from ncpol3sdpa.constraints import Constraint
+# from ncpol3sdpa.rules import Rule, apply_rule
+
+from ncpol3sdpa.resolution import Rule, Constraint
+from ncpol3sdpa.resolution.rules import apply_rule
 
 
 def test_rule_of_constraint() -> None:

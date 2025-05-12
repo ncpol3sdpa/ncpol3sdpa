@@ -1,7 +1,8 @@
-from ncpol3sdpa.solver import Solver
-from ncpol3sdpa.sdp_repr import MomentMatrixSDP, ProblemSDP
 import numpy as np
 # from typing import List
+
+from ncpol3sdpa.solver import Solver
+from ncpol3sdpa.sdp_repr import MomentMatrixSDP, ProblemSDP
 
 
 def test_1x1() -> None:
