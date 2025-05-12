@@ -284,3 +284,8 @@
   + Finish the implementation of the complexSDP to realSDP.
     * the tests pass but we need to do more tests on this function 
     * The implementation of the different elements is messy, we will need to clean the code
+  
+## 12/05/2025
+- (Yann)
+  * Works on the MR 18 and projects structure
+  * Works on the social and environmental impact of the project
