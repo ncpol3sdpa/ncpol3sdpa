@@ -10,7 +10,6 @@ from ncpol3sdpa.resolution import (
     AlgebraSDP,
     generate_needed_symbols,
 )
-from ncpol3sdpa.sdp_repr import complexSDP_to_realSDP
 from ncpol3sdpa.algebra_to_SDP import algebra_to_SDP
 
 
@@ -61,7 +60,6 @@ class Problem:
         ]
 
         # 1. Build algebraic formulation
-
         all_constraint_polynomials = [c.polynomial for c in self.constraints] + [
             self.objective
         ]
@@ -79,7 +77,7 @@ class Problem:
         # 2. Translate to SDP
         problemSDP = algebra_to_SDP(algebraSDP)
         if not self.real:
-            problemSDP = complexSDP_to_realSDP(problemSDP)
+            problemSDP = problemSDP.complex_to_realSDP()
 
         print(problemSDP)
 
