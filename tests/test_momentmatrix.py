@@ -15,7 +15,7 @@ def test_needed_monomials() -> None:
     pol2: Expr = 3 * x * y**2 - 6 * x**2 + 12 * y
     c1 = Constraint.EqualityConstraint(pol1)
     c2 = Constraint.EqualityConstraint(pol2)
-    rules = Rule.of_constraints([c1, c2])
+    rules = Rule([c1, c2])
     monomials_list: List[Expr] = [
         # TODO fix this typing error
         SymOne(),
@@ -29,7 +29,7 @@ def test_needed_monomials() -> None:
         x**3,
         y**3,
     ]
-    assert Rule.filter_monomials(monomials_list, rules) == [
+    assert rules.filter_monomials(monomials_list) == [
         1,
         x,
         y,
