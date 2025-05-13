@@ -12,12 +12,6 @@ class AlgebraSDPReal(AlgebraSDP):
         else:
             return monomial.adjoint()  # type: ignore
 
-    def add_monomial_to_positions(self, monomial: sp.Expr, i: int, j: int) -> None:
-        if monomial in self.monomial_to_positions.keys():
-            self.monomial_to_positions[monomial].append((i, j))
-        else:
-            self.monomial_to_positions[monomial] = [(i, j)]
-
     def get_length_constraint_matrix(self, deg_pol: int) -> int:
         k_i = math.floor(self.relaxation_order - deg_pol / 2)
         return k_i

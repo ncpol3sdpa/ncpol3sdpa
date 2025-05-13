@@ -119,6 +119,14 @@ class AlgebraSDP:
         for constraint in constraints:
             self.add_constraint(constraint)
 
+    def add_monomial_to_positions(self, monomial: sp.Expr, i: int, j: int) -> None:
+        """Add a monomial to the list of monomials and its position in the moment matrix"""
+
+        if monomial in self.monomial_to_positions.keys():
+            self.monomial_to_positions[monomial].append((i, j))
+        else:
+            self.monomial_to_positions[monomial] = [(i, j)]
+
     def expand_eq_constraint(self, constraint: sp.Expr) -> List[sp.Expr]:
         """
         Generate a list of polynomials {p = m * constraint | m : monomial & degre(p) <= 2*k }
@@ -181,12 +189,6 @@ class AlgebraSDP:
 
     def get_adjoint(self, monomial: sp.Expr) -> sp.Expr:
         """Get the adjoint of a monomial"""
-
-        raise NotImplementedError
-        # return monomial.adjoint()  if non commutative
-
-    def add_monomial_to_positions(self, monomial: sp.Expr, i: int, j: int) -> None:
-        """Add a monomial to the list of monomials and its position in the moment matrix"""
 
         raise NotImplementedError
 

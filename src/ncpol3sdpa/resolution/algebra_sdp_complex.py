@@ -11,11 +11,15 @@ class AlgebraSDPComplex(AlgebraSDP):
         else:
             return monomial.adjoint()  # type: ignore
 
+    def get_length_constraint_matrix(self, deg_pol: int) -> int:
+        k_i = self.relaxation_order - deg_pol
+        return k_i
+
+    def is_expressible_as_moment_coeff(self, monomial: sp.Expr) -> bool:
+        return degree_of_polynomial(monomial) <= self.relaxation_order
+
     def add_monomial_to_positions(self, monomial: sp.Expr, i: int, j: int) -> None:
-        if monomial in self.monomial_to_positions.keys():
-            self.monomial_to_positions[monomial].append((i, j))
-        else:
-            self.monomial_to_positions[monomial] = [(i, j)]
+        super().add_monomial_to_positions(monomial, i, j)
 
         if i != j:
             monomial = self.get_adjoint(self.moment_matrix[i][j])
@@ -23,10 +27,3 @@ class AlgebraSDPComplex(AlgebraSDP):
                 self.monomial_to_positions[monomial].append((j, i))
             else:
                 self.monomial_to_positions[monomial] = [(j, i)]
-
-    def get_length_constraint_matrix(self, deg_pol: int) -> int:
-        k_i = self.relaxation_order - deg_pol
-        return k_i
-
-    def is_expressible_as_moment_coeff(self, monomial: sp.Expr) -> bool:
-        return degree_of_polynomial(monomial) <= self.relaxation_order
