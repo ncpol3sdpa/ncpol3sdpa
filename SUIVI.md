@@ -327,3 +327,5 @@ ncpol3sdpa
 - (Yann)
   * Finish the [MR 22](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/22) about the project structure
 ![The new structure of the project](docs/graphs/pydeps_graph4.svg)
+- (Mathis)
+  * Creation of two classes `AlgebraSDPReal` and `AlgebraSDPComplex` to properly handle the real and complex cases with the polymorphism of the OOP. These changes lead to the [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/24)
