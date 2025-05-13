@@ -20,13 +20,12 @@ def list_increment(degrees: List[int], k: int) -> bool:
 def generate_monomials(
     symbols: Iterable[Symbol],
     relaxation_order: int,
-    commutative: bool = True,
-    real: bool = True,
+    is_commutative: bool = True,
+    is_real: bool = True,
 ) -> List[Expr]:
     """returns a list of all monomials that have degree less or equal to the relaxation_order"""
-    symbols = list(symbols)
 
-    if commutative:
+    if is_commutative:
         current_degrees = [0 for _ in symbols]
         res: List[Expr] = []
 
@@ -41,18 +40,18 @@ def generate_monomials(
                 break
 
         return sorted(res, key=total_degree)
+
     else:
         res = [sympify(1)]
+        pred_monomials: List[Expr] = [sympify(1)]
 
-        def dfs(i: int, curr_monomials: List[Expr], pred_monomials: List[Expr]) -> None:
-            if i > relaxation_order:
-                return
-            for monomial in pred_monomials:
-                for symbol in symbols:
-                    if symbol != 1:
-                        res.append(monomial * symbol)
-                        curr_monomials.append(monomial * symbol)
-            dfs(i + 1, [], curr_monomials)
+        for _ in range(relaxation_order):
+            pred_monomials = [
+                monomial * symbol
+                for monomial in pred_monomials
+                for symbol in symbols
+                if symbol != 1
+            ]
+            res.extend(pred_monomials)
 
-        dfs(0, [sympify(1)], [])
         return res

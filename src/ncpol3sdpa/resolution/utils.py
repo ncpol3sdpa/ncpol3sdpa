@@ -65,8 +65,8 @@ def create_constraint_matrix(
     monomials: List[sp.Expr],
     constraint_polynomial: sp.Expr,
     rules: Dict[sp.Expr, Any],
-    commutative: bool = True,
-    real: bool = True,
+    is_commutative: bool = True,
+    is_real: bool = True,
 ) -> Matrix:
     """Create the matrix of constraints
     The constraints are of the form `constraint_polynomial >= 0`
@@ -79,10 +79,10 @@ def create_constraint_matrix(
                 sp.expand(
                     (
                         monomials[j]
-                        if commutative and real
+                        if is_commutative and is_real
                         else (
                             monomials[j].conjugate()  # type: ignore
-                            if not real
+                            if not is_real
                             else monomials[j].adjoint()  # type: ignore
                         )
                     )
@@ -90,7 +90,7 @@ def create_constraint_matrix(
                     * monomials[i]
                 ),
                 rules,
-                commutative,
+                is_commutative,
             )
             for j in range(i + 1)
         ]

@@ -23,16 +23,18 @@ class AlgebraSDP:
         objective: sp.Expr,
         relaxation_order: int,
         substitution_rules: Dict[sp.Expr, sp.Expr],
-        commutative: bool = True,
-        real: bool = True,
+        is_commutative: bool = True,
+        is_real: bool = True,
     ) -> None:
         """Construct the symbolic Moment Matrices and soundings data structures. Works for the commutative case"""
         self.relaxation_order: int = relaxation_order
         self.substitution_rules: Dict[sp.Expr, sp.Expr] = substitution_rules
-        self.commutative = commutative
-        self.real = real
+        self.is_commutative = is_commutative
+        self.is_real = is_real
         self.monomials: List[sp.Expr] = needed_monomials(
-            generate_monomials(needed_variables, relaxation_order, commutative, real),
+            generate_monomials(
+                needed_variables, relaxation_order, is_commutative, is_real
+            ),
             substitution_rules,
         )
         self.objective: sp.Expr = Rule.apply_to_polynomial(
@@ -42,7 +44,7 @@ class AlgebraSDP:
 
         # In the commutative case, the moment matrix is symmetric
         self.moment_matrix = create_moment_matrix(
-            self.monomials, self.substitution_rules, self.commutative, self.real
+            self.monomials, self.substitution_rules, self.is_commutative, self.is_real
         )
         matrix_size: int = len(self.moment_matrix)
 
@@ -55,7 +57,7 @@ class AlgebraSDP:
                     self.monomial_to_positions[monomial].append((i, j))
                 else:
                     self.monomial_to_positions[monomial] = [(i, j)]
-                if not real and i != j:
+                if not is_real and i != j:
                     monomial = self.moment_matrix[i][j].conjugate()  # type: ignore
                     if monomial in self.monomial_to_positions.keys():
                         self.monomial_to_positions[monomial].append((j, i))
@@ -78,7 +80,7 @@ class AlgebraSDP:
             # inequality constraint
             # p.10 of Semidefinite programming relaxations for quantum correlations
 
-            if self.real:
+            if self.is_real:
                 k_i = math.floor(
                     self.relaxation_order
                     - degree_of_polynomial(constraint.polynomial) / 2
@@ -96,8 +98,8 @@ class AlgebraSDP:
                 generate_monomials(
                     self.objective.free_symbols,  # type: ignore
                     k_i,
-                    self.commutative,
-                    self.real,
+                    self.is_commutative,
+                    self.is_real,
                 ),
                 self.substitution_rules,
             )
@@ -107,8 +109,8 @@ class AlgebraSDP:
                     constraint_monomials,
                     constraint.polynomial,
                     self.substitution_rules,
-                    self.commutative,
-                    self.real,
+                    self.is_commutative,
+                    self.is_real,
                 )
             )
 
@@ -134,7 +136,7 @@ class AlgebraSDP:
         )
         ruled_filtered_monomials: filter[sp.Expr] = filter(
             lambda monomial: degree_of_polynomial(monomial)
-            <= (2 * self.relaxation_order if self.real else self.relaxation_order),
+            <= (2 * self.relaxation_order if self.is_real else self.relaxation_order),
             ruled_monomials,
         )
         return list(ruled_filtered_monomials)
