@@ -18,3 +18,7 @@ class AlgebraSDPReal(AlgebraSDP):
 
     def is_expressible_as_moment_coeff(self, monomial: sp.Expr) -> bool:
         return degree_of_polynomial(monomial) <= 2 * self.relaxation_order
+
+    @property
+    def is_real(self) -> bool:
+        return True

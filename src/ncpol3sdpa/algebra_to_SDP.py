@@ -46,7 +46,7 @@ def polynomial_to_matrix(
         # TODO/Idea What happens if we chose other than 0? at random?
         monomial_x, monomial_y = algebra.monomial_to_positions[monomial][0]
 
-        if isinstance(algebra, AlgebraSDPReal):
+        if algebra.is_real:
             # The matrices must be symmetric
             a_0[monomial_x][monomial_y] += 0.5 * coef
             a_0[monomial_y][monomial_x] += 0.5 * coef

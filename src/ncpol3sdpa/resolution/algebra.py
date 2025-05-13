@@ -79,6 +79,12 @@ class AlgebraSDP:
         """Return a string representation of the algebra for debugging."""
         return self.__str__()
 
+    # Properties
+
+    @property
+    def is_real(self) -> bool:
+        return False
+
     # Public methods
 
     def add_constraint(self, constraint: Constraint) -> None:
