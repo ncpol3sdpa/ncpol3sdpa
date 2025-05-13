@@ -9,7 +9,6 @@ from .monomial import generate_monomials
 from .constraints import Constraint
 from .utils import (
     Matrix,
-    needed_monomials,
     degree_of_polynomial,
     create_constraint_matrix,
     create_moment_matrix,
@@ -22,24 +21,22 @@ class AlgebraSDP:
         needed_variables: List[sp.Symbol],
         objective: sp.Expr,
         relaxation_order: int,
-        substitution_rules: Dict[sp.Expr, sp.Expr],
+        substitution_rules: Rule,
         is_commutative: bool = True,
         is_real: bool = True,
     ) -> None:
         """Construct the symbolic Moment Matrices and soundings data structures. Works for the commutative case"""
         self.relaxation_order: int = relaxation_order
-        self.substitution_rules: Dict[sp.Expr, sp.Expr] = substitution_rules
+        self.substitution_rules: Rule = substitution_rules
         self.is_commutative = is_commutative
         self.is_real = is_real
-        self.monomials: List[sp.Expr] = needed_monomials(
+        self.monomials: List[sp.Expr] = substitution_rules.filter_monomials(
             generate_monomials(
                 needed_variables, relaxation_order, is_commutative, is_real
-            ),
-            substitution_rules,
+            )
         )
-        self.objective: sp.Expr = Rule.apply_to_polynomial(
-            sp.expand(objective),
-            substitution_rules,
+        self.objective: sp.Expr = substitution_rules.apply_to_polynomial(
+            sp.expand(objective)
         )
 
         # In the commutative case, the moment matrix is symmetric
@@ -94,14 +91,13 @@ class AlgebraSDP:
             )
 
             # TODO This is redundant work, does this matter?
-            constraint_monomials = needed_monomials(
+            constraint_monomials = self.substitution_rules.filter_monomials(
                 generate_monomials(
                     self.objective.free_symbols,  # type: ignore
                     k_i,
                     self.is_commutative,
                     self.is_real,
-                ),
-                self.substitution_rules,
+                )
             )
 
             self.constraint_moment_matrices.append(
@@ -129,8 +125,8 @@ class AlgebraSDP:
         # Map and filter are lazy
         # so intermediate lists are not created
         ruled_monomials: map[sp.Expr] = map(
-            lambda monomial: Rule.apply_to_monomial(
-                monomial * constraint, self.substitution_rules
+            lambda monomial: self.substitution_rules.apply_to_monomial(
+                monomial * constraint
             ),
             self.monomials,
         )

@@ -25,27 +25,27 @@ def test_rules_of_constraints() -> None:
     pol2 = sp.poly(3 * x * y**2 - 6 * x**2 + 12 * y)
     c1 = Constraint.EqualityConstraint(pol1)
     c2 = Constraint.EqualityConstraint(pol2)
-    assert Rule.of_constraints([c1, c2]) == {x**2: x + 1, x * y**2: 2 * x**2 - 4 * y}
+    assert Rule([c1, c2]).rules == {x**2: x + 1, x * y**2: 2 * x**2 - 4 * y}
 
 
 def test_apply_rule() -> None:
     x, y = sp.symbols("x y")
-    rules = {x**2: x}
+    rules = Rule.from_dict({x**2: x})
     p1 = x * y
     p2 = x**2 * y
     p3 = x**6 * y**2 * 5
-    assert Rule.apply_to_monomial(p1, rules) == x * y
-    assert Rule.apply_to_monomial(p2, rules) == x * y
-    assert Rule.apply_to_monomial(p3, rules) == 5 * x * y**2
+    assert rules.apply_to_monomial(p1) == x * y
+    assert rules.apply_to_monomial(p2) == x * y
+    assert rules.apply_to_monomial(p3) == 5 * x * y**2
 
     # non commutative tests
     x, y = sp.symbols("x y", commutative=False)
-    rules = {x * y: x}
+    rules = Rule.from_dict({x * y: x})
     p1 = x * y
     p2 = x**2 * y
     p3 = x * y * x * y
     p4 = x * y * y
-    assert Rule.apply_to_monomial(p1, rules, False) == x
-    assert Rule.apply_to_monomial(p2, rules, False) == x**2
-    assert Rule.apply_to_monomial(p3, rules, False) == x**2
-    assert Rule.apply_to_monomial(p4, rules, False) == x
+    assert rules.apply_to_monomial(p1, False) == x
+    assert rules.apply_to_monomial(p2, False) == x**2
+    assert rules.apply_to_monomial(p3, False) == x**2
+    assert rules.apply_to_monomial(p4, False) == x
