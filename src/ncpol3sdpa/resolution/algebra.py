@@ -25,7 +25,12 @@ class AlgebraSDP:
         substitution_rules: Rule,
         is_commutative: bool = True,
     ) -> None:
-        """Construct the symbolic Moment Matrices and soundings data structures. Works for the commutative case"""
+        """
+        Construct the symbolic Moment Matrices and soundings data structures.
+
+        Works for the commutative case only.
+        """
+
         self.relaxation_order: int = relaxation_order
         self.substitution_rules: Rule = substitution_rules
         self.is_commutative = is_commutative
@@ -136,7 +141,49 @@ class AlgebraSDP:
         )
         return list(ruled_filtered_monomials)
 
+    def create_moment_matrix(self) -> Matrix:
+        matrix_size = len(self.monomials)
+        return [
+            [
+                self.substitution_rules.apply_to_monomial(
+                    self.get_adjoint(self.monomials[j]) * self.monomials[i],
+                    self.is_commutative,
+                )
+                for j in range(i + 1)
+            ]
+            for i in range(matrix_size)
+        ]
+
+    def create_constraint_matrix(
+        self, monomials: List[sp.Expr], constraint_polynomial: sp.Expr
+    ) -> Matrix:
+        """Create the matrix of constraints
+        The constraints are of the form `constraint_polynomial >= 0`
+        """
+
+        n = len(monomials)
+        return [
+            [
+                self.substitution_rules.apply_to_polynomial(
+                    sp.expand(
+                        self.get_adjoint(self.monomials[j])
+                        * constraint_polynomial
+                        * monomials[i]
+                    ),
+                    self.is_commutative,
+                )
+                for j in range(i + 1)
+            ]
+            for i in range(n)
+        ]
+
     # Abstract methods
+
+    def get_adjoint(self, monomial: sp.Expr) -> sp.Expr:
+        """Get the adjoint of a monomial"""
+
+        raise NotImplementedError
+        # return monomial.adjoint()  if non commutative
 
     def add_monomial_to_positions(self, monomial: sp.Expr, i: int, j: int) -> None:
         """Add a monomial to the list of monomials and its position in the moment matrix"""
@@ -149,19 +196,5 @@ class AlgebraSDP:
 
     def is_expressible_as_moment_coeff(self, monomial: sp.Expr) -> bool:
         """Check if the monomial is expressible as a moment coefficient"""
-
-        raise NotImplementedError
-
-    def create_moment_matrix(self) -> Matrix:
-        """Create the moment matrix of the monomials"""
-
-        raise NotImplementedError
-
-    def create_constraint_matrix(
-        self, monomials: List[sp.Expr], constraint_polynomial: sp.Expr
-    ) -> Matrix:
-        """Create the matrix of constraints
-        The constraints are of the form `constraint_polynomial >= 0`
-        """
 
         raise NotImplementedError
