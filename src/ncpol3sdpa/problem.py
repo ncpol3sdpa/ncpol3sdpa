@@ -15,12 +15,12 @@ from ncpol3sdpa.algebra_to_SDP import algebra_to_SDP
 
 class Problem:
     def __init__(
-        self, obj: sympy.Expr, commutative: bool = True, real: bool = True
+        self, obj: sympy.Expr, is_commutative: bool = True, is_real: bool = True
     ) -> None:
         self.constraints: List[Constraint] = []
         self.objective: Expr = obj
-        self.commutative = commutative
-        self.real = real
+        self.is_commutative = is_commutative
+        self.is_real = is_real
 
     def add_constraint(self, constraint: Constraint) -> None:
         self.constraints.append(constraint)
@@ -69,14 +69,14 @@ class Problem:
             self.objective,
             relaxation_order,
             rules,
-            self.commutative,
-            self.real,
+            self.is_commutative,
+            self.is_real,
         )
         algebraSDP.add_constraints(normal_constraints)
 
         # 2. Translate to SDP
         problemSDP = algebra_to_SDP(algebraSDP)
-        if not self.real:
+        if not self.is_real:
             problemSDP = problemSDP.complex_to_realSDP()
 
         print(problemSDP)
