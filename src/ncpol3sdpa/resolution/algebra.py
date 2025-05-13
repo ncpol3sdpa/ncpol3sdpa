@@ -9,7 +9,6 @@ from .monomial import generate_monomials
 from .constraints import Constraint
 from .utils import (
     Matrix,
-    needed_monomials,
     degree_of_polynomial,
     create_constraint_matrix,
     create_moment_matrix,
@@ -31,7 +30,7 @@ class AlgebraSDP:
         self.substitution_rules: Dict[sp.Expr, sp.Expr] = substitution_rules
         self.is_commutative = is_commutative
         self.is_real = is_real
-        self.monomials: List[sp.Expr] = needed_monomials(
+        self.monomials: List[sp.Expr] = Rule.filter_monomials(
             generate_monomials(
                 needed_variables, relaxation_order, is_commutative, is_real
             ),
@@ -94,7 +93,7 @@ class AlgebraSDP:
             )
 
             # TODO This is redundant work, does this matter?
-            constraint_monomials = needed_monomials(
+            constraint_monomials = Rule.filter_monomials(
                 generate_monomials(
                     self.objective.free_symbols,  # type: ignore
                     k_i,

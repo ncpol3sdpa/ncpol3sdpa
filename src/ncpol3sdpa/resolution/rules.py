@@ -94,3 +94,13 @@ class Rule:
         for monomial, coef in poly_dict.items():
             res += coef * Rule.apply_to_monomial(monomial, rules, commutative)
         return res
+
+    @classmethod
+    def filter_monomials(
+        cls,
+        monomials: List[Expr],
+        rules: Dict[Expr, Expr],
+    ) -> List[Expr]:
+        """Filter the monomials according to the rules"""
+
+        return [monomial for monomial in monomials if monomial not in rules.keys()]

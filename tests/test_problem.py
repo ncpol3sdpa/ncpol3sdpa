@@ -8,7 +8,7 @@ from ncpol3sdpa import Constraint, Problem, AvailableSolvers
 
 def test_1() -> None:
     obj = 2 * x * y
-    p = Problem(obj, real=True)
+    p = Problem(obj, is_real=True)
     c1 = Constraint.EqualityConstraint(x * x - x)
     c2 = Constraint.InequalityConstraint(-y * y + y + 0.25)
     p.add_constraint(c1)
@@ -79,7 +79,7 @@ def test_1_nc() -> None:
     b: HermitianOperator = HermitianOperator("b")  # type: ignore
 
     obj = a**2 - 0.5 * a * b - 0.5 * b * a - a
-    p = Problem(obj, commutative=False)
+    p = Problem(obj, is_commutative=False)
     c1 = Constraint.InequalityConstraint(a - a**2)
     c2 = Constraint.InequalityConstraint(b - b**2)
     p.add_constraint(c1)
@@ -92,7 +92,7 @@ def test_2_nc() -> None:
     b: HermitianOperator = HermitianOperator("b")  # type: ignore
 
     obj = a * b + b * a
-    p = Problem(obj, commutative=False)
+    p = Problem(obj, is_commutative=False)
     c1 = Constraint.InequalityConstraint(1 - a**2 - b**2)
     p.add_constraint(c1)
     assert abs(p.solve(2) - 1) <= 0.1
@@ -103,7 +103,7 @@ def test_3_nc() -> None:
     b: HermitianOperator = HermitianOperator("b")  # type: ignore
 
     obj = a**2 - 0.5 * a * b - 0.5 * b * a - a
-    p = Problem(obj, commutative=False)
+    p = Problem(obj, is_commutative=False)
     c1 = Constraint.InequalityConstraint(a - a**2)
     c2 = Constraint.InequalityConstraint(b - b**2)
     c3 = Constraint.EqualityConstraint(a * b - b * a)
@@ -114,9 +114,9 @@ def test_3_nc() -> None:
 
 
 def test_complex_1() -> None:
-    z = symbols("z", real=False)
+    z = symbols("z", is_real=False)
     obj = z + z.conjugate()
-    p = Problem(obj, real=False)
+    p = Problem(obj, is_real=False)
     c1 = Constraint.InequalityConstraint(-z * z.conjugate() + 1)
     c2 = Constraint.EqualityConstraint(z - z.conjugate())
     p.add_constraint(c1)
@@ -126,9 +126,9 @@ def test_complex_1() -> None:
 
 
 def test_complex_2() -> None:
-    z1, z2 = symbols("z1 z2", real=False)
+    z1, z2 = symbols("z1 z2", is_real=False)
     obj = (z1 + z1.conjugate()) / 2
-    p = Problem(obj, real=False)
+    p = Problem(obj, is_real=False)
     c1 = Constraint.InequalityConstraint(-z1 * z1.conjugate() + 4)
     c2 = Constraint.InequalityConstraint(-z2 * z2.conjugate() + 1)
     c3 = Constraint.EqualityConstraint(
