@@ -24,6 +24,7 @@ def degree_of_polynomial(polynomial: Expr) -> int:
     return res
 
 
+# Use only one time in AlgebraSDP
 def create_moment_matrix(
     monomials: List[sp.Expr],
     substitution_rules: Rule,
@@ -54,6 +55,7 @@ def create_moment_matrix(
     ]
 
 
+# Use only one time in AlgebraSDP
 def create_constraint_matrix(
     monomials: List[sp.Expr],
     constraint_polynomial: sp.Expr,
