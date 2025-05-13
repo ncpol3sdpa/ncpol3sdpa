@@ -21,7 +21,6 @@ def generate_monomials(
     symbols: Iterable[Symbol],
     relaxation_order: int,
     is_commutative: bool = True,
-    is_real: bool = True,
 ) -> List[Expr]:
     """returns a list of all monomials that have degree less or equal to the relaxation_order"""
 

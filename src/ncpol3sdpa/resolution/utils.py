@@ -4,7 +4,6 @@ from typing import List
 from sympy import Expr
 import sympy as sp
 
-from .rules import Rule
 
 type Matrix = List[List[Expr]]
 
@@ -22,74 +21,6 @@ def degree_of_polynomial(polynomial: Expr) -> int:
                 deg += exp
         res = max(deg, res)
     return res
-
-
-# Use only one time in AlgebraSDP
-def create_moment_matrix(
-    monomials: List[sp.Expr],
-    substitution_rules: Rule,
-    is_commutative: bool = True,
-    is_real: bool = True,
-) -> Matrix:
-    """Create the moment matrix of the monomials"""
-
-    matrix_size = len(monomials)
-    return [
-        [
-            substitution_rules.apply_to_monomial(
-                (
-                    monomials[j]
-                    if (is_commutative and is_real)
-                    else (
-                        monomials[j].conjugate()  # type: ignore
-                        if not is_real
-                        else monomials[j].adjoint()  # type: ignore
-                    )
-                )
-                * monomials[i],
-                is_commutative,
-            )
-            for j in range(i + 1)
-        ]
-        for i in range(matrix_size)
-    ]
-
-
-# Use only one time in AlgebraSDP
-def create_constraint_matrix(
-    monomials: List[sp.Expr],
-    constraint_polynomial: sp.Expr,
-    rules: Rule,
-    is_commutative: bool = True,
-    is_real: bool = True,
-) -> Matrix:
-    """Create the matrix of constraints
-    The constraints are of the form `constraint_polynomial >= 0`
-    """
-
-    n = len(monomials)
-    return [
-        [
-            rules.apply_to_polynomial(
-                sp.expand(
-                    (
-                        monomials[j]
-                        if is_commutative and is_real
-                        else (
-                            monomials[j].conjugate()  # type: ignore
-                            if not is_real
-                            else monomials[j].adjoint()  # type: ignore
-                        )
-                    )
-                    * constraint_polynomial
-                    * monomials[i]
-                ),
-                is_commutative,
-            )
-            for j in range(i + 1)
-        ]
-        for i in range(n)
-    ]
 
 
 def generate_needed_symbols(polynomials: List[sp.Expr]) -> List[sp.Symbol]:

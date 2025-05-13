@@ -3,11 +3,11 @@ from typing import List
 from sympy import Expr
 import sympy
 
+from ncpol3sdpa.resolution.algebra import create_AlgebraSDP
 from ncpol3sdpa.solvers import AvailableSolvers
 from ncpol3sdpa.resolution import (
     Rule,
     Constraint,
-    AlgebraSDP,
     generate_needed_symbols,
 )
 from ncpol3sdpa.algebra_to_SDP import algebra_to_SDP
@@ -64,7 +64,7 @@ class Problem:
             self.objective
         ]
         needed_symbols = generate_needed_symbols(all_constraint_polynomials)
-        algebraSDP = AlgebraSDP(
+        algebraSDP = create_AlgebraSDP(
             needed_symbols,
             self.objective,
             relaxation_order,

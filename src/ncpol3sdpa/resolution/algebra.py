@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import List, Tuple, Dict
 
 import sympy as sp
-import math
+
 
 from .rules import Rule
 from .monomial import generate_monomials
@@ -10,9 +10,36 @@ from .constraints import Constraint
 from .utils import (
     Matrix,
     degree_of_polynomial,
-    create_constraint_matrix,
-    create_moment_matrix,
 )
+
+
+def create_AlgebraSDP(
+    needed_variables: List[sp.Symbol],
+    objective: sp.Expr,
+    relaxation_order: int,
+    substitution_rules: Rule,
+    is_commutative: bool = True,
+    is_real: bool = True,
+) -> AlgebraSDP:
+    from ncpol3sdpa.resolution.algebra_sdp_real import AlgebraSDPReal
+    from ncpol3sdpa.resolution.algebra_sdp_complex import AlgebraSDPComplex
+
+    if is_real:
+        return AlgebraSDPReal(
+            needed_variables,
+            objective,
+            relaxation_order,
+            substitution_rules,
+            is_commutative,
+        )
+    else:
+        return AlgebraSDPComplex(
+            needed_variables,
+            objective,
+            relaxation_order,
+            substitution_rules,
+            is_commutative,
+        )
 
 
 class AlgebraSDP:
@@ -23,26 +50,20 @@ class AlgebraSDP:
         relaxation_order: int,
         substitution_rules: Rule,
         is_commutative: bool = True,
-        is_real: bool = True,
     ) -> None:
         """Construct the symbolic Moment Matrices and soundings data structures. Works for the commutative case"""
         self.relaxation_order: int = relaxation_order
         self.substitution_rules: Rule = substitution_rules
         self.is_commutative = is_commutative
-        self.is_real = is_real
         self.monomials: List[sp.Expr] = substitution_rules.filter_monomials(
-            generate_monomials(
-                needed_variables, relaxation_order, is_commutative, is_real
-            )
+            generate_monomials(needed_variables, relaxation_order, is_commutative)
         )
         self.objective: sp.Expr = substitution_rules.apply_to_polynomial(
             sp.expand(objective)
         )
 
         # In the commutative case, the moment matrix is symmetric
-        self.moment_matrix = create_moment_matrix(
-            self.monomials, self.substitution_rules, self.is_commutative, self.is_real
-        )
+        self.moment_matrix = self.create_moment_matrix()
         matrix_size: int = len(self.moment_matrix)
 
         # equivalence classes of equal coefficients
@@ -50,21 +71,27 @@ class AlgebraSDP:
         for i in range(matrix_size):
             for j in range(i + 1):
                 monomial = self.moment_matrix[i][j]
-                if monomial in self.monomial_to_positions.keys():
-                    self.monomial_to_positions[monomial].append((i, j))
-                else:
-                    self.monomial_to_positions[monomial] = [(i, j)]
-                if not is_real and i != j:
-                    monomial = self.moment_matrix[i][j].conjugate()  # type: ignore
-                    if monomial in self.monomial_to_positions.keys():
-                        self.monomial_to_positions[monomial].append((j, i))
-                    else:
-                        self.monomial_to_positions[monomial] = [(j, i)]
+                self.add_monomial_to_positions(monomial, i, j)
 
         # This is the positive semi-definite matrices in the sdp
         self.constraint_moment_matrices: List[Matrix] = []
         # List of polynomials that equal 0
         self.equality_constraints: List[sp.Expr] = []
+
+    def add_monomial_to_positions(self, monomial: sp.Expr, i: int, j: int) -> None:
+        return
+
+    def create_moment_matrix(self) -> Matrix:
+        """Create the moment matrix of the monomials"""
+        return []
+
+    def create_constraint_matrix(
+        self, monomials: List[sp.Expr], constraint_polynomial: sp.Expr
+    ) -> Matrix:
+        return []
+
+    def get_length_constraint_matrix(self, deg_pol: int) -> int:
+        return 0
 
     def add_constraint(self, constraint: Constraint) -> None:
         """Add a constraint to the algebra
@@ -77,15 +104,9 @@ class AlgebraSDP:
             # inequality constraint
             # p.10 of Semidefinite programming relaxations for quantum correlations
 
-            if self.is_real:
-                k_i = math.floor(
-                    self.relaxation_order
-                    - degree_of_polynomial(constraint.polynomial) / 2
-                )
-            else:
-                k_i = self.relaxation_order - degree_of_polynomial(
-                    constraint.polynomial
-                )
+            k_i = self.get_length_constraint_matrix(
+                degree_of_polynomial(constraint.polynomial)
+            )
             assert k_i >= 0, (
                 "Insufficient relaxation order to capture the constraint {constraint.polynomial}"
             )
@@ -96,23 +117,22 @@ class AlgebraSDP:
                     self.objective.free_symbols,  # type: ignore
                     k_i,
                     self.is_commutative,
-                    self.is_real,
                 )
             )
 
             self.constraint_moment_matrices.append(
-                create_constraint_matrix(
+                self.create_constraint_matrix(
                     constraint_monomials,
                     constraint.polynomial,
-                    self.substitution_rules,
-                    self.is_commutative,
-                    self.is_real,
                 )
             )
 
     def add_constraints(self, constraints: List[Constraint]) -> None:
         for constraint in constraints:
             self.add_constraint(constraint)
+
+    def is_expressible_as_moment_coeff(self, monomial: sp.Expr) -> bool:
+        return False
 
     def expand_eq_constraint(self, constraint: sp.Expr) -> List[sp.Expr]:
         """
@@ -131,8 +151,7 @@ class AlgebraSDP:
             self.monomials,
         )
         ruled_filtered_monomials: filter[sp.Expr] = filter(
-            lambda monomial: degree_of_polynomial(monomial)
-            <= (2 * self.relaxation_order if self.is_real else self.relaxation_order),
+            lambda monomial: self.is_expressible_as_moment_coeff(monomial),
             ruled_monomials,
         )
         return list(ruled_filtered_monomials)

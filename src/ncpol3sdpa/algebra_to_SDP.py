@@ -5,6 +5,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from ncpol3sdpa.resolution import AlgebraSDP
+from ncpol3sdpa.resolution.algebra_sdp_real import AlgebraSDPReal
 from ncpol3sdpa.sdp_repr import ProblemSDP, EqConstraint, MomentMatrixSDP
 
 
@@ -18,7 +19,7 @@ def polynomial_to_matrix(
         and deg(poly) <= 2*algebra.relaxation_order"""
     moment_matrix_size = len(algebra.moment_matrix)
 
-    if algebra.is_real:
+    if isinstance(algebra, AlgebraSDPReal):
         a_0 = np.zeros(shape=(moment_matrix_size, moment_matrix_size))
     else:
         a_0 = np.zeros(
@@ -45,7 +46,7 @@ def polynomial_to_matrix(
         # TODO/Idea What happens if we chose other than 0? at random?
         monomial_x, monomial_y = algebra.monomial_to_positions[monomial][0]
 
-        if algebra.is_real:
+        if isinstance(algebra, AlgebraSDPReal):
             # The matrices must be symmetric
             a_0[monomial_x][monomial_y] += 0.5 * coef
             a_0[monomial_y][monomial_x] += 0.5 * coef
