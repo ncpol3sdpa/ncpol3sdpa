@@ -8,6 +8,7 @@ from .rules import Rule
 from .monomial import generate_monomials
 from .constraints import Constraint
 from .utils import (
+    Matrix,
     needed_monomials,
     degree_of_polynomial,
     create_constraint_matrix,
@@ -62,8 +63,7 @@ class AlgebraSDP:
                         self.monomial_to_positions[monomial] = [(j, i)]
 
         # This is the positive semi-definite matrices in the sdp
-        #                                       v TODO Should this be a new type? discuss
-        self.constraint_moment_matrices: List[List[List[sp.Expr]]] = []
+        self.constraint_moment_matrices: List[Matrix] = []
         # List of polynomials that equal 0
         self.equality_constraints: List[sp.Expr] = []
 

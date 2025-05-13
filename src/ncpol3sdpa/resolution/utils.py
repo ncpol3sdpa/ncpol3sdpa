@@ -6,6 +6,8 @@ import sympy as sp
 
 from .rules import Rule
 
+type Matrix = List[List[Expr]]
+
 
 def degree_of_polynomial(polynomial: Expr) -> int:
     polynomial = polynomial.expand()
@@ -31,9 +33,9 @@ def needed_monomials(monomials: List[Expr], rules: Dict[Expr, Expr]) -> List[Exp
 def create_moment_matrix(
     monomials: List[sp.Expr],
     substitution_rules: Dict[sp.Expr, Any],
-    commutative: bool = True,
-    real: bool = True,
-) -> List[List[sp.Expr]]:
+    is_commutative: bool = True,
+    is_real: bool = True,
+) -> Matrix:
     """Create the moment matrix of the monomials"""
 
     matrix_size = len(monomials)
@@ -42,14 +44,16 @@ def create_moment_matrix(
             Rule.apply_to_monomial(
                 (
                     monomials[j]
-                    if (commutative and real)
+                    if (is_commutative and is_real)
                     else (
-                        monomials[j].conjugate() if not real else monomials[j].adjoint()  # type: ignore
+                        monomials[j].conjugate()  # type: ignore
+                        if not is_real
+                        else monomials[j].adjoint()  # type: ignore
                     )
                 )
                 * monomials[i],
                 substitution_rules,
-                commutative,
+                is_commutative,
             )
             for j in range(i + 1)
         ]
@@ -63,7 +67,7 @@ def create_constraint_matrix(
     rules: Dict[sp.Expr, Any],
     commutative: bool = True,
     real: bool = True,
-) -> List[List[sp.Expr]]:
+) -> Matrix:
     """Create the matrix of constraints
     The constraints are of the form `constraint_polynomial >= 0`
     """

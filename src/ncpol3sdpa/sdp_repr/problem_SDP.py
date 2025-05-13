@@ -88,51 +88,8 @@ class ProblemSDP:
         """The constraints of the SDP"""
         return self.__constraints
 
-    # --- unused ---
-
-    # def _add_symmetric_variable(self, matrix_size: int) -> None:
-    #     self.variable_sizes.append(matrix_size)
-
-    # def _is_feasible(self, variable_instances: List[NDArray[np.float64]]) -> bool:
-    #     """Verify that a given point is a feasible point of the problem"""
-    #     for var_i in variable_instances:
-    #         if np.linalg.norm(var_i - var_i.T, 1) > EPSILON:
-    #             return False
-    #         elif not (
-    #             np.all(np.linalg.eigvals(var_i) >= -EPSILON)
-    #         ):  # positive semidefinite
-    #             return False
-
-    #     moment_matrix = variable_instances[self.MOMENT_MATRIX_VAR_NUM]
-
-    #     for eq_class in self.moment_matrix.eq_classes:
-    #         eq_class_i = iter(eq_class)
-    #         x, y = eq_class_i.__next__()
-    #         for i, j in eq_class_i:
-    #             if abs(moment_matrix[i][j] - moment_matrix[x][y]) > EPSILON:
-    #                 return False
-
-    #     for constraint in self.constraints:
-    #         self._is_constraint_verified(constraint, variable_instances)
-
-    #     return True
-
-    # def _calculate_objective(
-    #     self, variable_instances: List[NDArray[np.float64]]
-    # ) -> np.float64:
-    #     """Calculate the objective function at a given point"""
-
-    #     moment_matrix: NDArray[np.float64] = variable_instances[
-    #         self.MOMENT_MATRIX_VAR_NUM
-    #     ]
-    #     res: np.float64 = np.sum(np.multiply(self.objective, moment_matrix))
-    #     assert isinstance(res, np.float64)
-
-    #     return res
-
     # --- internal functions ---
 
-    # inner function
     def _eq_2_coefs_constraint(
         self,
         coef1: Tuple[int, int],
@@ -151,18 +108,6 @@ class ProblemSDP:
         a[y][x] -= 0.5
 
         return EqConstraint([(var_number, a)])
-
-    # inner function
-    def _is_constraint_verified(
-        self, constraint: EqConstraint, variable_instances: List[NDArray[np.float64]]
-    ) -> bool:
-        """Verify if a constraint is satisfied"""
-        sum = 0
-
-        for var_num, a_matrix in constraint.constraints:
-            sum += np.sum(np.multiply(a_matrix, variable_instances[var_num]))
-
-        return abs(sum) < EPSILON
 
     # --- methods ---
 
