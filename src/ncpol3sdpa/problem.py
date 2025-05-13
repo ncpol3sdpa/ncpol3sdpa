@@ -4,7 +4,7 @@ from sympy import Expr
 import sympy
 
 from ncpol3sdpa.resolution.algebra import create_AlgebraSDP
-from ncpol3sdpa.solvers import AvailableSolvers
+from ncpol3sdpa.solvers import AvailableSolvers, Solver, SolverRegistry
 from ncpol3sdpa.resolution import (
     Rule,
     Constraint,
@@ -32,7 +32,7 @@ class Problem:
     def solve(
         self,
         relaxation_order: int = 1,
-        solver: AvailableSolvers = AvailableSolvers.CVXPY,
+        solver: Solver = SolverRegistry.get_solver(AvailableSolvers.CVXPY),
     ) -> float:
         """Solve the polynomial optimization problem using SDP relaxation.
 

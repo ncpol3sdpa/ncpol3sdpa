@@ -10,15 +10,6 @@ class Solver:
 
     @classmethod
     def solve(self, problem: ProblemSDP) -> float:
-        """Solve the SDP problem.
+        """Solve the SDP problem"""
 
-        Args:
-            problem: The SDP problem to solve.
-
-        Returns:
-            The optimal value of the objective function.
-
-        Raises:
-            NotImplementedError: If the subclass does not implement this method.
-        """
         raise NotImplementedError("This method should be implemented in a subclass")
