@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List
+from typing import List, Type
 
 import sympy as sp
 
@@ -17,19 +17,13 @@ def create_AlgebraSDP(
     is_commutative: bool = True,
     is_real: bool = True,
 ) -> AlgebraSDP:
-    if is_real:
-        return AlgebraSDPReal(
-            needed_variables,
-            objective,
-            relaxation_order,
-            substitution_rules,
-            is_commutative,
-        )
-    else:
-        return AlgebraSDPComplex(
-            needed_variables,
-            objective,
-            relaxation_order,
-            substitution_rules,
-            is_commutative,
-        )
+    AlgebraSubClass: Type[AlgebraSDP]
+    AlgebraSubClass = AlgebraSDPReal if is_real else AlgebraSDPComplex
+
+    return AlgebraSubClass(
+        needed_variables,
+        objective,
+        relaxation_order,
+        substitution_rules,
+        is_commutative,
+    )
