@@ -61,14 +61,6 @@ class Rule:
 
         return (leader_monomial_expressed, polynomial_without_leader)
 
-    # @classmethod
-    # def of_constraints(cls, constraints: List[Constraint]) -> Dict[Expr, Expr]:
-    #     """return the rules that represent a list of constraint
-    #     exemple : of_constraints([x²-x-1=0, x*y²+3=0]) = {x²->x+1, x*y²->-3}"""
-    #     return dict(
-    #         [Rule.of_single_constraint(constraint) for constraint in constraints]
-    #     )
-
     def apply_to_monomial(self, monomial: Expr, is_commutative: bool = True) -> Expr:
         """Apply a rule to a monomial"""
         if is_commutative:

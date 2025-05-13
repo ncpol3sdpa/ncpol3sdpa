@@ -24,16 +24,6 @@ def degree_of_polynomial(polynomial: Expr) -> int:
     return res
 
 
-# def needed_monomials(monomials: List[Expr], rules: Dict[Expr, Expr]) -> List[Expr]:
-#     """Filter the monomials according to the rules"""
-#     # ex: needed_monomials([x, x**2], {x : ...}) = [x**2]
-
-#     return Rule.filter_monomials(
-#         monomials,
-#         rules,
-#     )
-
-
 def create_moment_matrix(
     monomials: List[sp.Expr],
     substitution_rules: Rule,
