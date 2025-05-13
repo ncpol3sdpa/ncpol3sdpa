@@ -3,11 +3,11 @@ from typing import List
 from sympy import Expr
 import sympy
 
-from ncpol3sdpa.solvers import AvailableSolvers
+from ncpol3sdpa.solvers import AvailableSolvers, Solver, SolverRegistry
 from ncpol3sdpa.resolution import (
     Rule,
     Constraint,
-    AlgebraSDP,
+    create_AlgebraSDP,
     generate_needed_symbols,
 )
 from ncpol3sdpa.algebra_to_SDP import algebra_to_SDP
@@ -32,7 +32,7 @@ class Problem:
     def solve(
         self,
         relaxation_order: int = 1,
-        solver: AvailableSolvers = AvailableSolvers.CVXPY,
+        solver: Solver | AvailableSolvers = AvailableSolvers.CVXPY,
     ) -> float:
         """Solve the polynomial optimization problem using SDP relaxation.
 
@@ -64,7 +64,7 @@ class Problem:
             self.objective
         ]
         needed_symbols = generate_needed_symbols(all_constraint_polynomials)
-        algebraSDP = AlgebraSDP(
+        algebraSDP = create_AlgebraSDP(
             needed_symbols,
             self.objective,
             relaxation_order,
@@ -82,4 +82,11 @@ class Problem:
         print(problemSDP)
 
         # 3. Solve the SDP
-        return solver.solve(problemSDP)
+        if isinstance(solver, AvailableSolvers):
+            return SolverRegistry.get_solver(solver).solve(problemSDP)
+        elif isinstance(solver, Solver):
+            return solver.solve(problemSDP)
+        else:
+            raise TypeError(
+                f"Solver must be of type {Solver} or {AvailableSolvers}, not {type(solver)}"
+            )
