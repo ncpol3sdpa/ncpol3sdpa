@@ -32,7 +32,7 @@ class Problem:
     def solve(
         self,
         relaxation_order: int = 1,
-        solver: Solver = SolverRegistry.get_solver(AvailableSolvers.CVXPY),
+        solver: Solver | AvailableSolvers = AvailableSolvers.CVXPY,
     ) -> float:
         """Solve the polynomial optimization problem using SDP relaxation.
 
@@ -82,4 +82,11 @@ class Problem:
         print(problemSDP)
 
         # 3. Solve the SDP
-        return solver.solve(problemSDP)
+        if isinstance(solver, AvailableSolvers):
+            return SolverRegistry.get_solver(solver).solve(problemSDP)
+        elif isinstance(solver, Solver):
+            return solver.solve(problemSDP)
+        else:
+            raise TypeError(
+                f"Solver must be of type {Solver} or {AvailableSolvers}, not {type(solver)}"
+            )
