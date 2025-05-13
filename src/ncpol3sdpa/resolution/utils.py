@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Dict, Any
+from typing import List
 
 from sympy import Expr
 import sympy as sp
@@ -36,7 +36,7 @@ def degree_of_polynomial(polynomial: Expr) -> int:
 
 def create_moment_matrix(
     monomials: List[sp.Expr],
-    substitution_rules: Dict[sp.Expr, Any],
+    substitution_rules: Rule,
     is_commutative: bool = True,
     is_real: bool = True,
 ) -> Matrix:
@@ -45,7 +45,7 @@ def create_moment_matrix(
     matrix_size = len(monomials)
     return [
         [
-            Rule.apply_to_monomial(
+            substitution_rules.apply_to_monomial(
                 (
                     monomials[j]
                     if (is_commutative and is_real)
@@ -56,7 +56,6 @@ def create_moment_matrix(
                     )
                 )
                 * monomials[i],
-                substitution_rules,
                 is_commutative,
             )
             for j in range(i + 1)
@@ -68,7 +67,7 @@ def create_moment_matrix(
 def create_constraint_matrix(
     monomials: List[sp.Expr],
     constraint_polynomial: sp.Expr,
-    rules: Dict[sp.Expr, Any],
+    rules: Rule,
     is_commutative: bool = True,
     is_real: bool = True,
 ) -> Matrix:
@@ -79,7 +78,7 @@ def create_constraint_matrix(
     n = len(monomials)
     return [
         [
-            Rule.apply_to_polynomial(
+            rules.apply_to_polynomial(
                 sp.expand(
                     (
                         monomials[j]
@@ -93,7 +92,6 @@ def create_constraint_matrix(
                     * constraint_polynomial
                     * monomials[i]
                 ),
-                rules,
                 is_commutative,
             )
             for j in range(i + 1)

@@ -51,7 +51,7 @@ class Problem:
         """
 
         # 0. Separate constraint types
-        rules = Rule.of_constraints(
+        rules = Rule(
             [constraint for constraint in self.constraints if constraint.substitution]
         )
 
