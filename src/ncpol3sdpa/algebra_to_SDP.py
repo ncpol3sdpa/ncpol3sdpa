@@ -5,7 +5,6 @@ import numpy as np
 from numpy.typing import NDArray
 
 from ncpol3sdpa.resolution import AlgebraSDP
-from ncpol3sdpa.resolution.algebra_sdp_real import AlgebraSDPReal
 from ncpol3sdpa.sdp_repr import ProblemSDP, EqConstraint, MomentMatrixSDP
 
 
@@ -19,12 +18,9 @@ def polynomial_to_matrix(
         and deg(poly) <= 2*algebra.relaxation_order"""
     moment_matrix_size = len(algebra.moment_matrix)
 
-    if isinstance(algebra, AlgebraSDPReal):
-        a_0 = np.zeros(shape=(moment_matrix_size, moment_matrix_size))
-    else:
-        a_0 = np.zeros(
-            shape=(moment_matrix_size, moment_matrix_size), dtype=np.complex64
-        )
+    a_0: NDArray[np.float64] | NDArray[np.complex64] = np.zeros(
+        shape=(moment_matrix_size, moment_matrix_size), dtype=algebra.DTYPE
+    )
 
     print("a", algebra.monomial_to_positions.keys())
     print("b", sympy.expand(poly).as_coefficients_dict().items())

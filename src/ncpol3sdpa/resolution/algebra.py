@@ -82,6 +82,11 @@ class AlgebraSDP:
     # Properties
 
     @property
+    def DTYPE(self) -> type:
+        """Return the type of the objects in the algebra"""
+        raise NotImplementedError
+
+    @property
     def is_real(self) -> bool:
         return False
 

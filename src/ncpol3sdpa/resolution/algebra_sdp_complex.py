@@ -1,4 +1,5 @@
 import sympy as sp
+from numpy import complex64
 
 from ncpol3sdpa.resolution.algebra import AlgebraSDP
 from ncpol3sdpa.resolution.utils import degree_of_polynomial
@@ -17,6 +18,11 @@ class AlgebraSDPComplex(AlgebraSDP):
 
     def is_expressible_as_moment_coeff(self, monomial: sp.Expr) -> bool:
         return degree_of_polynomial(monomial) <= self.relaxation_order
+
+    @property
+    def DTYPE(self) -> type:
+        """Return the type of the objects in the algebra"""
+        return complex64
 
     def add_monomial_to_positions(self, monomial: sp.Expr, i: int, j: int) -> None:
         super().add_monomial_to_positions(monomial, i, j)
