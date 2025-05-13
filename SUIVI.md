@@ -323,9 +323,17 @@ ncpol3sdpa
   * add tests for the complex part
   * create a [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/20) for the complex polynomials optimization
 
-## 14/05/2025
+## 13/05/2025
 - (Yann)
   * Finish the [MR 22](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/22) about the project structure
 ![The new structure of the project](docs/graphs/pydeps_graph4.svg)
 - (Mathis)
   * Creation of two classes `AlgebraSDPReal` and `AlgebraSDPComplex` to properly handle the real and complex cases with the polymorphism of the OOP. These changes lead to the [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/24)
+
+## 14/05/2025
+- (Yann) 
+  * Work on the `AlgebraSDPReal` and `AlgebraSDPComplex` classes
+  * Improve the project structure
+  * Merge the [MR 24](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/24) about the project structure
+  * 
+![The new project struct after MR24](docs/graphs/pydeps_graph5.svg)
