@@ -3,7 +3,6 @@ from typing import List, Tuple, Dict
 
 import sympy as sp
 
-
 from .rules import Rule
 from .monomial import generate_monomials
 from .constraints import Constraint
@@ -13,36 +12,11 @@ from .utils import (
 )
 
 
-def create_AlgebraSDP(
-    needed_variables: List[sp.Symbol],
-    objective: sp.Expr,
-    relaxation_order: int,
-    substitution_rules: Rule,
-    is_commutative: bool = True,
-    is_real: bool = True,
-) -> AlgebraSDP:
-    from ncpol3sdpa.resolution.algebra_sdp_real import AlgebraSDPReal
-    from ncpol3sdpa.resolution.algebra_sdp_complex import AlgebraSDPComplex
-
-    if is_real:
-        return AlgebraSDPReal(
-            needed_variables,
-            objective,
-            relaxation_order,
-            substitution_rules,
-            is_commutative,
-        )
-    else:
-        return AlgebraSDPComplex(
-            needed_variables,
-            objective,
-            relaxation_order,
-            substitution_rules,
-            is_commutative,
-        )
-
-
 class AlgebraSDP:
+    """Base class for all SDP algebras"""
+
+    # Special methods
+
     def __init__(
         self,
         needed_variables: List[sp.Symbol],
@@ -78,20 +52,29 @@ class AlgebraSDP:
         # List of polynomials that equal 0
         self.equality_constraints: List[sp.Expr] = []
 
-    def add_monomial_to_positions(self, monomial: sp.Expr, i: int, j: int) -> None:
-        return
+    def __str__(self) -> str:
+        """Return a string representation of the algebra for debugging."""
 
-    def create_moment_matrix(self) -> Matrix:
-        """Create the moment matrix of the monomials"""
-        return []
+        return f"""Algebra:
+    relaxation_order: {self.relaxation_order}
+    monomials:
+        {self.monomials}
+    moment_matrix:
+        {self.moment_matrix}
+    substitution_rules:
+        {self.substitution_rules}
+    monomial_to_positions:
+        {self.monomial_to_positions}
+    equality_constraints:
+        {self.equality_constraints}
+    constraint_moment_matrices:
+        {self.constraint_moment_matrices}"""
 
-    def create_constraint_matrix(
-        self, monomials: List[sp.Expr], constraint_polynomial: sp.Expr
-    ) -> Matrix:
-        return []
+    def __repr__(self) -> str:
+        """Return a string representation of the algebra for debugging."""
+        return self.__str__()
 
-    def get_length_constraint_matrix(self, deg_pol: int) -> int:
-        return 0
+    # Public methods
 
     def add_constraint(self, constraint: Constraint) -> None:
         """Add a constraint to the algebra
@@ -131,9 +114,6 @@ class AlgebraSDP:
         for constraint in constraints:
             self.add_constraint(constraint)
 
-    def is_expressible_as_moment_coeff(self, monomial: sp.Expr) -> bool:
-        return False
-
     def expand_eq_constraint(self, constraint: sp.Expr) -> List[sp.Expr]:
         """
         Generate a list of polynomials {p = m * constraint | m : monomial & degre(p) <= 2*k }
@@ -156,24 +136,32 @@ class AlgebraSDP:
         )
         return list(ruled_filtered_monomials)
 
-    def __str__(self) -> str:
-        """Return a string representation of the algebra for debugging."""
+    # Abstract methods
 
-        return f"""Algebra:
-    relaxation_order: {self.relaxation_order}
-    monomials:
-        {self.monomials}
-    moment_matrix:
-        {self.moment_matrix}
-    substitution_rules:
-        {self.substitution_rules}
-    monomial_to_positions:
-        {self.monomial_to_positions}
-    equality_constraints:
-        {self.equality_constraints}
-    constraint_moment_matrices:
-        {self.constraint_moment_matrices}"""
+    def add_monomial_to_positions(self, monomial: sp.Expr, i: int, j: int) -> None:
+        """Add a monomial to the list of monomials and its position in the moment matrix"""
 
-    def __repr__(self) -> str:
-        """Return a string representation of the algebra for debugging."""
-        return self.__str__()
+        raise NotImplementedError
+
+    def get_length_constraint_matrix(self, deg_pol: int) -> int:
+        """Get the length of the constraint matrix"""
+        raise NotImplementedError
+
+    def is_expressible_as_moment_coeff(self, monomial: sp.Expr) -> bool:
+        """Check if the monomial is expressible as a moment coefficient"""
+
+        raise NotImplementedError
+
+    def create_moment_matrix(self) -> Matrix:
+        """Create the moment matrix of the monomials"""
+
+        raise NotImplementedError
+
+    def create_constraint_matrix(
+        self, monomials: List[sp.Expr], constraint_polynomial: sp.Expr
+    ) -> Matrix:
+        """Create the matrix of constraints
+        The constraints are of the form `constraint_polynomial >= 0`
+        """
+
+        raise NotImplementedError

@@ -3,11 +3,11 @@ from typing import List
 from sympy import Expr
 import sympy
 
-from ncpol3sdpa.resolution.algebra import create_AlgebraSDP
 from ncpol3sdpa.solvers import AvailableSolvers, Solver, SolverRegistry
 from ncpol3sdpa.resolution import (
     Rule,
     Constraint,
+    create_AlgebraSDP,
     generate_needed_symbols,
 )
 from ncpol3sdpa.algebra_to_SDP import algebra_to_SDP
