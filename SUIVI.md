@@ -337,3 +337,7 @@ ncpol3sdpa
   * Merge the [MR 24](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/24) about the project structure
   * 
 ![The new project struct after MR24](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/raw/main/docs/graphs/pydeps_graph5.svg)
+
+# 16/05/2025
+- (Mathis)
+  * Work on the theory of the optimization of complex non commutative problems. I'm trying to find out what these problems are because the value of the objective must be real.
