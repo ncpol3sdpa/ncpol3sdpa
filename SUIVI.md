@@ -326,7 +326,10 @@ ncpol3sdpa
 ## 13/05/2025
 - (Yann)
   * Finish the [MR 22](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/22) about the project structure
-![The new structure of the project](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/raw/main/docs/graphs/pydeps_graph4.svg)
+  
+![](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/raw/main/docs/graphs/pydeps_graph4.svg)
+![](./docs/graphs/pydeps_graph4.svg)
+
 - (Mathis)
   * Creation of two classes `AlgebraSDPReal` and `AlgebraSDPComplex` to properly handle the real and complex cases with the polymorphism of the OOP. These changes lead to the [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/24)
 
@@ -335,8 +338,9 @@ ncpol3sdpa
   * Work on the `AlgebraSDPReal` and `AlgebraSDPComplex` classes
   * Improve the project structure
   * Merge the [MR 24](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/24) about the project structure
-  * 
-![The new project struct after MR24](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/raw/main/docs/graphs/pydeps_graph5.svg)
+
+![](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/raw/main/docs/graphs/pydeps_graph5.svg)
+![](./docs/graphs/pydeps_graph5.svg)
 
 # 16/05/2025
 - (Mathis)
@@ -344,3 +348,5 @@ ncpol3sdpa
 
 # 18/05/2025
 - (Nazar) Redo the property based testing Merge Request because the Yann's reorganization broke everything 
+- (Yann) 
+  * Work on audit presentation
