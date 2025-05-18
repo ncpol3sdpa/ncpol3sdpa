@@ -2,14 +2,24 @@
 
 ## Description
 
-This package is a Python library for solving polynomial optimization problems using Lassert hierarchical SDP relaxations. 
+This package is a Python library for solving polynomial optimization problems using Lasserre hierarchical SDP relaxations.
+
+We solve the following problem:
+$$\begin{align*}
+\max_{x_1, \ldots, x_n} &\quad f(x_1, \ldots, x_n) \\
+\text{s.t.} &\quad g_i(x_1, \ldots, x_n) \leq 0 \quad \forall i
+\end{align*}$$
+
+where $f,g_i \in \mathbb K [x_1,\ldots,x_n]$.
+
+This library is a successor to the ncpol2sdpa library.
 
 ### Architecture
 
 ```
 ncpol3sdpa
 ├─ __init__.py
-├─ algebra_to_SDP.py         algebra_to_SDP
+├─ algebra_to_SDP.py
 ├─ funs.py
 ├─ main.py
 ├─ problem.py                Problem
