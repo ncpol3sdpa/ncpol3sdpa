@@ -40,7 +40,7 @@ repos:
   - id: pytest
     name: pytest
     stages: [pre-push]
-    entry: uv run pytest tests
+    entry: uv run pytest testing/tests
     language: system
     types: [python]
     pass_filenames: false
