@@ -45,7 +45,7 @@ skip-magic-trailing-comma = false
 strict = true
 exclude = ["main.py"]
 follow_untyped_imports = true
-files = ["src/ncpol3sdpa","tests"]
+files = ["src/ncpol3sdpa","testing/tests", "examples"]
 python_executable = ".venv/bin/python"
 mypy_path = "src/typing_stubs"
 
@@ -55,7 +55,7 @@ pythonpath = [
     "src"
 ]
 testpaths = [
-    "tests"
+    "testing/tests"
 ]
 
 [tool.pydeps]
@@ -64,3 +64,5 @@ output = "docs/graphs/pydeps_graph.svg"
 verbose = 2
 cluster = true
 no_show = true
+# max_cluster_size=1000
+exclude = "sympy cvxpy numpy mosek"

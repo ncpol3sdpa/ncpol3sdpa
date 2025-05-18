@@ -239,6 +239,9 @@
 ## 3/05/2025
 - (Nazar) Travail sur les test (property based testing)
 
+## 4/05/2025
+- (Nazar) ouvrir l'issue #4
+
 ## 5/05/2025
 
 - (Alain)
@@ -254,8 +257,87 @@
 - (Mathis)
   * Continue to try to implement the complex part
   * discussion about how to solve it with the other members
-- (Nazar) 
-  * Discouss slow code that was found by the tests
+- (Nazar)
+  * Discuss slow code that was found by tests
   * Merge Request to merge property-based-tests branch: !17
   * Review MR de Yann sur la restructuration de code
+- (Yann)
+  * Think about the [MR 18](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/18) about restructuration of the code
+  * Close the MR 18 because the restructuration of the code is not finished
 - (Thomas & Nazar) Discousion de comment implementer la decomposition SOS
+
+## 6/05/2025
+- (Nazar)
+  + Open some isues #5, #6
+  + Fix a bug in the test that caused them to take too long
+  + Open the sos-decomposition branch in preparation to rewrite of the the SOS part. Discuss organisation of upcoming work with Thomas
+  + Discuss failing tests in !17 with Mathis
+- (Mathis)
+  + Adapt the functions to handle hermitian matrices for the complex part instead of the symmetric matrices
+
+## 08/05/2025
+- (Mathis)
+  + Change the function that generate monomials for the complex part. We no longer generate the conjugate of the variables because this create issue when we create hermitian matrices instead of symmetric matrices for the complex part
+
+## 11/05/2025
+- (Mathis)
+  + Finish the implementation of the complexSDP to realSDP.
+    * the tests pass but we need to do more tests on this function
+    * The implementation of the different elements is messy, we will need to clean the code
+
+## 12/05/2025
+- (Yann)
+  * Works on the MR 18 and projects structure
+  * Works on the social and environmental impact of the project
+  * New architecture :
+```
+ncpol3sdpa
+├─ __init__.py
+├─ problem.py
+├─ sos.py
+├─ sdp_repr               The structure of a problem
+│  ├─ __init__.py         ProblemSDP, EqConstraint, MomentMatrixSDP
+│  ├─ MomentMatrixSDP
+│  ├─ ProblemSDP
+│  └─ EqConstraint
+├─ resolution             The resolution of a problem
+│  ├─ __init__.py         Rule, apply_rule_to_polynomial, Constraint
+│  ├─ rules.py
+│  ├─ apply_rules.py
+│  ├─ constraints.py
+│  ├─ monomial.py
+│  └─ algebra.py          AlgebraSDP,
+├─ solvers                Implementation of the solvers
+│  ├─ __init__.py
+│  ├─ cvxpy_solver.py
+│  └─ mosek_solver.py
+└─ solver.py              Solver
+```
+- (Alain)
+  * adds bibliography about other implementable examples
+  * continues the implementation of examples + tests on graph algorithms
+- (Thomas et Nazar)
+  * implmentation of the sos, it remains the tests to make
+- (Mathis)
+  * debugging the optimization for complex polynomials
+  * add tests for the complex part
+  * create a [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/20) for the complex polynomials optimization
+
+## 13/05/2025
+- (Yann)
+  * Finish the [MR 22](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/22) about the project structure
+![The new structure of the project](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/raw/main/docs/graphs/pydeps_graph4.svg)
+- (Mathis)
+  * Creation of two classes `AlgebraSDPReal` and `AlgebraSDPComplex` to properly handle the real and complex cases with the polymorphism of the OOP. These changes lead to the [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/24)
+
+## 14/05/2025
+- (Yann)
+  * Work on the `AlgebraSDPReal` and `AlgebraSDPComplex` classes
+  * Improve the project structure
+  * Merge the [MR 24](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/24) about the project structure
+  *
+![The new project struct after MR24](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/raw/main/docs/graphs/pydeps_graph5.svg)
+
+# 16/05/2025
+- (Mathis)
+  * Work on the theory of the optimization of complex non commutative problems. I'm trying to find out what these problems are because the value of the objective must be real.

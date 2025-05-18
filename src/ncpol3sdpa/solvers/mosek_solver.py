@@ -3,22 +3,15 @@ from numpy.typing import NDArray
 
 import warnings
 import numpy as np
-import cvxpy
-from cvxpy.expressions.expression import Expression as CVXPY_Expr
 import mosek
 
-import ncpol3sdpa.sdp_repr as sdp_repr
-from ncpol3sdpa import sdp_solution
-
-
-def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:
-    rt = cvxpy.sum(cvxpy.multiply(c, x))
-    assert isinstance(rt, CVXPY_Expr)
-    return rt
+from ncpol3sdpa.sdp_solution import Solution_SDP
+from ncpol3sdpa.sdp_repr import ProblemSDP
+from .solver import Solver
 
 
 def to_sparse_symmetric(
-    matrix: NDArray[np.float64],
+    matrix: NDArray[np.float64] | NDArray[np.complex64],
 ) -> Tuple[List[float], List[int], List[int]]:
     """
     Return the sparse form of a symmetric matrix (only lower triangle is given)
@@ -47,59 +40,9 @@ def to_sparse_symmetric(
     return val, rows, cols
 
 
-"""Interface class that other specific solver implementations inherit from"""
-
-
-class SolverInterface:
+class MosekSolver(Solver):
     @classmethod
-    def solve(self, problem: sdp_repr.ProblemSDP) -> sdp_solution.Solution_SDP:  # type: ignore
-        """Solve an SDP problem"""
-        ...
-
-
-class Solver:
-    @classmethod
-    def solve_cvxpy(self, problem: sdp_repr.ProblemSDP) -> sdp_solution.Solution_SDP:
-        """Solve the SDP problem with cvxpy"""
-        # Variables
-        sdp_vars = [
-            cvxpy.Variable((size, size), symmetric=True)
-            for size in problem.variable_sizes
-        ]
-        psd_constraints: List[cvxpy.Constraint] = [x >> 0 for x in sdp_vars]
-        # Moment matrix structure
-        G = sdp_vars[problem.MOMENT_MATRIX_VAR_NUM]
-        constraints: List[cvxpy.Constraint] = [G[0, 0] == 1]
-        for eq_class in problem.moment_matrix.eq_classes:
-            assert len(eq_class) > 0
-            (i, j) = eq_class.pop()
-            for x, y in eq_class:
-                constraints.append(G[i, j] == G[x, y])
-
-        # Constraints
-        for constraint in problem.constraints:
-            expression: cvxpy.Expression = cvxpy.Constant(0)
-            for var_num, matrix in constraint.constraints:
-                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
-            constraints.append(cvxpy.Constant(0) == expression)
-
-        # tr(A.T x G)
-        objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
-
-        prob = cvxpy.Problem(objective, constraints + psd_constraints)
-        # Returns the optimal value.
-        prob.solve()
-        assert isinstance(prob.value, float)
-
-        return sdp_solution.Solution_SDP(
-            prob.value,
-            [x.value for x in sdp_vars],  # type: ignore
-            constraints[0].dual_value,
-            [x.dual_value for x in psd_constraints],
-        )
-
-    @classmethod
-    def solve_mosek(self, problem: sdp_repr.ProblemSDP) -> float:
+    def solve(self, problem: ProblemSDP) -> Solution_SDP:
         """Solve the SDP problem with mosek"""
 
         # Convert constraints inside the moment matrix to primal form constraints
@@ -144,7 +87,7 @@ class Solver:
                     constraint_l = []
                     constraint_v = []
                     for var_num, matrix in problem.constraints[i].constraints:
-                        val_m, rows_m, cols_m = to_sparse_symmetric(matrix)
+                        val_m, rows_m, cols_m = to_sparse_symmetric(matrix)  # type
                         which_constraint += [1 + i] * len(val_m)
                         which_SDP += [var_num] * len(val_m)
                         constraint_k += rows_m
@@ -197,11 +140,12 @@ class Solver:
                     warnings.warn("Other solution status: ", solution_status)
                     return float("nan")  # Other solution status
 
+        # TODO implement getting the dual solution out of mosek
         try:
-            return mosek_task()
+            return Solution_SDP(mosek_task(), None, None, None)  # type: ignore
         except mosek.MosekException as e:
-            warnings.warn("Mosek exception : %s" % e)
-            return float("nan")
+            warnings.warn(f"Mosek exception : {e}")
+            return None  # type: ignore
         except Exception as e:
-            warnings.warn("Other exception : %s" % e)
-            return float("nan")
+            warnings.warn(f"Other exception : {e}")
+            return None  # type: ignore

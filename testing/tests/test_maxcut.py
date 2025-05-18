@@ -1,4 +1,5 @@
 import numpy as np
+
 from examples.maxcut import maxcut_relaxation
 
 

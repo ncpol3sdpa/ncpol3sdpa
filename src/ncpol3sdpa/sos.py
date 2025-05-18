@@ -7,7 +7,7 @@ import numpy
 from numpy.linalg import cholesky
 from numpy.typing import NDArray
 from ncpol3sdpa.sdp_solution import Solution_SDP
-import ncpol3sdpa.algebra as algebra
+import ncpol3sdpa.resolution.algebra as algebra
 # from ncpol3sdpa.problem import AvailableSolvers
 # from ncpol3sdpa.problem import Problem
 
