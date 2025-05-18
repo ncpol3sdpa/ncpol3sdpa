@@ -17,6 +17,7 @@ dependencies = [
     "mosek>=11.0.13",
     "pyvis>=0.3.2",
     "networkx>=3.4.2",
+    "hypothesis>=6.131.18",
 ]
 
 [dependency-groups]
