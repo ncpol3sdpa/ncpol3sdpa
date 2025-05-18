@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Callable
 
 import sympy as sp
 
@@ -10,6 +10,26 @@ from .utils import (
     Matrix,
     degree_of_polynomial,
 )
+
+
+def create_moment_matrix(
+    monomials: List[sp.Expr],
+    substitution_rules: Rule,
+    is_commutative: bool = True,
+    get_adjoint: Callable[[sp.Expr], sp.Expr] = lambda x: x,
+) -> Matrix:
+    """Creates a moment matrix with monomials, substitution rules. Defaults to the real commutative case"""
+    matrix_size = len(monomials)
+    return [
+        [
+            substitution_rules.apply_to_monomial(
+                get_adjoint(monomials[j]) * monomials[i],
+                is_commutative,
+            )
+            for j in range(i + 1)
+        ]
+        for i in range(matrix_size)
+    ]
 
 
 class AlgebraSDP:
@@ -42,7 +62,12 @@ class AlgebraSDP:
         )
 
         # In the commutative case, the moment matrix is symmetric
-        self.moment_matrix = self.create_moment_matrix()
+        self.moment_matrix = create_moment_matrix(
+            substitution_rules=self.substitution_rules,
+            monomials=self.monomials,
+            is_commutative=self.is_commutative,
+            get_adjoint=self.get_adjoint,
+        )
         matrix_size: int = len(self.moment_matrix)
 
         # equivalence classes of equal coefficients
@@ -159,19 +184,6 @@ class AlgebraSDP:
             ruled_monomials,
         )
         return list(ruled_filtered_monomials)
-
-    def create_moment_matrix(self) -> Matrix:
-        matrix_size = len(self.monomials)
-        return [
-            [
-                self.substitution_rules.apply_to_monomial(
-                    self.get_adjoint(self.monomials[j]) * self.monomials[i],
-                    self.is_commutative,
-                )
-                for j in range(i + 1)
-            ]
-            for i in range(matrix_size)
-        ]
 
     def create_constraint_matrix(
         self, monomials: List[sp.Expr], constraint_polynomial: sp.Expr
