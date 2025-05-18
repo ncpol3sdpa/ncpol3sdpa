@@ -18,7 +18,10 @@ ncpol3sdpa
 ├─ resolution                The resolution of a problem
 │  ├─ __init__.py            
 │  ├─ algebra.py             AlgebraSDP 
+│  ├─ algebra_sdp_real.py    
+│  ├─ algebra_sdp_complex.py
 │  ├─ constraints.py         Constraint
+│  ├─ create_algebra.py      
 │  ├─ monomial.py
 │  ├─ rules.py               Rule
 │  └─ utils.py               generate_needed_symbols
@@ -33,6 +36,7 @@ ncpol3sdpa
    ├─ __init__.py            AvailableSolvers
    ├─ cvxpy_solver.py
    ├─ mosek_solver.py
+   └─ solver_registry.py
    └─ solver.py              Solver
 ```
 
