@@ -46,7 +46,7 @@ Nous avons organisé notre travail en modules distincts :
 - **Développement par branche** : Chaque membre travaille sur une branche dédiée. Les branches sont fusionnées toutes les deux semaines.
 - **Revues de code** systématiques avant intégration
 - **Tests unitaires** et intégration continue
-- **Réunions bimensuel** avec notre superviseur (Peter Brown)
+- **Réunions bimensuelles** avec notre superviseur (Peter Brown)
 
 ### Planning
 
