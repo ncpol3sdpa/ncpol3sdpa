@@ -341,3 +341,6 @@ ncpol3sdpa
 # 16/05/2025
 - (Mathis)
   * Work on the theory of the optimization of complex non commutative problems. I'm trying to find out what these problems are because the value of the objective must be real.
+
+# 18/05/2025
+- (Nazar) Redo the property based testing Merge Request because the Yann's reorganization broke everything 
