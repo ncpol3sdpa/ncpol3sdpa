@@ -1,17 +1,6 @@
 ncpol3sdpa
 ==========
 
-.. toctree::
-   :maxdepth: 2
-
-   problem
-   constraints
-   momentmatrix
-   monomial
-   rules
-   solver
-   funs
-
 Overview
 --------
 
@@ -31,4 +20,4 @@ where :math:`f,g_i \in \mathbb{K}[x_1,\ldots,x_n]`.
 
 This library is a successor to the ncpol2sdpa library.
 
-This package is not fully functional yet, but it is under development. 
+This package is not fully functional yet, but it is under development.
