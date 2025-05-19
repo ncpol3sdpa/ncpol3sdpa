@@ -15,13 +15,20 @@ def generate_RST_files() -> None:
     
     # Define core modules to document - using direct module paths
     core_modules = [
-        ('ncpol3sdpa.problem', 'problem'),
-        ('ncpol3sdpa.resolution.constraints', 'constraints'),
-        ('ncpol3sdpa.resolution.rules', 'rules'),
-        ('ncpol3sdpa.resolution.monomial', 'monomial'),
-        ('ncpol3sdpa.resolution.algebra', 'momentmatrix'),
-        ('ncpol3sdpa.solvers.solver_registry', 'solver'),
-        ('ncpol3sdpa.algebra_to_SDP', 'funs'),
+        ('ncpol3sdpa.problem', 'Problem'),
+
+        ('ncpol3sdpa.resolution.algebra', 'Algebra'),
+        ('ncpol3sdpa.resolution.constraints', 'Constraints'),
+        ('ncpol3sdpa.resolution.create_algebra', 'CreateAlgebra'),
+        ('ncpol3sdpa.resolution.monomial', 'Monomial'),
+        ('ncpol3sdpa.resolution.rules', 'Rules'),
+
+        ('ncpol3sdpa.sdp_repr.problem_SDP', 'ProblemSDP'),
+        ('ncpol3sdpa.sdp_repr.moment_matrix_SDP', 'MomentMatrixSDP'),
+
+
+        ('ncpol3sdpa.solvers.solver', 'Solver'),
+        ('ncpol3sdpa.solvers.solver_registry', 'SolverRegistry'),
     ]
     
     # Generate RST files for core modules
