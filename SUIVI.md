@@ -350,3 +350,6 @@ ncpol3sdpa
 - (Nazar) Redo the property based testing Merge Request because the Yann's reorganization broke everything 
 - (Yann) 
   * Work on audit presentation
+
+# 19/05/2025
+- (Nazar) Implement getting the full solution from the mosek solver from the SOS decomposition
