@@ -353,3 +353,4 @@ ncpol3sdpa
 
 # 19/05/2025
 - (Nazar) Implement getting the full solution from the mosek solver from the SOS decomposition
+- (Tous) Audit presentation
