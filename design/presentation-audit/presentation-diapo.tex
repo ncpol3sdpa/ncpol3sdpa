@@ -7,6 +7,7 @@
 \usepackage[french]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, amssymb}
+\usepackage{subcaption}
 
 \title{Projet ncpol3sdpa}
 \subtitle{Audit de Présentation}
@@ -65,7 +66,7 @@ Notre bibliothèque vise à :
 
 \begin{frame}{Notre Équipe}
 \begin{description}
-    \item[Alain]: maxcut
+    \item[Alain]: problème maxcut
     \item[Mathis]: polynômes complexes et non commutatifs
     \item[Nazar]: tests et intégration continue
     \item[Thomas]: SOS decomposition
@@ -79,7 +80,6 @@ Notre bibliothèque vise à :
 Nous avons organisé notre travail en modules distincts :
 \begin{itemize}
     \item Implémentation du noyau mathématique
-    \item Développement des interfaces utilisateur
     \item Tests et validation
     \item Documentation et exemples d'utilisation
 \end{itemize}
@@ -102,7 +102,7 @@ Nous avons organisé notre travail en modules distincts :
 Cas d'optimisation des polynômes commutatifs et réels
 \begin{itemize}
     \item[\checkmark] Partie "Algèbre", manipulation symbolique des polynômes
-    \item[\checkmark] Construction de la matrice des moments de Lasserre
+    \item[\checkmark] Construction de la matrice des moments de la hiérarchie de Lasserre
     \item[\checkmark] Communication avec des solveurs de SDP
 \end{itemize}
 \end{frame}
@@ -129,6 +129,30 @@ Cas d'optimisation des polynômes commutatifs et réels
     \item Résolution de problèmes d'optimisation
     \item \texttt{ncpol2sdpa} est actuellement utilisée par des chercheurs
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Applications}
+
+\begin{itemize}
+    \item Problème maxcut
+    \item Ferme à mob dans Minecraft
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/minecraft-mob-farm.png}
+        \caption{Exemple d'application : optimisation dans Minecraft}
+    \end{subfigure}
+    % \hfill
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{img/maxcut.png}
+        \caption{Exemple d'application : optimisation du problème maxcut}
+    \end{subfigure}
+\end{figure}
+
 \end{frame}
 
 \begin{frame}{Merci de votre attention}
