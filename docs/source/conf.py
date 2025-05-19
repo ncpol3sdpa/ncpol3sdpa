@@ -6,6 +6,8 @@
 # Add the project root directory to Python's path
 import os
 import sys
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+import generate_docs
 sys.path.insert(0, os.path.abspath('../../'))
 sys.path.insert(0, os.path.abspath('../../src/'))
 
@@ -41,7 +43,6 @@ autosummary_generate = True
 autodoc_member_order = 'bysource'
 
 # Create a directory for autosummary generated templates
-import os
 if not os.path.exists(os.path.join(os.path.dirname(__file__), 'generated')):
     os.makedirs(os.path.join(os.path.dirname(__file__), 'generated'))
 
@@ -51,7 +52,7 @@ exclude_patterns = [
 ]
 
 # Mock imports that might cause issues during documentation building
-autodoc_mock_imports = ["cvxpy", "mosek", "sympy", "numpy"]
+autodoc_mock_imports = ["cvxpy", "mosek", "sympy", "numpy", "numpy.typing", "typing"]
 
 # Intersphinx configuration
 intersphinx_mapping = {
@@ -88,3 +89,7 @@ html_show_sourcelink = True
 # -- Script to generate the documentation -----------------------------------
 
 print("Generating documentation...")
+
+# Run the generate_docs.py script to create RST files for modules
+generate_docs.generate_RST_files()
+print(".rst files generated")
