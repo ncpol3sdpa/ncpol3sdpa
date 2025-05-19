@@ -5,9 +5,8 @@ This script creates documentation files for the core modules of the project.
 """
 
 import os
-import sys
 
-def main() -> int:
+def generate_RST_files() -> None:
     # Get the project root directory and docs source directory
     script_dir = os.path.dirname(os.path.abspath(__file__))
     output_dir = script_dir
@@ -29,7 +28,7 @@ def main() -> int:
     generated_modules = []
     for module_name, file_name in core_modules:
         print(f"Generating documentation for {module_name}")
-        file_path = os.path.join(output_dir, f"{file_name}.rst")
+        file_path = os.path.join(output_dir, f"generated/{file_name}.rst")
         
         display_name = file_name.replace('_', ' ').title()
         content = f"""{display_name}
@@ -47,7 +46,7 @@ def main() -> int:
         generated_modules.append(file_name)
     
     print(f"Generated documentation for {len(generated_modules)} modules")
-    return 0
+    return
 
 if __name__ == "__main__":
-    sys.exit(main())
+    generate_RST_files()
