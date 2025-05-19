@@ -15,28 +15,49 @@ ncpol3sdpa documentation
 Installation
 ------------
 
-You will need a mosek license to use the solver. You can get a free academic license from the [Mosek website](https://www.mosek.com/).
-
-.. code-block:: console
-
-   (docs) $ make html
+You will need a mosek license to use the solver. You can get a free academic license from the `Mosek website <https://www.mosek.com/>`_.
 
 
-you can use the ``src.ncpol3sdpa.momentmatrix.needed_monomials``.
+Basic Usage
+-----------
+
+Here's a simple example of how to use the package:
+
+.. code-block:: python
+
+   from ncpol3sdpa import Problem, Constraint
+   from sympy.abc import x, y
+   
+   # Define the objective function
+   objective = x*y
+   
+   # Create a problem instance
+   problem = Problem(objective)
+   
+   # Add constraints
+   problem.add_constraint(Constraint.InequalityConstraint(1 - x**2 - y**2))
+   
+   # Solve the problem
+   result = problem.solve(relaxation_order=2)
+   print(f"Optimal value: {result}")
 
 
-Project Structure
------------------
+Documentation
+-------------
 
 .. toctree::
    :maxdepth: 2
 
    Home <self>
-
-   constraints
-   funs
-   momentmatrix
-   monomial
-   problem
-   rules
-   solver
+   ncpol3sdpa
+   quickstart
+   examples
+   api
+   
+   generated/problem
+   generated/constraints
+   generated/momentmatrix
+   generated/monomial
+   generated/rules
+   generated/solver
+   generated/funs
