@@ -6,6 +6,8 @@
 # Add the project root directory to Python's path
 import os
 import sys
+
+
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 import generate_docs
 sys.path.insert(0, os.path.abspath('../../'))
@@ -64,20 +66,16 @@ intersphinx_mapping = {
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-# Use sphinx-rtd-theme if available, otherwise fall back to alabaster
-try:
-    import sphinx_rtd_theme
-    html_theme = "sphinx_rtd_theme"
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-    html_theme_options = {
-        'navigation_depth': 4,
-        'collapse_navigation': False,
-        'sticky_navigation': True,
-        'includehidden': True,
-        'titles_only': False
-    }
-except ImportError:
-    html_theme = "alabaster"
+# Use sphinx-rtd-theme
+
+html_theme = "sphinx_rtd_theme"
+html_theme_options = {
+    'navigation_depth': 4,
+    'collapse_navigation': False,
+    'sticky_navigation': True,
+    'includehidden': True,
+    'titles_only': False
+}
 
 html_static_path = ["_static"]
 html_title = f"{project} {release} Documentation"
