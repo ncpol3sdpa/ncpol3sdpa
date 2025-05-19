@@ -53,11 +53,3 @@ Documentation
    quickstart
    examples
    api
-   
-   generated/problem
-   generated/constraints
-   generated/momentmatrix
-   generated/monomial
-   generated/rules
-   generated/solver
-   generated/funs
