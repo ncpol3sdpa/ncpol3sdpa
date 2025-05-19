@@ -1,3 +1,4 @@
+from typing import Optional
 from ncpol3sdpa.sdp_repr import ProblemSDP
 from ncpol3sdpa.sdp_solution import Solution_SDP
 
@@ -10,7 +11,7 @@ class Solver:
     """
 
     @classmethod
-    def solve(self, problem: ProblemSDP) -> Solution_SDP:
+    def solve(self, problem: ProblemSDP) -> Optional[Solution_SDP]:
         """Solve the SDP problem"""
 
         raise NotImplementedError("This method should be implemented in a subclass")

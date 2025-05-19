@@ -35,7 +35,7 @@ class Problem:
         self,
         relaxation_order: int = 1,
         solver: Solver | AvailableSolvers = AvailableSolvers.CVXPY,
-    ) -> float:
+    ) -> Optional[float]:
         """Solve the polynomial optimization problem using SDP relaxation.
 
         Args:
@@ -92,4 +92,17 @@ class Problem:
             raise TypeError(
                 f"Solver must be of type {Solver} or {AvailableSolvers}, not {type(solver)}"
             )
-        return self.solution.primal_objective_value
+        if self.solution is not None:
+            return self.solution.primal_objective_value
+        else:
+            return None
+
+    def solve_uncheked(
+        self,
+        relaxation_order: int = 1,
+        solver: Solver | AvailableSolvers = AvailableSolvers.CVXPY,
+    ) -> float:
+        """Same as solve, but will raise an exception if there was no solution"""
+        res = self.solve(relaxation_order=relaxation_order, solver=solver)
+        assert res is not None, "Could not find solution"
+        return res

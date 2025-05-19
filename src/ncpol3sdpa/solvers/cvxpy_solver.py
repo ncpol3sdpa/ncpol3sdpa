@@ -1,4 +1,5 @@
-from typing import List
+from typing import List, Optional
+import warnings
 
 from numpy.typing import NDArray
 import numpy as np
@@ -19,7 +20,7 @@ def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:
 
 class CvxpySolver(Solver):
     @classmethod
-    def solve(self, problem: ProblemSDP) -> Solution_SDP:
+    def solve(self, problem: ProblemSDP) -> Optional[Solution_SDP]:
         """Solve the SDP problem with cvxpy"""
         # Variables
         sdp_vars = [
@@ -51,9 +52,15 @@ class CvxpySolver(Solver):
         prob.solve()
         assert isinstance(prob.value, float)
 
-        return Solution_SDP(
-            prob.value,
-            [x.value for x in sdp_vars],  # type: ignore
-            constraints[0].dual_value,
-            [c.dual_value for c in psd_constraints],
-        )
+        if prob.status == "optimal":
+            return Solution_SDP(
+                prob.value,
+                [x.value for x in sdp_vars],  # type: ignore
+                constraints[0].dual_value,
+                [c.dual_value for c in psd_constraints],
+            )
+        else:
+            warnings.warn(
+                f'CVXPY could not solve the problem, solution status is "{prob.status}"'
+            )
+            return None
