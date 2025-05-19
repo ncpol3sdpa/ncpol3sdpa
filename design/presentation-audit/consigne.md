@@ -10,7 +10,7 @@
 
 - Le questionnaire peut être rempli en Markdown, et sera collé dans une issue gitlab
 
-- Echange de ~20 minutes et ~10 minutes de questions (remplissage questionnaire)
+- Echange de ~10 minutes et ~10 minutes de questions (remplissage questionnaire)
 
 <!-- Les échanges dureront une vingtaine de minutes, permettant d’évaluer le groupe, suivies de quelques minutes pour discuter entre auditeurs et auditrices sur le remplissage (individuel) du questionnaire (et gardez quelques minutes pour aller à la salle suivante à l'heure, nous utilisons tout le bâtiment). Vous n’êtes pas obligés d’être d’accord sur tout, ni sur les notes à donner, ni sur les conseils, les groupes recevront toutes les notes et réponses rendues, verbatim (sauf la partie privée). Nous recommendons à tous les groupes de préparer une présentation d'une dizaine de minutes pour laisser une dizaine de minutes de questions/remarques. -->
 

@@ -2,23 +2,45 @@
 
 ## Description
 
+<<<<<<< HEAD
 This package is a Python library for solving polynomial optimization problems using Lassert hierarchical SDP relaxations.
+=======
+This package is a Python library for solving polynomial optimization problems using Lasserre hierarchical SDP relaxations.
+
+We solve the following problem:
+$$\begin{align*}
+\max_{x_1, \ldots, x_n} &\quad f(x_1, \ldots, x_n) \\
+\text{s.t.} &\quad g_i(x_1, \ldots, x_n) \leq 0 \quad \forall i
+\end{align*}$$
+
+where $f,g_i \in \mathbb K [x_1,\ldots,x_n]$.
+
+This library is a successor to the ncpol2sdpa library.
+>>>>>>> main
 
 ### Architecture
 
 ```
 ncpol3sdpa
 ├─ __init__.py
-├─ algebra_to_SDP.py         algebra_to_SDP
+├─ algebra_to_SDP.py
 ├─ funs.py
 ├─ main.py
 ├─ problem.py                Problem
 ├─ sos.py                    Sos
 │
 ├─ resolution                The resolution of a problem
+<<<<<<< HEAD
 │  ├─ __init__.py
 │  ├─ algebra.py             AlgebraSDP
+=======
+│  ├─ __init__.py
+│  ├─ algebra.py             AlgebraSDP
+│  ├─ algebra_sdp_real.py
+│  ├─ algebra_sdp_complex.py
+>>>>>>> main
 │  ├─ constraints.py         Constraint
+│  ├─ create_algebra.py
 │  ├─ monomial.py
 │  ├─ rules.py               Rule
 │  └─ utils.py               generate_needed_symbols
@@ -33,6 +55,7 @@ ncpol3sdpa
    ├─ __init__.py            AvailableSolvers
    ├─ cvxpy_solver.py
    ├─ mosek_solver.py
+   └─ solver_registry.py
    └─ solver.py              Solver
 ```
 
