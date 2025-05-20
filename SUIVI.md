@@ -354,3 +354,7 @@ ncpol3sdpa
 # 19/05/2025
 - (Nazar) Implement getting the full solution from the mosek solver from the SOS decomposition
 - (Tous) Audit presentation
+- (Nazar Mathis) Work on a theorical solution for the decomposition of a polynom P = <A|M> 
+
+# 20/05/2025
+- (Mathis) Refactor the non commutative part in the algebra class [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/26)
