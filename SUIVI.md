@@ -355,3 +355,21 @@ ncpol3sdpa
 - (Nazar) Implement getting the full solution from the mosek solver from the SOS decomposition
 - (Nazar & Mathis) Work out the details on how to force the A matrix to be hermitian in the non-commutative case
 - (Everyone) Present project during audit
+- (Yann)
+  * Documentation Infrastructure:
+    + Created and updated Sphinx documentation setup
+    + Added script (generate_docs.py) to automatically generate RST documentation files
+    + Updated configuration in conf.py for proper documentation generation
+    + Configured the sphinx-rtd-theme for better documentation presentation
+  * Documentation Content:
+    + Created core documentation files: API reference, examples, quickstart guide, and overview
+    + Added mathematical descriptions of the optimization problems the library tackles
+    + Included example code demonstrating basic usage
+  * Project Organization:
+    + Added and updated .gitignore files to properly manage generated documentation files
+    + Restructured module documentation paths to use a "generated/" subdirectory
+    + Removed unused toctree entries from documentation
+  * Library Description:
+    + Updated description of the ncpol3sdpa library, which is described as a successor to ncpol2sdpa
+    + Added mathematical notation for the optimization problems being solved
+    + Noted that the package is still under development and not yet fully functional
