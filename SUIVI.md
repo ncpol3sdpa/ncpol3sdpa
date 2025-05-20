@@ -338,20 +338,13 @@ ncpol3sdpa
   * Work on the `AlgebraSDPReal` and `AlgebraSDPComplex` classes
   * Improve the project structure
   * Merge the [MR 24](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/24) about the project structure
-<<<<<<< HEAD
-  *
-![The new project struct after MR24](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/raw/main/docs/graphs/pydeps_graph5.svg)
-=======
 
 ![](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/raw/main/docs/graphs/pydeps_graph5.svg)
 ![](./docs/graphs/pydeps_graph5.svg)
->>>>>>> main
 
 # 16/05/2025
 - (Mathis)
   * Work on the theory of the optimization of complex non commutative problems. I'm trying to find out what these problems are because the value of the objective must be real.
-<<<<<<< HEAD
-=======
 
 # 18/05/2025
 - (Nazar) Redo the property based testing Merge Request because the Yann's reorganization broke everything
@@ -360,4 +353,38 @@ ncpol3sdpa
 
 # 19/05/2025
 - (Nazar) Implement getting the full solution from the mosek solver from the SOS decomposition
->>>>>>> main
+- (Nazar & Mathis) Work out the details on how to force the A matrix to be hermitian in the non-commutative case
+- (Everyone) Present project during audit
+- (Yann)
+  * Documentation Infrastructure:
+    + Created and updated Sphinx documentation setup
+    + Added script (generate_docs.py) to automatically generate RST documentation files
+    + Updated configuration in conf.py for proper documentation generation
+    + Configured the sphinx-rtd-theme for better documentation presentation
+  * Documentation Content:
+    + Created core documentation files: API reference, examples, quickstart guide, and overview
+    + Added mathematical descriptions of the optimization problems the library tackles
+    + Included example code demonstrating basic usage
+  * Project Organization:
+    + Added and updated .gitignore files to properly manage generated documentation files
+    + Restructured module documentation paths to use a "generated/" subdirectory
+    + Removed unused toctree entries from documentation
+  * Library Description:
+    + Updated description of the ncpol3sdpa library, which is described as a successor to ncpol2sdpa
+    + Added mathematical notation for the optimization problems being solved
+    + Noted that the package is still under development and not yet fully functional
+
+# 20/05/2025
+- (Yann)
+  * Documentation Updates:
+    + New .gitignore for documentation build artifacts
+    + Moved HTML .gitignore to build directory
+    + Added .gitignore for generated files
+  * Documentation Structure:
+    + Removed unused toctree entries from ncpol3sdpa documentation
+    + Updated API reference file paths in source files
+    + Updated documentation generation script to match new structure
+
+# 21/05/2025
+- (Yann)
+  * Works on [MR 25](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/25) and [MR 26](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/26)
