@@ -373,3 +373,14 @@ ncpol3sdpa
     + Updated description of the ncpol3sdpa library, which is described as a successor to ncpol2sdpa
     + Added mathematical notation for the optimization problems being solved
     + Noted that the package is still under development and not yet fully functional
+
+# 20/05/2025
+- (Yann)
+  * Documentation Updates:
+    + New .gitignore for documentation build artifacts
+    + Moved HTML .gitignore to build directory
+    + Added .gitignore for generated files
+  * Documentation Structure:
+    + Removed unused toctree entries from ncpol3sdpa documentation
+    + Updated API reference file paths in source files
+    + Updated documentation generation script to match new structure
