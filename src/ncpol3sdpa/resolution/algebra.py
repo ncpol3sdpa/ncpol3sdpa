@@ -43,7 +43,6 @@ class AlgebraSDP:
         objective: sp.Expr,
         relaxation_order: int,
         substitution_rules: Rule,
-        is_commutative: bool = True,
     ) -> None:
         """
         Construct the symbolic Moment Matrices and soundings data structures.
@@ -53,9 +52,8 @@ class AlgebraSDP:
 
         self.relaxation_order: int = relaxation_order
         self.substitution_rules: Rule = substitution_rules
-        self.is_commutative = is_commutative
         self.monomials: List[sp.Expr] = substitution_rules.filter_monomials(
-            generate_monomials(needed_variables, relaxation_order, is_commutative)
+            generate_monomials(needed_variables, relaxation_order, self.is_commutative)
         )
         self.objective: sp.Expr = substitution_rules.apply_to_polynomial(
             sp.expand(objective)
@@ -114,6 +112,11 @@ class AlgebraSDP:
     @property
     def is_real(self) -> bool:
         return False
+
+    @property
+    def is_commutative(self) -> bool:
+        "Return the commutativity of self"
+        raise NotImplementedError
 
     # Public methods
 

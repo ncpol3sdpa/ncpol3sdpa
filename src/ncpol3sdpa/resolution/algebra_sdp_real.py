@@ -7,10 +7,11 @@ from ncpol3sdpa.resolution.utils import degree_of_polynomial
 
 class AlgebraSDPReal(AlgebraSDP):
     def get_adjoint(self, monomial: sp.Expr) -> sp.Expr:
-        if self.is_commutative:
-            return monomial
-        else:
-            return monomial.adjoint()  # type: ignore
+        return monomial
+
+    @property
+    def is_commutative(self) -> bool:
+        return True
 
     def get_length_constraint_matrix(self, deg_pol: int) -> int:
         k_i = self.relaxation_order - deg_pol // 2
