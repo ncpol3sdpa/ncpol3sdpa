@@ -326,7 +326,7 @@ ncpol3sdpa
 ## 13/05/2025
 - (Yann)
   * Finish the [MR 22](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/22) about the project structure
-  
+
 ![](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/raw/main/docs/graphs/pydeps_graph4.svg)
 ![](./docs/graphs/pydeps_graph4.svg)
 
@@ -334,7 +334,7 @@ ncpol3sdpa
   * Creation of two classes `AlgebraSDPReal` and `AlgebraSDPComplex` to properly handle the real and complex cases with the polymorphism of the OOP. These changes lead to the [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/24)
 
 ## 14/05/2025
-- (Yann) 
+- (Yann)
   * Work on the `AlgebraSDPReal` and `AlgebraSDPComplex` classes
   * Improve the project structure
   * Merge the [MR 24](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/24) about the project structure
@@ -347,14 +347,11 @@ ncpol3sdpa
   * Work on the theory of the optimization of complex non commutative problems. I'm trying to find out what these problems are because the value of the objective must be real.
 
 # 18/05/2025
-- (Nazar) Redo the property based testing Merge Request because the Yann's reorganization broke everything 
-- (Yann) 
+- (Nazar) Redo the property based testing Merge Request because the Yann's reorganization broke everything
+- (Yann)
   * Work on audit presentation
 
 # 19/05/2025
 - (Nazar) Implement getting the full solution from the mosek solver from the SOS decomposition
-- (Tous) Audit presentation
-- (Nazar Mathis) Work on a theorical solution for the decomposition of a polynom P = <A|M> 
-
-# 20/05/2025
-- (Mathis) Refactor the non commutative part in the algebra class [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/26)
+- (Nazar & Mathis) Work out the details on how to force the A matrix to be hermitian in the non-commutative case
+- (Everyone) Present project during audit
