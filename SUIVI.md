@@ -384,3 +384,7 @@ ncpol3sdpa
     + Removed unused toctree entries from ncpol3sdpa documentation
     + Updated API reference file paths in source files
     + Updated documentation generation script to match new structure
+
+# 21/05/2025
+- (Yann)
+  * Works on [MR 25](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/25) and [MR 26](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/26)
