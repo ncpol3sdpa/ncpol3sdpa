@@ -28,7 +28,7 @@ class ProblemSDP:
         # Each variable is a positive semi-definite matrix
         self.__variable_sizes: List[int] = [moment_matrix.size]
         self.__objective: NDArray[np.complex64] | NDArray[np.float64] = objective
-        self.__constraints: List[EqConstraint] = []
+        self.constraints: List[EqConstraint] = []
 
         assert objective.shape == (moment_matrix.size, moment_matrix.size)
 
@@ -82,11 +82,6 @@ class ProblemSDP:
     def objective(self) -> NDArray[np.complex64] | NDArray[np.float64]:
         """The objective matrix"""
         return self.__objective
-
-    @property
-    def constraints(self) -> List[EqConstraint]:
-        """The constraints of the SDP"""
-        return self.__constraints
 
     # --- internal functions ---
 

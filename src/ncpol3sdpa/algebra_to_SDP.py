@@ -34,7 +34,6 @@ def polynomial_to_matrix(
             monomial /= sympy.I
             coef = float(coef)
             coef *= 1j  # type: ignore
-        print(monomial)
         assert monomial in algebra.monomial_to_positions.keys()
         assert 0 < len(algebra.monomial_to_positions[monomial])
 
