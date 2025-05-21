@@ -21,6 +21,9 @@ stages:
   - test
   - deploy
 
+default:
+  image: ruby:3.2
+
 variables:
   PYTHON_VERSION: "3.13"
   UV_VERSION: "0.5.5"
@@ -107,3 +110,11 @@ deploy-job:
   script:
     - echo "Deploying application..."
     - echo "Application successfully deployed."
+
+create-pages:
+  stage: deploy
+  script:
+    - gem install bundler
+    - bundle install
+    - bundle exec jekyll build -d public
+  pages: true
