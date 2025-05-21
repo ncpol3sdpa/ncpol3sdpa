@@ -113,8 +113,13 @@ deploy-job:
 
 create-pages:
   stage: deploy
+  image: ruby:3.2
   script:
     - gem install bundler
     - bundle install
     - bundle exec jekyll build -d public
-  pages: true
+  artifacts:
+    paths:
+      - public
+  # only:
+  #   - main
