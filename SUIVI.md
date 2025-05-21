@@ -384,6 +384,8 @@ ncpol3sdpa
     + Removed unused toctree entries from ncpol3sdpa documentation
     + Updated API reference file paths in source files
     + Updated documentation generation script to match new structure
+- (Mathis)
+  * Refactor the nc part by creating a new class `AlgebraSDPnc` that inheritate from `AlgebraSDP` [MR26](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/26/diffs)
 
 # 21/05/2025
 - (Yann)
