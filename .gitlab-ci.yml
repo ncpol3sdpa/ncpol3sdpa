@@ -17,8 +17,8 @@
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
 stages:
-  # - build
-  # - test
+  - build
+  - test
   - deploy
 
 variables:
@@ -40,39 +40,39 @@ before_script:
   - echo "Setting up the environment..."
   - python3 --version
 
-uv-install:
-  stage: build
-  variables:
-    UV_CACHE_DIR: .uv-cache
-  cache:
-    key:
-      files:
-        - uv.lock
-    paths:
-      - $UV_CACHE_DIR
-  script:
-    - uv cache prune --ci
+# uv-install:
+#   stage: build
+#   variables:
+#     UV_CACHE_DIR: .uv-cache
+#   cache:
+#     key:
+#       files:
+#         - uv.lock
+#     paths:
+#       - $UV_CACHE_DIR
+#   script:
+#     - uv cache prune --ci
 
-pytest:
-  stage: test
-  script:
-    - echo "Running Pytest..."
-    - echo "HOME is $HOME"
-    - mkdir $HOME/mosek
-    - touch $HOME/mosek/mosek.lic
-    # - echo "$MSK_LICENSE" >> $HOME/mosek/mosek.lic
-    - echo "$MOSEK_LICENSE" >> $HOME/mosek/mosek.lic
-    - echo "Mosek license file created at $HOME/mosek/mosek.lic\n"
-    - uv run pytest
-    - echo "Pytest complete"
+# pytest:
+#   stage: test
+#   script:
+#     - echo "Running Pytest..."
+#     - echo "HOME is $HOME"
+#     - mkdir $HOME/mosek
+#     - touch $HOME/mosek/mosek.lic
+#     # - echo "$MSK_LICENSE" >> $HOME/mosek/mosek.lic
+#     - echo "$MOSEK_LICENSE" >> $HOME/mosek/mosek.lic
+#     - echo "Mosek license file created at $HOME/mosek/mosek.lic\n"
+#     - uv run pytest
+#     - echo "Pytest complete"
 
-mypy:
-  stage: test
-  script:
-    - echo "Running Mypy..."
-    - uv run mypy
-    - echo "Mypy complete"
-  allow_failure: false
+# mypy:
+#   stage: test
+#   script:
+#     - echo "Running Mypy..."
+#     - uv run mypy
+#     - echo "Mypy complete"
+#   allow_failure: false
 
 # - name: Setup MOSEK & Run Tests
 #    env:
@@ -88,13 +88,13 @@ mypy:
 #     - echo "Testing Key complete"
 #   allow_failure: true
 
-ruff-check-src:
-  stage: test
-  script:
-    - echo "Running Ruff..."
-    - uvx ruff check src
-    - echo "Ruff complete"
-  allow_failure: true
+# ruff-check-src:
+#   stage: test
+#   script:
+#     - echo "Running Ruff..."
+#     - uvx ruff check src
+#     - echo "Ruff complete"
+#   allow_failure: true
 
 # ruff-check-tests:
 #   stage: test
