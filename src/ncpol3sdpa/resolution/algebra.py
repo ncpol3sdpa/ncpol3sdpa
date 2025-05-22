@@ -56,7 +56,6 @@ class AlgebraSDP:
         self.monomials: List[sp.Expr] = substitution_rules.filter_monomials(
             generate_monomials(needed_variables, relaxation_order, self.is_commutative)
         )
-        print("APAGNAN", self.monomials, "\n")
         self.objective: sp.Expr = substitution_rules.apply_to_polynomial(
             sp.expand(objective)
         )
@@ -136,10 +135,7 @@ class AlgebraSDP:
             shape=(moment_matrix_size, moment_matrix_size), dtype=self.DTYPE
         )
 
-        print("a", self.monomial_to_positions.keys())
-
         for monomial, coef in sp.expand(poly).as_coefficients_dict().items():
-            print("b", monomial)
             if sp.I in coef.atoms():  # type: ignore
                 coef /= sp.I
                 coef = float(coef)
