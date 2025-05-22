@@ -391,3 +391,6 @@ ncpol3sdpa
 - (Yann)
   * Works on [MR 25](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/25) and [MR 26](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/26)
 - (Nazar) Work on fixing issue #6 . Uscucseffuly try to implement #8 . Read Boaz's notes on SOS 
+
+# 22/05/2025
+- (Nazar) Test the fix for issue #6. Open a merge request for this issue
