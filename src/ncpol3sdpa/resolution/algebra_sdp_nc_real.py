@@ -5,7 +5,7 @@ from ncpol3sdpa.resolution.algebra import AlgebraSDP
 from ncpol3sdpa.resolution.utils import degree_of_polynomial
 
 
-class AlgebraSDPnc(AlgebraSDP):
+class AlgebraSDPncReal(AlgebraSDP):
     def get_adjoint(self, monomial: sp.Expr) -> sp.Expr:
         return monomial.adjoint()  # type: ignore
 
@@ -13,8 +13,12 @@ class AlgebraSDPnc(AlgebraSDP):
     def is_commutative(self) -> bool:
         return False
 
+    @property
+    def is_real(self) -> bool:
+        return True
+
     def get_length_constraint_matrix(self, deg_pol: int) -> int:
-        k_i = self.relaxation_order - deg_pol
+        k_i = self.relaxation_order - deg_pol // 2
         return k_i
 
     def is_expressible_as_moment_coeff(self, monomial: sp.Expr) -> bool:
