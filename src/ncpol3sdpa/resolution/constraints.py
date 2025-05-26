@@ -3,6 +3,8 @@ from enum import Enum, auto
 
 from sympy import Expr, Poly
 
+from .utils import NoPublicConstructor
+
 
 class ConstraintType(Enum):
     EQUALITY = auto()  # Represents an equality constraint (p = 0)
@@ -10,7 +12,7 @@ class ConstraintType(Enum):
     LOCAL_INEQUALITY = auto()  # Represents a local inequality constraint (p > 0)
 
 
-class Constraint:
+class Constraint(metaclass=NoPublicConstructor):
     def __init__(
         self,
         constraint_type: ConstraintType,
@@ -33,16 +35,16 @@ class Constraint:
     def EqualityConstraint(
         cls, polynomial: Expr | Poly, substitution: bool = False
     ) -> Constraint:
-        return cls(ConstraintType.EQUALITY, polynomial, substitution)
+        return cls._create(ConstraintType.EQUALITY, polynomial, substitution)
 
     @classmethod
     def InequalityConstraint(
         cls, polynomial: Expr, substitution: bool = False
     ) -> Constraint:
-        return cls(ConstraintType.INEQUALITY, polynomial, substitution)
+        return cls._create(ConstraintType.INEQUALITY, polynomial, substitution)
 
     @classmethod
     def LocalInequalityConstraint(
         cls, polynomial: Expr, substitution: bool = False
     ) -> Constraint:
-        return cls(ConstraintType.LOCAL_INEQUALITY, polynomial, substitution)
+        return cls._create(ConstraintType.LOCAL_INEQUALITY, polynomial, substitution)
