@@ -54,6 +54,7 @@ class AlgebraSDP:
 
         # This is the positive semi-definite matrices in the sdp
         self.constraint_moment_matrices: List[Matrix] = []
+        self.psd_polynomials_gi: List[sp.Expr] = []
         # List of polynomials that equal 0
         self.equality_constraints: List[sp.Expr] = []
 
@@ -125,6 +126,7 @@ class AlgebraSDP:
                     constraint.polynomial,
                 )
             )
+            self.psd_polynomials_gi.append(constraint.polynomial)
 
     def add_constraints(self, constraints: List[Constraint]) -> None:
         for constraint in constraints:

@@ -13,13 +13,13 @@ Polynomial Variables: $X_1, \cdots , X_n \in \mathcal H$ <br>
 Relaxation order: $k \in \mathbb N$ <br>
 Number of monomials of degree less than k: $N\in\mathbb N$  <br>
 Vector of all monomials up to degree $k$ : $\omega = \begin{pmatrix} X_1 & X_1^\dagger & X_2 & X_2^\dagger & \cdots & X_1^2 & X_1 X_1^\dagger & \cdots& \end{pmatrix} \in \mathcal M_{1,N} (\mathcal H_o)$ <br>
-Variation : $w = v \cdot \omega  = \begin{pmatrix} v X_1 & v X_1^\dagger  & v X_2  &\cdots\; \end{pmatrix} \in \mathcal M_{1,N} (\mathcal H) $<br>
+Variation : $w = v \cdot \omega  = \begin{pmatrix} v X_1 & v X_1^\dagger  & v X_2  &\cdots\; \end{pmatrix} \in \mathcal M_{1,N} (\mathcal H)$ <br>
 Moment matrix $M = w^\dagger w \in \mathcal M_{N,N} (\mathcal H)$
 
 
 #### Polynomials relevant to the problem:
 
-Objective polynomial: $c$, $C \in \mathrm{Herm}(N) $ s.t. $ c(X_1, \cdots , X_n) = \langle C \vert M \rangle$ <br>
+Objective polynomial: $c$, $C \in \mathrm{Herm}(N)$ s.t. $c(X_1, \cdots , X_n) = \langle C \vert M \rangle$ <br>
 Zero constraint polynomials: for $0 \leq i \le n_z,$
 $$f_i \text{ and } F_i \in \mathrm{Herm}(N) \text{ s.t. } f_i(X_1, \cdots , X_n) = \langle F_i \vert M \rangle$$
 
@@ -32,7 +32,7 @@ PSD constraints: for $0 \leq i \le \widetilde n,$
  * Localizing moment matrix $M_i \in \mathcal M_{N_i,N_i} (\mathcal H_o)$, $k_i \in \mathbb N$ <br>such that $M_i = w_{k_i}^\dagger g_i w_{k_i}$ <br>
  where $w$ is shortened to up to degree $k_i$
  * for $0 \leq j \le n_{constraint, i}$ :
-    * $G_i \in \mathrm{Herm}(N), \Gamma_i \in \mathrm{Herm}(N_i), $ <br>
+    * $G_i \in \mathrm{Herm}(N), \Gamma_i \in \mathrm{Herm}(N_i),$ <br>
     * $\langle G_i \vert M \rangle = \langle \Gamma_i \vert M_i \rangle$
 
 $\forall i, c, f_i, g_i, h_i$ are hermitian

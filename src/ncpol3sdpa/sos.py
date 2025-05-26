@@ -1,51 +1,110 @@
-from typing import List, Tuple
+from typing import List
 
-# from numpy.typing import NDArray
-# import numpy as np
 import sympy
 import numpy
 from numpy.linalg import cholesky
 from numpy.typing import NDArray
 from ncpol3sdpa.sdp_solution import Solution_SDP
 import ncpol3sdpa.resolution.algebra as algebra
-# from ncpol3sdpa.problem import AvailableSolvers
-# from ncpol3sdpa.problem import Problem
 
 
-class Sos:
+def sympy_sum(terms: List[sympy.Expr]) -> sympy.Expr:
+    res: sympy.Expr = sympy.sympify(0)
+    for term in terms:
+        res += term
+    return res
+
+
+class SumOfSquares:
+    """Data structure representing a sum of squares polynomials"""
+
+    def __init__(self, squares: List[sympy.Expr], middle_term: sympy.Expr) -> None:
+        """The polynomial represented is the sum of the squares of the elements of `squares`"""
+        self.squares = squares
+        self.middle_term = middle_term
+
+    def to_expression(self) -> sympy.Expr:
+        return sympy_sum(
+            [sympy.adjoint(term) * self.middle_term * term for term in self.squares]
+        )
+
+
+class SosDecomposition:
     """Class to represent the SOS problem"""
 
-    def compute_sos_decomposition(
-        self, problem_algebra: algebra.AlgebraSDP, solution: Solution_SDP
-    ) -> Tuple[float, List[sympy.Expr], List[List[sympy.Expr]]]:
-        """Computes an SOS decomposition of (objective polynomial - lambda) using of the solution to the
-        dual SDP.
+    def __init__(
+        self, dual_objective: float, SOS: SumOfSquares, SOS_i: List[SumOfSquares]
+    ) -> None:
+        self.dual_objective = dual_objective
+        self.SOS = SOS
+        self.SOS_i = SOS_i
 
-        returns: (lambda, SOS, [SOS_i | i in range(len(algebra.constraints))])
-        requires: solution is a solution of the SDP relaxation
-        ensures: lambda - problem_algebra.objective_polynomial = SOS + Sum of(SOS_i*g_i)
+    def reconstructed_objective(self) -> sympy.Expr:
+        """Calculates the objective polynomial from the SOS formula
+        See equation (34) form "Semidefinite programming relaxations for quantum correlations" """
+        s_lambda: sympy.Expr = sympy.sympify(self.dual_objective)
+        return sympy_sum(
+            [s_lambda, -self.SOS.to_expression()]
+            + [-sos.to_expression() for sos in self.SOS_i]
+        )
+
+    def objective_error(self, problem_algebra: algebra.AlgebraSDP) -> float:
+        """Returns the maximum difference in coefficients of f - f_reconstructed,
+        where f is the objective polynomial, and f_reconstructed is the reconstructed
+        objective, see the above function.
+
+        Ideally, this should be zero. In practice it is non zero due to numerical precision."""
+        difference: sympy.Expr = sympy.expand(
+            problem_algebra.objective - self.reconstructed_objective()
+        )
+        epsilon = 0.0
+        for v in difference.as_coefficients_dict().values():
+            epsilon = max(epsilon, abs(v))
+
+        return epsilon
+
+
+def compute_sos_decomposition(
+    problem_algebra: algebra.AlgebraSDP, solution: Solution_SDP
+) -> SosDecomposition:
+    """Computes an SOS decomposition of (objective polynomial - lambda) using of the solution to the
+    dual SDP.
+
+    returns: (lambda, SOS, [SOS_i | i in range(len(algebra.constraints))])
+    requires: solution is a solution of the SDP relaxation
+    ensures: lambda - problem_algebra.objective_polynomial = SOS + Sum of(SOS_i*g_i)
+    """
+
+    A = solution.dual_variables[0]
+    B = solution.dual_variables[1:]
+
+    def calculate_SOS(
+        w: List[sympy.Expr], A: NDArray[numpy.float64], middle: sympy.Expr
+    ) -> SumOfSquares:
         """
+        w.T A w is a polynomial, and if A is positive-semidefinite, then
+        this function will calculate the SOS of this polynomial using the
+        Cholesky decomposition
+        Arguments:
+        w is the vector of monomials from AlgebraSDP
+        A is the numerical result of the dual variable from the SDP
+        """
+        P = cholesky(A)
+        Pw: List[sympy.Expr] = [sympy.S.Zero for _ in range(len(P))]
+        for i in range(len(P)):
+            for j in range(len(P)):
+                Pw[i] += P[i][j] * w[j]
 
-        A = solution.dual_variables[0]
-        B = solution.dual_variables[1:]
+        problem_algebra
+        return SumOfSquares(Pw, middle)
 
-        def obtentionSOS(
-            w: List[sympy.Expr], A: NDArray[numpy.float64]
-        ) -> List[sympy.Expr]:
-            P = cholesky(A)
-            Pw: List[sympy.Expr] = [sympy.S.Zero for _ in range(len(P))]
-            for i in range(len(P)):
-                for j in range(len(P)):
-                    Pw[i] += P[i][j] * w[j]
+    w = problem_algebra.monomials  # list of monomials used in the polynomial
 
-            return Pw
+    SOS = calculate_SOS(w, A, sympy.S.One)
 
-        w = problem_algebra.monomials  # list of monomials used in the polynom
+    SOSi = [
+        calculate_SOS(w, B[i], problem_algebra.psd_polynomials_gi[i])
+        for i in range(1, len(solution.dual_variables))
+    ]
 
-        SOS = obtentionSOS(w, A)
-
-        SOSi = []
-        for i in range(1, len(solution.dual_variables)):
-            SOSi.append(obtentionSOS(w, B[i]))
-
-        return (solution.dual_objective_value, SOS, SOSi)
+    return SosDecomposition(solution.dual_objective_value, SOS, SOSi)

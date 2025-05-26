@@ -74,6 +74,7 @@ class Problem:
             self.is_commutative,
             self.is_real,
         )
+        self.algebraSDP = algebraSDP
         algebraSDP.add_constraints(normal_constraints)
 
         # 2. Translate to SDP
@@ -92,6 +93,7 @@ class Problem:
             raise TypeError(
                 f"Solver must be of type {Solver} or {AvailableSolvers}, not {type(solver)}"
             )
+
         if self.solution is not None:
             return self.solution.primal_objective_value
         else:
