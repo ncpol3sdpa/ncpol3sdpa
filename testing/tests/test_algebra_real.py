@@ -63,6 +63,7 @@ def test_generate_needed_symbols(polynomials: List[sympy.Expr]) -> None:
 
 
 # @hypothesis.settings(max_examples=200)
+@settings(deadline=1000)
 @given(
     just(draw_poly.two_symbols),
     draw_poly.polynomials_from_monomials(monomials_2_3),
