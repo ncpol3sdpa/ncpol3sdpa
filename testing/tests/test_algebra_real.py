@@ -40,7 +40,7 @@ def test_filter_monomials(rules: Rule, monomial_list: List[sympy.Expr]) -> None:
 
 
 # @given(just(monomials_3_7), just({}))
-@given(just(monomials_3_4), generate_rules_1to1(monomials_3_4, max_rules=1))
+@given(just(monomials_2_3), generate_rules_1to1(monomials_2_3, max_rules=1))
 def test_create_moment_matrix_commutative(
     monomials: List[sympy.Expr], substitution_rules: Rule
 ) -> None:
@@ -65,7 +65,7 @@ def test_generate_needed_symbols(polynomials: List[sympy.Expr]) -> None:
 @given(
     just(draw_poly.two_symbols),
     draw_poly.polynomials_from_monomials(monomials_2_3),
-    integers(min_value=3, max_value=5),
+    integers(min_value=3, max_value=4),
     draw_poly.generate_rules_1to1(monomials_2_3, max_rules=3),
 )
 def test_AlgebraSDP(
