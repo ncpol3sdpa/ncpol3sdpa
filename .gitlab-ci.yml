@@ -30,10 +30,12 @@ variables:
 # default:
 #   image: ruby:3.2
 
-# Define the image to use for the entire pipeline
-image:
-  name: $IMAGE
-  entrypoint: [""]
+image: python:3.7-alpine
+
+# # Define the image to use for the entire pipeline
+# image:
+#   name: $IMAGE
+#   entrypoint: [""]
 
 # Script to be executed before each stage
 before_script:
@@ -111,15 +113,32 @@ deploy-job:
     - echo "Deploying application..."
     - echo "Application successfully deployed."
 
-create-pages:
-  stage: deploy
-  image: ruby:3.2
+# create-pages:
+#   stage: deploy
+#   image: ruby:3.2
+#   script:
+#     - gem install bundler
+#     - bundle install
+#     - bundle exec jekyll build -d public
+#   artifacts:
+#     paths:
+#       - public
+#   # only:
+#   #   - main
+
+test-sphinx:
+  stage: test
   script:
-    - gem install bundler
-    - bundle install
-    - bundle exec jekyll build -d public
+  - pip install -U sphinx
+  - sphinx-build -b html . public
+  rules:
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+
+pages:
+  stage: deploy
+  script:
+  - pip install -U sphinx
+  - sphinx-build -b html . public
   artifacts:
     paths:
-      - public
-  # only:
-  #   - main
+    - public
