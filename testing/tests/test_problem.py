@@ -1,7 +1,7 @@
 # from numpy import format_float_scientific
 from sympy.abc import x, y
 from sympy import Expr, symbols, I
-from sympy.physics.quantum import HermitianOperator
+from sympy.physics.quantum import HermitianOperator, Operator
 
 from ncpol3sdpa import Constraint, Problem, AvailableSolvers
 
@@ -142,3 +142,25 @@ def test_complex_2() -> None:
     p.add_constraint(c3)
     p.add_constraint(c4)
     assert abs(p.solve(3) - 0.7071) <= 0.1
+
+
+def test_nc_complex_1() -> None:
+    X1 = HermitianOperator("X1")  # type: ignore
+    X2 = HermitianOperator("X2")  # type: ignore
+    obj = -(X1**2) - X2**2 - I * (X1 * X2 - X2 * X1)
+    p = Problem(obj, is_commutative=False, is_real=False)
+    c1 = Constraint.InequalityConstraint(1 - X1**2 - X2**2)
+    p.add_constraint(c1)
+    assert abs(p.solve(2)) <= 0.1
+
+
+def test_nc_complex_2() -> None:
+    X1 = Operator("X1")  # type: ignore
+    X2 = HermitianOperator("X2")  # type: ignore
+    obj = -(X1**2) - X2**2 - I * (X1 * X2 - X2 * X1)
+    p = Problem(obj, is_commutative=False, is_real=False)
+    c1 = Constraint.InequalityConstraint(1 - X1**2 - X2**2)
+    c2 = Constraint.EqualityConstraint(X1 - X1.adjoint())  # type: ignore
+    p.add_constraint(c1)
+    p.add_constraint(c2)
+    assert abs(p.solve(2)) <= 0.1

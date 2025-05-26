@@ -99,4 +99,10 @@ class Rule:
     def filter_monomials(self, monomials: List[Expr]) -> List[Expr]:
         """Filter the monomials according to the rules"""
 
-        return [monomial for monomial in monomials if monomial not in self.rules.keys()]
+        # TODO This could be more optimized
+        # if a monomial M divides a N such that N -> _ is a rule, then it should not be
+        # in the final moment matrix
+        def bigger_than_a_key(p: Expr) -> bool:
+            return any([rem(p, r) == 0 for r in self.rules.keys()])
+
+        return [monomial for monomial in monomials if not bigger_than_a_key(monomial)]

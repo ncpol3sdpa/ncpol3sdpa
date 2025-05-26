@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import List, Tuple, Dict, Callable
 
 import sympy as sp
+import numpy as np
 
 from .rules import Rule
 from .monomial import generate_monomials
@@ -119,6 +120,42 @@ class AlgebraSDP:
         raise NotImplementedError
 
     # Public methods
+
+    def polynomial_to_matrix(
+        self, poly: sp.Expr
+    ) -> np.typing.NDArray[np.float64] | np.typing.NDArray[np.complex64]:
+        """Returns a hermitian A matrix such that poly = Tr(A.T @ G) where G is the moment matrix. In other
+        words express poly as a linear combination of the coefficients of G.
+        Requires that all monomials of poly exist within the moment matrix:
+            poly.free_vars included in algebra.moment_matrix free_vars
+            and deg(poly) <= 2*algebra.relaxation_order"""
+        moment_matrix_size = len(self.moment_matrix)
+
+        a_0: np.typing.NDArray[np.float64] | np.typing.NDArray[np.complex64] = np.zeros(
+            shape=(moment_matrix_size, moment_matrix_size), dtype=self.DTYPE
+        )
+
+        for monomial, coef in sp.expand(poly).as_coefficients_dict().items():
+            if sp.I in coef.atoms():  # type: ignore
+                coef /= sp.I
+                coef = float(coef)
+                coef *= 1j  # type: ignore
+            if sp.I in monomial.atoms():  # type: ignore
+                monomial /= sp.I
+                coef = float(coef)
+                coef *= 1j  # type: ignore
+            assert monomial in self.monomial_to_positions.keys()
+            assert 0 < len(self.monomial_to_positions[monomial])
+
+            # The 0 is arbitrary (?) could be any other element of the list.
+            # TODO/Idea What happens if we chose other than 0? at random?
+            monomial_x, monomial_y = self.monomial_to_positions[monomial][0]
+
+            # The matrices must be hermitian
+            a_0[monomial_x][monomial_y] += 0.5 * coef
+            a_0[monomial_y][monomial_x] += 0.5 * coef.conjugate()
+
+        return a_0
 
     def add_constraint(self, constraint: Constraint) -> None:
         """Add a constraint to the algebra

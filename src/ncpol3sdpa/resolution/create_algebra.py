@@ -7,7 +7,8 @@ from .rules import Rule
 from .algebra import AlgebraSDP
 from .algebra_sdp_real import AlgebraSDPReal
 from .algebra_sdp_complex import AlgebraSDPComplex
-from .algebra_sdp_nc import AlgebraSDPnc
+from .algebra_sdp_nc_complex import AlgebraSDPncComplex
+from .algebra_sdp_nc_real import AlgebraSDPncReal
 
 
 def create_AlgebraSDP(
@@ -19,11 +20,15 @@ def create_AlgebraSDP(
     is_real: bool = True,
 ) -> AlgebraSDP:
     AlgebraSubClass: Type[AlgebraSDP]
-    AlgebraSubClass = (
-        AlgebraSDPnc
-        if not is_commutative
-        else (AlgebraSDPReal if is_real else AlgebraSDPComplex)
-    )
+    match (is_commutative, is_real):
+        case (True, True):
+            AlgebraSubClass = AlgebraSDPReal
+        case (True, False):
+            AlgebraSubClass = AlgebraSDPComplex
+        case (False, True):
+            AlgebraSubClass = AlgebraSDPncReal
+        case (False, False):
+            AlgebraSubClass = AlgebraSDPncComplex
 
     return AlgebraSubClass(
         needed_variables,

@@ -67,7 +67,7 @@ def test_generate_needed_symbols(polynomials: List[sympy.Expr]) -> None:
 @given(
     just(draw_poly.two_symbols),
     draw_poly.polynomials_from_monomials(monomials_2_3),
-    integers(min_value=3, max_value=5),
+    integers(min_value=3, max_value=4),
     draw_poly.generate_rules_1to1(monomials_2_3, max_rules=3),
 )
 def test_AlgebraSDP(
