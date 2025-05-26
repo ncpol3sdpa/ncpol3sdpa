@@ -5,7 +5,7 @@ import sympy as sp
 
 from .rules import Rule
 from .monomial import generate_monomials
-from .constraints import Constraint
+from .constraints import Constraint, ConstraintType
 from .utils import (
     Matrix,
     degree_of_polynomial,
@@ -125,7 +125,7 @@ class AlgebraSDP:
 
         Save the constraint if it is an equality constraint,
         otherwise update the moment matrix for the inequality constraint"""
-        if constraint.is_equality_constraint:
+        if constraint.constraint_type == ConstraintType.EQUALITY:
             self.equality_constraints.append(constraint.polynomial)
         else:
             # inequality constraint
