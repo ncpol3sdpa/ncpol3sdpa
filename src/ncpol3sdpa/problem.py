@@ -12,6 +12,7 @@ from ncpol3sdpa.resolution import (
 )
 from ncpol3sdpa.algebra_to_SDP import algebra_to_SDP
 from ncpol3sdpa.sdp_solution import Solution_SDP
+from ncpol3sdpa.sos import SosDecomposition, compute_sos_decomposition
 
 
 class Problem:
@@ -108,3 +109,18 @@ class Problem:
         res = self.solve(relaxation_order=relaxation_order, solver=solver)
         assert res is not None, "Could not find solution"
         return res
+
+    def compute_sos_decomposition(self) -> SosDecomposition:
+        """Returns a Sum of Squares decomposition of (lambda - objective).
+        See sos_duality_derivation.md for more details.
+        The `solve` function must be called and must have succeeded before this function can be called.
+        """
+
+        assert self.solution is not None, (
+            "Solution not found: `solve` was not called or a solution was not found"
+        )
+        assert self.algebraSDP is not None, "Could not find algebra"
+
+        return compute_sos_decomposition(
+            solution=self.solution, problem_algebra=self.algebraSDP
+        )
