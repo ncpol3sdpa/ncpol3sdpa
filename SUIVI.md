@@ -415,3 +415,7 @@ ncpol3sdpa
   * Create the [MR 29](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/29)
     + Added a new `ConstraintType` enum with three constraint type : `EQUALITY`, `INEQUALITY` and `LOCAL_INEQUALITY`
     + Modified the `Constraint` class to use this enum instead of a boolean flag
+
+-(Nazar and Thomas)
+ * Modification of the class sos 
+ * Continue the tests of this class
