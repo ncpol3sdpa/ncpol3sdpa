@@ -384,7 +384,21 @@ ncpol3sdpa
     + Removed unused toctree entries from ncpol3sdpa documentation
     + Updated API reference file paths in source files
     + Updated documentation generation script to match new structure
+- (Mathis)
+  * Refactor the nc part by creating a new class `AlgebraSDPnc` that inheritate from `AlgebraSDP` [MR26](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/26/diffs)
 
 # 21/05/2025
 - (Yann)
   * Works on [MR 25](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/25) and [MR 26](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/26)
+- (Nazar) Work on fixing issue #6 . Uscucseffuly try to implement #8 . Read Boaz's notes on SOS 
+- (Mathis) Start the implementation of the nc-complex part by creating `AlgebraSDPncReal` and `AlgebraSDPncComplex` to properly implement the complex case without changing the real part (that is faster)
+
+# 22/05/2025
+- (Nazar) Test the fix for issue #6. Open a merge request for this issue
+- (Mathis)
+  * Finish the implementation if the nc-complex part 
+    + in the generation of the monomials, I added the adjoint of the symbols that were not hermitian in the nc part
+    + Modified the test_monomials.py file to make the change on `generale_monomials` work.
+    + Finished the implementation of `AlgebraSDPncReal` and `AlgebraSDPncComplex`
+    + Created tests for the nc-complex part
+    + Created the [MR 28](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/28) that implements all the nc-complex part

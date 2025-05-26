@@ -11,8 +11,8 @@ from typing import List
 def test_needed_monomials() -> None:
     x: Symbol = symbols("x")
     y: Symbol = symbols("y")
-    pol1: Expr = x**2 - x - 1
-    pol2: Expr = 3 * x * y**2 - 6 * x**2 + 12 * y
+    pol1: Expr = x**2 - x
+    pol2: Expr = y**3 - 6 * x * y
     c1 = Constraint.EqualityConstraint(pol1)
     c2 = Constraint.EqualityConstraint(pol2)
     rules = Rule([c1, c2])
@@ -29,13 +29,8 @@ def test_needed_monomials() -> None:
         x**3,
         y**3,
     ]
-    assert rules.filter_monomials(monomials_list) == [
-        1,
-        x,
-        y,
-        y**2,
-        x * y,
-        x**2 * y,
-        x**3,
-        y**3,
-    ]
+    res = set(rules.filter_monomials(monomials_list))
+    expected = [1, x, y, x * y, y**2, x * y**2]
+    assert len(res) == len(expected)
+    for monomial in expected:
+        assert monomial in res
