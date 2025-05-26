@@ -1,21 +1,29 @@
 from __future__ import annotations
+from enum import Enum, auto
+
 from sympy import Expr, Poly
 
+from .utils import NoPublicConstructor
 
-class Constraint:
+
+class ConstraintType(Enum):
+    EQUALITY = auto()  # Represents an equality constraint (p = 0)
+    INEQUALITY = auto()  # Represents an inequality constraint (p >= 0)
+    LOCAL_INEQUALITY = auto()  # Represents a local inequality constraint (p > 0)
+
+
+class Constraint(metaclass=NoPublicConstructor):
     def __init__(
         self,
-        is_equality_constraint: bool,
+        constraint_type: ConstraintType,
         polynomial: Expr | Poly,
         substitution: bool = False,
     ) -> None:
         """
-        is_equality_constraint : boolean indicating whether the constraint is >= or ==
+        constraint_type : ConstraintType
         polynomial : sympy polynomial
         """
-        self.is_equality_constraint: bool = (
-            is_equality_constraint  # is the constraint an equality or not ?
-        )
+        self.constraint_type: ConstraintType = constraint_type
         self.polynomial: Expr = (
             polynomial.as_expr()  # the constraint has the form p >= 0 or p = 0
         )
@@ -27,10 +35,16 @@ class Constraint:
     def EqualityConstraint(
         cls, polynomial: Expr | Poly, substitution: bool = False
     ) -> Constraint:
-        return cls(True, polynomial, substitution)
+        return cls._create(ConstraintType.EQUALITY, polynomial, substitution)
 
     @classmethod
     def InequalityConstraint(
         cls, polynomial: Expr, substitution: bool = False
     ) -> Constraint:
-        return cls(False, polynomial, substitution)
+        return cls._create(ConstraintType.INEQUALITY, polynomial, substitution)
+
+    @classmethod
+    def LocalInequalityConstraint(
+        cls, polynomial: Expr, substitution: bool = False
+    ) -> Constraint:
+        return cls._create(ConstraintType.LOCAL_INEQUALITY, polynomial, substitution)

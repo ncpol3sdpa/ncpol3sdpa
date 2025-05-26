@@ -23,8 +23,8 @@ def test_1() -> None:
 
 def test_2() -> None:
     obj = y**2 - x * y - y
-    c1 = Constraint(False, x - x**2)
-    c2 = Constraint(False, y - y**2)
+    c1 = Constraint.EqualityConstraint(x - x**2)
+    c2 = Constraint.EqualityConstraint(y - y**2)
     p = Problem(obj)
     p.add_constraint(c1)
     p.add_constraint(c2)

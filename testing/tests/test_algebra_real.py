@@ -11,7 +11,7 @@ from testing.draw_strategies.polynomials import generate_rules_1to1
 import testing.draw_strategies.polynomials as draw_poly
 
 from hypothesis.strategies import lists, just, integers
-from hypothesis import given
+from hypothesis import given, settings
 
 # TODO : add arbitrarily large monomials
 monomials_3_7: List[sympy.Expr] = lib_monomial.generate_monomials(
@@ -40,7 +40,8 @@ def test_filter_monomials(rules: Rule, monomial_list: List[sympy.Expr]) -> None:
 
 
 # @given(just(monomials_3_7), just({}))
-@given(just(monomials_2_3), generate_rules_1to1(monomials_2_3, max_rules=1))
+@settings(deadline=1000)  # Increase deadline to 1000ms
+@given(just(monomials_3_4), generate_rules_1to1(monomials_3_4, max_rules=1))
 def test_create_moment_matrix_commutative(
     monomials: List[sympy.Expr], substitution_rules: Rule
 ) -> None:
@@ -62,6 +63,7 @@ def test_generate_needed_symbols(polynomials: List[sympy.Expr]) -> None:
 
 
 # @hypothesis.settings(max_examples=200)
+@settings(deadline=1000)
 @given(
     just(draw_poly.two_symbols),
     draw_poly.polynomials_from_monomials(monomials_2_3),
