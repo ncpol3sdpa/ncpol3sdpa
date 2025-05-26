@@ -411,3 +411,7 @@ ncpol3sdpa
   * Review + Merge [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/27)
   * Raise some issues :  [13](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/issues/13) [14](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/issues/14)
   * start to replace the matrices by sparse matrices to have better performance
+- (Yann)
+  * Create the [MR 29](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/29)
+    + Added a new `ConstraintType` enum with three constraint type : `EQUALITY`, `INEQUALITY` and `LOCAL_INEQUALITY`
+    + Modified the `Constraint` class to use this enum instead of a boolean flag
