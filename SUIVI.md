@@ -405,3 +405,9 @@ ncpol3sdpa
     + Finished the implementation of `AlgebraSDPncReal` and `AlgebraSDPncComplex`
     + Created tests for the nc-complex part
     + Created the [MR 28](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/28) that implements all the nc-complex part
+
+# 26/05/2025
+- (Mathis)
+  * Review + Merge [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/27)
+  * Raise some issues :  [13](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/issues/13) [14](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/issues/14)
+  * start to replace the matrices by sparse matrices to have better performance
