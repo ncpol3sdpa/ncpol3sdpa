@@ -21,7 +21,6 @@ def objective_only_test(obj: sp.Expr) -> None:
 
         sosDecomposition = problem.compute_sos_decomposition()
         assert sosDecomposition is not None
-        print(sp.expand(sosDecomposition.reconstructed_objective()))
         assert np.abs(sosDecomposition.objective_error(problem.algebraSDP)) < 0.01
 
 
