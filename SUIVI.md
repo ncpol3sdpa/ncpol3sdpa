@@ -419,3 +419,8 @@ ncpol3sdpa
 -(Nazar and Thomas)
  * Modification of the class sos 
  * Continue the tests of this class
+
+ # 27/05/2025
+ - (Mathis)
+  * Finish the replacement of arrays by sparse matrices.
+  * Create an MR for the sparse matrices [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/30)
