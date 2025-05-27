@@ -29,3 +29,22 @@ def test_2x2() -> None:
     assert solution is not None
     result = solution.primal_objective_value
     assert np.abs(2 - result) <= 0.001  # result should be 2
+
+
+def test_2x2_mosek() -> None:
+    # Arithmetic - Geometric inequality
+    moment_matrix = MomentMatrixSDP(2, [[(0, 0), (1, 1)], [(1, 0)]])
+    # [ 1 a ]
+    # [ a 1 ]
+    p = ProblemSDP(moment_matrix, np.array([[0, -1], [-1, 0]]))
+    # maximize -2a, optimal for a = -1, and objective = 2
+    # x2 -2axy + y2 >= 0, because SDP
+
+    solution = SolverRegistry.solve(p, AvailableSolvers.CVXPY)
+    assert solution is not None
+    result = solution.primal_objective_value
+    assert np.abs(2 - result) <= 0.001  # result should be 2
+
+    expected = np.array([[1, -1], [-1, 1]])
+    h = expected - solution.primal_variables[0]
+    assert np.trace(h.T @ h) <= 0.001  # result should be 2

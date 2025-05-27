@@ -2,7 +2,6 @@ from typing import List
 
 import sympy
 import numpy
-from numpy.linalg import cholesky
 from numpy.typing import NDArray
 from ncpol3sdpa.sdp_solution import Solution_SDP
 from ncpol3sdpa.resolution import AlgebraSDP
@@ -15,6 +14,21 @@ def sympy_sum(terms: List[sympy.Expr]) -> sympy.Expr:
     return res
 
 
+def semidefinite_PTP_decomp(A: NDArray[numpy.float64]) -> NDArray[numpy.float64]:
+    """Returns $P$ such that $A = P^T P$ .
+
+    We could not use the standard Cholesky decomposition of numpy, because it does not like positive
+    semidefinite matrices(it only works with positive definite ones).
+    """
+    eigenvalues, eigenvectors = numpy.linalg.eigh(A)
+    # Clip small negative values (numerical errors)
+    eigvals_clipped = numpy.clip(eigenvalues, 0, None)
+    sqrt_eigvals = numpy.sqrt(eigvals_clipped)
+
+    P = eigenvectors @ numpy.diag(sqrt_eigvals)
+    return P.T  # type: ignore
+
+
 class SumOfSquares:
     """Data structure representing a sum of squares polynomials"""
 
@@ -24,9 +38,7 @@ class SumOfSquares:
         self.middle_term = middle_term
 
     def to_expression(self) -> sympy.Expr:
-        return sympy_sum(
-            [ self.middle_term * term**2 for term in self.squares]
-        )
+        return sympy_sum([self.middle_term * term**2 for term in self.squares])
 
 
 class SosDecomposition:
@@ -89,13 +101,14 @@ def compute_sos_decomposition(
         w is the vector of monomials from AlgebraSDP
         A is the numerical result of the dual variable from the SDP
         """
-        P = cholesky(A)
+        P = semidefinite_PTP_decomp(A)
         Pw: List[sympy.Expr] = [sympy.S.Zero for _ in range(len(P))]
         for i in range(len(P)):
             for j in range(len(P)):
                 Pw[i] += P[i][j] * w[j]
 
         problem_algebra
+        print("W = ", P.T @ P)
         return SumOfSquares(Pw, middle)
 
     w = problem_algebra.monomials  # list of monomials used in the polynomial

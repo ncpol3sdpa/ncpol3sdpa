@@ -83,7 +83,7 @@ def parse_mosek_solution(problem: ProblemSDP, task: mosek.Task) -> Solution_SDP:
         task.getbarsj(solution_type, i, dual_variables_lin[i])
 
     primal_variables = [de_linearize(var) for var in primal_variables_lin]
-    dual_variables = [de_linearize(var) for var in dual_variables_lin]
+    dual_variables = [-de_linearize(var) for var in dual_variables_lin]
 
     return Solution_SDP(
         primal_objective_value=primal_objective_value,
