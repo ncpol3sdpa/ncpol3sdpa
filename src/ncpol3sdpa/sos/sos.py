@@ -25,7 +25,7 @@ class SumOfSquares:
 
     def to_expression(self) -> sympy.Expr:
         return sympy_sum(
-            [sympy.adjoint(term) * self.middle_term * term for term in self.squares]
+            [ self.middle_term * term**2 for term in self.squares]
         )
 
 
@@ -104,7 +104,7 @@ def compute_sos_decomposition(
 
     SOSi = [
         calculate_SOS(w, B[i], problem_algebra.psd_polynomials_gi[i])
-        for i in range(1, len(solution.dual_variables))
+        for i in range(len(B))
     ]
 
     return SosDecomposition(solution.dual_objective_value, SOS, SOSi)
