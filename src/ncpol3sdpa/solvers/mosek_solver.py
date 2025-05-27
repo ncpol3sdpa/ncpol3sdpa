@@ -48,12 +48,13 @@ def de_linearize(vec: NDArray[np.float64]) -> NDArray[np.float64]:
         raise ValueError("vec should be of dimension n(n+1)/2")
 
     result = np.zeros((matrix_size, matrix_size), dtype=np.float64)
+    index = 0
     for i in range(matrix_size):
-        for j in range(i + 1):
-            index = j + ((i + 1) * i // 2)
+        for j in range(i, matrix_size):
             value = vec[index]
             result[i][j] = value
             result[j][i] = value
+            index += 1
     return result
 
 
@@ -83,6 +84,7 @@ def parse_mosek_solution(problem: ProblemSDP, task: mosek.Task) -> Solution_SDP:
         task.getbarsj(solution_type, i, dual_variables_lin[i])
 
     primal_variables = [de_linearize(var) for var in primal_variables_lin]
+    # despite what the MOSEK docs might suggest, barsj are negative semidefinite variables
     dual_variables = [-de_linearize(var) for var in dual_variables_lin]
 
     return Solution_SDP(

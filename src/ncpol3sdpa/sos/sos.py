@@ -107,8 +107,10 @@ def compute_sos_decomposition(
             for j in range(len(P)):
                 Pw[i] += P[i][j] * w[j]
 
-        problem_algebra
-        print("W = ", P.T @ P)
+        print("A = ", A)
+        print(numpy.linalg.eigvals(A))
+        print("ptp = ", P.T @ P)
+        print("ppT = ", P @ P.T)
         return SumOfSquares(Pw, middle)
 
     w = problem_algebra.monomials  # list of monomials used in the polynomial

@@ -15,7 +15,7 @@ def objective_only_test(obj: sp.Expr) -> None:
     problem = Problem(obj)
 
     # TODO Bug in mosek
-    for solver in [AvailableSolvers.CVXPY]:
+    for solver in [AvailableSolvers.MOSEK, AvailableSolvers.CVXPY]:
         print("solver: ", solver)
         problem.solve(relaxation_order=1, solver=solver)
 
