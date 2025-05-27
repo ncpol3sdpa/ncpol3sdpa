@@ -406,6 +406,11 @@ ncpol3sdpa
     + Created tests for the nc-complex part
     + Created the [MR 28](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/28) that implements all the nc-complex part
 
+# 25/05/2025
+ - (Nazar)
+    * Write a document explainig the math of the SOS decomposition, and the SDP duality.
+    * Begin refactoring of SDP code.
+
 # 26/05/2025
 - (Mathis)
   * Review + Merge [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/27)
@@ -420,7 +425,10 @@ ncpol3sdpa
  * Modification of the class sos 
  * Continue the tests of this class
 
- # 27/05/2025
+# 27/05/2025
  - (Mathis)
   * Finish the replacement of arrays by sparse matrices.
   * Create an MR for the sparse matrices [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/30)
+
+# 28/05/2025
+ - (Nazar) Fix 2 bugs in the SOS decomposition
