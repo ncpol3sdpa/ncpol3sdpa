@@ -4,10 +4,11 @@ from ncpol3sdpa.sdp_repr import (
     EqConstraint,
 )
 
+from scipy.sparse import lil_matrix
+
 # typing
 from typing import Optional, Tuple, TypeVar, List
 from hypothesis.strategies import SearchStrategy, DrawFn
-from numpy.typing import NDArray
 
 # from hypothesis import given
 import numpy as np
@@ -32,14 +33,14 @@ def symmetric_matrices(
     draw: DrawFn,
     size: int | SearchStrategy[int],
     elements: SearchStrategy[float] = float_strategies.small_normal_floats,
-) -> NDArray[np.float64]:
+) -> lil_matrix:
     if not isinstance(size, int):
         size = draw(size)
-    m: NDArray[np.float64] = draw(
-        hyp_np.arrays(np.float64, shape=(size, size), elements=elements)
+    m: lil_matrix = draw(
+        lil_matrix(hyp_np.arrays(np.float64, shape=(size, size), elements=elements))  # type: ignore
     )
 
-    return m + m.T
+    return m + m.T  # type: ignore
 
 
 A = TypeVar("A")
@@ -113,7 +114,7 @@ def gen_eq_constraints(
     )
 
     # the formatting on this is atrocious ...
-    terms: List[Tuple[int, NDArray[np.float64] | NDArray[np.complex64]]] = [
+    terms: List[Tuple[int, lil_matrix]] = [
         (
             var_num,
             draw(

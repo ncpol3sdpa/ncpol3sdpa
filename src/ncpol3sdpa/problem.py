@@ -79,8 +79,6 @@ class Problem:
         if not self.is_real:
             problemSDP = problemSDP.complex_to_realSDP()
 
-        print(problemSDP)
-
         # 3. Solve the SDP
         if isinstance(solver, AvailableSolvers):
             return SolverRegistry.get_solver(solver).solve(problemSDP)
