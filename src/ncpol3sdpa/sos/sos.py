@@ -5,7 +5,7 @@ import numpy
 from numpy.linalg import cholesky
 from numpy.typing import NDArray
 from ncpol3sdpa.sdp_solution import Solution_SDP
-import ncpol3sdpa.resolution.algebra as algebra
+from ncpol3sdpa.resolution import AlgebraSDP
 
 
 def sympy_sum(terms: List[sympy.Expr]) -> sympy.Expr:
@@ -48,7 +48,7 @@ class SosDecomposition:
             + [-sos.to_expression() for sos in self.SOS_i]
         )
 
-    def objective_error(self, problem_algebra: algebra.AlgebraSDP) -> float:
+    def objective_error(self, problem_algebra: AlgebraSDP) -> float:
         """Returns the maximum difference in coefficients of f - f_reconstructed,
         where f is the objective polynomial, and f_reconstructed is the reconstructed
         objective, see the above function.
@@ -65,7 +65,7 @@ class SosDecomposition:
 
 
 def compute_sos_decomposition(
-    problem_algebra: algebra.AlgebraSDP, solution: Solution_SDP
+    problem_algebra: AlgebraSDP, solution: Solution_SDP
 ) -> SosDecomposition:
     """Computes an SOS decomposition of (objective polynomial - lambda) using of the solution to the
     dual SDP.
