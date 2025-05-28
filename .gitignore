@@ -4,6 +4,7 @@
 **/__pycache__
 venv
 .hypothesis
+public
 
 # **/*.dot
 # **/*.pdf
