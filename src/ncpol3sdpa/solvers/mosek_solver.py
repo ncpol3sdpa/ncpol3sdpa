@@ -1,42 +1,44 @@
 from typing import Tuple, List
 import warnings
 
-from numpy.typing import NDArray
-import numpy as np
 import mosek
+from scipy.sparse import lil_matrix
 
 from ncpol3sdpa.sdp_repr import ProblemSDP
 from .solver import Solver
 
 
-def to_sparse_symmetric(
-    matrix: NDArray[np.float64] | NDArray[np.complex64],
+def get_sparse_vecs(
+    matrix: lil_matrix,
 ) -> Tuple[List[float], List[int], List[int]]:
     """
-    Return the sparse form of a symmetric matrix (only lower triangle is given)
-    Exemple:
-    >>> to_sparse([
-    ... [a, 0, b],
-    ... [0, 0, c],
-    ... [b, c, 0]
-    ... ])
-    [
-    [a, b, c],
-    [0, 2, 2],
-    [0, 0, 1]
-    ]
+    Return the sparse form of a symmetric matrix stored as a lil_matrix,
+    considering only the lower triangle (including diagonal).
+
+    Args:
+        matrix: lil_matrix, square sparse matrix.
+
+    Returns:
+        Tuple of lists: (values, rows, cols)
     """
-    n = len(matrix)
-    val = []
+    n = matrix.shape[0]
+    values = []
     rows = []
     cols = []
+
+    # itérer sur chaque ligne
     for i in range(n):
-        for j in range(i + 1):
-            if matrix[i][j] != 0:
-                val.append(matrix[i][j])
+        # colonnes non-nulles sur la ligne i
+        row_cols = matrix.rows[i]
+        # valeurs correspondantes
+        row_data = matrix.data[i]
+        for idx, j in enumerate(row_cols):
+            if j <= i:  # on ne garde que la partie inférieure (y compris la diagonale)
+                values.append(row_data[idx])
                 rows.append(i)
                 cols.append(j)
-    return val, rows, cols
+
+    return values, rows, cols
 
 
 class MosekSolver(Solver):
@@ -62,7 +64,7 @@ class MosekSolver(Solver):
                 task.appendbarvars(problem.variable_sizes)
 
                 # objective function
-                val_obj, rows_obj, cols_obj = to_sparse_symmetric(problem.objective)
+                val_obj, rows_obj, cols_obj = get_sparse_vecs(problem.objective)
                 task.putbarcblocktriplet(
                     [problem.MOMENT_MATRIX_VAR_NUM] * len(val_obj),
                     rows_obj,
@@ -86,7 +88,7 @@ class MosekSolver(Solver):
                     constraint_l = []
                     constraint_v = []
                     for var_num, matrix in problem.constraints[i].constraints:
-                        val_m, rows_m, cols_m = to_sparse_symmetric(matrix)  # type
+                        val_m, rows_m, cols_m = get_sparse_vecs(matrix)  # type
                         which_constraint += [1 + i] * len(val_m)
                         which_SDP += [var_num] * len(val_m)
                         constraint_k += rows_m

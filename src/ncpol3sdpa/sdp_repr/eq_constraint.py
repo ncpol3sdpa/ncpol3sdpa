@@ -1,7 +1,6 @@
 from typing import Tuple, List
 
-import numpy as np
-from numpy.typing import NDArray
+from scipy.sparse import lil_matrix
 
 # class ConstraintType(Enum):
 #     EqualZero = 1
@@ -11,9 +10,7 @@ from numpy.typing import NDArray
 
 
 class EqConstraint:
-    def __init__(
-        self, from_l: List[Tuple[int, NDArray[np.float64] | NDArray[np.complex64]]]
-    ) -> None:
+    def __init__(self, from_l: List[Tuple[int, lil_matrix]]) -> None:
         """Represents a list of constraints
 
         A tuple (k, A) represents the constraint :

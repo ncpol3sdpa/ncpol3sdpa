@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 import sympy
-import numpy as np
+from scipy.sparse import lil_matrix
 
 from ncpol3sdpa.resolution import AlgebraSDP
 from ncpol3sdpa.sdp_repr import ProblemSDP, EqConstraint, MomentMatrixSDP
@@ -36,9 +36,9 @@ def algebra_to_SDP_add_inequality_constraint(
 
     for i, row in enumerate(constraint_moment_matrix):
         for j, poly in enumerate(row):
-            a_k = np.zeros(shape=(constraint_matrix_size, constraint_matrix_size))
-            a_k[i][j] -= 0.5
-            a_k[j][i] -= 0.5
+            a_k = lil_matrix((constraint_matrix_size, constraint_matrix_size))  # type: ignore
+            a_k[i, j] -= 0.5
+            a_k[j, i] -= 0.5
 
             a_0 = algebra.polynomial_to_matrix(poly)
             constraint = EqConstraint(
