@@ -1,9 +1,7 @@
 from __future__ import annotations
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
-from sympy import Expr, S, poly, rem, Mul, Pow
-
-from .constraints import Constraint
+from sympy import Expr, S, rem, Mul, Pow
 
 
 def list_of_monomial(monomial: Expr) -> List[Expr]:
@@ -20,49 +18,16 @@ def list_of_monomial(monomial: Expr) -> List[Expr]:
     return res
 
 
-class Rule:
-    def __init__(self, constraints: List[Constraint]) -> None:
-        """Constructor of the class Rule"""
+class Rules:
+    def __init__(self, dictionary: Dict[Expr, Expr] = {}) -> None:
+        self.rules = dictionary
 
-        self.rules = dict(
-            [Rule.of_single_constraint(constraint) for constraint in constraints]
-        )
-
-    @classmethod
-    def from_dict(cls, rules: Dict[Expr, Expr]) -> Rule:
-        """Constructor of the class Rule from a dictionary"""
-        res = cls([])
-        res.rules = rules
-        return res
-
-    @classmethod
-    def of_single_constraint(cls, constraint: Constraint) -> Tuple[Expr, Expr]:
-        """Private method creating a Tuple of equivalence"""
-
-        # express polynomial as a list of monomial
-        polynomial: List[Tuple[Tuple[int, ...], float]] = poly(
-            constraint.polynomial
-        ).terms()
-
-        leader_monomial = max(polynomial, key=lambda monomial: sum(monomial[0]))
-
-        # leader_monomial expressed with variables
-        leader_monomial_expressed: Expr = S.One
-        for i, monomial in enumerate(poly(constraint.polynomial).gens):
-            leader_monomial_expressed *= monomial ** leader_monomial[0][i]
-        assert isinstance(leader_monomial_expressed, Expr)
-
-        # rewriting the constraint as a rule
-        polynomial_without_leader: Expr = constraint.polynomial
-        polynomial_without_leader /= leader_monomial[1]
-        polynomial_without_leader -= leader_monomial_expressed
-        polynomial_without_leader *= -1
-        assert isinstance(polynomial_without_leader, Expr)
-
-        return (leader_monomial_expressed, polynomial_without_leader)
+    def add_rule(self, old: Expr, new: Expr) -> None:
+        """Appends a new substitution rule in place"""
+        self.rules[old] = new
 
     def apply_to_monomial(self, monomial: Expr, is_commutative: bool = True) -> Expr:
-        """Apply a rule to a monomial"""
+        """Apply rules to a monomial"""
         if is_commutative:
             for key in self.rules.keys():
                 if rem(monomial, key) == 0:
@@ -87,7 +52,7 @@ class Rule:
     def apply_to_polynomial(
         self, polynomial: Expr, is_commutative: bool = True
     ) -> Expr:
-        """Apply a rule to a polynomial"""
+        """Apply rules to a polynomial"""
 
         poly_dict: Dict[Expr, float] = polynomial.as_coefficients_dict()
 

@@ -1,5 +1,6 @@
 # from numpy import format_float_scientific
 from sympy.abc import x, y
+from sympy import S
 from sympy import Expr, symbols, I
 from sympy.physics.quantum import HermitianOperator, Operator
 
@@ -50,9 +51,8 @@ def test_3() -> None:
 # Issue with cvxpy ??
 def test_4() -> None:
     obj = y * (-(x**2) + 2)
-    c1 = Constraint.EqualityConstraint(y - 10, substitution=True)
     p = Problem(obj)
-    p.add_constraint(c1)
+    p.add_rule(y, 10 * S.One)
     assert abs(p.solve(2) - 20) <= 0.1
     assert abs(p.solve(3) - 20) <= 0.001
     assert abs(p.solve(2, AvailableSolvers.MOSEK) - 20) <= 0.1
@@ -62,10 +62,9 @@ def test_4() -> None:
 def test_1_sub() -> None:
     obj = 2 * x * y
     p = Problem(obj)
-    c1 = Constraint.EqualityConstraint(x * x - x, substitution=True)
-    c2 = Constraint.EqualityConstraint(-y * y + y + 0.25)
-    p.add_constraint(c1)
-    p.add_constraint(c2)
+    constraint = Constraint.EqualityConstraint(-y * y + y + 0.25)
+    p.add_constraint(constraint)
+    p.add_rule(x * x, x)
     assert abs(p.solve(1) - 2.4142) <= 0.01
     assert abs(p.solve(2) - 2.4142) <= 0.01
     assert abs(p.solve(3) - 2.4142) <= 0.01

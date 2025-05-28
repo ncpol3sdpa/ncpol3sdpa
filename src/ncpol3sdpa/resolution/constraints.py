@@ -14,10 +14,7 @@ class ConstraintType(Enum):
 
 class Constraint(metaclass=NoPublicConstructor):
     def __init__(
-        self,
-        constraint_type: ConstraintType,
-        polynomial: Expr | Poly,
-        substitution: bool = False,
+        self, constraint_type: ConstraintType, polynomial: Expr | Poly
     ) -> None:
         """
         constraint_type : ConstraintType
@@ -27,24 +24,23 @@ class Constraint(metaclass=NoPublicConstructor):
         self.polynomial: Expr = (
             polynomial.as_expr()  # the constraint has the form p >= 0 or p = 0
         )
-        self.substitution: bool = (
-            substitution  # do we use substitution technique for this constraint ?
-        )
 
     @classmethod
-    def EqualityConstraint(
-        cls, polynomial: Expr | Poly, substitution: bool = False
-    ) -> Constraint:
-        return cls._create(ConstraintType.EQUALITY, polynomial, substitution)
+    def EqualityConstraint(cls, polynomial: Expr | Poly) -> Constraint:
+        """Equal to zero constraint: `polynomial = 0`"""
+        return cls._create(ConstraintType.EQUALITY, polynomial)
 
     @classmethod
-    def InequalityConstraint(
-        cls, polynomial: Expr, substitution: bool = False
-    ) -> Constraint:
-        return cls._create(ConstraintType.INEQUALITY, polynomial, substitution)
+    def InequalityConstraint(cls, polynomial: Expr) -> Constraint:
+        """Inequality constraint
+        * In the commutative case: `polynomial >= 0`
+        * In the non-commutative case: `polynomial` is positive semi-definite
+        """
+        return cls._create(ConstraintType.INEQUALITY, polynomial)
 
     @classmethod
-    def LocalInequalityConstraint(
-        cls, polynomial: Expr, substitution: bool = False
-    ) -> Constraint:
-        return cls._create(ConstraintType.LOCAL_INEQUALITY, polynomial, substitution)
+    def LocalInequalityConstraint(cls, polynomial: Expr) -> Constraint:
+        """Constraint specific to the non-commutative case
+        * In the non-commutative case: `Trace(\\rho polynomial) >= 0`
+        """
+        return cls._create(ConstraintType.LOCAL_INEQUALITY, polynomial)
