@@ -24,8 +24,7 @@ def create_moment_matrix(
     return [
         [
             substitution_rules.apply_to_monomial(
-                get_adjoint(monomials[j]) * monomials[i],
-                is_commutative,
+                get_adjoint(monomials[j]) * monomials[i]
             )
             for j in range(i + 1)
         ]
@@ -240,8 +239,7 @@ class AlgebraSDP:
                         self.get_adjoint(self.monomials[j])
                         * constraint_polynomial
                         * monomials[i]
-                    ),
-                    self.is_commutative,
+                    )
                 )
                 for j in range(i + 1)
             ]

@@ -1,7 +1,7 @@
 from .algebra import AlgebraSDP
 from .constraints import Constraint
 from .create_algebra import create_AlgebraSDP
-from .rules import Rules
+from .rules import Rules, RulesCommutative, RulesNoncommutative
 from .utils import generate_needed_symbols
 
 __all__ = [
@@ -10,4 +10,6 @@ __all__ = [
     "Rules",
     "create_AlgebraSDP",
     "generate_needed_symbols",
+    "RulesCommutative",
+    "RulesNoncommutative",
 ]

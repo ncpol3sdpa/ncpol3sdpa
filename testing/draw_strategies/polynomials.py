@@ -5,7 +5,7 @@ from hypothesis.strategies import SearchStrategy, DrawFn
 # from hypothesis import given
 import sympy
 from hypothesis.strategies import composite, one_of, lists, just, builds, integers
-from ncpol3sdpa.resolution.rules import Rules
+from ncpol3sdpa.resolution.rules import RulesCommutative
 
 from ncpol3sdpa.resolution.monomial import generate_monomials
 import testing.draw_strategies.float_strategies as float_strategies
@@ -67,7 +67,7 @@ def pick_monomials(monomials: List[sympy.Expr]) -> SearchStrategy[sympy.Expr]:
 
 def generate_rules_1to1(
     monomials: List[sympy.Expr], max_rules: int | None = None
-) -> SearchStrategy[Rules]:
+) -> SearchStrategy[RulesCommutative]:
     """Generates a list of rules of the form Y³X² -> XY.
     Always monomial to monomial. Rules it generates must decrees the degree (otherwise
     there a risk of generating rules that loop forever)
@@ -90,4 +90,4 @@ def generate_rules_1to1(
     rt: SearchStrategy[Dict[sympy.Expr, sympy.Expr]] = builds(
         dict, lists(monomial_2ple, unique=True, max_size=max_rules)
     )
-    return rt.map(lambda x: Rules(x))
+    return rt.map(lambda x: RulesCommutative(x))

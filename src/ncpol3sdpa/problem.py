@@ -6,6 +6,8 @@ import sympy
 from ncpol3sdpa.solvers import AvailableSolvers, Solver, SolverRegistry
 from ncpol3sdpa.resolution import (
     Rules,
+    RulesCommutative,
+    RulesNoncommutative,
     Constraint,
     create_AlgebraSDP,
     generate_needed_symbols,
@@ -21,7 +23,9 @@ class Problem:
         self.objective: Expr = obj
         self.is_commutative = is_commutative
         self.is_real = is_real
-        self.rules = Rules()
+        self.rules: Rules = (
+            RulesCommutative() if is_commutative else RulesNoncommutative()
+        )
 
     def add_rule(self, old: Expr, new: Expr) -> None:
         """Adds the substitution rule old -> new to the problem. (variation of the constraint old = new)

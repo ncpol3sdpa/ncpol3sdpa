@@ -2,7 +2,7 @@ import sympy
 from typing import List
 
 from ncpol3sdpa.resolution.algebra_sdp_real import AlgebraSDPReal
-from ncpol3sdpa.resolution.rules import Rules
+from ncpol3sdpa.resolution.rules import RulesCommutative
 from ncpol3sdpa.resolution.algebra import create_moment_matrix
 import ncpol3sdpa.resolution.monomial as lib_monomial
 import ncpol3sdpa.resolution.utils as utils
@@ -31,7 +31,9 @@ monomials_2_3: List[sympy.Expr] = lib_monomial.generate_monomials(
     generate_rules_1to1(monomials=monomials_3_7),
     lists(draw_poly.pick_monomials(monomials_3_7), max_size=20),
 )
-def test_filter_monomials(rules: Rules, monomial_list: List[sympy.Expr]) -> None:
+def test_filter_monomials(
+    rules: RulesCommutative, monomial_list: List[sympy.Expr]
+) -> None:
     # this is mostly a crash test
     result = rules.filter_monomials(monomials=monomial_list)
     for monomial in result:
@@ -43,7 +45,7 @@ def test_filter_monomials(rules: Rules, monomial_list: List[sympy.Expr]) -> None
 @settings(deadline=1000)  # Increase deadline to 1000ms
 @given(just(monomials_3_4), generate_rules_1to1(monomials_3_4, max_rules=1))
 def test_create_moment_matrix_commutative(
-    monomials: List[sympy.Expr], substitution_rules: Rules
+    monomials: List[sympy.Expr], substitution_rules: RulesCommutative
 ) -> None:
     # this is a crash test
     for big, small in substitution_rules.rules.items():
@@ -74,7 +76,7 @@ def test_AlgebraSDP(
     needed_variables: List[sympy.Symbol],
     objective: sympy.Expr,
     relaxation_order: int,
-    substitution_rules: Rules,
+    substitution_rules: RulesCommutative,
 ) -> None:
     # crash tests
     al = AlgebraSDPReal(
