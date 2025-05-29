@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Dict, List, Tuple
 
-from sympy import Expr, S, simplify
+from sympy import Expr, S
 
 
 class Rules:
@@ -33,7 +33,7 @@ class Rules:
             result = self.divisible_factors(key, monomial)
             if result is not None:
                 a, b = result
-                return self.apply_to_monomial(simplify(a * self.rules[key] * b))
+                return self.apply_to_monomial(a * self.rules[key] * b)
         return monomial
 
     def apply_to_polynomial(self, polynomial: Expr) -> Expr:
