@@ -48,7 +48,6 @@ def test_3() -> None:
     assert abs(p.solve(3, AvailableSolvers.MOSEK) - 10) <= 0.001
 
 
-# Issue with cvxpy ??
 def test_4() -> None:
     obj = y * (-(x**2) + 2)
     p = Problem(obj)

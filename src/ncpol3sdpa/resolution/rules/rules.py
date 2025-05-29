@@ -1,12 +1,24 @@
 from __future__ import annotations
 from typing import Dict, List, Tuple
 
-from sympy import Expr, S
+from sympy import Expr, S, Mul
+
+
+# TODO This is a temporary fix. Should be removed when issue #15 "Substitution rule oversight/bug" is resolved
+def remove_one_coeff(expr: Expr) -> Expr:
+    if isinstance(expr, Mul):
+        coef, rest = expr.as_coeff_Mul()
+        if coef == 1.0:
+            return rest  # type: ignore
+    return expr
 
 
 class Rules:
-    def __init__(self, dictionary: Dict[Expr, Expr] = {}) -> None:
-        self.rules = dictionary
+    def __init__(self, dictionary: Dict[Expr, Expr] | None = None) -> None:
+        if dictionary is None:
+            self.rules = {}
+        else:
+            self.rules = dictionary
 
     def add_rule(self, old: Expr, new: Expr) -> None:
         """Appends a new substitution rule in place"""
@@ -34,7 +46,7 @@ class Rules:
             if result is not None:
                 a, b = result
                 return self.apply_to_monomial(a * self.rules[key] * b)
-        return monomial
+        return remove_one_coeff(monomial)  # TODO remove remove_one coeff #15
 
     def apply_to_polynomial(self, polynomial: Expr) -> Expr:
         """Apply rules to a polynomial"""

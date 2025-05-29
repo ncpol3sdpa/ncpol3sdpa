@@ -1,7 +1,8 @@
 from ncpol3sdpa.resolution.rules import Rules
 
 from typing import Tuple
-from sympy import Expr, div, S
+from sympy import Expr, div
+from sympy.core.numbers import S
 
 
 class RulesCommutative(Rules):
