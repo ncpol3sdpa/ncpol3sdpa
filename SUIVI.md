@@ -432,3 +432,10 @@ ncpol3sdpa
 
 # 28/05/2025
  - (Nazar) Fix 2 bugs in the SOS decomposition
+
+# 29/05/2025
+ - (Nazar) Refactor rules API, MR !31
+ - (Mathis) Review this MR
+
+# 30/05/2025
+ - (Nazar) Add more test to !31 
