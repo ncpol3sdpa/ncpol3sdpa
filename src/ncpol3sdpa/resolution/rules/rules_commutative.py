@@ -6,7 +6,7 @@ from sympy.core.numbers import S
 
 
 class RulesCommutative(Rules):
-    def divisible_factors(
+    def _divides_factors(
         self, monomial1: Expr, monomial2: Expr
     ) -> None | Tuple[Expr, Expr]:
         """If monomial1 divides monomial2 (ie there exists a,b s.t. monomial2 = a * monomial1 * b),

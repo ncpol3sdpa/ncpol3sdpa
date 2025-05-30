@@ -10,10 +10,9 @@ import ncpol3sdpa.resolution.utils as utils
 from testing.draw_strategies.polynomials import generate_rules_1to1
 import testing.draw_strategies.polynomials as draw_poly
 
-from hypothesis.strategies import lists, just, integers
+from hypothesis.strategies import lists, just, integers, sampled_from
 from hypothesis import given, settings
 
-# TODO : add arbitrarily large monomials
 monomials_3_7: List[sympy.Expr] = lib_monomial.generate_monomials(
     draw_poly.three_symbols, 7, is_commutative=True
 )
@@ -29,7 +28,7 @@ monomials_2_3: List[sympy.Expr] = lib_monomial.generate_monomials(
 
 @given(
     generate_rules_1to1(monomials=monomials_3_7),
-    lists(draw_poly.pick_monomials(monomials_3_7), max_size=20),
+    lists(sampled_from(monomials_3_7), max_size=20),
 )
 def test_filter_monomials(
     rules: RulesCommutative, monomial_list: List[sympy.Expr]

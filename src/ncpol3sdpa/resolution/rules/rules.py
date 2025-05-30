@@ -24,25 +24,54 @@ class Rules:
         """Appends a new substitution rule in place"""
         self.rules[old] = new
 
-    def divisible_factors(
+    def _divides_factors(
         self, monomial1: Expr, monomial2: Expr
     ) -> None | Tuple[Expr, Expr]:
         """If monomial1 divides monomial2 (ie there exists a,b s.t. monomial2 = a * monomial1 * b),
-        returns a and b. otherwise return None
+        returns a and b. otherwise return None.
+        The monomials must be nonzero and without a numeric coefficient in from of them
         """
         # implemented by subclasses, different if the problem is commutative or not
         raise NotImplementedError
 
-    def divisible(self, monomial1: Expr, monomial2: Expr) -> bool:
+    def divides_factors(
+        self, monomial1: Expr, monomial2: Expr
+    ) -> None | Tuple[Expr, Expr]:
+        """If monomial1 divides monomial2 (ie there exists a,b s.t. monomial2 = a * monomial1 * b),
+        returns a and b. otherwise return None.
+        This version also accepts monomials with coefficients on them
+        """
+        if monomial2 == S.Zero:
+            return S.Zero, S.Zero
+        if monomial1 == S.Zero:
+            return None
+        if len(monomial1.free_symbols) == 0:
+            return (monomial2 / monomial1) * S.One, S.One
+
+        c1, c2 = 1, 1
+        if isinstance(monomial1, Mul):
+            c1, monomial1 = monomial1.as_coeff_Mul()
+        if isinstance(monomial2, Mul):
+            c2, monomial2 = monomial2.as_coeff_Mul()
+
+        res = self._divides_factors(monomial1, monomial2)
+        if res is not None:
+            a, b = res
+            return (c2 / c1) * a, b
+        else:
+            return None
+
+    def divides(self, monomial1: Expr, monomial2: Expr) -> bool:
         """Check if monomial1 divides monomial2.
         ie there exists a,b s.t. monomial2 = a * monomial1 * b"""
 
-        return self.divisible_factors(monomial1, monomial2) is not None
+        return self.divides_factors(monomial1, monomial2) is not None
 
     def apply_to_monomial(self, monomial: Expr) -> Expr:
-        """Apply rules to a monomial"""
+        """Apply rules to a monomial.
+        Expects monomials to be non zero and without a numeric coefficient"""
         for key in self.rules.keys():
-            result = self.divisible_factors(key, monomial)
+            result = self.divides_factors(key, monomial)
             if result is not None:
                 a, b = result
                 return self.apply_to_monomial(a * self.rules[key] * b)
@@ -65,6 +94,6 @@ class Rules:
         # if a monomial M divides a N such that N -> _ is a rule, then it should not be
         # in the final moment matrix
         def bigger_than_a_key(p: Expr) -> bool:
-            return any([self.divisible(key, p) for key in self.rules.keys()])
+            return any([self.divides(key, p) for key in self.rules.keys()])
 
         return [monomial for monomial in monomials if not bigger_than_a_key(monomial)]

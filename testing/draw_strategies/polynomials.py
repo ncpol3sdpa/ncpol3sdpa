@@ -4,7 +4,7 @@ from hypothesis.strategies import SearchStrategy, DrawFn
 
 # from hypothesis import given
 import sympy
-from hypothesis.strategies import composite, one_of, lists, just, builds, integers
+from hypothesis.strategies import composite, sampled_from, lists, builds, integers
 from ncpol3sdpa.resolution.rules import RulesCommutative
 
 from ncpol3sdpa.resolution.monomial import generate_monomials
@@ -19,8 +19,8 @@ three_symbols: List[sympy.Symbol] = [
 ]
 
 
-def n_symbols(n: int) -> List[sympy.Symbol]:
-    return [sympy.Symbol(f"x{i}") for i in range(n)]
+def n_symbols(n: int, commutative: bool = True) -> List[sympy.Symbol]:
+    return [sympy.Symbol(f"x{i}", commutative=commutative) for i in range(n)]
 
 
 def gen_symbols(max_symbols: int) -> SearchStrategy[List[sympy.Symbol]]:
@@ -57,14 +57,6 @@ def polynomials_commutative(
     )  # .filter(leading coefficients non zero?)
 
 
-def pick_monomials(monomials: List[sympy.Expr]) -> SearchStrategy[sympy.Expr]:
-    def justifier(x: sympy.Expr) -> SearchStrategy[sympy.Expr]:
-        return just(x)
-
-    rt: SearchStrategy[sympy.Expr] = one_of(list(map(justifier, monomials)))
-    return rt
-
-
 def generate_rules_1to1(
     monomials: List[sympy.Expr], max_rules: int | None = None
 ) -> SearchStrategy[RulesCommutative]:
@@ -72,7 +64,7 @@ def generate_rules_1to1(
     Always monomial to monomial. Rules it generates must decrees the degree (otherwise
     there a risk of generating rules that loop forever)
     The scalar multiplier between the monomials is always 1"""
-    monomial_gen = pick_monomials(monomials)
+    monomial_gen = sampled_from(monomials)
 
     def sort_tuple_by_degree(
         t: List[sympy.Expr],

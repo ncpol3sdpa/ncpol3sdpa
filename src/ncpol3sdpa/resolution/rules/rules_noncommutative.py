@@ -19,7 +19,7 @@ def list_of_monomial(monomial: Expr) -> List[Expr]:
 
 
 class RulesNoncommutative(Rules):
-    def divisible_factors(
+    def _divides_factors(
         self, monomial1: Expr, monomial2: Expr
     ) -> None | Tuple[Expr, Expr]:
         """If monomial1 divides monomial2 (ie there exists a,b s.t. monomial2 = a * monomial1 * b),
@@ -31,7 +31,7 @@ class RulesNoncommutative(Rules):
         for i in range(len(m2_list) - len(m1_list) + 1):
             if m2_list[i : i + len(m1_list)] == m1_list:
                 return (
-                    Mul(*(m2_list[: max(0, i)])),
+                    Mul(*m2_list[: max(0, i)]),
                     Mul(*m2_list[(i + len(m1_list)) :]),
                 )
 
