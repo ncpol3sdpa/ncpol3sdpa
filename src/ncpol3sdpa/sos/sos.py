@@ -87,8 +87,8 @@ def compute_sos_decomposition(
     ensures: lambda - problem_algebra.objective_polynomial = SOS + Sum of(SOS_i*g_i)
     """
 
-    A = solution.dual_variables[0]
-    B = solution.dual_variables[1:]
+    A = solution.dual_PSD_variables[0]
+    B = solution.dual_PSD_variables[1:]
 
     def calculate_SOS(
         w: List[sympy.Expr], A: NDArray[numpy.float64], middle: sympy.Expr

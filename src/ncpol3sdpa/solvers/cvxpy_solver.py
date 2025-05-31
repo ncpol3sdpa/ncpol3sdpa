@@ -30,34 +30,38 @@ class CvxpySolver(Solver):
         psd_constraints: List[cvxpy.Constraint] = [x >> 0 for x in sdp_vars]
         # Moment matrix structure
         G = sdp_vars[problem.MOMENT_MATRIX_VAR_NUM]
-        constraints: List[cvxpy.Constraint] = [G[0, 0] == 1]
+        moment_structure_constraints: List[cvxpy.Constraint] = [G[0, 0] == 1]
         for eq_class in problem.moment_matrix.eq_classes:
             assert len(eq_class) > 0
             (i, j) = eq_class.pop()
             for x, y in eq_class:
-                constraints.append(G[i, j] == G[x, y])
+                moment_structure_constraints.append(G[i, j] == G[x, y])
 
         # Constraints
+        eq_constraints: List[cvxpy.Constraint] = []
         for constraint in problem.constraints:
             expression: cvxpy.Expression = cvxpy.Constant(0)
             for var_num, matrix in constraint.constraints:
                 expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])  # type: ignore
-            constraints.append(cvxpy.Constant(0) == expression)
+            eq_constraints.append(cvxpy.Constant(0) == expression)
 
         # tr(A.T x G)
         objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))  # type: ignore
 
-        prob = cvxpy.Problem(objective, constraints + psd_constraints)
+        prob = cvxpy.Problem(
+            objective, moment_structure_constraints + psd_constraints + eq_constraints
+        )
         # Returns the optimal value.
         prob.solve()
         assert isinstance(prob.value, float)
 
         if prob.status == "optimal":
             return Solution_SDP(
-                prob.value,
-                [x.value for x in sdp_vars],  # type: ignore
-                constraints[0].dual_value,
-                [c.dual_value for c in psd_constraints],
+                primal_objective_value=prob.value,
+                primal_PSD_variables=[x.value for x in sdp_vars],  # type: ignore
+                dual_objective_value=moment_structure_constraints[0].dual_value,
+                dual_PSD_variables=[c.dual_value for c in psd_constraints],
+                dual_eqC_variables=np.array([c.dual_value for c in eq_constraints]),
             )
         else:
             warnings.warn(

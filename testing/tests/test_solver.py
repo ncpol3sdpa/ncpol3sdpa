@@ -46,5 +46,5 @@ def test_2x2_mosek() -> None:
     assert np.abs(2 - result) <= 0.001  # result should be 2
 
     expected = np.array([[1, -1], [-1, 1]])
-    h = expected - solution.primal_variables[0]
+    h = expected - solution.primal_PSD_variables[0]
     assert np.trace(h.T @ h) <= 0.001  # result should be 2

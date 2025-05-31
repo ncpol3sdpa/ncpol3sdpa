@@ -58,7 +58,9 @@ def de_linearize(vec: NDArray[np.float64]) -> NDArray[np.float64]:
     return result
 
 
-def parse_mosek_solution(problem: ProblemSDP, task: mosek.Task) -> Solution_SDP:
+def parse_mosek_solution(
+    problem: ProblemSDP, task: mosek.Task, n_eq_constrants: int
+) -> Solution_SDP:
     solution_type = mosek.soltype.itr
     primal_objective_value = task.getprimalobj(solution_type)
     dual_objective_value = task.getdualobj(solution_type)
@@ -72,26 +74,32 @@ def parse_mosek_solution(problem: ProblemSDP, task: mosek.Task) -> Solution_SDP:
     assert abs(dual_objective_value - dual_alt) <= 0.01
 
     # pre-allocate the arrays to be filled in. They are stored as a list by mosek
-    primal_variables_lin = [
+    primal_PSD_variables_lin = [
         np.zeros(n * (n + 1) // 2, dtype=np.float64) for n in problem.variable_sizes
     ]
-    dual_variables_lin = [
+    dual_PSD_variables_lin = [
         np.zeros(n * (n + 1) // 2, dtype=np.float64) for n in problem.variable_sizes
     ]
 
     for i in range(len(problem.variable_sizes)):
-        task.getbarxj(solution_type, i, primal_variables_lin[i])
-        task.getbarsj(solution_type, i, dual_variables_lin[i])
+        task.getbarxj(solution_type, i, primal_PSD_variables_lin[i])
+        task.getbarsj(solution_type, i, dual_PSD_variables_lin[i])
 
-    primal_variables = [de_linearize(var) for var in primal_variables_lin]
+    primal_PSD_variables = [de_linearize(var) for var in primal_PSD_variables_lin]
     # despite what the MOSEK docs might suggest, barsj are negative semidefinite variables
-    dual_variables = [-de_linearize(var) for var in dual_variables_lin]
+    dual_PSD_variables = [-de_linearize(var) for var in dual_PSD_variables_lin]
+
+    # The first y is the dual_objective, then come the equality constraints, then
+    dual_eqC_variables = np.zeros(n_eq_constrants, dtype=np.float64)
+
+    task.getyslice(solution_type, 1, 1 + n_eq_constrants, dual_eqC_variables)
 
     return Solution_SDP(
         primal_objective_value=primal_objective_value,
-        primal_variables=primal_variables,
+        primal_PSD_variables=primal_PSD_variables,
         dual_objective_value=dual_objective_value,
-        dual_variables=dual_variables,
+        dual_PSD_variables=dual_PSD_variables,
+        dual_eqC_variables=dual_eqC_variables,
     )
 
 
@@ -99,6 +107,9 @@ class MosekSolver(Solver):
     @classmethod
     def solve(self, problem: ProblemSDP) -> Solution_SDP:
         """Solve the SDP problem with mosek"""
+
+        # Gets the number of equ constraints to decode the solution
+        n_eq_constrants = len(problem.constraints)
 
         # Convert constraints inside the moment matrix to primal form constraints
         problem.compile_moment_matrix_to_constraints()
@@ -173,7 +184,7 @@ class MosekSolver(Solver):
 
                 # Handle solution cases
                 if solution_status == mosek.solsta.optimal:
-                    return parse_mosek_solution(problem=problem, task=task)
+                    return parse_mosek_solution(problem, task, n_eq_constrants)
 
                 elif solution_status in [
                     mosek.solsta.dual_infeas_cer,
