@@ -4,7 +4,7 @@ from typing import List, Tuple, Dict, Callable
 import sympy as sp
 from scipy.sparse import lil_matrix
 
-from .rules import Rule
+from .rules import Rules
 from .monomial import generate_monomials
 from .constraints import Constraint, ConstraintType
 from .utils import (
@@ -15,7 +15,7 @@ from .utils import (
 
 def create_moment_matrix(
     monomials: List[sp.Expr],
-    substitution_rules: Rule,
+    substitution_rules: Rules,
     is_commutative: bool = True,
     get_adjoint: Callable[[sp.Expr], sp.Expr] = lambda x: x,
 ) -> Matrix:
@@ -24,8 +24,7 @@ def create_moment_matrix(
     return [
         [
             substitution_rules.apply_to_monomial(
-                get_adjoint(monomials[j]) * monomials[i],
-                is_commutative,
+                get_adjoint(monomials[j]) * monomials[i]
             )
             for j in range(i + 1)
         ]
@@ -43,7 +42,7 @@ class AlgebraSDP:
         needed_variables: List[sp.Symbol],
         objective: sp.Expr,
         relaxation_order: int,
-        substitution_rules: Rule,
+        substitution_rules: Rules,
     ) -> None:
         """
         Construct the symbolic Moment Matrices and soundings data structures.
@@ -52,7 +51,7 @@ class AlgebraSDP:
         """
 
         self.relaxation_order: int = relaxation_order
-        self.substitution_rules: Rule = substitution_rules
+        self.substitution_rules: Rules = substitution_rules
         self.monomials: List[sp.Expr] = substitution_rules.filter_monomials(
             generate_monomials(needed_variables, relaxation_order, self.is_commutative)
         )
@@ -237,8 +236,7 @@ class AlgebraSDP:
                         self.get_adjoint(self.monomials[j])
                         * constraint_polynomial
                         * monomials[i]
-                    ),
-                    self.is_commutative,
+                    )
                 )
                 for j in range(i + 1)
             ]
