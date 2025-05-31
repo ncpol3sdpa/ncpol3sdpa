@@ -80,11 +80,11 @@ class Solver:
         for constraint in problem.constraints:
             expression: cvxpy.Expression = cvxpy.Constant(0)
             for var_num, matrix in constraint.constraints:
-                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
+                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])  # type: ignore
             constraints.append(cvxpy.Constant(0) == expression)
 
         # tr(A.T x G)
-        objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
+        objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))  # type: ignore
 
         prob = cvxpy.Problem(objective, constraints + psd_constraints)
         # Returns the optimal value.
@@ -120,7 +120,7 @@ class Solver:
                 task.appendbarvars(problem.variable_sizes)
 
                 # objective function
-                val_obj, rows_obj, cols_obj = to_sparse_symmetric(problem.objective)
+                val_obj, rows_obj, cols_obj = to_sparse_symmetric(problem.objective)  # type: ignore
                 task.putbarcblocktriplet(
                     [problem.MOMENT_MATRIX_VAR_NUM] * len(val_obj),
                     rows_obj,
@@ -144,7 +144,7 @@ class Solver:
                     constraint_l = []
                     constraint_v = []
                     for var_num, matrix in problem.constraints[i].constraints:
-                        val_m, rows_m, cols_m = to_sparse_symmetric(matrix)
+                        val_m, rows_m, cols_m = to_sparse_symmetric(matrix)  # type: ignore
                         which_constraint += [1 + i] * len(val_m)
                         which_SDP += [var_num] * len(val_m)
                         constraint_k += rows_m
