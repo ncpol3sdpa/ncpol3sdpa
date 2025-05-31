@@ -1,36 +1,47 @@
-# TODO
+from copy import deepcopy
 
 import numpy as np
-
-# from typing import List
-from ncpol3sdpa import AvailableSolvers
-
-from ncpol3sdpa import Problem
-
 from sympy.abc import x, y
 import sympy as sp
 
+# from typing import List
+from ncpol3sdpa import AvailableSolvers
+from ncpol3sdpa import Problem
+from ncpol3sdpa import Constraint
 
-def objective_only_test(obj: sp.Expr) -> None:
-    problem = Problem(obj)
 
-    # TODO Bug in mosek
-    for solver in [AvailableSolvers.MOSEK, AvailableSolvers.CVXPY]:
+solvers = [AvailableSolvers.CVXPY, AvailableSolvers.MOSEK]
+
+
+def verify_test(problem: Problem, k: int = 1) -> None:
+    for solver in solvers:
+        # The problem should be solved only once
+        prob_copy = deepcopy(problem)
+
         print("solver: ", solver)
-        problem.solve(relaxation_order=1, solver=solver)
+        prob_copy.solve(relaxation_order=k, solver=solver)
 
-        sosDecomposition = problem.compute_sos_decomposition()
+        sosDecomposition = prob_copy.compute_sos_decomposition()
         assert sosDecomposition is not None
-        assert np.abs(sosDecomposition.objective_error(problem.algebraSDP)) < 0.01
+        assert np.abs(sosDecomposition.objective_error(prob_copy.algebraSDP)) < 0.01
 
 
 def test1() -> None:
-    objective_only_test(-(y**2) - y)
+    problem = Problem(-(y**2) - y)
+    verify_test(problem)
 
 
 def test2() -> None:
-    objective_only_test(sp.expand(-(x**2) - (3 * x - 6 * y) ** 2 + 7 * x - 4 * y + 12))
+    problem = Problem(sp.expand(-(x**2) - (3 * x - 6 * y) ** 2 + 7 * x - 4 * y + 12))
+    verify_test(problem)
 
 
 def test3() -> None:
-    objective_only_test(sp.expand(-(x**2) - (3 * x - 6 * y) ** 2 + 12))
+    problem = Problem(sp.expand(-(x**2) - (3 * x - 6 * y) ** 2 + 12))
+    verify_test(problem)
+
+
+def test4() -> None:
+    problem = Problem(sp.expand(-(x**2) - (3 * x - 6 * y) ** 2 + 12))
+    problem.add_constraint(Constraint.EqualityConstraint(x * y + 6 - x**2))
+    verify_test(problem, k=3)
