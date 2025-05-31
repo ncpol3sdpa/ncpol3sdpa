@@ -1,7 +1,6 @@
 from typing import Tuple, List, NamedTuple
 
-import numpy as np
-from numpy.typing import NDArray
+from scipy.sparse import lil_matrix
 
 
 class EqConstraint(NamedTuple):
@@ -11,4 +10,4 @@ class EqConstraint(NamedTuple):
     sum_i < A[i] | G[k,i] > = 0
     """
 
-    constraint: List[Tuple[int, NDArray[np.float64] | NDArray[np.complex64]]]
+    constraints: List[Tuple[int, lil_matrix]]

@@ -17,6 +17,8 @@ dependencies = [
     "mosek>=11.0.13",
     "pyvis>=0.3.2",
     "networkx>=3.4.2",
+    "hypothesis>=6.131.18",
+    "scipy>=1.15.2",
 ]
 
 [dependency-groups]
@@ -45,7 +47,7 @@ skip-magic-trailing-comma = false
 strict = true
 exclude = ["main.py"]
 follow_untyped_imports = true
-files = ["src/ncpol3sdpa","testing/tests", "examples"]
+files = ["src/ncpol3sdpa","testing/tests","testing/draw_strategies", "examples"]
 python_executable = ".venv/bin/python"
 mypy_path = "src/typing_stubs"
 

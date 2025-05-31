@@ -5,13 +5,17 @@ from ncpol3sdpa.resolution.algebra import AlgebraSDP
 from ncpol3sdpa.resolution.utils import degree_of_polynomial
 
 
-class AlgebraSDPComplex(AlgebraSDP):
+class AlgebraSDPncComplex(AlgebraSDP):
     def get_adjoint(self, monomial: sp.Expr) -> sp.Expr:
-        return monomial.conjugate()  # type: ignore
+        return monomial.adjoint()  # type: ignore
 
     @property
     def is_commutative(self) -> bool:
-        return True
+        return False
+
+    @property
+    def is_real(self) -> bool:
+        return False
 
     def get_length_constraint_matrix(self, deg_pol: int) -> int:
         k_i = self.relaxation_order - deg_pol

@@ -1,21 +1,23 @@
 from typing import List, Optional
 import warnings
 
-from numpy.typing import NDArray
+from scipy.sparse import lil_matrix
 import numpy as np
 
 import cvxpy
-from cvxpy.expressions.expression import Expression as CVXPY_Expr
 
 from ncpol3sdpa.sdp_solution import Solution_SDP
 from ncpol3sdpa.sdp_repr import ProblemSDP
 from .solver import Solver
 
 
-def cvxpy_dot_prod(c: NDArray[np.float64], x: CVXPY_Expr) -> CVXPY_Expr:
-    rt = cvxpy.sum(cvxpy.multiply(c, x))
-    assert isinstance(rt, CVXPY_Expr)
-    return rt
+def cvxpy_dot_prod(c: lil_matrix, x: "cvxpy.Expression") -> "cvxpy.Expression":
+    expr = cvxpy.Constant(0)
+    for i, row in enumerate(c.rows):
+        for idx, j in enumerate(row):
+            val = c.data[i][idx]
+            expr += val * x[i, j]
+    return expr
 
 
 class CvxpySolver(Solver):
@@ -42,11 +44,11 @@ class CvxpySolver(Solver):
         for constraint in problem.constraints:
             expression: cvxpy.Expression = cvxpy.Constant(0)
             for var_num, matrix in constraint.constraints:
-                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])  # type: ignore
+                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
             eq_constraints.append(cvxpy.Constant(0) == expression)
 
         # tr(A.T x G)
-        objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))  # type: ignore
+        objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
 
         prob = cvxpy.Problem(
             objective, moment_structure_constraints + psd_constraints + eq_constraints

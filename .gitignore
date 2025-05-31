@@ -3,6 +3,8 @@
 **/.DS_Store
 **/__pycache__
 venv
+.hypothesis
+public
 
 # **/*.dot
 # **/*.pdf

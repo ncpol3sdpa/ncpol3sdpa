@@ -5,7 +5,9 @@ import sympy
 
 from ncpol3sdpa.solvers import AvailableSolvers, Solver, SolverRegistry
 from ncpol3sdpa.resolution import (
-    Rule,
+    Rules,
+    RulesCommutative,
+    RulesNoncommutative,
     Constraint,
     create_AlgebraSDP,
     generate_needed_symbols,
@@ -24,6 +26,15 @@ class Problem:
         self.is_commutative = is_commutative
         self.is_real = is_real
         self.solution: Optional[Solution_SDP] = None
+        self.rules: Rules = (
+            RulesCommutative() if is_commutative else RulesNoncommutative()
+        )
+
+    def add_rule(self, old: Expr, new: Expr) -> None:
+        """Adds the substitution rule old -> new to the problem. (variation of the constraint old = new)
+        old and new MUST BE MONOMIALS"""
+        # TODO: assert that old and new are monomials
+        self.rules.add_rule(old, new)
 
     def add_constraint(self, constraint: Constraint) -> None:
         self.constraints.append(constraint)
@@ -53,14 +64,7 @@ class Problem:
             >>> result = problem.solve(relaxation_order=2)
         """
 
-        # 0. Separate constraint types
-        rules = Rule(
-            [constraint for constraint in self.constraints if constraint.substitution]
-        )
-
-        normal_constraints = [
-            constraint for constraint in self.constraints if not constraint.substitution
-        ]
+        normal_constraints = self.constraints
 
         # 1. Build algebraic formulation
         all_constraint_polynomials = [c.polynomial for c in self.constraints] + [
@@ -71,7 +75,7 @@ class Problem:
             needed_symbols,
             self.objective,
             relaxation_order,
-            rules,
+            self.rules,
             self.is_commutative,
             self.is_real,
         )
@@ -82,8 +86,6 @@ class Problem:
         problemSDP = algebra_to_SDP(algebraSDP)
         if not self.is_real:
             problemSDP = problemSDP.complex_to_realSDP()
-
-        print(problemSDP)
 
         # 3. Solve the SDP
         if isinstance(solver, AvailableSolvers):

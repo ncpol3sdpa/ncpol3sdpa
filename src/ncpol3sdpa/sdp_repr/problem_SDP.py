@@ -1,8 +1,7 @@
 from __future__ import annotations
 from typing import List, Tuple
 
-from numpy.typing import NDArray
-import numpy as np
+from scipy.sparse import lil_matrix, hstack, vstack
 
 from .moment_matrix_SDP import MomentMatrixSDP
 from .eq_constraint import EqConstraint
@@ -18,7 +17,7 @@ class ProblemSDP:
     def __init__(
         self,
         moment_matrix: MomentMatrixSDP,
-        objective: NDArray[np.float64] | NDArray[np.complex64],
+        objective: lil_matrix,
     ) -> None:
         # The moment matrix should always be in position 0
         self.__MOMENT_MATRIX_VAR_NUM: int = 0
@@ -27,15 +26,15 @@ class ProblemSDP:
         # The number of elements in this list is the number of variables.
         # Each variable is a positive semi-definite matrix
         self.__variable_sizes: List[int] = [moment_matrix.size]
-        self.__objective: NDArray[np.complex64] | NDArray[np.float64] = objective
-        self.__constraints: List[EqConstraint] = []
+        self.__objective: lil_matrix = objective
+        self.constraints: List[EqConstraint] = []
 
         assert objective.shape == (moment_matrix.size, moment_matrix.size)
 
     def __str__(self) -> str:
         s = (
             "SDP translation:\n"
-            + f".objective: \n {self.objective}\n"
+            + f".objective: \n {self.objective.toarray()}\n"  # type: ignore
             + f".variable_sizes: {self.variable_sizes}\n"
             + "Moment matrix: \n"
             + f"    .moment_matrix.size: \n {self.moment_matrix.size}\n"
@@ -45,7 +44,7 @@ class ProblemSDP:
 
         for c in self.constraints:
             for c2 in c.constraints:
-                s = s + str(c2[0]) + "\n" + str(c2[1]) + "\n"
+                s = s + str(c2[0]) + "\n" + str(c2[1].toarray()) + "\n"  # type: ignore
             s = s + "\n"
 
         return s
@@ -79,14 +78,9 @@ class ProblemSDP:
         self.__variable_sizes = value
 
     @property
-    def objective(self) -> NDArray[np.complex64] | NDArray[np.float64]:
+    def objective(self) -> lil_matrix:
         """The objective matrix"""
         return self.__objective
-
-    @property
-    def constraints(self) -> List[EqConstraint]:
-        """The constraints of the SDP"""
-        return self.__constraints
 
     # --- internal functions ---
 
@@ -99,13 +93,13 @@ class ProblemSDP:
         x, y = coef2
         i, j = coef1
         assert coef1 != coef2
-        a = np.zeros(
-            shape=(self.variable_sizes[var_number], self.variable_sizes[var_number])
+        a = lil_matrix(
+            (self.variable_sizes[var_number], self.variable_sizes[var_number])  # type: ignore
         )
-        a[i][j] += 0.5
-        a[j][i] += 0.5
-        a[x][y] -= 0.5
-        a[y][x] -= 0.5
+        a[i, j] += 0.5
+        a[j, i] += 0.5
+        a[x, y] -= 0.5
+        a[y, x] -= 0.5
 
         return EqConstraint([(var_number, a)])
 
@@ -183,15 +177,16 @@ class ProblemSDP:
 
 
 def complexMatrix_to_realMatrix(
-    X: NDArray[np.complex64] | NDArray[np.float64],
-) -> NDArray[np.float64]:
+    X: lil_matrix,
+) -> lil_matrix:
     if X.shape[0] != X.shape[1]:
         raise ValueError("The matrix must be square")
 
-    X_re = np.divide(np.real(X), 2)
-    X_im = np.divide(np.imag(X), 2)
+    X_re = X.real.multiply(0.5)
+    X_im = X.imag.multiply(0.5)
 
-    upper = np.hstack([X_re, -X_im])
-    lower = np.hstack([X_im, X_re])
+    upper = hstack([X_re, -X_im])  # type: ignore
+    lower = hstack([X_im, X_re])  # type: ignore
 
-    return np.vstack([upper, lower])
+    result = vstack([upper, lower]).tolil()  # type: ignore
+    return result  # type: ignore

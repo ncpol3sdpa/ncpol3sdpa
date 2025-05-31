@@ -1,7 +1,8 @@
 # from numpy import format_float_scientific
 from sympy.abc import x, y
+from sympy import S
 from sympy import Expr, symbols, I
-from sympy.physics.quantum import HermitianOperator
+from sympy.physics.quantum import HermitianOperator, Operator
 
 from ncpol3sdpa import Constraint, Problem, AvailableSolvers
 
@@ -23,8 +24,8 @@ def test_1() -> None:
 
 def test_2() -> None:
     obj = y**2 - x * y - y
-    c1 = Constraint(False, x - x**2)
-    c2 = Constraint(False, y - y**2)
+    c1 = Constraint.EqualityConstraint(x - x**2)
+    c2 = Constraint.EqualityConstraint(y - y**2)
     p = Problem(obj)
     p.add_constraint(c1)
     p.add_constraint(c2)
@@ -47,12 +48,10 @@ def test_3() -> None:
     assert abs(p.solve_uncheked(3, AvailableSolvers.MOSEK) - 10) <= 0.001
 
 
-# Issue with cvxpy ??
 def test_4() -> None:
     obj = y * (-(x**2) + 2)
-    c1 = Constraint.EqualityConstraint(y - 10, substitution=True)
     p = Problem(obj)
-    p.add_constraint(c1)
+    p.add_rule(y, 10 * S.One)
     assert abs(p.solve_uncheked(2) - 20) <= 0.1
     assert abs(p.solve_uncheked(3) - 20) <= 0.001
     assert abs(p.solve_uncheked(2, AvailableSolvers.MOSEK) - 20) <= 0.1
@@ -62,10 +61,9 @@ def test_4() -> None:
 def test_1_sub() -> None:
     obj = 2 * x * y
     p = Problem(obj)
-    c1 = Constraint.EqualityConstraint(x * x - x, substitution=True)
-    c2 = Constraint.EqualityConstraint(-y * y + y + 0.25)
-    p.add_constraint(c1)
-    p.add_constraint(c2)
+    constraint = Constraint.EqualityConstraint(-y * y + y + 0.25)
+    p.add_constraint(constraint)
+    p.add_rule(x * x, x)
     assert abs(p.solve_uncheked(1) - 2.4142) <= 0.01
     assert abs(p.solve_uncheked(2) - 2.4142) <= 0.01
     assert abs(p.solve_uncheked(3) - 2.4142) <= 0.01
@@ -143,3 +141,25 @@ def test_complex_2() -> None:
     p.add_constraint(c4)
     solution = p.solve_uncheked(3)
     assert abs(solution - 0.7071) <= 0.1
+
+
+def test_nc_complex_1() -> None:
+    X1 = HermitianOperator("X1")  # type: ignore
+    X2 = HermitianOperator("X2")  # type: ignore
+    obj = -(X1**2) - X2**2 - I * (X1 * X2 - X2 * X1)
+    p = Problem(obj, is_commutative=False, is_real=False)
+    c1 = Constraint.InequalityConstraint(1 - X1**2 - X2**2)
+    p.add_constraint(c1)
+    assert abs(p.solve_uncheked(2)) <= 0.1
+
+
+def test_nc_complex_2() -> None:
+    X1 = Operator("X1")  # type: ignore
+    X2 = HermitianOperator("X2")  # type: ignore
+    obj = -(X1**2) - X2**2 - I * (X1 * X2 - X2 * X1)
+    p = Problem(obj, is_commutative=False, is_real=False)
+    c1 = Constraint.InequalityConstraint(1 - X1**2 - X2**2)
+    c2 = Constraint.EqualityConstraint(X1 - X1.adjoint())  # type: ignore
+    p.add_constraint(c1)
+    p.add_constraint(c2)
+    assert abs(p.solve_uncheked(2)) <= 0.1

@@ -1,15 +1,35 @@
 from __future__ import annotations
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Callable
 
 import sympy as sp
+from scipy.sparse import lil_matrix
 
-from .rules import Rule
+from .rules import Rules
 from .monomial import generate_monomials
-from .constraints import Constraint
+from .constraints import Constraint, ConstraintType
 from .utils import (
     Matrix,
     degree_of_polynomial,
 )
+
+
+def create_moment_matrix(
+    monomials: List[sp.Expr],
+    substitution_rules: Rules,
+    is_commutative: bool = True,
+    get_adjoint: Callable[[sp.Expr], sp.Expr] = lambda x: x,
+) -> Matrix:
+    """Creates a moment matrix with monomials, substitution rules. Defaults to the real commutative case"""
+    matrix_size = len(monomials)
+    return [
+        [
+            substitution_rules.apply_to_monomial(
+                get_adjoint(monomials[j]) * monomials[i]
+            )
+            for j in range(i + 1)
+        ]
+        for i in range(matrix_size)
+    ]
 
 
 class AlgebraSDP:
@@ -22,8 +42,7 @@ class AlgebraSDP:
         needed_variables: List[sp.Symbol],
         objective: sp.Expr,
         relaxation_order: int,
-        substitution_rules: Rule,
-        is_commutative: bool = True,
+        substitution_rules: Rules,
     ) -> None:
         """
         Construct the symbolic Moment Matrices and soundings data structures.
@@ -32,17 +51,21 @@ class AlgebraSDP:
         """
 
         self.relaxation_order: int = relaxation_order
-        self.substitution_rules: Rule = substitution_rules
-        self.is_commutative = is_commutative
+        self.substitution_rules: Rules = substitution_rules
         self.monomials: List[sp.Expr] = substitution_rules.filter_monomials(
-            generate_monomials(needed_variables, relaxation_order, is_commutative)
+            generate_monomials(needed_variables, relaxation_order, self.is_commutative)
         )
         self.objective: sp.Expr = substitution_rules.apply_to_polynomial(
             sp.expand(objective)
         )
 
         # In the commutative case, the moment matrix is symmetric
-        self.moment_matrix = self.create_moment_matrix()
+        self.moment_matrix = create_moment_matrix(
+            substitution_rules=self.substitution_rules,
+            monomials=self.monomials,
+            is_commutative=self.is_commutative,
+            get_adjoint=self.get_adjoint,
+        )
         matrix_size: int = len(self.moment_matrix)
 
         # equivalence classes of equal coefficients
@@ -91,14 +114,52 @@ class AlgebraSDP:
     def is_real(self) -> bool:
         return False
 
+    @property
+    def is_commutative(self) -> bool:
+        "Return the commutativity of self"
+        raise NotImplementedError
+
     # Public methods
+
+    def polynomial_to_matrix(self, poly: sp.Expr) -> lil_matrix:
+        """Returns a hermitian A matrix such that poly = Tr(A.T @ G) where G is the moment matrix. In other
+        words express poly as a linear combination of the coefficients of G.
+        Requires that all monomials of poly exist within the moment matrix:
+            poly.free_vars included in algebra.moment_matrix free_vars
+            and deg(poly) <= 2*algebra.relaxation_order"""
+        moment_matrix_size = len(self.moment_matrix)
+        a_0: lil_matrix = lil_matrix(
+            (moment_matrix_size, moment_matrix_size), dtype=self.DTYPE
+        )  # type: ignore
+
+        for monomial, coef in sp.expand(poly).as_coefficients_dict().items():
+            if sp.I in coef.atoms():  # type: ignore
+                coef /= sp.I
+                coef = float(coef)
+                coef *= 1j  # type: ignore
+            if sp.I in monomial.atoms():  # type: ignore
+                monomial /= sp.I
+                coef = float(coef)
+                coef *= 1j  # type: ignore
+            assert monomial in self.monomial_to_positions.keys()
+            assert 0 < len(self.monomial_to_positions[monomial])
+
+            # The 0 is arbitrary (?) could be any other element of the list.
+            # TODO/Idea What happens if we chose other than 0? at random?
+            monomial_x, monomial_y = self.monomial_to_positions[monomial][0]
+
+            # The matrices must be hermitian
+            a_0[monomial_x, monomial_y] += 0.5 * coef
+            a_0[monomial_y, monomial_x] += 0.5 * coef.conjugate()
+
+        return a_0
 
     def add_constraint(self, constraint: Constraint) -> None:
         """Add a constraint to the algebra
 
         Save the constraint if it is an equality constraint,
         otherwise update the moment matrix for the inequality constraint"""
-        if constraint.is_equality_constraint:
+        if constraint.constraint_type == ConstraintType.EQUALITY:
             self.equality_constraints.append(constraint.polynomial)
         else:
             # inequality constraint
@@ -162,19 +223,6 @@ class AlgebraSDP:
         )
         return list(ruled_filtered_monomials)
 
-    def create_moment_matrix(self) -> Matrix:
-        matrix_size = len(self.monomials)
-        return [
-            [
-                self.substitution_rules.apply_to_monomial(
-                    self.get_adjoint(self.monomials[j]) * self.monomials[i],
-                    self.is_commutative,
-                )
-                for j in range(i + 1)
-            ]
-            for i in range(matrix_size)
-        ]
-
     def create_constraint_matrix(
         self, monomials: List[sp.Expr], constraint_polynomial: sp.Expr
     ) -> Matrix:
@@ -190,8 +238,7 @@ class AlgebraSDP:
                         self.get_adjoint(self.monomials[j])
                         * constraint_polynomial
                         * monomials[i]
-                    ),
-                    self.is_commutative,
+                    )
                 )
                 for j in range(i + 1)
             ]

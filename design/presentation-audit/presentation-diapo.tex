@@ -8,6 +8,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, amssymb}
 \usepackage{subcaption}
+\usepackage{listings}
 
 \title{Projet ncpol3sdpa}
 \subtitle{Audit de Présentation}
@@ -74,7 +75,24 @@ Notre bibliothèque vise à :
 \end{description}
 \end{frame}
 
+\begin{frame}{SOS decomposition}
+
+    La décomposition sum ofsSquare :
+$$f(x) - \lambda = SOS(x) - \sum_i SOS_i(x) g_i(x)$$
+Avec $SOS_i(x) = \sum_k p_k(x)^2$
+\end{frame}
+
 \section{Organisation du Travail}
+
+% \begin{frame}{Organisation du code}
+
+% \begin{text}
+% ncpol3sdpa/
+% ├── __init__.py
+% └── utils/
+% \end{text}
+
+% \end{frame}
 
 \begin{frame}{Répartition des Tâches}
 Nous avons organisé notre travail en modules distincts :
