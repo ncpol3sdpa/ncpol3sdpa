@@ -45,11 +45,16 @@ class SosDecomposition:
     """Class to represent the SOS problem"""
 
     def __init__(
-        self, dual_objective: float, SOS: SumOfSquares, SOS_i: List[SumOfSquares]
+        self,
+        dual_objective: float,
+        SOS: SumOfSquares,
+        SOS_i: List[SumOfSquares],
+        eq_polys: List[sympy.Expr],  # $\\nu_i * f_i | \\eta_i * h_i
     ) -> None:
         self.dual_objective = dual_objective
         self.SOS = SOS
         self.SOS_i = SOS_i
+        self.eq_polys = eq_polys
 
     def reconstructed_objective(self) -> sympy.Expr:
         """Calculates the objective polynomial from the SOS formula
@@ -58,6 +63,7 @@ class SosDecomposition:
         return sympy_sum(
             [s_lambda, -self.SOS.to_expression()]
             + [-sos.to_expression() for sos in self.SOS_i]
+            + self.eq_polys
         )
 
     def objective_error(self, problem_algebra: AlgebraSDP) -> float:
@@ -117,4 +123,9 @@ def compute_sos_decomposition(
         for i in range(len(B))
     ]
 
-    return SosDecomposition(solution.dual_objective_value, SOS, SOSi)
+    eq_polys = [
+        -solution.dual_eqC_variables[i] * problem_algebra.equality_constraints[i]
+        for i in range(len(solution.dual_eqC_variables))
+    ]
+
+    return SosDecomposition(solution.dual_objective_value, SOS, SOSi, eq_polys)

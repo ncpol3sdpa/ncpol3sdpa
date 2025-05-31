@@ -89,7 +89,7 @@ def parse_mosek_solution(
     # despite what the MOSEK docs might suggest, barsj are negative semidefinite variables
     dual_PSD_variables = [-de_linearize(var) for var in dual_PSD_variables_lin]
 
-    # The first y is the dual_objective, then come the equality constraints, then
+    # The first y is the dual_objective, then come the equality constraints.
     dual_eqC_variables = np.zeros(n_eq_constrants, dtype=np.float64)
 
     task.getyslice(solution_type, 1, 1 + n_eq_constrants, dual_eqC_variables)
