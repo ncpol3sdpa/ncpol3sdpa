@@ -2,9 +2,6 @@
 
 ## Description
 
-<<<<<<< HEAD
-This package is a Python library for solving polynomial optimization problems using Lassert hierarchical SDP relaxations.
-=======
 This package is a Python library for solving polynomial optimization problems using Lasserre hierarchical SDP relaxations.
 
 We solve the following problem:
@@ -16,7 +13,6 @@ $$\begin{align*}
 where $f,g_i \in \mathbb K [x_1,\ldots,x_n]$.
 
 This library is a successor to the ncpol2sdpa library.
->>>>>>> main
 
 ### Architecture
 
@@ -30,15 +26,10 @@ ncpol3sdpa
 ├─ sos.py                    Sos
 │
 ├─ resolution                The resolution of a problem
-<<<<<<< HEAD
-│  ├─ __init__.py
-│  ├─ algebra.py             AlgebraSDP
-=======
 │  ├─ __init__.py
 │  ├─ algebra.py             AlgebraSDP
 │  ├─ algebra_sdp_real.py
 │  ├─ algebra_sdp_complex.py
->>>>>>> main
 │  ├─ constraints.py         Constraint
 │  ├─ create_algebra.py
 │  ├─ monomial.py
