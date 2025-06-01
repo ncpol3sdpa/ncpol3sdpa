@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Tuple, Dict, Callable
+from typing import List, Tuple, Dict, Callable, NamedTuple
 
 import sympy as sp
 from scipy.sparse import lil_matrix
@@ -11,6 +11,19 @@ from .utils import (
     Matrix,
     degree_of_polynomial,
 )
+
+
+class ConstraintGroup(NamedTuple):
+    """Stores Equality constraint metadata for the SOS decomposition
+
+    Invariants:
+       * monomial_multiples[0] = (1,1)
+       * for all i, zero_polynomials[i] = monomial_multiples[i][0] * zero_polynomials[0] * monomial_multiples[i][1]
+    """
+
+    """Zero polynomials have substitution rules already applied to them"""
+    zero_polynomials: List[sp.Expr]
+    monomial_multiples: List[Tuple[sp.Expr, sp.Expr]]
 
 
 def create_moment_matrix(
@@ -79,7 +92,7 @@ class AlgebraSDP:
         self.constraint_moment_matrices: List[Matrix] = []
         self.psd_polynomials_gi: List[sp.Expr] = []
         # List of polynomials that equal 0
-        self.equality_constraints: List[sp.Expr] = []
+        self.equality_constraints: List[ConstraintGroup] = []
 
     def __str__(self) -> str:
         """Return a string representation of the algebra for debugging."""
@@ -154,40 +167,44 @@ class AlgebraSDP:
 
         return a_0
 
+    def add_inequality_constraint(self, constraint: sp.Expr) -> None:
+        # inequality constraint
+        # p.10 of Semidefinite programming relaxations for quantum correlations
+
+        k_i = self.get_length_constraint_matrix(degree_of_polynomial(constraint))
+        assert k_i >= 0, (
+            "Insufficient relaxation order to capture the constraint {constraint.polynomial}"
+        )
+
+        # TODO This is redundant work, does this matter?
+        constraint_monomials = self.substitution_rules.filter_monomials(
+            generate_monomials(
+                self.objective.free_symbols,  # type: ignore
+                k_i,
+                self.is_commutative,
+            )
+        )
+
+        self.constraint_moment_matrices.append(
+            self.create_constraint_matrix(
+                constraint_monomials,
+                constraint,
+            )
+        )
+        self.psd_polynomials_gi.append(constraint)
+
+    def add_equality_constraint(self, constraint: sp.Expr) -> None:
+        self.equality_constraints.append(self.expand_eq_constraint(constraint))
+
     def add_constraint(self, constraint: Constraint) -> None:
         """Add a constraint to the algebra
 
         Save the constraint if it is an equality constraint,
-        otherwise update the moment matrix for the inequality constraint"""
+        otherwise add a moment matrix for the inequality constraint"""
         if constraint.constraint_type == ConstraintType.EQUALITY:
-            self.equality_constraints.append(constraint.polynomial)
+            self.add_equality_constraint(constraint.polynomial)
         else:
-            # inequality constraint
-            # p.10 of Semidefinite programming relaxations for quantum correlations
-
-            k_i = self.get_length_constraint_matrix(
-                degree_of_polynomial(constraint.polynomial)
-            )
-            assert k_i >= 0, (
-                "Insufficient relaxation order to capture the constraint {constraint.polynomial}"
-            )
-
-            # TODO This is redundant work, does this matter?
-            constraint_monomials = self.substitution_rules.filter_monomials(
-                generate_monomials(
-                    self.objective.free_symbols,  # type: ignore
-                    k_i,
-                    self.is_commutative,
-                )
-            )
-
-            self.constraint_moment_matrices.append(
-                self.create_constraint_matrix(
-                    constraint_monomials,
-                    constraint.polynomial,
-                )
-            )
-            self.psd_polynomials_gi.append(constraint.polynomial)
+            self.add_inequality_constraint(constraint.polynomial)
 
     def add_constraints(self, constraints: List[Constraint]) -> None:
         for constraint in constraints:
@@ -201,7 +218,7 @@ class AlgebraSDP:
         else:
             self.monomial_to_positions[monomial] = [(i, j)]
 
-    def expand_eq_constraint(self, constraint: sp.Expr) -> List[sp.Expr]:
+    def expand_eq_constraint(self, constraint: sp.Expr) -> ConstraintGroup:
         """
         Generate a list of polynomials {p = m * constraint | m : monomial & degre(p) <= 2*k }
         where k is the relaxation order. 2k are monomials that "fit inside" the moment matrix.
@@ -211,17 +228,25 @@ class AlgebraSDP:
 
         # Map and filter are lazy
         # so intermediate lists are not created
-        ruled_monomials: map[sp.Expr] = map(
-            lambda monomial: self.substitution_rules.apply_to_monomial(
-                monomial * constraint
+        ruled: map[Tuple[sp.Expr, sp.Expr]] = map(
+            lambda monomial: (
+                monomial,
+                self.substitution_rules.apply_to_polynomial(monomial * constraint),
             ),
             self.monomials,
         )
-        ruled_filtered_monomials: filter[sp.Expr] = filter(
-            lambda monomial: self.is_expressible_as_moment_coeff(monomial),
-            ruled_monomials,
+        ruled_filtered: filter[Tuple[sp.Expr, sp.Expr]] = filter(
+            lambda t: self.is_expressible_as_moment_coeff(t[1]),
+            ruled,
         )
-        return list(ruled_filtered_monomials)
+        mon, z_poly = list(zip(*ruled_filtered))
+        monomial_multipliers: map[Tuple[sp.Expr, sp.Expr]] = map(
+            lambda m: (sp.S.One, m), mon
+        )
+
+        return ConstraintGroup(
+            zero_polynomials=list(z_poly), monomial_multiples=list(monomial_multipliers)
+        )
 
     def create_constraint_matrix(
         self, monomials: List[sp.Expr], constraint_polynomial: sp.Expr

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, NamedTuple, Tuple, Iterable
 
 import sympy
 import numpy
@@ -7,7 +7,7 @@ from ncpol3sdpa.sdp_solution import Solution_SDP
 from ncpol3sdpa.resolution import AlgebraSDP
 
 
-def sympy_sum(terms: List[sympy.Expr]) -> sympy.Expr:
+def sympy_sum(terms: Iterable[sympy.Expr]) -> sympy.Expr:
     res: sympy.Expr = sympy.sympify(0)
     for term in terms:
         res += term
@@ -17,8 +17,8 @@ def sympy_sum(terms: List[sympy.Expr]) -> sympy.Expr:
 def semidefinite_PTP_decomp(A: NDArray[numpy.float64]) -> NDArray[numpy.float64]:
     """Returns $P$ such that $A = P^T P$ .
 
-    We could not use the standard Cholesky decomposition of numpy, because it does not like positive
-    semidefinite matrices(it only works with positive definite ones).
+    We could not use the standard Cholesky decomposition of numpy, because it does not like singular
+    positive semidefinite matrices(it only works with positive definite ones).
     """
     eigenvalues, eigenvectors = numpy.linalg.eigh(A)
     # Clip small negative values (numerical errors)
@@ -27,6 +27,23 @@ def semidefinite_PTP_decomp(A: NDArray[numpy.float64]) -> NDArray[numpy.float64]
 
     P = eigenvectors @ numpy.diag(sqrt_eigvals)
     return P.T  # type: ignore
+
+
+class SumOfMultiplesPolynomial(NamedTuple):
+    """Represents an Equality constraint polynomial"""
+
+    """The zero polynomial"""
+    poly: sympy.Expr
+
+    """Terms that multiply the polynomial"""
+    multiplier_monomials: List[Tuple[sympy.Expr, sympy.Expr]]
+
+    def to_expression(self) -> sympy.Expr:
+        terms: map[sympy.Expr] = map(
+            lambda multiplier: multiplier[0] * self.poly * multiplier[1],
+            self.multiplier_monomials,
+        )
+        return sympy_sum(terms)
 
 
 class SumOfSquares:
@@ -49,13 +66,14 @@ class SosDecomposition:
         dual_objective: float,
         SOS: SumOfSquares,
         SOS_i: List[SumOfSquares],
-        eq_polys: List[sympy.Expr],  # $\\nu_i * f_i | \\eta_i * h_i
+        eq_polys: List[SumOfMultiplesPolynomial],  # $\\nu_i * f_i | \\eta_i * h_i
     ) -> None:
         self.dual_objective = dual_objective
         self.SOS = SOS
         self.SOS_i = SOS_i
         self.eq_polys = eq_polys
 
+    # TODO add substitution rules
     def reconstructed_objective(self) -> sympy.Expr:
         """Calculates the objective polynomial from the SOS formula
         See equation (34) form "Semidefinite programming relaxations for quantum correlations" """
@@ -63,7 +81,7 @@ class SosDecomposition:
         return sympy_sum(
             [s_lambda, -self.SOS.to_expression()]
             + [-sos.to_expression() for sos in self.SOS_i]
-            + self.eq_polys
+            + [-cpol.to_expression() for cpol in self.eq_polys]
         )
 
     def objective_error(self, problem_algebra: AlgebraSDP) -> float:
@@ -80,6 +98,36 @@ class SosDecomposition:
             epsilon = max(epsilon, abs(v))
 
         return epsilon
+
+
+def compute_equality_constraints(
+    problem_algebra: AlgebraSDP, solution: Solution_SDP
+) -> List[SumOfMultiplesPolynomial]:
+    """Obtain equality constraint data from the solution"""
+
+    # `solution.dual_eqC_variables` contains the constraints in order
+    # for each equality contraint is f_i = 0 has a group of sub-constraints :
+    #   {m* f_i *n = 0 | m,n monomials}
+    # `solution.dual_eqC_variables` has  the dual variables of sub constraints in the following order:
+    #  * first, the sub-constraints of f_0, with the order indicated by constraint.monomial_multiples
+    #  * then, the sub-constraints of f_1,
+    #  * etc...
+
+    y_idx = 0
+    res = []
+    for constraint in problem_algebra.equality_constraints:
+        multiplier_monomials: List[Tuple[sympy.Expr, sympy.Expr]] = []
+        for monomials in constraint.monomial_multiples:
+            nu_i = solution.dual_eqC_variables[y_idx]
+            a, b = monomials
+            multiplier_monomials.append((nu_i * a, b))
+            y_idx += 1
+        res.append(
+            SumOfMultiplesPolynomial(
+                constraint.zero_polynomials[0], multiplier_monomials
+            )
+        )
+    return res
 
 
 def compute_sos_decomposition(
@@ -102,7 +150,7 @@ def compute_sos_decomposition(
         """
         w.T A w is a polynomial, and if A is positive-semidefinite, then
         this function will calculate the SOS of this polynomial using the
-        Cholesky decomposition
+        eigenvalue decomposition
         Arguments:
         w is the vector of monomials from AlgebraSDP
         A is the numerical result of the dual variable from the SDP
@@ -123,9 +171,6 @@ def compute_sos_decomposition(
         for i in range(len(B))
     ]
 
-    eq_polys = [
-        -solution.dual_eqC_variables[i] * problem_algebra.equality_constraints[i]
-        for i in range(len(solution.dual_eqC_variables))
-    ]
+    eq_polys = compute_equality_constraints(problem_algebra, solution)
 
     return SosDecomposition(solution.dual_objective_value, SOS, SOSi, eq_polys)

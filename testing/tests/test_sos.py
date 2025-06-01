@@ -41,7 +41,13 @@ def test3() -> None:
     verify_test(problem)
 
 
-def test4() -> None:
+def test_eq_constraint() -> None:
     problem = Problem(sp.expand(-(x**2) - (3 * x - 6 * y) ** 2 + 12))
     problem.add_constraint(Constraint.EqualityConstraint(x * y + 6 - x**2))
+    verify_test(problem, k=3)
+
+
+def test_ineq_constraint() -> None:
+    problem = Problem(sp.expand(-(x**2) - (3 * x - 6 * y) ** 2 + 12))
+    problem.add_constraint(Constraint.InequalityConstraint(x * y + 6 - x**2))
     verify_test(problem, k=3)

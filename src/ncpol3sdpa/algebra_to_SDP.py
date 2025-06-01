@@ -3,19 +3,15 @@ from typing import List, Tuple
 import sympy
 from scipy.sparse import lil_matrix
 
-from ncpol3sdpa.resolution import AlgebraSDP
+from ncpol3sdpa.resolution import AlgebraSDP, ConstraintGroup
 from ncpol3sdpa.sdp_repr import ProblemSDP, EqConstraint, MomentMatrixSDP
 
 
 def algebra_to_SDP_add_equality_constraint(
-    problem: ProblemSDP, algebra: AlgebraSDP, eq_constraint: sympy.Expr
+    problem: ProblemSDP, algebra: AlgebraSDP, eq_constraint: ConstraintGroup
 ) -> None:
-    implied_constraints = algebra.expand_eq_constraint(eq_constraint)
+    implied_constraints = eq_constraint.zero_polynomials
     for implied_constraint in implied_constraints:
-        implied_constraint = algebra.substitution_rules.apply_to_polynomial(
-            implied_constraint
-        )
-
         # constraint matrix
         a_0 = algebra.polynomial_to_matrix(implied_constraint)
 

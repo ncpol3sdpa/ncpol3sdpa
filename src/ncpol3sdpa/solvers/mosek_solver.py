@@ -98,6 +98,7 @@ def parse_mosek_solution(
     dual_eqC_variables = np.zeros(n_eq_constrants, dtype=np.float64)
 
     task.getyslice(solution_type, 1, 1 + n_eq_constrants, dual_eqC_variables)
+    dual_eqC_variables *= -1.0
 
     return Solution_SDP(
         primal_objective_value=primal_objective_value,
