@@ -439,3 +439,9 @@ ncpol3sdpa
 
 # 30/05/2025
  - (Nazar) Add more test to !31 
+
+# 31/05/2025
+ - (Nazar) Add equality constraint support for the SOS decomposition
+
+# 01/06/2025
+ - (Nazar) Add property based tests to the SOS decomposition
