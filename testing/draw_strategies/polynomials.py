@@ -1,13 +1,14 @@
 # typing
 from typing import List, Dict, Tuple
-from hypothesis.strategies import SearchStrategy, DrawFn
+from hypothesis.strategies import SearchStrategy
 
 # from hypothesis import given
 import sympy
-from hypothesis.strategies import composite, sampled_from, lists, builds, integers
+from hypothesis.strategies import sampled_from, lists, builds, integers, just
 from ncpol3sdpa.resolution.rules import RulesCommutative
 
 from ncpol3sdpa.resolution.monomial import generate_monomials
+from ncpol3sdpa.resolution.utils import sympy_sum
 import testing.draw_strategies.float_strategies as float_strategies
 
 one_symbol: List[sympy.Symbol] = [sympy.Symbol("x")]
@@ -19,7 +20,9 @@ three_symbols: List[sympy.Symbol] = [
 ]
 
 
-def n_symbols(n: int, commutative: bool = True) -> List[sympy.Symbol]:
+def n_symbols(
+    n: int, commutative: bool = True, real: bool = True
+) -> List[sympy.Symbol]:
     return [sympy.Symbol(f"x{i}", commutative=commutative) for i in range(n)]
 
 
@@ -27,34 +30,63 @@ def gen_symbols(max_symbols: int) -> SearchStrategy[List[sympy.Symbol]]:
     return builds(n_symbols, integers())
 
 
-@composite
 def polynomials_from_monomials(
-    draw: DrawFn,
     monomials: list[sympy.Expr],
     coefs: SearchStrategy[float] = float_strategies.small_normal_floats,
-    is_commutative: bool = True,
-) -> sympy.Expr:
-    terms: List[sympy.Expr] = [draw(coefs) * monomial for monomial in monomials]
-    poly = sum(terms)
-    if isinstance(poly, sympy.Expr):
-        return poly
-    else:
-        return sympy.core.numbers.Zero()  # type: ignore
+) -> SearchStrategy[sympy.Expr]:
+    n = len(monomials)
+    # [a,b,c,...]
+    coefficients = lists(coefs, min_size=n, max_size=n)
+
+    # [(a,1), (b, x0), (c, x1), ...]
+    coef_monomials = builds(zip, coefficients, just(monomials))
+
+    # [a*1, b*x0, c*x1, ...]
+    terms = builds(lambda lst: map(lambda t: t[0] * t[1], lst), coef_monomials)
+
+    # a*1 + b*x0 + c*x1 + ...
+    poly = builds(sympy_sum, terms)
+    return poly
 
 
-def polynomials_commutative(
+def polynomials(
     symbols: List[sympy.Symbol],
-    degree: int,
+    max_degree: int,
     coefs: SearchStrategy[float] = float_strategies.small_normal_floats,
+    is_commutative: bool = True,
 ) -> SearchStrategy[sympy.Expr]:
     """All possible polynomials of a certain degree or lower"""
     monomials = generate_monomials(
-        symbols=symbols, relaxation_order=degree, is_commutative=True
+        symbols=symbols, relaxation_order=max_degree, is_commutative=True
     )
 
-    return polynomials_from_monomials(
-        monomials=monomials, coefs=coefs, is_commutative=True
-    )  # .filter(leading coefficients non zero?)
+    return polynomials_from_monomials(monomials=monomials, coefs=coefs)
+
+
+def square_polynomials(
+    symbols: List[sympy.Symbol],
+    max_degree: int = 3,
+    coefs: SearchStrategy[float] = float_strategies.small_normal_floats,
+    expand: bool = True,
+) -> SearchStrategy[sympy.Expr]:
+    # TODO support Noncommutative and complex case with p† * p
+
+    poly = polynomials(symbols=symbols, max_degree=max_degree).map(lambda p: p * p)
+    if expand:
+        poly = builds(sympy.expand, poly)
+    return poly
+
+
+def sos_polynomials(
+    symbols: List[sympy.Symbol],
+    max_degree: int = 3,
+    coefs: SearchStrategy[float] = float_strategies.small_normal_floats,
+    expand: bool = True,
+) -> SearchStrategy[sympy.Expr]:
+    """generates sum of squares polynomials"""
+    polys = lists(square_polynomials(symbols, max_degree, coefs, expand), max_size=4)
+
+    return builds(sympy_sum, polys)
 
 
 def generate_rules_1to1(

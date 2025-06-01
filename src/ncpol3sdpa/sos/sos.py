@@ -1,17 +1,11 @@
-from typing import List, NamedTuple, Tuple, Iterable
+from typing import List, NamedTuple, Tuple
 
 import sympy
 import numpy
 from numpy.typing import NDArray
 from ncpol3sdpa.sdp_solution import Solution_SDP
 from ncpol3sdpa.resolution import AlgebraSDP
-
-
-def sympy_sum(terms: Iterable[sympy.Expr]) -> sympy.Expr:
-    res: sympy.Expr = sympy.sympify(0)
-    for term in terms:
-        res += term
-    return res
+from ncpol3sdpa.resolution.utils import sympy_sum
 
 
 def semidefinite_PTP_decomp(A: NDArray[numpy.float64]) -> NDArray[numpy.float64]:

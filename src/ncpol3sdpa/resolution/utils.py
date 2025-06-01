@@ -1,11 +1,18 @@
 from __future__ import annotations
-from typing import List, Type, Any, TypeVar
+from typing import List, Type, Any, TypeVar, Iterable
 
 from sympy import Expr
 import sympy as sp
 
 
 type Matrix = List[List[Expr]]
+
+
+def sympy_sum(terms: Iterable[sp.Expr]) -> sp.Expr:
+    res: sp.Expr = sp.sympify(0)
+    for term in terms:
+        res += term
+    return res
 
 
 def degree_of_polynomial(polynomial: Expr) -> int:

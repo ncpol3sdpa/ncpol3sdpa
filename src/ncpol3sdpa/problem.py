@@ -91,7 +91,6 @@ class Problem:
         if isinstance(solver, AvailableSolvers):
             solver = SolverRegistry.get_solver(solver)
         if isinstance(solver, Solver):
-            print("voir")
             self.solution = solver.solve(problemSDP)
         else:
             raise TypeError(

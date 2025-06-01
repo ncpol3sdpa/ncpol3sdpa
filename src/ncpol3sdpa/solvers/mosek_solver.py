@@ -200,9 +200,14 @@ class MosekSolver(Solver):
                     return None  # Primal or dual infeasibility certificate found
                 elif solution_status == mosek.solsta.unknown:
                     warnings.warn("Unknown solution status")
-                    return None  # Unknown solution status
+
+                    # Unknown solution status
+                    # In the mosek docs: `Solution status UNKNOWN does not necessarily mean that the solution is completely useless`
+                    return parse_mosek_solution(problem, task, n_eq_constrants)
                 else:
-                    warnings.warn("Other solution status: ", solution_status)
+                    # task.analyzeproblem(mosek.streamtype.msg)
+                    # task.solutionsummary(mosek.streamtype.msg)
+                    warnings.warn(f"Other solution status: {solution_status}")
                     return None  # Other solution status
 
         # TODO implement getting the dual solution out of mosek

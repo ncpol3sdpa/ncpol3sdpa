@@ -12,7 +12,7 @@ from hypothesis.strategies import (
     builds,
 )  # , integers, just, booleans
 from testing.draw_strategies.polynomials import n_symbols
-from testing.draw_strategies.float_strategies import all_valid_floats
+from testing.draw_strategies.float_strategies import order_of_magnitude_floats
 
 from typing import List, Tuple, Dict
 
@@ -40,7 +40,7 @@ def monomials(commutative: bool) -> SearchStrategy[Expr]:
 def coef_monomials(commutative: bool) -> SearchStrategy[Expr]:
     return builds(
         lambda a, b: a * b,
-        all_valid_floats.filter(lambda x: x != 0.0),
+        order_of_magnitude_floats.filter(lambda x: x != 0.0),
         monomials(commutative),
     )
 
