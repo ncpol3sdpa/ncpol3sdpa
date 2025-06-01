@@ -20,9 +20,7 @@ three_symbols: List[sympy.Symbol] = [
 ]
 
 
-def n_symbols(
-    n: int, commutative: bool = True, real: bool = True
-) -> List[sympy.Symbol]:
+def n_symbols(n: int, commutative: bool = True) -> List[sympy.Symbol]:
     return [sympy.Symbol(f"x{i}", commutative=commutative) for i in range(n)]
 
 
