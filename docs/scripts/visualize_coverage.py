@@ -8,6 +8,7 @@ import os
 import sys
 import xml.etree.ElementTree as ET
 from datetime import datetime
+from typing import List
 
 
 def generate_html_report(xml_file: str, output_dir: str) -> bool:
@@ -108,6 +109,60 @@ def generate_html_report(xml_file: str, output_dir: str) -> bool:
 
 def generate_package_page(package: ET.Element, output_file: str, pkg_name: str) -> None:
     """Generate HTML page for a specific package."""
+    # Get the source root directory from the XML file
+    # Find the root element by navigating the tree
+    root = package
+    while root.tag != "coverage":
+        # Find the parent by getting the parent in the tree structure
+        parent_map = {c: p for p in root.iter() for c in p}
+        if root in parent_map:
+            root = parent_map[root]
+        else:
+            # If we can't find the parent, assume current root is the top level
+            break
+
+    sources = root.find("./sources")
+    source_roots = (
+        [elem.text for elem in sources.findall("./source") if elem.text]
+        if sources
+        else []
+    )
+
+    # Function to find the actual source file
+    def find_source_file(filename: str) -> str | None:
+        # Try each source root
+        for root in source_roots:
+            potential_path = os.path.join(root, filename)
+            if os.path.exists(potential_path):
+                return potential_path
+
+        # If not found in XML-specified roots, try some common locations
+        common_roots = [
+            ".",
+            "./src",
+            "../src",
+            "../../src",
+            "../../../src",
+        ]
+        for root in common_roots:
+            potential_path = os.path.join(root, filename)
+            if os.path.exists(potential_path):
+                return potential_path
+
+        return None
+
+    # Read source file content
+    def get_source_content(filename: str) -> List[str]:
+        source_path = find_source_file(filename)
+        if source_path and os.path.exists(source_path):
+            try:
+                with open(source_path, "r", encoding="utf-8") as src_file:
+                    return src_file.readlines()
+            except Exception as e:
+                print(f"Error reading source file {source_path}: {e}")
+
+        return []
+
     with open(output_file, "w") as f:
         f.write(f"""<!DOCTYPE html>
 <html>
@@ -132,6 +187,9 @@ def generate_package_page(package: ET.Element, output_file: str, pkg_name: str) 
         .line {{ font-family: monospace; white-space: pre; }}
         .hit {{ background-color: #ceffce; }}
         .miss {{ background-color: #ffcece; }}
+        .line-content {{ font-family: 'Courier New', monospace; white-space: pre-wrap; padding-left: 10px; }}
+        .line-number {{ user-select: none; color: #888; text-align: right; padding-right: 10px; }}
+        code {{ display: block; padding: 0; margin: 0; }}
     </style>
 </head>
 <body>
@@ -180,33 +238,69 @@ def generate_package_page(package: ET.Element, output_file: str, pkg_name: str) 
             cls_name = cls.get("name", "unknown")
             filename = cls.get("filename", "")
 
+            # Get source code lines
+            source_lines = get_source_content(filename)
+
+            # Create a dictionary of line numbers to coverage status
+            coverage_info = {}
+            for line in cls.findall("./lines/line"):
+                line_num = int(line.get("number", "0"))
+                hits = int(line.get("hits", "0"))
+                coverage_info[line_num] = hits
+
             f.write(f"""
     <div class="module">
         <h3 class="module-title">{cls_name}</h3>
         <p>Filename: {filename}</p>
         <p>Coverage: {float(cls.get("line-rate", "0")) * 100:.2f}%</p>
 
-        <h4>Line Coverage</h4>
+        <h4>Source Code with Coverage</h4>
         <table>
             <tr>
                 <th>Line #</th>
                 <th>Hits</th>
-                <th>Status</th>
+                <th>Code</th>
             </tr>
 """)
 
-            # Add line coverage details
-            for line in cls.findall("./lines/line"):
-                line_num = line.get("number", "?")
-                hits = line.get("hits", "0")
-                status = "hit" if int(hits) > 0 else "miss"
-                status_text = "✓" if int(hits) > 0 else "✗"
+            # If we have source code, display each line with its coverage
+            if source_lines:
+                for i, line_content in enumerate(source_lines, 1):
+                    line_content = line_content.rstrip("\n")
+                    # Line might not be instrumented if it's not executable code
+                    if i in coverage_info:
+                        hits = coverage_info[i]
+                        status = "hit" if hits > 0 else "miss"
+                        hits_display = str(hits) if hits > 0 else "0"
+                    else:
+                        # Line wasn't instrumented (comments, blank lines, etc.)
+                        status = ""
+                        hits_display = ""
 
-                f.write(f"""
+                    # Escape HTML special chars in code content
+                    line_content = (
+                        line_content.replace("&", "&amp;")
+                        .replace("<", "&lt;")
+                        .replace(">", "&gt;")
+                    )
+
+                    f.write(f"""
+            <tr class="{status}">
+                <td class="line-number">{i}</td>
+                <td>{hits_display}</td>
+                <td class="line-content">{line_content}</td>
+            </tr>""")
+            else:
+                # If we couldn't find the source code, just show the coverage info
+                for line_num in sorted(coverage_info.keys()):
+                    hits = coverage_info[line_num]
+                    status = "hit" if hits > 0 else "miss"
+
+                    f.write(f"""
             <tr class="{status}">
                 <td>{line_num}</td>
                 <td>{hits}</td>
-                <td>{status_text}</td>
+                <td><em>Source code not available</em></td>
             </tr>""")
 
             f.write("""
@@ -228,6 +322,10 @@ def main() -> int:
         "--output-dir",
         default="docs/htmlcov",
         help="Directory to output HTML coverage report",
+    )
+    parser.add_argument(
+        "--src-root",
+        help="Root directory for source files (if not specified in coverage.xml)",
     )
     args = parser.parse_args()
 
