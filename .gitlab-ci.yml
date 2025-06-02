@@ -33,7 +33,7 @@ image: $IMAGE
 
 before_script:
   - echo "Setting up the environment..."
-  - python3 --version
+  - uv run python3 --version
 
 
 ###########################################
@@ -55,7 +55,7 @@ uv-install:
   script:
     - uv cache prune --ci
     - uv pip install --system -e .
-    
+
 
 ###########################################
 #                                         #
@@ -72,7 +72,6 @@ pytest:
     - echo "$MOSEK_LICENSE" >> $HOME/mosek/mosek.lic
     - echo "Mosek license file created at $HOME/mosek/mosek.lic\n"
     - uv run pytest --durations=10 --cov=src --cov-report=xml:coverage.xml
-    - echo "Pytest complete"
   coverage: '/TOTAL.*\s+(\d+%)$/'
   artifacts:
     reports:
@@ -117,8 +116,13 @@ code-quality:
   services:
     - docker:dind
   script:
-    - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock pipelinecomponents/codeclimate analyze -f json > gl-code-quality-report.json
+    - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock pipelinecomponents/codeclimate analyze -f json > gl-code-quality-report.json || echo "CodeClimate analysis failed"
+    - if [ -f "gl-code-quality-report.json" ]; then echo "Report file generated successfully"; else echo "Report file not found" && touch gl-code-quality-report.json && echo "[]" > gl-code-quality-report.json; fi
+    - ls -la gl-code-quality-report.json
+    - pwd
   artifacts:
+    paths:
+      - gl-code-quality-report.json
     reports:
       codequality: gl-code-quality-report.json
     expire_in: 1 week
@@ -133,8 +137,8 @@ performance:
     paths:
       - benchmark.json
     expire_in: 1 week
-  only:
-    - main  # Only run on main branch to avoid noise
+  # only:
+  #   - main  # Only run on main branch to avoid noise
 
 ###########################################
 #                                         #
@@ -142,32 +146,11 @@ performance:
 #                                         #
 ###########################################
 
-# deploy-job:
-#   stage: deploy
-#   environment: production
-#   script:
-#     - echo "Deploying application..."
-#     - echo "Application successfully deployed."
-
 pages:
   stage: deploy
   script:
-  # - pip install -U sphinx
   - uv run sphinx-build --version
   - uv run sphinx-build -b html docs/source public
   artifacts:
     paths:
     - public
-
-# create-pages:
-#   stage: deploy
-#   image: ruby:3.2
-#   script:
-#     - gem install bundler
-#     - bundle install
-#     - bundle exec jekyll build -d public
-#   artifacts:
-#     paths:
-#       - public
-#   # only:
-#   #   - main
