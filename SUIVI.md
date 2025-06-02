@@ -432,6 +432,7 @@ ncpol3sdpa
 
 # 28/05/2025
  - (Nazar) Fix 2 bugs in the SOS decomposition
+ - (Yann) Works on Gitlab Pages setup for the documentation
 
 # 29/05/2025
  - (Nazar) Refactor rules API, MR !31
