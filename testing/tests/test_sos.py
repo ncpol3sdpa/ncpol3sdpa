@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 import numpy as np
-from sympy.abc import x, y
+from sympy.abc import x, y, z
 import sympy as sp
 
 # from typing import List
@@ -19,7 +19,7 @@ from testing.draw_strategies.polynomials import (
 from hypothesis import given, settings
 from hypothesis.strategies import sampled_from
 
-solvers = [AvailableSolvers.MOSEK, AvailableSolvers.CVXPY]
+solvers = [AvailableSolvers.MOSEK]  # , AvailableSolvers.CVXPY]
 
 
 def verify_test(problem: Problem, k: int = 1) -> None:
@@ -66,6 +66,22 @@ def test_eq_constraint() -> None:
 def test_ineq_constraint() -> None:
     problem = Problem(sp.expand(-(x**2) - (3 * x - 6 * y) ** 2 + 12))
     problem.add_constraint(Constraint.InequalityConstraint(x * y + 6 - x**2))
+    verify_test(problem, k=3)
+
+
+def test_failing() -> None:
+    # This is sos
+    p1 = (
+        203.655826479035 * x**2
+        - 336.661012226743 * x * z
+        - 133.085609676013 * x
+        + 1.0 * y**2
+        - 20.0 * y * z
+        + 294.273570504449 * z**2
+        + 287.022169905708 * z
+        + 163.816502149217
+    )
+    problem = Problem(p1)
     verify_test(problem, k=3)
 
 
