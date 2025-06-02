@@ -439,6 +439,7 @@ ncpol3sdpa
 
 # 30/05/2025
  - (Nazar) Add more test to !31 
+ - (Mathis) New review of !31 (some tests does not pass but they are niche)
 
 # 31/05/2025
  - (Nazar) Add equality constraint support for the SOS decomposition
