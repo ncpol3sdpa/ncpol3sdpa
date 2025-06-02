@@ -32,8 +32,8 @@ variables:
 # default:
 #   image: ruby:3.2
 
-image: python:3.7-alpine
-# image: $IMAGE
+# image: python:3.7-alpine
+image: $IMAGE
 
 # # Define the image to use for the entire pipeline
 # image:
