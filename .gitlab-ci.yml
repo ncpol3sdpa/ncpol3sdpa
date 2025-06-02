@@ -54,8 +54,8 @@ uv-install:
       - $UV_CACHE_DIR
   script:
     - uv cache prune --ci
-    - python3 --version
-    - uv run sphinx-build --version
+    - uv pip install --system -e .
+    
 
 ###########################################
 #                                         #
@@ -71,8 +71,17 @@ pytest:
     - touch $HOME/mosek/mosek.lic
     - echo "$MOSEK_LICENSE" >> $HOME/mosek/mosek.lic
     - echo "Mosek license file created at $HOME/mosek/mosek.lic\n"
-    - uv run pytest --durations=10
+    - uv run pytest --durations=10 --cov=src --cov-report=xml:coverage.xml
     - echo "Pytest complete"
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - coverage.xml
+    expire_in: 1 week
 
 mypy:
   stage: test
@@ -98,13 +107,34 @@ ruff-check-src:
 #     - echo "Ruff complete"
 #   allow_failure: true
 
-# test-sphinx:
-#   stage: test
-#   script:
-#   - pip install -U sphinx
-#   - sphinx-build -b html docs/source public
-#   # rules:
-#   #   - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+# Add a new job for code quality metrics
+code-quality:
+  stage: test
+  image: docker:stable
+  variables:
+    DOCKER_DRIVER: overlay2
+  allow_failure: true
+  services:
+    - docker:dind
+  script:
+    - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock pipelinecomponents/codeclimate analyze -f json > gl-code-quality-report.json
+  artifacts:
+    reports:
+      codequality: gl-code-quality-report.json
+    expire_in: 1 week
+
+# Add a new job for performance metrics
+performance:
+  stage: test
+  script:
+    - uv pip install --system pytest-benchmark
+    - uv run pytest tests/performance --benchmark-json=benchmark.json
+  artifacts:
+    paths:
+      - benchmark.json
+    expire_in: 1 week
+  only:
+    - main  # Only run on main branch to avoid noise
 
 ###########################################
 #                                         #
@@ -112,18 +142,19 @@ ruff-check-src:
 #                                         #
 ###########################################
 
-deploy-job:
-  stage: deploy
-  environment: production
-  script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
+# deploy-job:
+#   stage: deploy
+#   environment: production
+#   script:
+#     - echo "Deploying application..."
+#     - echo "Application successfully deployed."
 
 pages:
   stage: deploy
   script:
-  - pip install -U sphinx
-  - sphinx-build -b html docs/source public
+  # - pip install -U sphinx
+  - uv run sphinx-build --version
+  - uv run sphinx-build -b html docs/source public
   artifacts:
     paths:
     - public
