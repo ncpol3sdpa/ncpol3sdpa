@@ -6,6 +6,8 @@ venv
 .hypothesis
 # public
 
+docs/htmlcov
+
 # **/*.dot
 # **/*.pdf
 # **/*.svg
