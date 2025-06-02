@@ -63,6 +63,7 @@ uv-install:
 #                                         #
 ###########################################
 
+# This job runs the tests using Pytest
 pytest:
   stage: test
   script:
@@ -82,6 +83,7 @@ pytest:
       - coverage.xml
     expire_in: 1 week
 
+# This job checks the code for type errors using Mypy
 mypy:
   stage: test
   script:
@@ -90,6 +92,7 @@ mypy:
     - echo "Mypy complete"
   allow_failure: false
 
+# This job checks the code for style violations using Ruff
 ruff-check-src:
   stage: test
   script:
@@ -115,11 +118,15 @@ code-quality:
   allow_failure: true
   services:
     - docker:dind
+  # Skip the global before_script that requires uv
+  before_script: []
   script:
     - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock pipelinecomponents/codeclimate analyze -f json > gl-code-quality-report.json || echo "CodeClimate analysis failed"
     - if [ -f "gl-code-quality-report.json" ]; then echo "Report file generated successfully"; else echo "Report file not found" && touch gl-code-quality-report.json && echo "[]" > gl-code-quality-report.json; fi
     - ls -la gl-code-quality-report.json
     - pwd
+    # Make sure the file has the right permissions and is in the expected location
+    - chmod 644 gl-code-quality-report.json
   artifacts:
     paths:
       - gl-code-quality-report.json
