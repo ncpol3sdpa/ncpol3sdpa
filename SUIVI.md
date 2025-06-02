@@ -448,5 +448,17 @@ ncpol3sdpa
 # 01/06/2025
  - (Nazar) Add property based tests to the SOS decomposition
 
-# 02/06/2025
+
+# 01/05/2025
+ - (Nazar) Add more tests to the SOS decomposition, and fix bugs.
+
+# 02/05/2025
  - (Thomas) Begin the work on one possible application of the sdp relaxation: the quantum gorund-state problem
+ - (All) Meeting with Peter Brown
+
+New planning for the folowing 2 weeks:
+  Thomas : Ground State Energy example
+  Mathis : trance inequality, petentioly tensor product 
+  Alain : Bell inequality example
+  Nazar : SOS support for Comlex solution, SOS support for trance inequality
+  Yann : Finish implementing the Documentaion. Profiling for the test to see why they take so long
