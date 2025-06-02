@@ -447,3 +447,6 @@ ncpol3sdpa
 
 # 01/06/2025
  - (Nazar) Add property based tests to the SOS decomposition
+
+# 02/06/2025
+ - (Thomas) Begin the work on one possible application of the sdp relaxation: the quantum gorund-state problem
