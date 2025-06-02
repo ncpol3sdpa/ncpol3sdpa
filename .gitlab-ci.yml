@@ -54,6 +54,8 @@ uv-install:
       - $UV_CACHE_DIR
   script:
     - uv cache prune --ci
+    - python3 --version
+    - uv run sphinx-build --version
 
 ###########################################
 #                                         #
@@ -65,13 +67,11 @@ pytest:
   stage: test
   script:
     - echo "Running Pytest..."
-    - echo "HOME is $HOME"
     - mkdir $HOME/mosek
     - touch $HOME/mosek/mosek.lic
-    # - echo "$MSK_LICENSE" >> $HOME/mosek/mosek.lic
     - echo "$MOSEK_LICENSE" >> $HOME/mosek/mosek.lic
     - echo "Mosek license file created at $HOME/mosek/mosek.lic\n"
-    - uv run pytest
+    - uv run pytest --durations=10
     - echo "Pytest complete"
 
 mypy:
@@ -81,20 +81,6 @@ mypy:
     - uv run mypy
     - echo "Mypy complete"
   allow_failure: false
-
-# - name: Setup MOSEK & Run Tests
-#    env:
-#      MOSEKLM_LICENSE_FILE: ${{ secrets.MSK_LICENSE }}
-#    run: |
-#      pytest -sv
-
-# testing-key:
-#   stage: test
-#   script:
-#     - echo "Running Testing Key..."
-#     - echo "$TestKey"
-#     - echo "Testing Key complete"
-#   allow_failure: true
 
 ruff-check-src:
   stage: test
@@ -112,13 +98,13 @@ ruff-check-src:
 #     - echo "Ruff complete"
 #   allow_failure: true
 
-test-sphinx:
-  stage: test
-  script:
-  - pip install -U sphinx
-  - sphinx-build -b html docs/source public
-  # rules:
-  #   - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+# test-sphinx:
+#   stage: test
+#   script:
+#   - pip install -U sphinx
+#   - sphinx-build -b html docs/source public
+#   # rules:
+#   #   - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 ###########################################
 #                                         #
@@ -133,6 +119,15 @@ deploy-job:
     - echo "Deploying application..."
     - echo "Application successfully deployed."
 
+pages:
+  stage: deploy
+  script:
+  - pip install -U sphinx
+  - sphinx-build -b html docs/source public
+  artifacts:
+    paths:
+    - public
+
 # create-pages:
 #   stage: deploy
 #   image: ruby:3.2
@@ -145,12 +140,3 @@ deploy-job:
 #       - public
 #   # only:
 #   #   - main
-
-pages:
-  stage: deploy
-  script:
-  - pip install -U sphinx
-  - sphinx-build -b html docs/source public
-  artifacts:
-    paths:
-    - public
