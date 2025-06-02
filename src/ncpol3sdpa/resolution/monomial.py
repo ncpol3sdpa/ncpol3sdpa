@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import List, Iterable
 
 from sympy import Expr, Symbol, total_degree, sympify, S
+from sympy.physics.quantum import Operator
 
 
 def list_increment(degrees: List[int], k: int) -> bool:
@@ -18,7 +19,7 @@ def list_increment(degrees: List[int], k: int) -> bool:
 
 
 def generate_monomials(
-    symbols: Iterable[Symbol],
+    symbols: Iterable[Symbol | Operator],
     relaxation_order: int,
     is_commutative: bool = True,
 ) -> List[Expr]:
@@ -44,11 +45,16 @@ def generate_monomials(
         res = [sympify(1)]
         pred_monomials: List[Expr] = [sympify(1)]
 
+        new_symbols = list(symbols)
+        for symbol in symbols:
+            if not symbol.is_hermitian:  # type: ignore
+                new_symbols.append(symbol.adjoint())  # type: ignore
+
         for _ in range(relaxation_order):
             pred_monomials = [
                 monomial * symbol
                 for monomial in pred_monomials
-                for symbol in symbols
+                for symbol in new_symbols
                 if symbol != 1
             ]
             res.extend(pred_monomials)

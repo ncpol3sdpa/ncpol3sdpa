@@ -316,6 +316,9 @@ ncpol3sdpa
 - (Alain)
   * adds bibliography about other implementable examples
   * continues the implementation of examples + tests on graph algorithms
+  * implement a class for MobFarm optimization
+  * thinking about raising issue to allow returning approximative values reaching near the optimum
+
 - (Thomas et Nazar)
   * implmentation of the sos, it remains the tests to make
 - (Mathis)
@@ -384,7 +387,78 @@ ncpol3sdpa
     + Removed unused toctree entries from ncpol3sdpa documentation
     + Updated API reference file paths in source files
     + Updated documentation generation script to match new structure
+- (Mathis)
+  * Refactor the nc part by creating a new class `AlgebraSDPnc` that inheritate from `AlgebraSDP` [MR26](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/26/diffs)
 
 # 21/05/2025
 - (Yann)
   * Works on [MR 25](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/25) and [MR 26](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/26)
+- (Nazar) Work on fixing issue #6 . Uscucseffuly try to implement #8 . Read Boaz's notes on SOS
+- (Mathis) Start the implementation of the nc-complex part by creating `AlgebraSDPncReal` and `AlgebraSDPncComplex` to properly implement the complex case without changing the real part (that is faster)
+
+# 22/05/2025
+- (Nazar) Test the fix for issue #6. Open a merge request for this issue
+- (Mathis)
+  * Finish the implementation if the nc-complex part
+    + in the generation of the monomials, I added the adjoint of the symbols that were not hermitian in the nc part
+    + Modified the test_monomials.py file to make the change on `generale_monomials` work.
+    + Finished the implementation of `AlgebraSDPncReal` and `AlgebraSDPncComplex`
+    + Created tests for the nc-complex part
+    + Created the [MR 28](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/28) that implements all the nc-complex part
+
+# 25/05/2025
+ - (Nazar)
+    * Write a document explainig the math of the SOS decomposition, and the SDP duality.
+    * Begin refactoring of SDP code.
+
+# 26/05/2025
+- (Mathis)
+  * Review + Merge [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/27)
+  * Raise some issues :  [13](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/issues/13) [14](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/issues/14)
+  * start to replace the matrices by sparse matrices to have better performance
+- (Yann)
+  * Create the [MR 29](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/29)
+    + Added a new `ConstraintType` enum with three constraint type : `EQUALITY`, `INEQUALITY` and `LOCAL_INEQUALITY`
+    + Modified the `Constraint` class to use this enum instead of a boolean flag
+
+-(Nazar and Thomas)
+ * Modification of the class sos 
+ * Continue the tests of this class
+
+# 27/05/2025
+ - (Mathis)
+  * Finish the replacement of arrays by sparse matrices.
+  * Create an MR for the sparse matrices [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/30)
+
+# 28/05/2025
+ - (Nazar) Fix 2 bugs in the SOS decomposition
+ - (Yann) Works on Gitlab Pages setup for the documentation
+
+# 29/05/2025
+ - (Nazar) Refactor rules API, MR !31
+ - (Mathis) Review this MR
+
+# 30/05/2025
+ - (Nazar) Add more test to !31 
+ - (Mathis) New review of !31 (some tests does not pass but they are niche)
+
+# 31/05/2025
+ - (Nazar) Add equality constraint support for the SOS decomposition
+
+# 01/06/2025
+ - (Nazar) Add property based tests to the SOS decomposition
+
+
+# 01/05/2025
+ - (Nazar) Add more tests to the SOS decomposition, and fix bugs.
+
+# 02/05/2025
+ - (Thomas) Begin the work on one possible application of the sdp relaxation: the quantum gorund-state problem
+ - (All) Meeting with Peter Brown
+
+New planning for the folowing 2 weeks:
+  Thomas : Ground State Energy example
+  Mathis : trance inequality, petentioly tensor product 
+  Alain : Bell inequality example
+  Nazar : SOS support for Comlex solution, SOS support for trance inequality
+  Yann : Finish implementing the Documentaion. Profiling for the test to see why they take so long
