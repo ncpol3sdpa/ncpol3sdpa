@@ -57,7 +57,12 @@ class CvxpySolver(Solver):
         prob.solve()
         assert isinstance(prob.value, float)
 
-        if prob.status == "optimal":
+        if prob.status == "optimal" or prob.status == "optimal_inaccurate":
+            if prob.status == "optimal_inaccurate":
+                warnings.warn(
+                    f'CVXPY does not guarantee the accuracy of the solution: "{prob.status}"'
+                )
+
             return Solution_SDP(
                 primal_objective_value=prob.value,
                 primal_PSD_variables=[x.value for x in sdp_vars],  # type: ignore

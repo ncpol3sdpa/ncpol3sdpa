@@ -19,9 +19,7 @@ from testing.draw_strategies.polynomials import (
 from hypothesis import given, settings
 from hypothesis.strategies import sampled_from
 
-solvers = [
-    AvailableSolvers.MOSEK,
-]  # AvailableSolvers.CVXPY]
+solvers = [AvailableSolvers.MOSEK, AvailableSolvers.CVXPY]
 
 
 def verify_test(problem: Problem, k: int = 1) -> None:
