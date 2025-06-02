@@ -1,4 +1,4 @@
-from typing import Tuple, List, Optional
+from typing import Tuple, List
 from numpy.typing import NDArray
 
 import warnings
@@ -124,9 +124,10 @@ class MosekSolver(Solver):
         def stream_printer(text: str) -> None:
             # sys.stdout.write(text)
             # sys.stdout.flush()
+            print(text, end="")
             pass
 
-        def mosek_task() -> Optional[Solution_SDP]:
+        def mosek_task() -> Solution_SDP | None:
             # Create a task object and attach log stream printer
             with mosek.Task() as task:
                 task.set_Stream(mosek.streamtype.log, stream_printer)

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 
 from sympy import Expr
 import sympy
@@ -25,7 +25,7 @@ class Problem:
         self.objective: Expr = obj
         self.is_commutative = is_commutative
         self.is_real = is_real
-        self.solution: Optional[Solution_SDP] = None
+        self.solution: Solution_SDP | None = None
         self.rules: Rules = (
             RulesCommutative() if is_commutative else RulesNoncommutative()
         )
@@ -47,7 +47,7 @@ class Problem:
         self,
         relaxation_order: int = 1,
         solver: Solver | AvailableSolvers = AvailableSolvers.CVXPY,
-    ) -> Optional[float]:
+    ) -> float | None:
         """Solve the polynomial optimization problem using SDP relaxation.
 
         Args:
@@ -86,6 +86,7 @@ class Problem:
         problemSDP = algebra_to_SDP(algebraSDP)
         if not self.is_real:
             problemSDP = problemSDP.complex_to_realSDP()
+        # print(problemSDP)
 
         # 3. Solve the SDP
         if isinstance(solver, AvailableSolvers):

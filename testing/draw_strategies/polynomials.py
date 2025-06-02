@@ -69,7 +69,9 @@ def square_polynomials(
 ) -> SearchStrategy[sympy.Expr]:
     # TODO support Noncommutative and complex case with p† * p
 
-    poly = polynomials(symbols=symbols, max_degree=max_degree).map(lambda p: p * p)
+    poly = polynomials(symbols=symbols, max_degree=max_degree, coefs=coefs).map(
+        lambda p: p * p
+    )
     if expand:
         poly = builds(sympy.expand, poly)
     return poly
@@ -80,9 +82,12 @@ def sos_polynomials(
     max_degree: int = 3,
     coefs: SearchStrategy[float] = float_strategies.small_normal_floats,
     expand: bool = True,
+    max_polynomials: int = 4,
 ) -> SearchStrategy[sympy.Expr]:
     """generates sum of squares polynomials"""
-    polys = lists(square_polynomials(symbols, max_degree, coefs, expand), max_size=4)
+    polys = lists(
+        square_polynomials(symbols, max_degree, coefs, expand), max_size=max_polynomials
+    )
 
     return builds(sympy_sum, polys)
 

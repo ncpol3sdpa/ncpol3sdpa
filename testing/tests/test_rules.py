@@ -40,7 +40,7 @@ def monomials(commutative: bool) -> SearchStrategy[Expr]:
 def coef_monomials(commutative: bool) -> SearchStrategy[Expr]:
     return builds(
         lambda a, b: a * b,
-        order_of_magnitude_floats.filter(lambda x: x != 0.0),
+        order_of_magnitude_floats(2).filter(lambda x: x != 0.0),
         monomials(commutative),
     )
 

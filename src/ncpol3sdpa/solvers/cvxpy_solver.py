@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 import warnings
 
 from scipy.sparse import lil_matrix
@@ -22,7 +22,7 @@ def cvxpy_dot_prod(c: lil_matrix, x: "cvxpy.Expression") -> "cvxpy.Expression":
 
 class CvxpySolver(Solver):
     @classmethod
-    def solve(self, problem: ProblemSDP) -> Optional[Solution_SDP]:
+    def solve(self, problem: ProblemSDP) -> Solution_SDP | None:
         """Solve the SDP problem with cvxpy"""
         # Variables
         sdp_vars = [
