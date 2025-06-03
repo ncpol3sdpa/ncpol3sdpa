@@ -278,6 +278,7 @@
 ## 08/05/2025
 - (Mathis)
   + Change the function that generate monomials for the complex part. We no longer generate the conjugate of the variables because this create issue when we create hermitian matrices instead of symmetric matrices for the complex part
+- (Alain) change 'check-larger-files settings' for pre-commit package
 
 ## 11/05/2025
 - (Mathis)
@@ -376,6 +377,7 @@ ncpol3sdpa
     + Updated description of the ncpol3sdpa library, which is described as a successor to ncpol2sdpa
     + Added mathematical notation for the optimization problems being solved
     + Noted that the package is still under development and not yet fully functional
+ - (Alain) add comments on the examples branch + reorganized files
 
 # 20/05/2025
 - (Yann)
@@ -410,6 +412,7 @@ ncpol3sdpa
  - (Nazar)
     * Write a document explainig the math of the SOS decomposition, and the SDP duality.
     * Begin refactoring of SDP code.
+ - (Alain) begin work on integrating more extended applications (e.g applications of MaxCut relaxation, etc) on branch examples
 
 # 26/05/2025
 - (Mathis)
@@ -422,7 +425,7 @@ ncpol3sdpa
     + Modified the `Constraint` class to use this enum instead of a boolean flag
 
 -(Nazar and Thomas)
- * Modification of the class sos 
+ * Modification of the class sos
  * Continue the tests of this class
 
 # 27/05/2025
@@ -437,9 +440,10 @@ ncpol3sdpa
 # 29/05/2025
  - (Nazar) Refactor rules API, MR !31
  - (Mathis) Review this MR
+ - (Alain) work on minor fixes for Git documentation (typos in README)
 
 # 30/05/2025
- - (Nazar) Add more test to !31 
+ - (Nazar) Add more test to !31
  - (Mathis) New review of !31 (some tests does not pass but they are niche)
 
 # 31/05/2025
@@ -449,16 +453,19 @@ ncpol3sdpa
  - (Nazar) Add property based tests to the SOS decomposition
 
 
-# 01/05/2025
+# 01/06/2025
  - (Nazar) Add more tests to the SOS decomposition, and fix bugs.
 
-# 02/05/2025
+# 02/06/2025
  - (Thomas) Begin the work on one possible application of the sdp relaxation: the quantum gorund-state problem
  - (All) Meeting with Peter Brown
 
 New planning for the folowing 2 weeks:
   Thomas : Ground State Energy example
-  Mathis : trance inequality, petentioly tensor product 
+  Mathis : trance inequality, petentioly tensor product
   Alain : Bell inequality example
   Nazar : SOS support for Comlex solution, SOS support for trance inequality
   Yann : Finish implementing the Documentaion. Profiling for the test to see why they take so long
+
+# 03/06/25
+ - (Alain) begin work on displaying optimized mob farms, on branch of examples
