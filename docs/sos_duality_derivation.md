@@ -42,9 +42,9 @@ $\forall i, c, f_i, g_i, h_i$ are hermitian
 #### Primal Problem:
 
 $$\large \begin{gather*} &\max_{\mathcal H, X_1, \cdots , X_n} & \mathrm{tr} \left(\rho \, c(X_1, \cdots , X_n)\right) \\
-& \textrm{s.t.} & \mathrm{tr}(\rho f_i(X_1, \cdots , X_n)) = 0 & \forall i\\
-& & \mathrm{tr}(\rho h_i(X_1, \cdots , X_n)) \geqslant 0 & \forall i\\
+& \textrm{s.t.} & f_i(X_1, \cdots , X_n) = 0 & \forall i\\
 & & g_i(X_1, \cdots , X_n) \succcurlyeq 0 & \forall i\\
+& & \mathrm{tr}(\rho h_i(X_1, \cdots , X_n)) \geqslant 0 & \forall i\\
 & & \mathrm{tr}(\rho) = 1 &\end{gather*}$$
 
 #### Primal SDP Relaxation
@@ -58,7 +58,7 @@ $$\large\begin{gather*} & \max_{\bar Z^0, \cdots , \bar Z^{\widetilde n}} & \lan
  &               & \langle E_{0,0} \vert \bar Z^0 \rangle = 1 & \\
 \end{gather*}$$
 
-$E_{0,0}$ is the matrix with all zeros exept a 1 at (0,0)
+$E_{0,0}$ is the matrix with all zeros except a 1 at (0,0)
 
 Note that $\bar Z^0$ models the moment matrix, and the other $\bar Z^i$ s correspond to $g_i$ localizing moment matrices
 
@@ -75,9 +75,9 @@ $$
 &\ + \lambda\left(1 - \langle E_{0,0} \vert \bar Z^0 \rangle\right)
 \end{align*}
 $$
-1 term per constraint, and 1 term for the objective
+1 term per constraint, and 1 term for the objective. (Ok so this is not entirely acuate, because for each $f_i$ there are implicit constraints $\forall m, m f_i n = 0$ and thus several $F_i$)
 
-Primal SDP Relaxation is equivelent to:
+Primal SDP Relaxation is equivalent to:
 
 
 $$\large\begin{gather*}
@@ -159,7 +159,7 @@ $$\begin{align*}
 $$
 
 <!-- TODO -->
-At a feasible point of the primal problem, for a given i,j, there exist indicies a,b s.t. :
+At a feasible point of the primal problem, for a given i,j, there exist indices a,b s.t. :
 
 $$\begin{align*}
 w_s\Gamma_{i,j} w_s^\dagger =&\;\mathrm{tr}(\rho \, \bar X^{a} \bar X^{b\dagger}) \\
