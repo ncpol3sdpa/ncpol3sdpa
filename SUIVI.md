@@ -459,6 +459,7 @@ ncpol3sdpa
 # 02/06/2025
  - (Thomas) Begin the work on one possible application of the sdp relaxation: the quantum gorund-state problem
  - (All) Meeting with Peter Brown
+ - (Matihs) Begin to implement the trace inequality constraint
 
 New planning for the folowing 2 weeks:
   Thomas : Ground State Energy example
@@ -469,3 +470,7 @@ New planning for the folowing 2 weeks:
 
 # 03/06/25
  - (Alain) begin work on displaying optimized mob farms, on branch of examples
+
+# 05/06/2025
+ - (Mathis)
+  * Finish the implementation of the trace inequality constraint -> create a [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/33)
