@@ -80,6 +80,8 @@ class AlgebraSDP:
         self.constraint_moment_matrices: List[Matrix] = []
         # List of polynomials that equal 0
         self.equality_constraints: List[sp.Expr] = []
+        # List of local inequality constraints
+        self.local_inequality_constraints: List[sp.Expr] = []
 
     def __str__(self) -> str:
         """Return a string representation of the algebra for debugging."""
@@ -161,7 +163,7 @@ class AlgebraSDP:
         otherwise update the moment matrix for the inequality constraint"""
         if constraint.constraint_type == ConstraintType.EQUALITY:
             self.equality_constraints.append(constraint.polynomial)
-        else:
+        elif constraint.constraint_type == ConstraintType.INEQUALITY:
             # inequality constraint
             # p.10 of Semidefinite programming relaxations for quantum correlations
 
@@ -187,6 +189,8 @@ class AlgebraSDP:
                     constraint.polynomial,
                 )
             )
+        else:
+            self.local_inequality_constraints.append(constraint.polynomial)
 
     def add_constraints(self, constraints: List[Constraint]) -> None:
         for constraint in constraints:

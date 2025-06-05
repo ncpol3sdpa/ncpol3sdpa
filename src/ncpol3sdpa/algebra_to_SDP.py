@@ -4,7 +4,7 @@ import sympy
 from scipy.sparse import lil_matrix
 
 from ncpol3sdpa.resolution import AlgebraSDP
-from ncpol3sdpa.sdp_repr import ProblemSDP, EqConstraint, MomentMatrixSDP
+from ncpol3sdpa.sdp_repr import EqConstraint, MomentMatrixSDP, ProblemSDP
 
 
 def algebra_to_SDP_add_equality_constraint(
@@ -47,6 +47,22 @@ def algebra_to_SDP_add_inequality_constraint(
             problem.constraints.append(constraint)
 
 
+def algebra_to_SDP_add_local_inequality_constraint(
+    problem: ProblemSDP,
+    algebra: AlgebraSDP,
+    local_constraint: sympy.Expr,
+) -> None:
+    "Adds a local inequality constraint(trace) to the algebra"
+    constraint_size = 1
+    new_var = len(problem.variable_sizes)
+    problem.variable_sizes.append(constraint_size)
+    a_0 = algebra.polynomial_to_matrix(local_constraint)
+    constraint = EqConstraint(
+        [(problem.MOMENT_MATRIX_VAR_NUM, a_0), (new_var, lil_matrix([1]))]  # type: ignore
+    )
+    problem.constraints.append(constraint)
+
+
 def algebra_to_SDP(algebra: AlgebraSDP) -> ProblemSDP:
     """Convert the algebraic representation to the numeric SDP representation"""
 
@@ -73,5 +89,11 @@ def algebra_to_SDP(algebra: AlgebraSDP) -> ProblemSDP:
 
     for constraint_matrix in algebra.constraint_moment_matrices:
         algebra_to_SDP_add_inequality_constraint(result_SDP, algebra, constraint_matrix)
+
+    # Translate Local inequality constraints
+    for local_constraint in algebra.local_inequality_constraints:
+        algebra_to_SDP_add_local_inequality_constraint(
+            result_SDP, algebra, local_constraint
+        )
 
     return result_SDP

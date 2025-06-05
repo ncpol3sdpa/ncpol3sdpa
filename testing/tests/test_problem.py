@@ -164,3 +164,14 @@ def test_nc_complex_2() -> None:
     p.add_constraint(c1)
     p.add_constraint(c2)
     assert abs(p.solve(2)) <= 0.1
+
+
+def test_trace_inequality() -> None:
+    X1 = HermitianOperator("X1")  # type: ignore
+    X2 = HermitianOperator("X2")  # type: ignore
+    obj = -1 * (X1 * X2 + X2 * X1).adjoint() * (X1 * X2 + X2 * X1)
+    p = Problem(obj, is_commutative=False, is_real=False)
+    c1 = Constraint.LocalInequalityConstraint(X1 * X2 + X2 * X1)
+    p.add_constraint(c1)
+    assert abs(p.solve(2)) <= 0.1
+    assert abs(p.solve(3)) <= 0.0001
