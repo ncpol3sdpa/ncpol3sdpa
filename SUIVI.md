@@ -460,6 +460,10 @@ ncpol3sdpa
  - (Thomas) Begin the work on one possible application of the sdp relaxation: the quantum gorund-state problem
  - (All) Meeting with Peter Brown
  - (Matihs) Begin to implement the trace inequality constraint
+ - (Yann) Work on the pipeline
+    * Add code coverage to the pipeline
+    * Test to add code quality
+    * Add code coverage visualization
 
 New planning for the folowing 2 weeks:
   Thomas : Ground State Energy example
