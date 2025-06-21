@@ -475,3 +475,11 @@ New planning for the folowing 2 weeks:
  - (Mathis)
   * Finish the implementation of the trace inequality constraint -> create a [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/33)
  - (Nazar) Review this merge requestst [MR](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/33)
+
+ # 21/06/2025
+ - (Mathis)
+  * Search about the tensor product optimization (how does it work)
+
+# 22/06/2025
+- (Mathis)
+  * Change MR [33] to implement the requested changes 
