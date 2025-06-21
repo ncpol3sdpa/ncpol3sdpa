@@ -5,6 +5,7 @@ from scipy.sparse import lil_matrix, hstack, vstack
 
 from .moment_matrix_SDP import MomentMatrixSDP
 from .eq_constraint import EqConstraint
+from .inequality_scalar_constraint import InequalityScalarConstraint
 
 # for validation
 EPSILON = 0.001
@@ -28,6 +29,7 @@ class ProblemSDP:
         self.__variable_sizes: List[int] = [moment_matrix.size]
         self.__objective: lil_matrix = objective
         self.constraints: List[EqConstraint] = []
+        self.inequality_scalar_constraints: List[InequalityScalarConstraint] = []
 
         assert objective.shape == (moment_matrix.size, moment_matrix.size)
 

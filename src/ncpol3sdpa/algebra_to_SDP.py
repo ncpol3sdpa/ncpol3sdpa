@@ -4,7 +4,12 @@ import sympy
 from scipy.sparse import lil_matrix
 
 from ncpol3sdpa.resolution import AlgebraSDP
-from ncpol3sdpa.sdp_repr import EqConstraint, MomentMatrixSDP, ProblemSDP
+from ncpol3sdpa.sdp_repr import (
+    EqConstraint,
+    MomentMatrixSDP,
+    ProblemSDP,
+    InequalityScalarConstraint,
+)
 
 
 def algebra_to_SDP_add_equality_constraint(
@@ -53,14 +58,9 @@ def algebra_to_SDP_add_local_inequality_constraint(
     local_constraint: sympy.Expr,
 ) -> None:
     "Adds a local inequality constraint(trace) to the algebra"
-    constraint_size = 1
-    new_var = len(problem.variable_sizes)
-    problem.variable_sizes.append(constraint_size)
     a_0 = algebra.polynomial_to_matrix(local_constraint)
-    constraint = EqConstraint(
-        [(problem.MOMENT_MATRIX_VAR_NUM, a_0), (new_var, lil_matrix([1]))]  # type: ignore
-    )
-    problem.constraints.append(constraint)
+    constraint = InequalityScalarConstraint((problem.MOMENT_MATRIX_VAR_NUM, a_0))
+    problem.inequality_scalar_constraints.append(constraint)
 
 
 def algebra_to_SDP(algebra: AlgebraSDP) -> ProblemSDP:
