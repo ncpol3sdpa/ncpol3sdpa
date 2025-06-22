@@ -161,36 +161,37 @@ class AlgebraSDP:
 
         Save the constraint if it is an equality constraint,
         otherwise update the moment matrix for the inequality constraint"""
-        if constraint.constraint_type == ConstraintType.EQUALITY:
-            self.equality_constraints.append(constraint.polynomial)
-        elif constraint.constraint_type == ConstraintType.INEQUALITY:
-            # inequality constraint
-            # p.10 of Semidefinite programming relaxations for quantum correlations
+        match constraint.constraint_type:
+            case ConstraintType.EQUALITY:
+                self.equality_constraints.append(constraint.polynomial)
+            case ConstraintType.INEQUALITY:
+                # inequality constraint
+                # p.10 of Semidefinite programming relaxations for quantum correlations
 
-            k_i = self.get_length_constraint_matrix(
-                degree_of_polynomial(constraint.polynomial)
-            )
-            assert k_i >= 0, (
-                "Insufficient relaxation order to capture the constraint {constraint.polynomial}"
-            )
-
-            # TODO This is redundant work, does this matter?
-            constraint_monomials = self.substitution_rules.filter_monomials(
-                generate_monomials(
-                    self.objective.free_symbols,  # type: ignore
-                    k_i,
-                    self.is_commutative,
+                k_i = self.get_length_constraint_matrix(
+                    degree_of_polynomial(constraint.polynomial)
                 )
-            )
-
-            self.constraint_moment_matrices.append(
-                self.create_constraint_matrix(
-                    constraint_monomials,
-                    constraint.polynomial,
+                assert k_i >= 0, (
+                    "Insufficient relaxation order to capture the constraint {constraint.polynomial}"
                 )
-            )
-        else:
-            self.local_inequality_constraints.append(constraint.polynomial)
+
+                # TODO This is redundant work, does this matter?
+                constraint_monomials = self.substitution_rules.filter_monomials(
+                    generate_monomials(
+                        self.objective.free_symbols,  # type: ignore
+                        k_i,
+                        self.is_commutative,
+                    )
+                )
+
+                self.constraint_moment_matrices.append(
+                    self.create_constraint_matrix(
+                        constraint_monomials,
+                        constraint.polynomial,
+                    )
+                )
+            case ConstraintType.LOCAL_INEQUALITY:
+                self.local_inequality_constraints.append(constraint.polynomial)
 
     def add_constraints(self, constraints: List[Constraint]) -> None:
         for constraint in constraints:
