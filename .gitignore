@@ -6,6 +6,10 @@ venv
 .hypothesis
 public
 
+docs/build/doctrees
+docs/build/html
+docs/htmlcov
+
 # **/*.dot
 # **/*.pdf
 # **/*.svg
