@@ -2,10 +2,9 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on pushes to any branch
   push:
-    branches: ["main"]
-
+  
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -40,4 +39,5 @@ jobs:
           path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
+        uses: actions/deploy-pages@v4
         uses: actions/deploy-pages@v4
