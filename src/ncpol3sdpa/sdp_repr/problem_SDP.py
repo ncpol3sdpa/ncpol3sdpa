@@ -136,24 +136,24 @@ class ProblemSDP:
         for eq_class in self.moment_matrix.eq_classes:
             new_eq_class00 = []
             new_eq_class01 = []
-            new_eq_class10 = []
             for i, j in eq_class:
-                new_eq_class00.append((i, j))
-                new_eq_class00.append((i + size, j + size))
-                new_eq_class01.append((i, j + size))
-                new_eq_class10.append((i + size, j))
+                new_eq_class00.append((i, j))   # RE
+                new_eq_class01.append((i, j + size))     # IM
             real_eq_classes.append(new_eq_class00)
             real_eq_classes.append(new_eq_class01)
-            real_eq_classes.append(new_eq_class10)
         real_moment_matrix = MomentMatrixSDP(2 * size, real_eq_classes)
 
         # creation of the real objective
         objective = complexMatrix_to_realMatrix(self.objective)
 
-        # creation of the real SDP
+        # create the real sdp
         real_sdp = ProblemSDP(real_moment_matrix, objective)
-        real_sdp.variable_sizes = self.variable_sizes
-        real_sdp.variable_sizes[0] = 2 * size
+        real_sdp.variable_sizes = []
+
+        # create all the new sdp vars
+        for i in range(len(self.__variable_sizes)):
+            complexSDPvar_to_realSDPvar(self, real_sdp, i)
+        print(real_sdp.variable_sizes)
 
         # adding constraints
         for constraint in self.constraints:
@@ -169,9 +169,15 @@ class ProblemSDP:
             # inequality constraint
             elif len(c) == 2:
                 matrix_constraint = complexMatrix_to_realMatrix(c[0][1])
+                
+                sdp_var = c[1][0]
+                eq_mat_pre = c[1][1]
+
+                eq_mat = complexMatrix_to_realMatrix(eq_mat_pre)
+                print(eq_mat)
                 real_sdp.constraints.append(
                     EqConstraint(
-                        [(real_sdp.MOMENT_MATRIX_VAR_NUM, matrix_constraint), c[1]]
+                        [(real_sdp.MOMENT_MATRIX_VAR_NUM, matrix_constraint), (sdp_var, eq_mat)]
                     )
                 )
 
@@ -183,6 +189,42 @@ class ProblemSDP:
             )
 
         return real_sdp
+
+
+def complexSDPvar_to_realSDPvar(complex_sdp : ProblemSDP, real_sdp : ProblemSDP, num_var : int) -> None:
+    """
+    Add the real sdp var in the real sdp. 
+    The num_var of the real_sdp must be the same as the complex_sdp
+    """
+    pre_var = complex_sdp.variable_sizes[num_var]
+    new_var = 2 * pre_var
+    
+    for j in range(pre_var):
+        for i in range(j):
+            m = lil_matrix((new_var, new_var)) # we can optimize it by creating only one lil_matrix before the loop and just change the coefficients
+            m[i, j] = 1
+            m[i + pre_var, j + pre_var] = -1
+            real_sdp.constraints.append(
+                EqConstraint(
+                    [(num_var, m)]
+                )
+            )
+
+    for j in range(pre_var):
+        for i in range(j):
+            m = lil_matrix((new_var, new_var))
+            m[i, j + pre_var] = 1
+            m[j, i + pre_var] = 1
+            real_sdp.constraints.append(
+                EqConstraint(
+                    [(num_var, m)]
+                )
+            )
+
+    real_sdp.variable_sizes = real_sdp.variable_sizes + [new_var]
+
+
+
 
 
 def complexMatrix_to_realMatrix(
@@ -199,3 +241,6 @@ def complexMatrix_to_realMatrix(
 
     result = vstack([upper, lower]).tolil()  # type: ignore
     return result  # type: ignore
+
+
+
