@@ -1,5 +1,5 @@
 Quick Start
-==========
+===========
 
 Installation
 -----------
@@ -18,7 +18,7 @@ Installation
    pip install -e .
 
 Basic Example
-------------
+-------------
 
 Here's a simple example to get you started:
 
@@ -26,19 +26,19 @@ Here's a simple example to get you started:
 
    from ncpol3sdpa import Problem, Constraint
    from sympy.abc import x, y
-   
+
    # Define variables
    variables = [x, y]
-   
+
    # Define objective function
    objective = x*y
-   
+
    # Create problem
    problem = Problem(objective)
-   
+
    # Add constraints
    problem.add_constraint(Constraint.InequalityConstraint(1 - x**2 - y**2))
-   
+
    # Solve the problem
    result = problem.solve(relaxation_order=2)
    print(f"Optimal value: {result}")
