@@ -43,9 +43,10 @@ class CvxpySolver(Solver):
             constraints.append(cvxpy.Constant(0) == expression)
 
         for constraint in problem.inequality_scalar_constraints:  # type: ignore
+            var_num, mat = constraint.constraints  # type: ignore
             expression: cvxpy.Expression = cvxpy_dot_prod(  # type: ignore
-                constraint[1],  # type: ignore
-                sdp_vars[constraint[0]],  # type: ignore
+                mat,  # type: ignore
+                sdp_vars[var_num],
             )
             constraints.append(expression >= cvxpy.Constant(0))
 

@@ -175,6 +175,13 @@ class ProblemSDP:
                     )
                 )
 
+        for constraint in self.inequality_scalar_constraints:  # type: ignore
+            var_num, mat = constraint.constraints
+            real_mat = complexMatrix_to_realMatrix(mat)  # type: ignore
+            real_sdp.inequality_scalar_constraints.append(
+                InequalityScalarConstraint((var_num, real_mat))  # type: ignore
+            )
+
         return real_sdp
 
 
