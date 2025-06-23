@@ -6,7 +6,7 @@
 .tach
 .venv
 .hypothesis
-# public
+public
 
 docs/build/doctrees
 docs/build/html
