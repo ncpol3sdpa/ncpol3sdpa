@@ -180,23 +180,23 @@ ruff-check-src:
 #                                         #
 ###########################################
 
-pages:
-  stage: deploy
-  script:
-  - echo "Deploying documentation..."
-  - uv run sphinx-build --version
-  - cd docs
-  - make html
-  - yes "" | make latexpdf
-  - cd ..
-  # - uv run sphinx-build -b html docs/source public
-  # - uv run sphinx-build -b latex docs/source docs/build/latex
-  # - make -C docs/build/latex
+# pages:
+#   stage: deploy
+#   script:
+#   - echo "Deploying documentation..."
+#   - uv run sphinx-build --version
+#   - cd docs
+#   - make html
+#   - yes "" | make latexpdf
+#   - cd ..
+#   # - uv run sphinx-build -b html docs/source public
+#   # - uv run sphinx-build -b latex docs/source docs/build/latex
+#   # - make -C docs/build/latex
 
-  # - echo "Copying performance reports..."
-  # - mkdir -p public/performance
-  # - if [ -f "benchmark_report.html" ]; then cp benchmark_report.html public/performance/; fi
-  # - if [ -f "benchmark.json" ]; then cp benchmark.json public/performance/; fi
-  artifacts:
-    paths:
-    - public
+#   # - echo "Copying performance reports..."
+#   # - mkdir -p public/performance
+#   # - if [ -f "benchmark_report.html" ]; then cp benchmark_report.html public/performance/; fi
+#   # - if [ -f "benchmark.json" ]; then cp benchmark.json public/performance/; fi
+#   artifacts:
+#     paths:
+#     - public
