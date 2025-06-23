@@ -2,7 +2,15 @@
 **/.vscode
 **/.DS_Store
 **/__pycache__
-venv
+.mypy_cache
+.tach
+.venv
+.hypothesis
+# public
+
+docs/build/doctrees
+docs/build/html
+docs/htmlcov
 
 # **/*.dot
 # **/*.pdf

@@ -17,6 +17,7 @@ dependencies = [
     "mosek>=11.0.13",
     "pyvis>=0.3.2",
     "networkx>=3.4.2",
+    "sphinx-rtd-theme>=3.0.2",
 ]
 
 [dependency-groups]
