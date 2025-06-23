@@ -1,7 +1,30 @@
 Examples
 ========
 
-Example 1: Max-Cut Problem
+Example 1: Simple Polynomial Optimization
+-----------------------------------------
+
+Here's a simple example to get you started:
+
+.. code-block:: python
+
+   from ncpol3sdpa import Problem, Constraint
+   from sympy.abc import x, y
+
+   # Define objective function
+   objective = x*y
+
+   # Create problem
+   problem = Problem(objective)
+
+   # Add constraints
+   problem.add_constraint(Constraint.InequalityConstraint(1 - x**2 - y**2))
+
+   # Solve the problem
+   result = problem.solve(relaxation_order=2)
+   print(f"Optimal value: {result}")
+
+Example 2: Max-Cut Problem
 --------------------------
 
 This example shows how to solve a Max-Cut problem using ncpol3sdpa.
@@ -10,7 +33,7 @@ This example shows how to solve a Max-Cut problem using ncpol3sdpa.
 
    # Example code for Max-Cut will be provided here
 
-Example 2: Quantum Correlation
+Example 3: Quantum Correlation
 ------------------------------
 
 This example shows how to compute quantum correlations.
