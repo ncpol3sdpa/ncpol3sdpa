@@ -1,11 +1,11 @@
 from __future__ import annotations
-from typing import List
+from typing import List, TypeAlias
 
 from sympy import Expr
 import sympy as sp
 
 
-type Matrix = List[List[Expr]]
+Matrix: TypeAlias = List[List[Expr]]
 
 
 def degree_of_polynomial(polynomial: Expr) -> int:

@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, Union
 
 import numpy as np
 from numpy.typing import NDArray
@@ -12,7 +12,8 @@ from numpy.typing import NDArray
 
 class EqConstraint:
     def __init__(
-        self, from_l: List[Tuple[int, NDArray[np.float64] | NDArray[np.complex64]]]
+        self,
+        from_l: List[Tuple[int, Union[NDArray[np.float64], NDArray[np.complex64]]]],
     ) -> None:
         """Represents a list of constraints
 

@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import sympy
 import numpy as np
@@ -10,7 +10,7 @@ from ncpol3sdpa.sdp_repr import ProblemSDP, EqConstraint, MomentMatrixSDP
 
 def polynomial_to_matrix(
     algebra: AlgebraSDP, poly: sympy.Expr
-) -> NDArray[np.float64] | NDArray[np.complex64]:
+) -> Union[NDArray[np.float64], NDArray[np.complex64]]:
     """Returns a symmetric A matrix such that poly = Tr(A.T @ G) where G is the moment matrix. In other
     words express poly as a linear combination of the coefficients of G.
     Requires that all monomials of poly exist within the moment matrix:
@@ -18,7 +18,7 @@ def polynomial_to_matrix(
         and deg(poly) <= 2*algebra.relaxation_order"""
     moment_matrix_size = len(algebra.moment_matrix)
 
-    a_0: NDArray[np.float64] | NDArray[np.complex64] = np.zeros(
+    a_0: Union[NDArray[np.float64], NDArray[np.complex64]] = np.zeros(
         shape=(moment_matrix_size, moment_matrix_size), dtype=algebra.DTYPE
     )
 

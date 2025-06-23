@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, Union
 import warnings
 
 from numpy.typing import NDArray
@@ -10,7 +10,7 @@ from .solver import Solver
 
 
 def to_sparse_symmetric(
-    matrix: NDArray[np.float64] | NDArray[np.complex64],
+    matrix: Union[NDArray[np.float64], NDArray[np.complex64]],
 ) -> Tuple[List[float], List[int], List[int]]:
     """
     Return the sparse form of a symmetric matrix (only lower triangle is given)
