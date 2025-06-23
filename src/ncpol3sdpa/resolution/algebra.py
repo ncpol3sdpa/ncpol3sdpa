@@ -293,7 +293,7 @@ class AlgebraSDP:
             [
                 self.substitution_rules.apply_to_polynomial(
                     sp.expand(
-                        self.get_adjoint(self.monomials[j])
+                        self.get_adjoint(monomials[j])
                         * constraint_polynomial
                         * monomials[i]
                     )
