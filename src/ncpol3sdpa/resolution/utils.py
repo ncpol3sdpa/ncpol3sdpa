@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Type, Any, TypeVar, Iterable
+from typing import List, Type, Any, TypeVar, Iterable, Set
 
 from sympy import Expr
 import sympy as sp
@@ -31,11 +31,11 @@ def degree_of_polynomial(polynomial: Expr) -> int:
 
 
 def generate_needed_symbols(polynomials: List[sp.Expr]) -> List[sp.Symbol]:
-    total: sp.Expr = sp.S.One
+    total: Set[sp.Symbol] = set([])
     for p in polynomials:
-        total += p
+        total = total | set(p.free_symbols)  # type: ignore
 
-    return list(total.free_symbols)  # type: ignore
+    return list(total)
 
 
 T = TypeVar("T")
