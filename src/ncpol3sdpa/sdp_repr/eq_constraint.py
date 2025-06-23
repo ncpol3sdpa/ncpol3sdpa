@@ -1,4 +1,4 @@
-from typing import Tuple, List, Union
+from typing import Tuple, List
 
 from scipy.sparse import lil_matrix
 
@@ -10,10 +10,7 @@ from scipy.sparse import lil_matrix
 
 
 class EqConstraint:
-    def __init__(
-        self,
-        from_l: List[Tuple[int, Union[NDArray[np.float64], NDArray[np.complex64]]]],
-    ) -> None:
+    def __init__(self, from_l: List[Tuple[int, lil_matrix]]) -> None:
         """Represents a list of constraints
 
         A tuple (k, A) represents the constraint :
