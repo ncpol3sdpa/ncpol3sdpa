@@ -10,8 +10,8 @@ public
 
 docs/build/doctrees
 docs/build/html
+docs/build/htmlcov
 docs/build/latex
-docs/htmlcov
 
 # **/*.dot
 # **/*.pdf

@@ -322,7 +322,7 @@ def main() -> int:
     )
     parser.add_argument(
         "--output-dir",
-        default="docs/htmlcov",
+        default="docs/build/htmlcov",
         help="Directory to output HTML coverage report",
     )
     parser.add_argument(

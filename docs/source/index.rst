@@ -77,6 +77,5 @@ Documentation
    :maxdepth: 2
 
    Home <self>
-   quickstart
    examples
    api

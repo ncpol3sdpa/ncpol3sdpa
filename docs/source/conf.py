@@ -90,7 +90,6 @@ html_theme_options = {
     "titles_only": False,
 }
 
-# html_static_path = ["_static"]
 html_title = f"{project} {release} Documentation"
 html_show_sourcelink = True
 
