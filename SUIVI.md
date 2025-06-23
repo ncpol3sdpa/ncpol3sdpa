@@ -451,7 +451,7 @@ ncpol3sdpa
 
 # 01/06/2025
  - (Nazar) Add property based tests to the SOS decomposition
-
+ - (Alain) add example_code for MobFarm
 
 # 01/06/2025
  - (Nazar) Add more tests to the SOS decomposition, and fix bugs.
