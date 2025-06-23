@@ -72,6 +72,11 @@ pytest:
     - touch $HOME/mosek/mosek.lic
     - echo "$MOSEK_LICENSE" >> $HOME/mosek/mosek.lic
     - echo "Mosek license file created at $HOME/mosek/mosek.lic\n"
+    # Executes pytest to run all test files in the project.
+    # Options:
+    # - `--durations=10`: Shows the 10 slowest test executions
+    # - `--cov=src`: Measures code coverage for the 'src' directory
+    # - `--cov-report=xml:docs/tools-source/coverage.xml`: Generates an XML coverage report at the specified path
     - uv run pytest --durations=10 --cov=src --cov-report=xml:docs/tools-source/coverage.xml
   coverage: '/TOTAL.*\s+(\d+%)$/'
   artifacts:
