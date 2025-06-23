@@ -71,6 +71,7 @@ class Problem:
             self.objective
         ]
         needed_symbols = generate_needed_symbols(all_constraint_polynomials)
+        print("hello", all_constraint_polynomials)
         algebraSDP = create_AlgebraSDP(
             needed_symbols,
             self.objective,
@@ -81,6 +82,7 @@ class Problem:
         )
         self.algebraSDP = algebraSDP
         algebraSDP.add_constraints(normal_constraints)
+        # print(algebraSDP.moment_matrix)
 
         # 2. Translate to SDP
         problemSDP = algebra_to_SDP(algebraSDP)
@@ -103,7 +105,7 @@ class Problem:
         else:
             return None
 
-    def solve_uncheked(
+    def solve_unchecked(
         self,
         relaxation_order: int = 1,
         solver: Solver | AvailableSolvers = AvailableSolvers.CVXPY,

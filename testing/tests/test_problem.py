@@ -14,12 +14,12 @@ def test_1() -> None:
     c2 = Constraint.InequalityConstraint(-y * y + y + 0.25)
     p.add_constraint(c1)
     p.add_constraint(c2)
-    assert abs(p.solve_uncheked(1) - 2.4142) <= 0.01
-    assert abs(p.solve_uncheked(2) - 2.4142) <= 0.01
-    assert abs(p.solve_uncheked(3) - 2.4142) <= 0.01
-    assert abs(p.solve_uncheked(1, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
-    assert abs(p.solve_uncheked(2, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
-    assert abs(p.solve_uncheked(3, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(1) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(2) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(3) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(1, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(2, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(3, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
 
 
 def test_2() -> None:
@@ -29,33 +29,33 @@ def test_2() -> None:
     p = Problem(obj)
     p.add_constraint(c1)
     p.add_constraint(c2)
-    assert abs(p.solve_uncheked(1)) <= 1
-    assert abs(p.solve_uncheked(2)) <= 0.1
-    assert abs(p.solve_uncheked(3)) <= 0.001
-    assert abs(p.solve_uncheked(1, AvailableSolvers.MOSEK)) <= 1
-    assert abs(p.solve_uncheked(2, AvailableSolvers.MOSEK)) <= 0.1
-    assert abs(p.solve_uncheked(3, AvailableSolvers.MOSEK)) <= 0.001
+    assert abs(p.solve_unchecked(1)) <= 1
+    assert abs(p.solve_unchecked(2)) <= 0.1
+    assert abs(p.solve_unchecked(3)) <= 0.001
+    assert abs(p.solve_unchecked(1, AvailableSolvers.MOSEK)) <= 1
+    assert abs(p.solve_unchecked(2, AvailableSolvers.MOSEK)) <= 0.1
+    assert abs(p.solve_unchecked(3, AvailableSolvers.MOSEK)) <= 0.001
 
 
 def test_3() -> None:
     obj: Expr = -(x**2) + 10
     p = Problem(obj)
-    assert abs(p.solve_uncheked(1) - 10) <= 1
-    assert abs(p.solve_uncheked(2) - 10) <= 0.1
-    assert abs(p.solve_uncheked(3) - 10) <= 0.001
-    assert abs(p.solve_uncheked(1, AvailableSolvers.MOSEK) - 10) <= 1
-    assert abs(p.solve_uncheked(2, AvailableSolvers.MOSEK) - 10) <= 0.1
-    assert abs(p.solve_uncheked(3, AvailableSolvers.MOSEK) - 10) <= 0.001
+    assert abs(p.solve_unchecked(1) - 10) <= 1
+    assert abs(p.solve_unchecked(2) - 10) <= 0.1
+    assert abs(p.solve_unchecked(3) - 10) <= 0.001
+    assert abs(p.solve_unchecked(1, AvailableSolvers.MOSEK) - 10) <= 1
+    assert abs(p.solve_unchecked(2, AvailableSolvers.MOSEK) - 10) <= 0.1
+    assert abs(p.solve_unchecked(3, AvailableSolvers.MOSEK) - 10) <= 0.001
 
 
 def test_4() -> None:
     obj = y * (-(x**2) + 2)
     p = Problem(obj)
     p.add_rule(y, 10 * S.One)
-    assert abs(p.solve_uncheked(2) - 20) <= 0.1
-    assert abs(p.solve_uncheked(3) - 20) <= 0.001
-    assert abs(p.solve_uncheked(2, AvailableSolvers.MOSEK) - 20) <= 0.1
-    assert abs(p.solve_uncheked(3, AvailableSolvers.MOSEK) - 20) <= 0.001
+    assert abs(p.solve_unchecked(2) - 20) <= 0.1
+    assert abs(p.solve_unchecked(3) - 20) <= 0.001
+    assert abs(p.solve_unchecked(2, AvailableSolvers.MOSEK) - 20) <= 0.1
+    assert abs(p.solve_unchecked(3, AvailableSolvers.MOSEK) - 20) <= 0.001
 
 
 def test_1_sub() -> None:
@@ -64,12 +64,12 @@ def test_1_sub() -> None:
     constraint = Constraint.EqualityConstraint(-y * y + y + 0.25)
     p.add_constraint(constraint)
     p.add_rule(x * x, x)
-    assert abs(p.solve_uncheked(1) - 2.4142) <= 0.01
-    assert abs(p.solve_uncheked(2) - 2.4142) <= 0.01
-    assert abs(p.solve_uncheked(3) - 2.4142) <= 0.01
-    assert abs(p.solve_uncheked(1, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
-    assert abs(p.solve_uncheked(2, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
-    assert abs(p.solve_uncheked(3, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(1) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(2) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(3) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(1, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(2, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(3, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
 
 
 def test_1_nc() -> None:
@@ -82,7 +82,7 @@ def test_1_nc() -> None:
     c2 = Constraint.InequalityConstraint(b - b**2)
     p.add_constraint(c1)
     p.add_constraint(c2)
-    assert abs(p.solve_uncheked(2) - 1 / 8) <= 0.1
+    assert abs(p.solve_unchecked(2) - 1 / 8) <= 0.1
 
 
 def test_2_nc() -> None:
@@ -93,7 +93,7 @@ def test_2_nc() -> None:
     p = Problem(obj, is_commutative=False)
     c1 = Constraint.InequalityConstraint(1 - a**2 - b**2)
     p.add_constraint(c1)
-    assert abs(p.solve_uncheked(2) - 1) <= 0.1
+    assert abs(p.solve_unchecked(2) - 1) <= 0.1
 
 
 def test_3_nc() -> None:
@@ -108,7 +108,7 @@ def test_3_nc() -> None:
     p.add_constraint(c1)
     p.add_constraint(c2)
     p.add_constraint(c3)
-    assert abs(p.solve_uncheked(3)) <= 0.1
+    assert abs(p.solve_unchecked(3)) <= 0.1
 
 
 def test_complex_1() -> None:
@@ -119,8 +119,8 @@ def test_complex_1() -> None:
     c2 = Constraint.EqualityConstraint(z - z.conjugate())
     p.add_constraint(c1)
     p.add_constraint(c2)
-    assert abs(p.solve_uncheked(2) - 2) <= 0.1
-    assert abs(p.solve_uncheked(3) - 2) <= 0.1
+    assert abs(p.solve_unchecked(2) - 2) <= 0.1
+    assert abs(p.solve_unchecked(3) - 2) <= 0.1
 
 
 def test_complex_2() -> None:
@@ -139,7 +139,7 @@ def test_complex_2() -> None:
     p.add_constraint(c2)
     p.add_constraint(c3)
     p.add_constraint(c4)
-    solution = p.solve_uncheked(3)
+    solution = p.solve_unchecked(3)
     assert abs(solution - 0.7071) <= 0.1
 
 
@@ -150,7 +150,7 @@ def test_nc_complex_1() -> None:
     p = Problem(obj, is_commutative=False, is_real=False)
     c1 = Constraint.InequalityConstraint(1 - X1**2 - X2**2)
     p.add_constraint(c1)
-    assert abs(p.solve_uncheked(2)) <= 0.1
+    assert abs(p.solve_unchecked(2)) <= 0.1
 
 
 def test_nc_complex_2() -> None:
@@ -162,4 +162,4 @@ def test_nc_complex_2() -> None:
     c2 = Constraint.EqualityConstraint(X1 - X1.adjoint())  # type: ignore
     p.add_constraint(c1)
     p.add_constraint(c2)
-    assert abs(p.solve_uncheked(2)) <= 0.1
+    assert abs(p.solve_unchecked(2)) <= 0.1
