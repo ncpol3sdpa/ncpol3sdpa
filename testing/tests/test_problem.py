@@ -1,7 +1,7 @@
 # from numpy import format_float_scientific
 from sympy.abc import x, y
 from sympy import S
-from sympy import Expr, symbols, I
+from sympy import Expr, symbols, I, expand
 from sympy.physics.quantum import HermitianOperator, Operator
 
 from ncpol3sdpa import Constraint, Problem, AvailableSolvers
@@ -56,6 +56,15 @@ def test_4() -> None:
     assert abs(p.solve_unchecked(3) - 20) <= 0.001
     assert abs(p.solve_unchecked(2, AvailableSolvers.MOSEK) - 20) <= 0.1
     assert abs(p.solve_unchecked(3, AvailableSolvers.MOSEK) - 20) <= 0.001
+
+
+def test_arithmetic_geometric() -> None:
+    obj = -expand((x + y) ** 2 - 4 * x * y)
+
+    p = Problem(obj)
+    assert abs(p.solve_unchecked(1)) <= 0.0001
+    sos = p.compute_sos_decomposition()
+    assert abs(sos.objective_error(problem_algebra=p.algebraSDP)) <= 0.0001
 
 
 def test_1_sub() -> None:

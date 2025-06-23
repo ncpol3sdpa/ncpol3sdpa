@@ -65,7 +65,7 @@ def de_linearize(vec: NDArray[np.float64]) -> NDArray[np.float64]:
 
 def parse_mosek_solution(
     problem: ProblemSDP, task: mosek.Task, n_eq_constrants: int
-) -> Solution_SDP:
+) -> Solution_SDP[np.float64]:
     solution_type = mosek.soltype.itr
     primal_objective_value = task.getprimalobj(solution_type)
     dual_objective_value = task.getdualobj(solution_type)
@@ -111,7 +111,7 @@ def parse_mosek_solution(
 
 class MosekSolver(Solver):
     @classmethod
-    def solve(self, problem: ProblemSDP) -> Solution_SDP:
+    def solve(self, problem: ProblemSDP) -> Solution_SDP[np.float64]:
         """Solve the SDP problem with mosek"""
 
         # Gets the number of equ constraints to decode the solution
@@ -124,10 +124,10 @@ class MosekSolver(Solver):
         def stream_printer(text: str) -> None:
             # sys.stdout.write(text)
             # sys.stdout.flush()
-            print(text, end="")
+            # print(text, end="")
             pass
 
-        def mosek_task() -> Solution_SDP | None:
+        def mosek_task() -> Solution_SDP[np.float64] | None:
             # Create a task object and attach log stream printer
             with mosek.Task() as task:
                 task.set_Stream(mosek.streamtype.log, stream_printer)

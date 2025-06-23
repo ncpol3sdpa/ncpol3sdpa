@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any
 
 from sympy import Expr
 import sympy
@@ -25,7 +25,7 @@ class Problem:
         self.objective: Expr = obj
         self.is_commutative = is_commutative
         self.is_real = is_real
-        self.solution: Solution_SDP | None = None
+        self.solution: Solution_SDP[Any] | None = None
         self.rules: Rules = (
             RulesCommutative() if is_commutative else RulesNoncommutative()
         )

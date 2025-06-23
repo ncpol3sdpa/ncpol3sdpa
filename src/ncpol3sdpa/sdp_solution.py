@@ -1,11 +1,13 @@
 import numpy as np
 
 from numpy.typing import NDArray
-from typing import List, NamedTuple
+from typing import List, NamedTuple, TypeVar, Generic
+
+T = TypeVar("T", bound=np.generic)
 
 
 # Data structure representing a solution of the sdp
-class Solution_SDP(NamedTuple):
+class Solution_SDP(NamedTuple, Generic[T]):
     # equations found in the article "Semidefinite programming relaxations for quantum correlations"
     """Solution to a given SDP problem, returned by solvers"""
 
@@ -15,7 +17,7 @@ class Solution_SDP(NamedTuple):
 
     """value of the primal PSD variables at the optimal point. They are the variables called G^k, G^k_{g_i} in eq (30)
     In the documentation, corresponds to ($\\bar X^i$)"""
-    primal_PSD_variables: List[NDArray[np.float64]]
+    primal_PSD_variables: List[NDArray[T]]
 
     """value of lambda or the objective function of the dual in the dual formulation of the SDP. See (36)
     In the documentation, corresponds to ($\\lambda$)"""
@@ -23,7 +25,7 @@ class Solution_SDP(NamedTuple):
 
     """value of the dual PSD variables associated with the PSD constraints on the primal variables.
     In the documentation, corresponds to ($\\bar Y^i$)"""
-    dual_PSD_variables: List[NDArray[np.float64]]
+    dual_PSD_variables: List[NDArray[T]]
 
     """value of the dual variables associated with the equality constraints on the between polynomials.
     In the documentation, corresponds to ($\\nu_i$) and ($\\eta_i) """

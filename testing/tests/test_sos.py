@@ -98,6 +98,8 @@ def test_failing2() -> None:
 
 # --------- Automatic property tests ---------
 
+epsilon = 0.0001
+
 
 @settings(deadline=1000)
 @given(
@@ -125,7 +127,7 @@ def test_bounded_no_constraints(sos_poly: sp.Expr, solver: AvailableSolvers) -> 
 
     sosDecomposition = problem.compute_sos_decomposition()
     assert sosDecomposition is not None
-    assert np.abs(sosDecomposition.objective_error(problem.algebraSDP)) < 0.01
+    assert np.abs(sosDecomposition.objective_error(problem.algebraSDP)) < epsilon
 
 
 @settings(deadline=2000)
@@ -143,7 +145,7 @@ def test_bounded_monomials(poly: sp.Expr, solver: AvailableSolvers) -> None:
 
     sosDecomposition = problem.compute_sos_decomposition()
     assert sosDecomposition is not None
-    assert np.abs(sosDecomposition.objective_error(problem.algebraSDP)) < 0.05
+    assert np.abs(sosDecomposition.objective_error(problem.algebraSDP)) < epsilon
 
 
 @settings(deadline=2000)
@@ -172,4 +174,4 @@ def test_ellipsis_monomials(
 
     sosDecomposition = problem.compute_sos_decomposition()
     assert sosDecomposition is not None
-    assert np.abs(sosDecomposition.objective_error(problem.algebraSDP)) < 0.05
+    assert np.abs(sosDecomposition.objective_error(problem.algebraSDP)) < epsilon

@@ -1,4 +1,4 @@
-from typing import List, NamedTuple, Tuple
+from typing import List, NamedTuple, Tuple, Any
 
 import sympy
 import numpy
@@ -95,7 +95,7 @@ class SosDecomposition:
 
 
 def compute_equality_constraints(
-    problem_algebra: AlgebraSDP, solution: Solution_SDP
+    problem_algebra: AlgebraSDP, solution: Solution_SDP[numpy.float64]
 ) -> List[SumOfMultiplesPolynomial]:
     """Obtain equality constraint data from the solution"""
 
@@ -125,7 +125,7 @@ def compute_equality_constraints(
 
 
 def compute_sos_decomposition(
-    problem_algebra: AlgebraSDP, solution: Solution_SDP
+    problem_algebra: AlgebraSDP, solution: Solution_SDP[Any]
 ) -> SosDecomposition:
     """Computes an SOS decomposition of (objective polynomial - lambda) using of the solution to the
     dual SDP.

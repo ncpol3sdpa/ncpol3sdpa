@@ -1,5 +1,6 @@
 from enum import Enum, auto
 from typing import Dict, Type
+import numpy
 
 from ncpol3sdpa.sdp_solution import Solution_SDP
 from ncpol3sdpa.sdp_repr import ProblemSDP
@@ -39,7 +40,7 @@ class SolverRegistry:
     @classmethod
     def solve(
         cls, problem: ProblemSDP, solver_type: AvailableSolvers
-    ) -> Solution_SDP | None:
+    ) -> Solution_SDP[numpy.float64] | None:
         """Solve the problem using the specified solver type."""
 
         solver = cls.get_solver(solver_type)

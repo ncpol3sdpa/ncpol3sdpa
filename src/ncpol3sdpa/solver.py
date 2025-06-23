@@ -59,7 +59,9 @@ class SolverInterface:
 
 class Solver:
     @classmethod
-    def solve_cvxpy(self, problem: sdp_repr.ProblemSDP) -> sdp_solution.Solution_SDP:
+    def solve_cvxpy(
+        self, problem: sdp_repr.ProblemSDP
+    ) -> sdp_solution.Solution_SDP[np.float64]:
         """Solve the SDP problem with cvxpy"""
         # Variables
         sdp_vars = [

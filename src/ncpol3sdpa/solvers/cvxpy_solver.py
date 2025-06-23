@@ -22,7 +22,7 @@ def cvxpy_dot_prod(c: lil_matrix, x: "cvxpy.Expression") -> "cvxpy.Expression":
 
 class CvxpySolver(Solver):
     @classmethod
-    def solve(self, problem: ProblemSDP) -> Solution_SDP | None:
+    def solve(self, problem: ProblemSDP) -> Solution_SDP[np.float64] | None:
         """Solve the SDP problem with cvxpy"""
         # Variables
         sdp_vars = [
