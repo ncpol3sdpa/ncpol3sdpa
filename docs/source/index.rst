@@ -6,7 +6,22 @@
 ncpol3sdpa documentation
 ========================
 
-**ncpol3sdpa** is a Python package for solving noncommutative polynomial optimization problems using the SDPA family of semidefinite programming solvers.
+
+**ncpol3sdpa** is a Python package for solving noncommutative polynomial optimization problems using semidefinite programming (SDP) solvers.
+
+
+We solve the following optimization problem:
+
+.. math::
+
+   \begin{align}
+   \max_{x_1, \ldots, x_n} &\quad f(x_1, \ldots, x_n) \\
+   \text{s.t.} &\quad g_i(x_1, \ldots, x_n) \leq 0 \quad \forall i
+   \end{align}
+
+where :math:`f,g_i \in \mathbb{K}[x_1,\ldots,x_n]`.
+
+This library is a successor to the ncpol2sdpa library.
 
 .. note::
 
@@ -15,28 +30,52 @@ ncpol3sdpa documentation
 Installation
 ------------
 
-You will need a mosek license to use the solver. You can get a free academic license from the [Mosek website](https://www.mosek.com/).
+You will need a mosek license to use the solver. You can get a free academic license from the `Mosek website <https://www.mosek.com/>`_.
 
-.. code-block:: console
+1. Clone the repository:
 
-   (docs) $ make html
+.. code-block:: bash
 
+   git clone https://github.com/yourusername/python-poly-opt.git
+   cd python-poly-opt
 
-you can use the ``src.ncpol3sdpa.momentmatrix.needed_monomials``.
+2. Install the package:
 
+.. code-block:: bash
 
-Project Structure
------------------
+   pip install -e .
+
+Basic Usage
+-----------
+
+Here's a simple example of how to use the package:
+
+.. code-block:: python
+
+   from ncpol3sdpa import Problem, Constraint
+   from sympy.abc import x, y
+
+   # Define the objective function
+   objective = x*y
+
+   # Create a problem instance
+   problem = Problem(objective)
+
+   # Add constraints
+   problem.add_constraint(Constraint.InequalityConstraint(1 - x**2 - y**2))
+
+   # Solve the problem
+   result = problem.solve(relaxation_order=2)
+   print(f"Optimal value: {result}")
+
+For more examples, see the :doc:`examples` section.
+
+Documentation
+-------------
 
 .. toctree::
    :maxdepth: 2
 
    Home <self>
-
-   constraints
-   funs
-   momentmatrix
-   monomial
-   problem
-   rules
-   solver
+   examples
+   api

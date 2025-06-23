@@ -145,7 +145,12 @@ class MosekSolver(Solver):
                 )
                 # Append the contraints
                 number_of_constraints = len(problem.constraints)
-                task.appendcons(number_of_constraints + 1)
+                number_of_scalar_constraints = len(
+                    problem.inequality_scalar_constraints
+                )
+                task.appendcons(
+                    number_of_constraints + number_of_scalar_constraints + 1
+                )
 
                 # Adds the normalisation constraint
                 task.putbarablocktriplet(
@@ -160,7 +165,7 @@ class MosekSolver(Solver):
                     constraint_l = []
                     constraint_v = []
                     for var_num, matrix in problem.constraints[i].constraints:
-                        val_m, rows_m, cols_m = get_sparse_vecs(matrix)  # type
+                        val_m, rows_m, cols_m = get_sparse_vecs(matrix)
                         which_constraint += [1 + i] * len(val_m)
                         which_SDP += [var_num] * len(val_m)
                         constraint_k += rows_m
@@ -174,12 +179,46 @@ class MosekSolver(Solver):
                         constraint_v,
                     )
 
+                for i in range(number_of_scalar_constraints):
+                    which_constraint = []
+                    which_SDP = []
+                    constraint_k = []
+                    constraint_l = []
+                    constraint_v = []
+                    var_num, matrix = problem.inequality_scalar_constraints[
+                        i
+                    ].constraints
+                    val_m, rows_m, cols_m = get_sparse_vecs(matrix)
+                    which_constraint += [1 + i + number_of_constraints] * len(val_m)
+                    which_SDP += [var_num] * len(val_m)
+                    constraint_k += rows_m
+                    constraint_l += cols_m
+                    constraint_v += val_m
+                    task.putbarablocktriplet(
+                        which_constraint,
+                        which_SDP,
+                        constraint_k,
+                        constraint_l,
+                        constraint_v,
+                    )
+
                 # Set bounds for constraints
                 task.putconboundlist(
-                    list(range(number_of_constraints + 1)),
-                    [mosek.boundkey.fx for _ in range(number_of_constraints + 1)],
-                    [1.0] + [0.0 for _ in range(number_of_constraints)],
-                    [1] + [0 for _ in range(number_of_constraints)],
+                    list(
+                        range(number_of_constraints + number_of_scalar_constraints + 1)
+                    ),
+                    [mosek.boundkey.fx for _ in range(number_of_constraints + 1)]
+                    + [mosek.boundkey.lo for _ in range(number_of_scalar_constraints)],
+                    [1.0]
+                    + [
+                        0.0
+                        for _ in range(
+                            number_of_constraints + number_of_scalar_constraints
+                        )
+                    ],
+                    [1]
+                    + [0 for _ in range(number_of_constraints)]
+                    + [float("inf") for _ in range(number_of_scalar_constraints)],  # type: ignore
                 )
 
                 # Optimize

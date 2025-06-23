@@ -1,11 +1,11 @@
 from __future__ import annotations
-from typing import List, Type, Any, TypeVar, Iterable, Set
+from typing import List, Type, TypeAlias, Any, TypeVar, Iterable, Set
 
 from sympy import Expr
 import sympy as sp
 
 
-type Matrix = List[List[Expr]]
+Matrix: TypeAlias = List[List[Expr]]
 
 
 def sympy_sum(terms: Iterable[sp.Expr]) -> sp.Expr:

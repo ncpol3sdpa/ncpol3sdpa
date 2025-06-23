@@ -47,6 +47,14 @@ class CvxpySolver(Solver):
                 expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
             eq_constraints.append(cvxpy.Constant(0) == expression)
 
+        for constraint in problem.inequality_scalar_constraints:  # type: ignore
+            var_num, mat = constraint.constraints  # type: ignore
+            expression: cvxpy.Expression = cvxpy_dot_prod(  # type: ignore
+                mat,  # type: ignore
+                sdp_vars[var_num],
+            )
+            eq_constraints.append(expression >= cvxpy.Constant(0))
+
         # tr(A.T x G)
         objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
 

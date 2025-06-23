@@ -71,7 +71,6 @@ class Problem:
             self.objective
         ]
         needed_symbols = generate_needed_symbols(all_constraint_polynomials)
-        print("hello", all_constraint_polynomials)
         algebraSDP = create_AlgebraSDP(
             needed_symbols,
             self.objective,

@@ -16,6 +16,8 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
+
+
 stages:
   - build
   - test
@@ -27,15 +29,18 @@ variables:
   BASE_LAYER: bookworm-slim
   IMAGE: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
 
-# Define the image to use for the entire pipeline
-image:
-  name: $IMAGE
-  entrypoint: [""]
+image: $IMAGE
 
-# Script to be executed before each stage
 before_script:
   - echo "Setting up the environment..."
-  - python3 --version
+  - uv run python3 --version
+
+
+###########################################
+#                                         #
+#               Build Stage               #
+#                                         #
+###########################################
 
 uv-install:
   stage: build
@@ -49,20 +54,41 @@ uv-install:
       - $UV_CACHE_DIR
   script:
     - uv cache prune --ci
+    - uv pip install --system -e .
 
+
+###########################################
+#                                         #
+#               Test Stage                #
+#                                         #
+###########################################
+
+# This job runs the tests using Pytest
 pytest:
   stage: test
   script:
     - echo "Running Pytest..."
-    - echo "HOME is $HOME"
     - mkdir $HOME/mosek
     - touch $HOME/mosek/mosek.lic
-    # - echo "$MSK_LICENSE" >> $HOME/mosek/mosek.lic
     - echo "$MOSEK_LICENSE" >> $HOME/mosek/mosek.lic
     - echo "Mosek license file created at $HOME/mosek/mosek.lic\n"
-    - uv run pytest
-    - echo "Pytest complete"
+    # Executes pytest to run all test files in the project.
+    # Options:
+    # - `--durations=10`: Shows the 10 slowest test executions
+    # - `--cov=src`: Measures code coverage for the 'src' directory
+    # - `--cov-report=xml:docs/source/coverage.xml`: Generates an XML coverage report at the specified path
+    - uv run pytest --durations=10 --cov=src --cov-report=xml:docs/source/coverage.xml
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: docs/source/coverage.xml
+    paths:
+      - docs/source/coverage.xml
+    expire_in: 1 week
 
+# This job checks the code for type errors using Mypy
 mypy:
   stage: test
   script:
@@ -71,20 +97,7 @@ mypy:
     - echo "Mypy complete"
   allow_failure: false
 
-# - name: Setup MOSEK & Run Tests
-#    env:
-#      MOSEKLM_LICENSE_FILE: ${{ secrets.MSK_LICENSE }}
-#    run: |
-#      pytest -sv
-
-# testing-key:
-#   stage: test
-#   script:
-#     - echo "Running Testing Key..."
-#     - echo "$TestKey"
-#     - echo "Testing Key complete"
-#   allow_failure: true
-
+# This job checks the code for style violations using Ruff
 ruff-check-src:
   stage: test
   script:
@@ -101,9 +114,89 @@ ruff-check-src:
 #     - echo "Ruff complete"
 #   allow_failure: true
 
-deploy-job:
-  stage: deploy
-  environment: production
-  script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
+# # Add a new job for code quality metrics
+# code-quality:
+#   stage: test
+#   image: docker:stable
+#   variables:
+#     DOCKER_DRIVER: overlay2
+#   allow_failure: true
+#   services:
+#     - docker:dind
+#   # Skip the global before_script that requires uv
+#   before_script: []
+#   script:
+#     - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock pipelinecomponents/codeclimate analyze -f json > gl-code-quality-report.json || echo "CodeClimate analysis failed"
+#     - if [ -f "gl-code-quality-report.json" ]; then echo "Report file generated successfully"; else echo "Report file not found" && touch gl-code-quality-report.json && echo "[]" > gl-code-quality-report.json; fi
+#     - ls -la gl-code-quality-report.json
+#     - pwd
+#     # Make sure the file has the right permissions and is in the expected location
+#     - chmod 644 gl-code-quality-report.json
+#   artifacts:
+#     paths:
+#       - gl-code-quality-report.json
+#     reports:
+#       codequality: gl-code-quality-report.json
+#     expire_in: 2 week
+
+# # Add a new job for performance metrics
+# performance:
+#   stage: test
+#   script:
+#     - uv pip install --system pytest-benchmark pytest-benchmark-k pandas matplotlib
+#     - uv run pytest testing/performance --benchmark-json=benchmark.json
+#     # Generate HTML report
+#     - uv run python -c "
+#         import json;
+#         from pytest_benchmark_k import render;
+#         with open('benchmark.json') as f:
+#             data = json.load(f);
+#         render.render_html(data, 'benchmark_report.html')"
+#     # Create directory structure for benchmarks if it doesn't exist
+#     - mkdir -p testing/benchmarks
+#     # Track performance history if running on main branch
+#     - |
+#       if [[ "$CI_COMMIT_BRANCH" == "main" ]]; then
+#         echo "Updating performance history database..."
+#         uv run python testing/benchmarks/track_performance.py benchmark.json testing/benchmarks/benchmark_history.db testing/benchmarks/charts
+#         mkdir -p public/performance
+#         cp -r testing/benchmarks/charts/* public/performance/ || echo "No charts yet"
+#       fi
+#   artifacts:
+#     paths:
+#       - benchmark.json
+#       - benchmark_report.html
+#       - testing/benchmarks/benchmark_history.db
+#       - testing/benchmarks/charts
+#     reports:
+#       performance: benchmark.json
+#     expire_in: 2 week
+#   # only:
+#   #   - main  # Only run on main branch to avoid noise
+
+###########################################
+#                                         #
+#               Deploy Stage              #
+#                                         #
+###########################################
+
+# pages:
+#   stage: deploy
+#   script:
+#   - echo "Deploying documentation..."
+#   - uv run sphinx-build --version
+#   - cd docs
+#   - make html
+#   - yes "" | make latexpdf
+#   - cd ..
+#   # - uv run sphinx-build -b html docs/source public
+#   # - uv run sphinx-build -b latex docs/source docs/build/latex
+#   # - make -C docs/build/latex
+
+#   # - echo "Copying performance reports..."
+#   # - mkdir -p public/performance
+#   # - if [ -f "benchmark_report.html" ]; then cp benchmark_report.html public/performance/; fi
+#   # - if [ -f "benchmark.json" ]; then cp benchmark.json public/performance/; fi
+#   artifacts:
+#     paths:
+#     - public

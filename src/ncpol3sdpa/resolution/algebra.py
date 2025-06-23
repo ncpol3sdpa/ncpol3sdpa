@@ -93,6 +93,8 @@ class AlgebraSDP:
         self.psd_polynomials_gi: List[sp.Expr] = []
         # List of polynomials that equal 0
         self.equality_constraints: List[ConstraintGroup] = []
+        # List of local inequality constraints
+        self.local_inequality_constraints: List[sp.Expr] = []
 
     def __str__(self) -> str:
         """Return a string representation of the algebra for debugging."""
@@ -138,8 +140,8 @@ class AlgebraSDP:
         """Returns a hermitian A matrix such that poly = Tr(A.T @ G) where G is the moment matrix. In other
         words express poly as a linear combination of the coefficients of G.
         Requires that all monomials of poly exist within the moment matrix:
-            poly.free_vars included in algebra.moment_matrix free_vars
-            and deg(poly) <= 2*algebra.relaxation_order"""
+        poly.free_vars included in algebra.moment_matrix free_vars
+        and deg(poly) <= 2*algebra.relaxation_order"""
         moment_matrix_size = len(self.moment_matrix)
         a_0: lil_matrix = lil_matrix(
             (moment_matrix_size, moment_matrix_size), dtype=self.DTYPE
@@ -200,11 +202,14 @@ class AlgebraSDP:
         """Add a constraint to the algebra
 
         Save the constraint if it is an equality constraint,
-        otherwise add a moment matrix for the inequality constraint"""
-        if constraint.constraint_type == ConstraintType.EQUALITY:
-            self.add_equality_constraint(constraint.polynomial)
-        else:
-            self.add_inequality_constraint(constraint.polynomial)
+        otherwise update the moment matrix for the inequality constraint"""
+        match constraint.constraint_type:
+            case ConstraintType.EQUALITY:
+                self.add_equality_constraint(constraint.polynomial)
+            case ConstraintType.INEQUALITY:
+                self.add_inequality_constraint(constraint.polynomial)
+            case ConstraintType.LOCAL_INEQUALITY:
+                self.local_inequality_constraints.append(constraint.polynomial)
 
     def add_constraints(self, constraints: List[Constraint]) -> None:
         for constraint in constraints:
