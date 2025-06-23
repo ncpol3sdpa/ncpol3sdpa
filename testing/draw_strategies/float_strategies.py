@@ -10,11 +10,20 @@ small_normal_floats = floats(
 )
 
 
-def order_of_magnitude_floats(number_of_orders: int) -> SearchStrategy[float]:
+def order_of_magnitude_floats(
+    number_of_orders: int, positive_only: bool = False, can_be_zero: bool = True
+) -> SearchStrategy[float]:
     assert number_of_orders > 0
     min_abs = 1.0
     max_abs = 10.0**number_of_orders
 
     positive = floats(min_value=min_abs, max_value=max_abs, width=64)
     negative = floats(min_value=-max_abs, max_value=-min_abs, width=64)
-    return just(0.0) | positive | negative
+
+    res = positive
+    if not positive_only:
+        res = res | negative
+    if can_be_zero:
+        res = just(0.0) | res
+
+    return res
