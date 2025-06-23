@@ -1,5 +1,6 @@
 import sympy
 from typing import List
+from sympy.physics.quantum import HermitianOperator, Operator
 
 from ncpol3sdpa.resolution.monomial import list_increment, generate_monomials
 from ncpol3sdpa.resolution.utils import degree_of_polynomial
@@ -75,7 +76,10 @@ def test_generate_monomials() -> None:
 
 
 def test_generate_monomials_non_commutative() -> None:
-    x, y, z = sympy.symbols("x y z", commutative=False)
+    x = HermitianOperator("x")  # type: ignore
+    y = HermitianOperator("y")  # type: ignore
+    z = HermitianOperator("z")  # type: ignore
+    t = Operator("t")  # type: ignore
     assert (generate_monomials([x, y], 2, False)) == [
         1,
         x,
@@ -117,12 +121,29 @@ def test_generate_monomials_non_commutative() -> None:
         y**2 * x,
         y**3,
     ]
+    assert (set(generate_monomials([sympy.S.One, x, t], 2, False))) == set(
+        [
+            1,
+            x,
+            x**2,
+            t,
+            t**2,
+            t.adjoint(),  # type: ignore
+            t.adjoint() ** 2,  # type: ignore
+            t.adjoint() * t,  # type: ignore
+            t * t.adjoint(),  # type: ignore
+            x * t,
+            x * t.adjoint(),  # type: ignore
+            t * x,
+            t.adjoint() * x,  # type: ignore
+        ]
+    )
 
 
 def test_generate_monomials_complex() -> None:
     z = sympy.symbols("z", real=False)
-    assert generate_monomials([z], 1, False) == [1, z]
-    assert set(generate_monomials([z], 2, False)) == set([1, z, z**2])
+    assert generate_monomials([z], 1) == [1, z]
+    assert set(generate_monomials([z], 2)) == set([1, z, z**2])
 
 
 def test_degree() -> None:

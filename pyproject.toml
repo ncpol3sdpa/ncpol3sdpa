@@ -18,6 +18,10 @@ dependencies = [
     "pyvis>=0.3.2",
     "networkx>=3.4.2",
     "sphinx-rtd-theme>=3.0.2",
+    "hypothesis>=6.131.18",
+    "pytest-benchmark>=5.1.0",
+    "pytest-cov>=6.1.1",
+    "coverage>=7.8.2",
 ]
 
 [dependency-groups]
@@ -46,7 +50,7 @@ skip-magic-trailing-comma = false
 strict = true
 exclude = ["main.py"]
 follow_untyped_imports = true
-files = ["src/ncpol3sdpa","testing/tests", "examples"]
+files = ["src/ncpol3sdpa","testing/tests","testing/draw_strategies", "examples"]
 python_executable = ".venv/bin/python"
 mypy_path = "src/typing_stubs"
 

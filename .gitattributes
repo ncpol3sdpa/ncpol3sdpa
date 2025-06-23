@@ -1,0 +1,2 @@
+# Disable view of large files in GitLab diff
+uv.lock gitlab-generated

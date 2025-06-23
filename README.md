@@ -26,12 +26,12 @@ ncpol3sdpa
 ├─ sos.py                    Sos
 │
 ├─ resolution                The resolution of a problem
-│  ├─ __init__.py            
-│  ├─ algebra.py             AlgebraSDP 
-│  ├─ algebra_sdp_real.py    
+│  ├─ __init__.py
+│  ├─ algebra.py             AlgebraSDP
+│  ├─ algebra_sdp_real.py
 │  ├─ algebra_sdp_complex.py
 │  ├─ constraints.py         Constraint
-│  ├─ create_algebra.py      
+│  ├─ create_algebra.py
 │  ├─ monomial.py
 │  ├─ rules.py               Rule
 │  └─ utils.py               generate_needed_symbols
@@ -146,8 +146,8 @@ To learn more about the details of pre-commit, the documentation is [here](https
 
 ```bash
 pip install sphinx
-``` 
---> 
+```
+-->
 
 For the documentation, we use `sphinx`. You can build the documentation by executing the following command:
 

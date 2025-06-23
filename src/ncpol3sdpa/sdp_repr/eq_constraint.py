@@ -1,7 +1,6 @@
 from typing import Tuple, List, Union
 
-import numpy as np
-from numpy.typing import NDArray
+from scipy.sparse import lil_matrix
 
 # class ConstraintType(Enum):
 #     EqualZero = 1

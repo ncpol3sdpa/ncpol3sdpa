@@ -1,42 +1,44 @@
 from typing import Tuple, List, Union
 import warnings
 
-from numpy.typing import NDArray
-import numpy as np
 import mosek
+from scipy.sparse import lil_matrix
 
 from ncpol3sdpa.sdp_repr import ProblemSDP
 from .solver import Solver
 
 
-def to_sparse_symmetric(
-    matrix: Union[NDArray[np.float64], NDArray[np.complex64]],
+def get_sparse_vecs(
+    matrix: lil_matrix,
 ) -> Tuple[List[float], List[int], List[int]]:
     """
-    Return the sparse form of a symmetric matrix (only lower triangle is given)
-    Exemple:
-    >>> to_sparse([
-    ... [a, 0, b],
-    ... [0, 0, c],
-    ... [b, c, 0]
-    ... ])
-    [
-    [a, b, c],
-    [0, 2, 2],
-    [0, 0, 1]
-    ]
+    Return the sparse form of a symmetric matrix stored as a lil_matrix,
+    considering only the lower triangle (including diagonal).
+
+    Args:
+        matrix: lil_matrix, square sparse matrix.
+
+    Returns:
+        Tuple of lists: (values, rows, cols)
     """
-    n = len(matrix)
-    val = []
+    n = matrix.shape[0]
+    values = []
     rows = []
     cols = []
+
+    # itérer sur chaque ligne
     for i in range(n):
-        for j in range(i + 1):
-            if matrix[i][j] != 0:
-                val.append(matrix[i][j])
+        # colonnes non-nulles sur la ligne i
+        row_cols = matrix.rows[i]
+        # valeurs correspondantes
+        row_data = matrix.data[i]
+        for idx, j in enumerate(row_cols):
+            if j <= i:  # on ne garde que la partie inférieure (y compris la diagonale)
+                values.append(row_data[idx])
                 rows.append(i)
                 cols.append(j)
-    return val, rows, cols
+
+    return values, rows, cols
 
 
 class MosekSolver(Solver):
@@ -62,7 +64,7 @@ class MosekSolver(Solver):
                 task.appendbarvars(problem.variable_sizes)
 
                 # objective function
-                val_obj, rows_obj, cols_obj = to_sparse_symmetric(problem.objective)
+                val_obj, rows_obj, cols_obj = get_sparse_vecs(problem.objective)
                 task.putbarcblocktriplet(
                     [problem.MOMENT_MATRIX_VAR_NUM] * len(val_obj),
                     rows_obj,
@@ -71,7 +73,12 @@ class MosekSolver(Solver):
                 )
                 # Append the contraints
                 number_of_constraints = len(problem.constraints)
-                task.appendcons(number_of_constraints + 1)
+                number_of_scalar_constraints = len(
+                    problem.inequality_scalar_constraints
+                )
+                task.appendcons(
+                    number_of_constraints + number_of_scalar_constraints + 1
+                )
 
                 # Adds the normalisation constraint
                 task.putbarablocktriplet(
@@ -86,7 +93,7 @@ class MosekSolver(Solver):
                     constraint_l = []
                     constraint_v = []
                     for var_num, matrix in problem.constraints[i].constraints:
-                        val_m, rows_m, cols_m = to_sparse_symmetric(matrix)  # type
+                        val_m, rows_m, cols_m = get_sparse_vecs(matrix)
                         which_constraint += [1 + i] * len(val_m)
                         which_SDP += [var_num] * len(val_m)
                         constraint_k += rows_m
@@ -100,12 +107,46 @@ class MosekSolver(Solver):
                         constraint_v,
                     )
 
+                for i in range(number_of_scalar_constraints):
+                    which_constraint = []
+                    which_SDP = []
+                    constraint_k = []
+                    constraint_l = []
+                    constraint_v = []
+                    var_num, matrix = problem.inequality_scalar_constraints[
+                        i
+                    ].constraints
+                    val_m, rows_m, cols_m = get_sparse_vecs(matrix)
+                    which_constraint += [1 + i + number_of_constraints] * len(val_m)
+                    which_SDP += [var_num] * len(val_m)
+                    constraint_k += rows_m
+                    constraint_l += cols_m
+                    constraint_v += val_m
+                    task.putbarablocktriplet(
+                        which_constraint,
+                        which_SDP,
+                        constraint_k,
+                        constraint_l,
+                        constraint_v,
+                    )
+
                 # Set bounds for constraints
                 task.putconboundlist(
-                    list(range(number_of_constraints + 1)),
-                    [mosek.boundkey.fx for _ in range(number_of_constraints + 1)],
-                    [1.0] + [0.0 for _ in range(number_of_constraints)],
-                    [1] + [0 for _ in range(number_of_constraints)],
+                    list(
+                        range(number_of_constraints + number_of_scalar_constraints + 1)
+                    ),
+                    [mosek.boundkey.fx for _ in range(number_of_constraints + 1)]
+                    + [mosek.boundkey.lo for _ in range(number_of_scalar_constraints)],
+                    [1.0]
+                    + [
+                        0.0
+                        for _ in range(
+                            number_of_constraints + number_of_scalar_constraints
+                        )
+                    ],
+                    [1]
+                    + [0 for _ in range(number_of_constraints)]
+                    + [float("inf") for _ in range(number_of_scalar_constraints)],  # type: ignore
                 )
 
                 # Optimize

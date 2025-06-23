@@ -25,11 +25,11 @@ Notre bibliothèque vise à :
 
 ## Notre Équipe
 
-Alain: maxcut  
-Mathis: polynômes complexes et non commutatifs  
-Nazar: tests et intégration continue  
-Thomas: SOS decomposition  
-Yann: organisation technique  
+Alain: maxcut
+Mathis: polynômes complexes et non commutatifs
+Nazar: tests et intégration continue
+Thomas: SOS decomposition
+Yann: organisation technique
 
 ## Organisation du Travail
 
@@ -74,6 +74,5 @@ Cas d'optimisation des polynomes commutatifs et réel
 
 ## Applications et Impact
 
-Notre bibliothèque pourra être utilisée en informatique quantique et en théorie de l'information quantique, principalement pour la résolution de problèmes d'optimisation dans ces domaines. 
+Notre bibliothèque pourra être utilisée en informatique quantique et en théorie de l'information quantique, principalement pour la résolution de problèmes d'optimisation dans ces domaines.
 La bibliothèque `ncpol2sdpa` est actuellement utilisée par des chercheurs dans ces domaines.
-
