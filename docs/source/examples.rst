@@ -11,7 +11,7 @@ This example shows how to solve a Max-Cut problem using ncpol3sdpa.
    # Example code for Max-Cut will be provided here
 
 Example 2: Quantum Correlation
------------------------------
+------------------------------
 
 This example shows how to compute quantum correlations.
 
