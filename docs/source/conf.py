@@ -7,11 +7,12 @@
 import os
 import sys
 
-
+# Configure paths and do imports
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 import generate_docs
-sys.path.insert(0, os.path.abspath('../../'))
-sys.path.insert(0, os.path.abspath('../../src/'))
+
+sys.path.insert(0, os.path.abspath("../../"))
+sys.path.insert(0, os.path.abspath("../../src/"))
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -30,23 +31,23 @@ extensions = [
     "sphinx.ext.napoleon",  # Support for Google/NumPy style docstrings
     "sphinx.ext.viewcode",  # Link documentation to source code
     "sphinx.ext.intersphinx",  # Link to other documentation
-    "sphinx.ext.mathjax",   # For math notation
+    "sphinx.ext.mathjax",  # For math notation
 ]
 
 # Configure autodoc
 autodoc_default_options = {
-    'members': True,
-    'undoc-members': True,
-    'show-inheritance': True,
+    "members": True,
+    "undoc-members": True,
+    "show-inheritance": True,
 }
 
 # Generate API documentation automatically
 autosummary_generate = True
-autodoc_member_order = 'bysource'
+autodoc_member_order = "bysource"
 
 # Create a directory for autosummary generated templates
-if not os.path.exists(os.path.join(os.path.dirname(__file__), 'generated')):
-    os.makedirs(os.path.join(os.path.dirname(__file__), 'generated'))
+if not os.path.exists(os.path.join(os.path.dirname(__file__), "generated")):
+    os.makedirs(os.path.join(os.path.dirname(__file__), "generated"))
 
 templates_path = ["_templates"]
 exclude_patterns = [
@@ -54,13 +55,25 @@ exclude_patterns = [
 ]
 
 # Mock imports that might cause issues during documentation building
-autodoc_mock_imports = ["cvxpy", "mosek", "sympy", "numpy", "numpy.typing", "typing"]
+autodoc_mock_imports = [
+    "cvxpy",
+    "mosek",
+    "sympy",
+    "numpy",
+    "numpy.typing",
+    "typing",
+    "scipy",
+    "scipy.sparse",
+    "scipy._lib",
+    "scipy._lib._pep440",
+]
 
 # Intersphinx configuration
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None),
-    'numpy': ('https://numpy.org/doc/stable/', None),
-    'sympy': ('https://docs.sympy.org/latest/', None),
+    "python": ("https://docs.python.org/3", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "sympy": ("https://docs.sympy.org/latest/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
 }
 
 # -- Options for HTML output -------------------------------------------------
@@ -70,14 +83,14 @@ intersphinx_mapping = {
 
 html_theme = "sphinx_rtd_theme"
 html_theme_options = {
-    'navigation_depth': 4,
-    'collapse_navigation': False,
-    'sticky_navigation': True,
-    'includehidden': True,
-    'titles_only': False
+    "navigation_depth": 4,
+    "collapse_navigation": False,
+    "sticky_navigation": True,
+    "includehidden": True,
+    "titles_only": False,
 }
 
-html_static_path = ["_static"]
+# html_static_path = ["_static"]
 html_title = f"{project} {release} Documentation"
 html_show_sourcelink = True
 

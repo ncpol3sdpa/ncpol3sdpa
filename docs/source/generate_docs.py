@@ -8,6 +8,8 @@ import os
 
 
 def generate_RST_files() -> None:
+    print("Generating RST documentation files...")
+
     # Get the project root directory and docs source directory
     script_dir = os.path.dirname(os.path.abspath(__file__))
     output_dir = script_dir
@@ -22,7 +24,7 @@ def generate_RST_files() -> None:
         ("ncpol3sdpa.resolution.monomial", "Monomial"),
         ("ncpol3sdpa.resolution.rules", "Rules"),
         ("ncpol3sdpa.resolution.utils", "Utils"),
-        ("ncpol3sdpa.sdp_repr.eq_constraints", "EqConstraints"),
+        ("ncpol3sdpa.sdp_repr.eq_constraint", "EqConstraint"),
         ("ncpol3sdpa.sdp_repr.moment_matrix_SDP", "MomentMatrixSDP"),
         ("ncpol3sdpa.sdp_repr.problem_SDP", "ProblemSDP"),
         ("ncpol3sdpa.solvers.solver_registry", "SolverRegistry"),
