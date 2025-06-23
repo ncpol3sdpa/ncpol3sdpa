@@ -47,13 +47,14 @@ class CvxpySolver(Solver):
                 expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
             eq_constraints.append(cvxpy.Constant(0) == expression)
 
-        for constraint in problem.inequality_scalar_constraints:  # type: ignore
-            var_num, mat = constraint.constraints  # type: ignore
-            expression: cvxpy.Expression = cvxpy_dot_prod(  # type: ignore
-                mat,  # type: ignore
+        ineq_constraints: List[cvxpy.Constraint] = []
+        for constraint2 in problem.inequality_scalar_constraints:
+            var_num, mat = constraint2.constraints
+            expression2: cvxpy.Expression = cvxpy_dot_prod(
+                mat,
                 sdp_vars[var_num],
             )
-            eq_constraints.append(expression >= cvxpy.Constant(0))
+            ineq_constraints.append(expression2 >= cvxpy.Constant(0))
 
         # tr(A.T x G)
         objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
@@ -77,6 +78,7 @@ class CvxpySolver(Solver):
                 dual_objective_value=moment_structure_constraints[0].dual_value,
                 dual_PSD_variables=[c.dual_value for c in psd_constraints],
                 dual_eqC_variables=np.array([c.dual_value for c in eq_constraints]),
+                dual_ineqC_variables=np.array([c.dual_value for c in ineq_constraints]),
             )
         else:
             warnings.warn(

@@ -121,6 +121,12 @@ def compute_equality_constraints(
                 constraint.zero_polynomials[0], multiplier_monomials
             )
         )
+
+    for i in range(len(problem_algebra.local_inequality_constraints)):
+        multiplier_monomials = [(sympy.S.One, sympy.S.One)]
+        poly = problem_algebra.local_inequality_constraints[i]
+        res.append(SumOfMultiplesPolynomial(poly, multiplier_monomials))
+
     return res
 
 

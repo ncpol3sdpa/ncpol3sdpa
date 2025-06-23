@@ -27,9 +27,13 @@ class Solution_SDP(NamedTuple, Generic[T]):
     In the documentation, corresponds to ($\\bar Y^i$)"""
     dual_PSD_variables: List[NDArray[T]]
 
-    """value of the dual variables associated with the equality constraints on the between polynomials.
-    In the documentation, corresponds to ($\\nu_i$) and ($\\eta_i) """
+    """value of the dual variables associated with the equality constraints between polynomials.
+    In the documentation, corresponds to ($\\nu_i$)  """
     dual_eqC_variables: NDArray[np.float64]
+
+    """value of the dual variables associated with the local inequality constraints.
+    In the documentation, corresponds to ($\\eta_i) """
+    dual_ineqC_variables: NDArray[np.float64]
 
     # Note: The order in which the variables appear in, in each list should be the same as their order in
     # the Problem_SDP class. For example, the main moment matrix should be in self.primal_variables[0]

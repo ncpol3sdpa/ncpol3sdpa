@@ -96,9 +96,18 @@ def parse_mosek_solution(
 
     # The first y is the dual_objective, then come the equality constraints.
     dual_eqC_variables = np.zeros(n_eq_constrants, dtype=np.float64)
-
     task.getyslice(solution_type, 1, 1 + n_eq_constrants, dual_eqC_variables)
     dual_eqC_variables *= -1.0
+
+    n_scalar_ineq_constrains = len(problem.inequality_scalar_constraints)
+    dual_ineqC_variables = np.zeros(n_eq_constrants, dtype=np.float64)
+    task.getyslice(
+        solution_type,
+        1 + n_eq_constrants,
+        1 + n_eq_constrants + n_scalar_ineq_constrains,
+        dual_ineqC_variables,
+    )
+    dual_ineqC_variables *= -1.0
 
     return Solution_SDP(
         primal_objective_value=primal_objective_value,
@@ -106,6 +115,7 @@ def parse_mosek_solution(
         dual_objective_value=dual_objective_value,
         dual_PSD_variables=dual_PSD_variables,
         dual_eqC_variables=dual_eqC_variables,
+        dual_ineqC_variables=dual_ineqC_variables,
     )
 
 
