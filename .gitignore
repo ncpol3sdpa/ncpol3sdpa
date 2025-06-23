@@ -1,6 +1,6 @@
 
 **/.vscode
-**/.DS_Store
+**/*.DS_Store
 **/__pycache__
 .mypy_cache
 .tach
@@ -10,7 +10,8 @@ public
 
 docs/build/doctrees
 docs/build/html
-docs/htmlcov
+docs/build/htmlcov
+docs/build/latex
 
 # **/*.dot
 # **/*.pdf

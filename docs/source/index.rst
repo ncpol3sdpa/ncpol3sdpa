@@ -32,6 +32,18 @@ Installation
 
 You will need a mosek license to use the solver. You can get a free academic license from the `Mosek website <https://www.mosek.com/>`_.
 
+1. Clone the repository:
+
+.. code-block:: bash
+
+   git clone https://github.com/yourusername/python-poly-opt.git
+   cd python-poly-opt
+
+2. Install the package:
+
+.. code-block:: bash
+
+   pip install -e .
 
 Basic Usage
 -----------
@@ -56,6 +68,7 @@ Here's a simple example of how to use the package:
    result = problem.solve(relaxation_order=2)
    print(f"Optimal value: {result}")
 
+For more examples, see the :doc:`examples` section.
 
 Documentation
 -------------
@@ -64,6 +77,5 @@ Documentation
    :maxdepth: 2
 
    Home <self>
-   quickstart
    examples
    api
