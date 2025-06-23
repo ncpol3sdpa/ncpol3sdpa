@@ -12,6 +12,17 @@ BUILDDIR      = build
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
+# Runs a script to visualize test coverage for the project
+coverage:
+	./docs/scripts/visualize_coverage.py
+
+# Generates dependency graphs for the ncpol3sdpa module using pydeps
+graph:
+	uv run pydeps src/ncpol3sdpa
+
+test:
+	echo "test Make file"
+
 .PHONY: help Makefile
 
 # Catch-all target: route all unknown targets to Sphinx using the new

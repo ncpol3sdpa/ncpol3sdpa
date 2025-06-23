@@ -4,7 +4,9 @@
 **/__pycache__
 venv
 .hypothesis
-public
+# public
+
+docs/htmlcov
 
 docs/build/doctrees
 docs/build/html

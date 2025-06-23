@@ -18,7 +18,9 @@ dependencies = [
     "pyvis>=0.3.2",
     "networkx>=3.4.2",
     "hypothesis>=6.131.18",
-    "scipy>=1.15.2",
+    "pytest-benchmark>=5.1.0",
+    "pytest-cov>=6.1.1",
+    "coverage>=7.8.2",
 ]
 
 [dependency-groups]
