@@ -502,6 +502,7 @@ New planning for the folowing 2 weeks:
 - (Alain)
   * debug mob farm optimization
   * add repr for mob farm & constraints
+- (Yann) Work on coverage documentation to create a coverage html report
 
 # 24/06/2025
 - (Thomas)
