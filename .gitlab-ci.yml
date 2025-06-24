@@ -114,71 +114,15 @@ ruff-check-src:
 #     - echo "Ruff complete"
 #   allow_failure: true
 
-# # Add a new job for code quality metrics
-# code-quality:
-#   stage: test
-#   image: docker:stable
-#   variables:
-#     DOCKER_DRIVER: overlay2
-#   allow_failure: true
-#   services:
-#     - docker:dind
-#   # Skip the global before_script that requires uv
-#   before_script: []
-#   script:
-#     - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock pipelinecomponents/codeclimate analyze -f json > gl-code-quality-report.json || echo "CodeClimate analysis failed"
-#     - if [ -f "gl-code-quality-report.json" ]; then echo "Report file generated successfully"; else echo "Report file not found" && touch gl-code-quality-report.json && echo "[]" > gl-code-quality-report.json; fi
-#     - ls -la gl-code-quality-report.json
-#     - pwd
-#     # Make sure the file has the right permissions and is in the expected location
-#     - chmod 644 gl-code-quality-report.json
-#   artifacts:
-#     paths:
-#       - gl-code-quality-report.json
-#     reports:
-#       codequality: gl-code-quality-report.json
-#     expire_in: 2 week
-
-# # Add a new job for performance metrics
-# performance:
-#   stage: test
-#   script:
-#     - uv pip install --system pytest-benchmark pytest-benchmark-k pandas matplotlib
-#     - uv run pytest testing/performance --benchmark-json=benchmark.json
-#     # Generate HTML report
-#     - uv run python -c "
-#         import json;
-#         from pytest_benchmark_k import render;
-#         with open('benchmark.json') as f:
-#             data = json.load(f);
-#         render.render_html(data, 'benchmark_report.html')"
-#     # Create directory structure for benchmarks if it doesn't exist
-#     - mkdir -p testing/benchmarks
-#     # Track performance history if running on main branch
-#     - |
-#       if [[ "$CI_COMMIT_BRANCH" == "main" ]]; then
-#         echo "Updating performance history database..."
-#         uv run python testing/benchmarks/track_performance.py benchmark.json testing/benchmarks/benchmark_history.db testing/benchmarks/charts
-#         mkdir -p public/performance
-#         cp -r testing/benchmarks/charts/* public/performance/ || echo "No charts yet"
-#       fi
-#   artifacts:
-#     paths:
-#       - benchmark.json
-#       - benchmark_report.html
-#       - testing/benchmarks/benchmark_history.db
-#       - testing/benchmarks/charts
-#     reports:
-#       performance: benchmark.json
-#     expire_in: 2 week
-#   # only:
-#   #   - main  # Only run on main branch to avoid noise
-
 ###########################################
 #                                         #
 #               Deploy Stage              #
 #                                         #
 ###########################################
+
+# The deploy job has been disabled for now.
+# Gitlab Pages is unavailable for us,
+# so we used GitHub Actions for deployment instead.
 
 # pages:
 #   stage: deploy
@@ -192,11 +136,3 @@ ruff-check-src:
 #   # - uv run sphinx-build -b html docs/source public
 #   # - uv run sphinx-build -b latex docs/source docs/build/latex
 #   # - make -C docs/build/latex
-
-#   # - echo "Copying performance reports..."
-#   # - mkdir -p public/performance
-#   # - if [ -f "benchmark_report.html" ]; then cp benchmark_report.html public/performance/; fi
-#   # - if [ -f "benchmark.json" ]; then cp benchmark.json public/performance/; fi
-#   artifacts:
-#     paths:
-#     - public

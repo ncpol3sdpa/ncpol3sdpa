@@ -46,8 +46,8 @@ autosummary_generate = True
 autodoc_member_order = "bysource"
 
 # Create a directory for autosummary generated templates
-if not os.path.exists(os.path.join(os.path.dirname(__file__), "generated")):
-    os.makedirs(os.path.join(os.path.dirname(__file__), "generated"))
+if not os.path.exists(os.path.join(os.path.dirname(__file__), "api")):
+    os.makedirs(os.path.join(os.path.dirname(__file__), "api"))
 
 templates_path = ["_templates"]
 exclude_patterns = [
