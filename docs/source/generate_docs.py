@@ -35,6 +35,14 @@ def generate_RST_files() -> None:
         ("ncpol3sdpa.sos", "SOS"),
     ]
 
+    # Clean up existing API directory
+    api_dir = os.path.join(output_dir, "api")
+    if os.path.exists(api_dir):
+        print(f"Removing existing API directory: {api_dir}")
+        for root, dirs, files in os.walk(api_dir, topdown=False):
+            for name in files:
+                os.remove(os.path.join(root, name))
+
     # Generate RST files for core modules
     generated_modules = []
     for module_name, file_name in core_modules:

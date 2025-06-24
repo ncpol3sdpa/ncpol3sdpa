@@ -13,6 +13,7 @@ docs/build/html
 docs/build/htmlcov
 docs/build/latex
 docs/source/api
+docs/graphs/.*
 
 # **/*.dot
 # **/*.pdf
