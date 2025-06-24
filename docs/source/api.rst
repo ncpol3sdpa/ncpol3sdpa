@@ -6,21 +6,21 @@ This section provides detailed API documentation for ncpol3sdpa.
 .. toctree::
    :maxdepth: 2
 
-   generated/Problem
-   generated/AlgebraToSDP
-   generated/Funs
-   generated/SOS
+   api/Problem
+   api/AlgebraToSDP
+   api/Funs
+   api/SOS
 
-   generated/Algebra
-   generated/Constraints
-   generated/CreateAlgebra
-   generated/Monomial
-   generated/Rules
-   generated/Utils
+   api/Algebra
+   api/Constraints
+   api/CreateAlgebra
+   api/Monomial
+   api/Rules
+   api/Utils
 
-   generated/EqConstraint
-   generated/ProblemSDP
-   generated/MomentMatrixSDP
+   api/EqConstraint
+   api/ProblemSDP
+   api/MomentMatrixSDP
 
-   generated/Solver
-   generated/SolverRegistry
+   api/Solver
+   api/SolverRegistry
