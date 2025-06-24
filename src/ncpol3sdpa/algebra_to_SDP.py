@@ -23,10 +23,14 @@ def algebra_to_SDP_add_equality_constraint(
         )
 
         # constraint matrix
-        a_0 = algebra.polynomial_to_matrix(implied_constraint)
-
+        a_0 = algebra.polynomial_to_matrix(implied_constraint, real_part=True)
         constraint = EqConstraint([(problem.MOMENT_MATRIX_VAR_NUM, a_0)])
         problem.constraints.append(constraint)
+
+        if not algebra.is_real:
+            b_0 = algebra.polynomial_to_matrix(implied_constraint, real_part=False)
+            constraint = EqConstraint([(problem.MOMENT_MATRIX_VAR_NUM, b_0)])
+            problem.constraints.append(constraint)
 
 
 def add_inequality_sub_constraint(
