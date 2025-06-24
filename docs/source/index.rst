@@ -80,3 +80,4 @@ Documentation
    Home <self>
    examples
    api
+   bibliography

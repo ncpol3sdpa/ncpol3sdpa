@@ -1,17 +1,24 @@
-Convex Optimization de Boyd et Vandenberghe.
-livre de reference sur optimisation convexe
+.. _bibliography:
 
-Semidefinite programming relaxations for quantum correlations de Armin Tavakoli, Alejandro Pozas-Kerstjens, Peter Brown, and Mateus Araújo.
-article de synthèse sur l'optimisation polynomiales, relaxation SDP, et ses application dans le domaine quantique.
+Bibliography
+============
 
+* **Convex Optimization** by Boyd et Vandenberghe.
+  
+  Reference book on convex optimization.
 
-Approximation algorithms for Max-3-Cut and other problems via complex semidefinite programming
-de Michel X. Goemans a,1 and David P. Williamson
-article qui décrit la representation de SDP complexe comme un SDP réel
+* **Semidefinite programming relaxations for quantum correlations** by Armin Tavakoli, Alejandro Pozas-Kerstjens, Peter Brown, and Mateus Araújo.
+  
+  Overview paper on polynomial optimization, SDP relaxation, and its applications in quantum physics.
 
-MOSEK Optimizer API for Python, Release 11.0.23, MOSEK ApS
-Docs de MOSEK
+* **Approximation algorithms for Max-3-Cut and other problems via complex semidefinite programming** by Michel X. Goemans and David P. Williamson.
+  
+  Paper describing the representation of complex SDP as real SDP.
 
-MORE EFFICIENT REFORMULATION OF COMPLEX SDP AS REAL SDP
-JIE WANG
-le titre dit tout
+* **MOSEK Optimizer API for Python, Release 11.0.23** by MOSEK ApS.
+  
+  MOSEK documentation.
+
+* **MORE EFFICIENT REFORMULATION OF COMPLEX SDP AS REAL SDP** by JIE WANG.
+  
+Paper presenting more efficient methods to reformulate complex semidefinite programs as real semidefinite programs.
