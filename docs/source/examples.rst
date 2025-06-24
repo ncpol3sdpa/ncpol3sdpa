@@ -33,7 +33,7 @@ Here's a simple example to get you started:
 
 
 Example 2: Non-commutative Complex Polynomial Optimization
---------------------------------------------------
+----------------------------------------------------------
 
 This example demonstrates how to solve a non-commutative complex polynomial optimization problem.
 
@@ -77,7 +77,7 @@ This example shows how to perform Sum-of-Squares (SOS) optimization.
    # Example code for Sum-of-Squares (SOS) optimization will be provided here
 
 
-For more information about SOS, see the :doc:`api/sos` section.
+For more information about SOS, see the :doc:`api/SOS` section.
 
 Example X: Ground State Preparation
 -----------------------------------

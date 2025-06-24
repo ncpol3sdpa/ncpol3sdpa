@@ -39,7 +39,7 @@ def generate_RST_files() -> None:
     generated_modules = []
     for module_name, file_name in core_modules:
         print(f"Generating documentation for {module_name}")
-        file_path = os.path.join(output_dir, f"generated/{file_name}.rst")
+        file_path = os.path.join(output_dir, f"api/{file_name}.rst")
 
         display_name = file_name.replace("_", " ").title()
         content = f"""{display_name}
