@@ -131,7 +131,7 @@ class AlgebraSDP:
         moment_matrix_size = len(self.moment_matrix)
         a_0: lil_matrix = lil_matrix(
             (moment_matrix_size, moment_matrix_size), dtype=self.DTYPE
-        )  # type: ignore
+        )
 
         for monomial, coef in sp.expand(poly).as_coefficients_dict().items():
             if sp.I in coef.atoms():  # type: ignore
