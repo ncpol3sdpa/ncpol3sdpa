@@ -502,7 +502,12 @@ New planning for the folowing 2 weeks:
 - (Alain)
   * debug mob farm optimization
   * add repr for mob farm & constraints
-- (Yann) Work on coverage documentation to create a coverage html report
+- (Yann) 
+  * Work on coverage documentation to create a coverage html report
+  * Merge [MR 32 — GitLab Page configuration](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/32)
+  * Merge [MR 34 — Documentation Improvements](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/34)
+  * Merge [MR 35 — Documentation and Configuration Improvements](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/35)
+  * Merge [MR 36 - Github action](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/36)
 
 # 24/06/2025
 - (Thomas)
