@@ -6,6 +6,14 @@ Example 1: Simple Polynomial Optimization
 
 Here's a simple example to get you started:
 
+.. math::
+
+   \begin{align}
+   \max_{x, y} &\quad\quad x \cdot y\\
+   \text{s.t.} &\quad\quad x^2 - x &= 0 \\
+               &\quad\quad -y^2 + y + 0.25 &\geq 0
+   \end{align}
+
 .. code-block:: python
 
    from ncpol3sdpa import Problem, Constraint, AvailableSolvers
@@ -96,3 +104,8 @@ This example demonstrates how to implement the BB84 quantum key distribution pro
 .. code-block:: python
 
    # Example code for BB84 will be provided here
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents
