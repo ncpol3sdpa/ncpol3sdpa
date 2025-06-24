@@ -7,7 +7,12 @@ Hermitian matrix -> lowest eigenvalue
 $H = \bold 1 \otimes \bold 1 - X \otimes X - Y \otimes Y - Z \otimes Z$
 
 With $X, Y, Z$ being the Pauli matrices.
-We have $\sigma_i^2 = \bold 1$ and $[\sigma_i, \sigma_j] = 2i \epsilon_{ijk} \sigma_k$.
+We have $\sigma_i^2 = \bold 1$  
+and $[\sigma_i, \sigma_j] = 2i \epsilon_{ijk} \sigma_k$.
+
+With $\epsilon_{ijk} = \epsilon_{jki} = \epsilon_{kij} = 1$,  
+$\epsilon_{jik} = -\epsilon_{ijk}$, $\epsilon_{kji} = -\epsilon_{ijk}$,  
+and $\epsilon_{ijk} = 0$ if any two indices are equal.
 
 > This is only an example in the case of dimension 2.
 
