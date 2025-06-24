@@ -36,7 +36,7 @@ class ProblemSDP:
     def __str__(self) -> str:
         s = (
             "SDP translation:\n"
-            + f".objective: \n {self.objective.toarray()}\n"  # type: ignore
+            + f".objective: \n {self.objective.toarray()}\n"
             + f".variable_sizes: {self.variable_sizes}\n"
             + "Moment matrix: \n"
             + f"    .moment_matrix.size: \n {self.moment_matrix.size}\n"
@@ -46,7 +46,7 @@ class ProblemSDP:
 
         for c in self.constraints:
             for c2 in c.constraints:
-                s = s + str(c2[0]) + "\n" + str(c2[1].toarray()) + "\n"  # type: ignore
+                s = s + str(c2[0]) + "\n" + str(c2[1].toarray()) + "\n"
             s = s + "\n"
 
         return s
@@ -96,7 +96,7 @@ class ProblemSDP:
         i, j = coef1
         assert coef1 != coef2
         a = lil_matrix(
-            (self.variable_sizes[var_number], self.variable_sizes[var_number])  # type: ignore
+            (self.variable_sizes[var_number], self.variable_sizes[var_number])
         )
         a[i, j] += 0.5
         a[j, i] += 0.5
@@ -211,8 +211,8 @@ def complexMatrix_to_realMatrix(
     X_re = X.real.multiply(0.5)
     X_im = X.imag.multiply(0.5)
 
-    upper = hstack([X_re, -X_im])  # type: ignore
-    lower = hstack([X_im, X_re])  # type: ignore
+    upper = hstack([X_re, -X_im])
+    lower = hstack([X_im, X_re])
 
-    result = vstack([upper, lower]).tolil()  # type: ignore
-    return result  # type: ignore
+    result = vstack([upper, lower]).tolil()
+    return result
