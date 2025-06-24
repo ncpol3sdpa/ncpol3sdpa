@@ -126,8 +126,8 @@ class AlgebraSDP:
         """Returns a hermitian A matrix such that poly = Tr(A.T @ G) where G is the moment matrix. In other
         words express poly as a linear combination of the coefficients of G.
         Requires that all monomials of poly exist within the moment matrix:
-            poly.free_vars included in algebra.moment_matrix free_vars
-            and deg(poly) <= 2*algebra.relaxation_order"""
+        poly.free_vars included in algebra.moment_matrix free_vars
+        and deg(poly) <= 2*algebra.relaxation_order"""
         moment_matrix_size = len(self.moment_matrix)
         a_0: lil_matrix = lil_matrix(
             (moment_matrix_size, moment_matrix_size), dtype=self.DTYPE

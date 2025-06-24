@@ -76,16 +76,16 @@ pytest:
     # Options:
     # - `--durations=10`: Shows the 10 slowest test executions
     # - `--cov=src`: Measures code coverage for the 'src' directory
-    # - `--cov-report=xml:docs/tools-source/coverage.xml`: Generates an XML coverage report at the specified path
-    - uv run pytest --durations=10 --cov=src --cov-report=xml:docs/tools-source/coverage.xml
+    # - `--cov-report=xml:docs/source/coverage.xml`: Generates an XML coverage report at the specified path
+    - uv run pytest --durations=10 --cov=src --cov-report=xml:docs/source/coverage.xml
   coverage: '/TOTAL.*\s+(\d+%)$/'
   artifacts:
     reports:
       coverage_report:
         coverage_format: cobertura
-        path: docs/tools-source/coverage.xml
+        path: docs/source/coverage.xml
     paths:
-      - docs/tools-source/coverage.xml
+      - docs/source/coverage.xml
     expire_in: 1 week
 
 # This job checks the code for type errors using Mypy
@@ -180,17 +180,23 @@ ruff-check-src:
 #                                         #
 ###########################################
 
-pages:
-  stage: deploy
-  script:
-  - echo "Deploying documentation..."
-  - uv run sphinx-build --version
-  - uv run sphinx-build -b html docs/source public
+# pages:
+#   stage: deploy
+#   script:
+#   - echo "Deploying documentation..."
+#   - uv run sphinx-build --version
+#   - cd docs
+#   - make html
+#   - yes "" | make latexpdf
+#   - cd ..
+#   # - uv run sphinx-build -b html docs/source public
+#   # - uv run sphinx-build -b latex docs/source docs/build/latex
+#   # - make -C docs/build/latex
 
-  # - echo "Copying performance reports..."
-  # - mkdir -p public/performance
-  # - if [ -f "benchmark_report.html" ]; then cp benchmark_report.html public/performance/; fi
-  # - if [ -f "benchmark.json" ]; then cp benchmark.json public/performance/; fi
-  artifacts:
-    paths:
-    - public
+#   # - echo "Copying performance reports..."
+#   # - mkdir -p public/performance
+#   # - if [ -f "benchmark_report.html" ]; then cp benchmark_report.html public/performance/; fi
+#   # - if [ -f "benchmark.json" ]; then cp benchmark.json public/performance/; fi
+#   artifacts:
+#     paths:
+#     - public
