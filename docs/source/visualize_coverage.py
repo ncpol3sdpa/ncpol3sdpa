@@ -317,7 +317,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Convert XML coverage report to HTML")
     parser.add_argument(
         "--xml-file",
-        default="docs/tools-source/coverage.xml",
+        default="docs/source/coverage.xml",
         help="Path to the coverage XML file",
     )
     parser.add_argument(
