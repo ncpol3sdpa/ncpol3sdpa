@@ -172,7 +172,6 @@ class Problem:
 
         # 2. Translate to SDP
         problemSDP = algebra_to_SDP(algebraSDP)
-        print(problemSDP)
         if not self.is_real:
             problemSDP = problemSDP.complex_to_realSDP()
 
