@@ -62,7 +62,8 @@ Here's a simple example of how to use the package:
    problem = Problem(objective)
 
    # Add constraints
-   problem.add_constraint(Constraint.InequalityConstraint(1 - x**2 - y**2))
+   c = Constraint.InequalityConstraint(1 - x**2 - y**2)
+   problem.add_constraint(c)
 
    # Solve the problem
    result = problem.solve(relaxation_order=2)
