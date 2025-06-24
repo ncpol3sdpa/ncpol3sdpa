@@ -96,3 +96,8 @@ This example demonstrates how to implement the BB84 quantum key distribution pro
 .. code-block:: python
 
    # Example code for BB84 will be provided here
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents

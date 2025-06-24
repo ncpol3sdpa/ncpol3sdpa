@@ -80,4 +80,5 @@ Documentation
    Home <self>
    examples
    api
+   organization
    bibliography
