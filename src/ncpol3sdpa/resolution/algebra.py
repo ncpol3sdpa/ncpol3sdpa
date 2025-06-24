@@ -122,9 +122,10 @@ class AlgebraSDP:
 
     # Public methods
 
-    def polynomial_to_matrix(self, poly: sp.Expr) -> lil_matrix:
-        """Returns a hermitian A matrix such that poly = Tr(A.T @ G) where G is the moment matrix. In other
-        words express poly as a linear combination of the coefficients of G.
+    def polynomial_to_matrix(self, poly: sp.Expr, real_part: bool = True) -> lil_matrix:
+        """Returns a hermitian A matrix such that poly = Tr(A.T @ G) where G is the moment matrix.
+        In the complex case, Re(tr(ρ poly)) = Tr(A.T @ G), or Im(tr(ρ poly)) = Tr(A.T @ G) depending on real_part parameter
+        In other words express poly as a linear combination of the coefficients of G.
         Requires that all monomials of poly exist within the moment matrix:
         poly.free_vars included in algebra.moment_matrix free_vars
         and deg(poly) <= 2*algebra.relaxation_order"""
@@ -150,8 +151,14 @@ class AlgebraSDP:
             monomial_x, monomial_y = self.monomial_to_positions[monomial][0]
 
             # The matrices must be hermitian
-            a_0[monomial_x, monomial_y] += 0.5 * coef
-            a_0[monomial_y, monomial_x] += 0.5 * coef.conjugate()
+            if real_part:
+                # real part constraint
+                a_0[monomial_x, monomial_y] += 0.5 * coef
+                a_0[monomial_y, monomial_x] += 0.5 * coef.conjugate()
+            else:
+                # imaginary part constraint
+                a_0[monomial_x, monomial_y] += -0.5j * coef
+                a_0[monomial_y, monomial_x] += 0.5j * coef.conjugate()
 
         return a_0
 
