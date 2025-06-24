@@ -70,4 +70,4 @@ verbose = 2
 cluster = true
 no_show = true
 # max_cluster_size=1000
-exclude = "sympy cvxpy numpy mosek"
+exclude = "sympy cvxpy numpy mosek scipy"
