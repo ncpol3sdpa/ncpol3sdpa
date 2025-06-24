@@ -36,11 +36,9 @@ def symmetric_matrices(
 ) -> lil_matrix:
     if not isinstance(size, int):
         size = draw(size)
-    m: lil_matrix = draw(
-        lil_matrix(hyp_np.arrays(np.float64, shape=(size, size), elements=elements))  # type: ignore
-    )
+    m = draw(hyp_np.arrays(np.float64, shape=(size, size), elements=elements))
 
-    return m + m.T  # type: ignore
+    return lil_matrix(m + m.T)
 
 
 A = TypeVar("A")

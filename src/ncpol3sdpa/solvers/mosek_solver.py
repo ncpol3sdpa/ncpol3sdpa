@@ -100,7 +100,7 @@ def parse_mosek_solution(
     dual_eqC_variables *= -1.0
 
     n_scalar_ineq_constrains = len(problem.inequality_scalar_constraints)
-    dual_ineqC_variables = np.zeros(n_eq_constrants, dtype=np.float64)
+    dual_ineqC_variables = np.zeros(n_scalar_ineq_constrains, dtype=np.float64)
     task.getyslice(
         solution_type,
         1 + n_eq_constrants,

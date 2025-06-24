@@ -10,6 +10,7 @@ import sys
 # Configure paths and do imports
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 import generate_docs
+import visualize_coverage
 
 sys.path.insert(0, os.path.abspath("../../"))
 sys.path.insert(0, os.path.abspath("../../src/"))
@@ -46,8 +47,8 @@ autosummary_generate = True
 autodoc_member_order = "bysource"
 
 # Create a directory for autosummary generated templates
-if not os.path.exists(os.path.join(os.path.dirname(__file__), "generated")):
-    os.makedirs(os.path.join(os.path.dirname(__file__), "generated"))
+if not os.path.exists(os.path.join(os.path.dirname(__file__), "api")):
+    os.makedirs(os.path.join(os.path.dirname(__file__), "api"))
 
 templates_path = ["_templates"]
 exclude_patterns = [
@@ -96,10 +97,21 @@ html_show_sourcelink = True
 # -- Options for LaTeX output ------------------------------------------------
 
 
-# -- Script to generate the documentation -----------------------------------
+# -- Script to generate the documentation ------------------------------------
 
 print("Generating documentation...")
 
 # Run the generate_docs.py script to create RST files for modules
 generate_docs.generate_RST_files()
 print(".rst files generated")
+
+# -- Script to generate the coverage report ----------------------------------
+
+GENERATE_COVERAGE_REPORT = False
+
+if GENERATE_COVERAGE_REPORT:
+    print("Generating coverage report...")
+    xml_path = "coverage.xml"
+    build_path = "build/coverage_html_report"
+    visualize_coverage.generate_html_report(xml_path, build_path)
+    print("Coverage report generated at build/coverage_html_report")
