@@ -37,6 +37,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install Graphviz
+        run: sudo apt-get install -y graphviz
+
       - name: Install uv
         run: pip install uv
 
@@ -48,7 +51,7 @@ jobs:
       - name: Generate documentation
         run: |
           uv run sphinx-build -b html docs/source public
-          uv run pydeps src/ncpol3sdpa && cp docs/graphs/pydeps_graph.svg public/img/pydeps_graph.svg
+          uv run pydeps src/ncpol3sdpa && mkdir -p public/img && cp docs/graphs/pydeps_graph.svg public/img/pydeps_graph.svg
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
