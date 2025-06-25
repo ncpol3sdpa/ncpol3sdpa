@@ -316,13 +316,13 @@ def generate_package_page(package: ET.Element, output_file: str, pkg_name: str) 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Convert XML coverage report to HTML")
     parser.add_argument(
-        # "--xml-file", default="coverage.xml", 
-        "--xml-file", default="docs/tools-source/coverage.xml", 
-        help="Path to the coverage XML file"
+        "--xml-file",
+        default="docs/source/coverage.xml",
+        help="Path to the coverage XML file",
     )
     parser.add_argument(
         "--output-dir",
-        default="docs/htmlcov",
+        default="docs/build/htmlcov",
         help="Directory to output HTML coverage report",
     )
     parser.add_argument(

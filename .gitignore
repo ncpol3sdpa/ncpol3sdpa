@@ -1,16 +1,19 @@
 
 **/.vscode
-**/.DS_Store
+**/*.DS_Store
 **/__pycache__
 .mypy_cache
 .tach
 .venv
 .hypothesis
-# public
+public
 
 docs/build/doctrees
 docs/build/html
-docs/htmlcov
+docs/build/htmlcov
+docs/build/latex
+docs/source/api
+docs/graphs/.*
 
 # **/*.dot
 # **/*.pdf
