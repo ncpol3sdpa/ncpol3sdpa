@@ -77,7 +77,7 @@ class CvxpySolver(Solver):
 
 
     @classmethod
-    def _cvxpy_dot_prod(cls, c: lil_matrix, x: "cvxpy.Expression") -> "cvxpy.Expression": # type: ignore
+    def _cvxpy_dot_prod(cls, c: lil_matrix, x: Any) -> Any:
         """Compute the dot product of a sparse matrix and a cvxpy expression."""
 
         import cvxpy
