@@ -523,7 +523,6 @@ dependencies = [
     { name = "cvxpy" },
     { name = "dot" },
     { name = "hypothesis" },
-    { name = "mosek" },
     { name = "mypy" },
     { name = "networkx" },
     { name = "pre-commit" },
@@ -539,9 +538,17 @@ dependencies = [
     { name = "tach" },
 ]
 
+[package.optional-dependencies]
+mosek = [
+    { name = "mosek" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "pytest" },
+]
+mosek = [
+    { name = "mosek" },
 ]
 
 [package.metadata]
@@ -550,7 +557,7 @@ requires-dist = [
     { name = "cvxpy", specifier = ">=1.6.3" },
     { name = "dot", specifier = ">=0.3.0" },
     { name = "hypothesis", specifier = ">=6.131.18" },
-    { name = "mosek", specifier = ">=11.0.13" },
+    { name = "mosek", marker = "extra == 'mosek'", specifier = ">=11.0.0" },
     { name = "mypy", specifier = ">=1.15.0" },
     { name = "networkx", specifier = ">=3.4.2" },
     { name = "pre-commit", specifier = ">=4.2.0" },
@@ -565,9 +572,11 @@ requires-dist = [
     { name = "sympy", specifier = ">=1.13.3" },
     { name = "tach", specifier = ">=0.28.4" },
 ]
+provides-extras = ["mosek"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = ">=8.3.4" }]
+mosek = [{ name = "mosek", specifier = ">=11.0.0,<12.0.0" }]
 
 [[package]]
 name = "networkx"
