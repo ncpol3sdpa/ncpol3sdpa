@@ -54,7 +54,7 @@ uv-install:
       - $UV_CACHE_DIR
   script:
     - uv cache prune --ci
-    - uv pip install --system -e .
+    - uv pip install --system -e ".[mosek]"
 
 
 ###########################################
