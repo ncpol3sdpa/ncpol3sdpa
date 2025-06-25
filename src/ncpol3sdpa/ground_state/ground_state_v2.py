@@ -181,4 +181,7 @@ class Ground_state2:
                     )
                     p.add_constraint(c)
 
-        return -p.solve(2)
+        solution = p.solve(2)
+        if solution is None:
+            raise ValueError("No solution found for the ground state problem.")
+        return -solution
