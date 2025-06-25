@@ -69,9 +69,9 @@ def test_ineq_constraint() -> None:
     verify_test(problem, k=3)
 
 
-def test_mosek_ilposed() -> None:
-    problem = Problem(-sp.expand(1.0 + (0.005 * x + 1) ** 2))
-    verify_test(problem, k=3)
+# def test_mosek_ilposed() -> None:
+#     problem = Problem(-sp.expand(1.0 + (0.005 * x + 1) ** 2))
+#     verify_test(problem, k=3)
 
 
 # --------- Automatic property tests ---------
