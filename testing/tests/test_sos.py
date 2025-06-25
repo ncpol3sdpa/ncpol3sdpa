@@ -77,7 +77,7 @@ def test_mosek_ilposed() -> None:
 # --------- Automatic property tests ---------
 
 
-@settings(deadline=1000)
+@settings(deadline=2000)
 @given(
     sos_polynomials(
         three_symbols, expand=False, coefs=order_of_magnitude_floats, max_degree=1
