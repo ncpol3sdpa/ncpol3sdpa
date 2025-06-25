@@ -77,7 +77,7 @@ def test_ineq_constraint() -> None:
 # --------- Automatic property tests ---------
 
 
-@settings(deadline=2000, max_examples=10)
+@settings(max_examples=10)
 @given(
     sos_polynomials(
         three_symbols, expand=False, coefs=order_of_magnitude_floats, max_degree=1
