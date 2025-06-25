@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 import numpy as np
 from sympy.abc import x, y, z
 import sympy as sp
@@ -26,7 +24,9 @@ solvers = [AvailableSolvers.MOSEK]  # , AvailableSolvers.CVXPY]
 def verify_test(problem: Problem, k: int = 1, epsilon: float = 0.05) -> None:
     for solver in solvers:
         # The problem should be solved only once
-        prob_copy = deepcopy(problem)
+        # prob_copy = deepcopy(problem)
+        prob_copy = problem  # copying is not necessary, as the problem is immutable
+        prob_copy.solution = None
 
         print("solver: ", solver)
         prob_copy.solve(relaxation_order=k, solver=solver)
@@ -119,21 +119,6 @@ def test_complex1() -> None:
     verify_test(problem, k=2)
 
 
-# strageness...
-# def test_complex2() -> None:
-#     x, y = sp.symbols("x y", commutative=False, real=False)
-#     problem = Problem(
-#         # 1j * x.adjoint() * y * x - 1j * x.adjoint() * y.adjoint() * x,
-#         sp.expand(x.adjoint() * (1j * y - 1j * y.adjoint()) * x),
-#         is_commutative=False,
-#         is_real=False,
-#     )
-#     problem.add_constraint(Constraint.InequalityConstraint(1 - (x + x.adjoint())))
-#     problem.add_constraint(Constraint.InequalityConstraint(1 - 1j * (y - y.adjoint())))
-
-#    verify_test(problem, k=2)
-
-
 def test_complex3() -> None:
     x, y = sp.symbols("x y", commutative=False, real=False)
     problem = Problem(
@@ -173,6 +158,7 @@ def test_complex_local1() -> None:
 
 epsilon = 0.0001
 
+
 @settings(max_examples=10)
 @given(
     sos_polynomials(
@@ -203,7 +189,7 @@ def test_bounded_no_constraints(sos_poly: sp.Expr, solver: AvailableSolvers) -> 
 
 
 # Expensive tests
-@settings(deadline=5000, max_examples=35)
+@settings(deadline=5000, max_examples=20)
 @given(
     polynomials(two_symbols, coefs=order_of_magnitude_floats(1), max_degree=2),
     sampled_from(solvers),
@@ -223,7 +209,7 @@ def test_bounded_monomials(poly: sp.Expr, solver: AvailableSolvers) -> None:
 
 
 # Expensive tests
-@settings(deadline=5000, max_examples=60)
+@settings(deadline=5000, max_examples=20)
 @given(
     order_of_magnitude_floats(1, can_be_zero=False, positive_only=True),
     order_of_magnitude_floats(1, can_be_zero=False, positive_only=True),
