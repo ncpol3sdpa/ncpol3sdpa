@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Tuple, Dict, Callable, NamedTuple
+from typing import List, Tuple, Dict, Callable, NamedTuple, Generator
 
 import sympy as sp
 from scipy.sparse import lil_matrix
@@ -18,7 +18,7 @@ class ConstraintGroup(NamedTuple):
 
     Invariants:
        * monomial_multiples[0] = (1,1)
-       * for all i, zero_polynomials[i] = monomial_multiples[i][0] * zero_polynomials[0] * monomial_multiples[i][1]
+       * for all i, zero_polynomials[i] = adjoint(monomial_multiples[i][0]) * zero_polynomials[0] * monomial_multiples[i][1]
     """
 
     """Zero polynomials have substitution rules already applied to them"""
@@ -230,6 +230,11 @@ class AlgebraSDP:
         else:
             self.monomial_to_positions[monomial] = [(i, j)]
 
+    def _cross_product_monomials(self) -> Generator[Tuple[sp.Expr, sp.Expr]]:
+        for n in self.monomials:
+            for m in self.monomials:
+                yield (n, m)
+
     def expand_eq_constraint(self, constraint: sp.Expr) -> ConstraintGroup:
         """
         Generate a list of polynomials {p = m * constraint | m : monomial & degre(p) <= 2*k }
@@ -240,21 +245,23 @@ class AlgebraSDP:
 
         # Map and filter are lazy
         # so intermediate lists are not created
-        ruled: map[Tuple[sp.Expr, sp.Expr]] = map(
-            lambda monomial: (
-                monomial,
-                self.substitution_rules.apply_to_polynomial(monomial * constraint),
+        monomial_pairs = self._cross_product_monomials()
+        ruled: map[Tuple[sp.Expr, sp.Expr, sp.Expr]] = map(
+            lambda monomials: (
+                monomials[0],
+                self.substitution_rules.apply_to_polynomial(
+                    self.get_adjoint(monomials[0]) * constraint * monomials[1]
+                ),
+                monomials[1],
             ),
-            self.monomials,
+            monomial_pairs,
         )
-        ruled_filtered: filter[Tuple[sp.Expr, sp.Expr]] = filter(
+        ruled_filtered: filter[Tuple[sp.Expr, sp.Expr, sp.Expr]] = filter(
             lambda t: self.is_expressible_as_moment_coeff(t[1]),
             ruled,
         )
-        mon, z_poly = list(zip(*ruled_filtered))
-        monomial_multipliers: map[Tuple[sp.Expr, sp.Expr]] = map(
-            lambda m: (sp.S.One, m), mon
-        )
+        z_poly = map(lambda t: t[1], ruled_filtered)
+        monomial_multipliers = map(lambda t: (t[0], t[2]), ruled_filtered)
 
         return ConstraintGroup(
             zero_polynomials=list(z_poly), monomial_multiples=list(monomial_multipliers)

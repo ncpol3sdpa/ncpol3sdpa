@@ -35,6 +35,7 @@ def solution_real_to_complex(
         primal_objective_value=solution.primal_objective_value,
         dual_objective_value=solution.dual_objective_value,
         dual_eqC_variables=solution.dual_eqC_variables,
+        dual_ineqC_variables=solution.dual_ineqC_variables,
         dual_PSD_variables=[
             matrix_real_to_complex(Z) for Z in solution.dual_PSD_variables
         ],

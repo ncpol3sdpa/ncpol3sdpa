@@ -1,4 +1,5 @@
 from typing import List, NamedTuple, Tuple, Any
+from collections.abc import Callable
 
 import sympy
 import numpy
@@ -32,24 +33,40 @@ class SumOfMultiplesPolynomial(NamedTuple):
     """Terms that multiply the polynomial"""
     multiplier_monomials: List[Tuple[sympy.Expr, sympy.Expr]]
 
+    """Function that maps a monomial to it's adjoint (in particular in the complex case)"""
+    adjoint_func: Callable[[sympy.Expr], sympy.Expr]
+
     def to_expression(self) -> sympy.Expr:
+        # fmt: off
         terms: map[sympy.Expr] = map(
-            lambda multiplier: multiplier[0] * self.poly * multiplier[1],
+            lambda multiplier:
+            self.adjoint_func(multiplier[0])
+            * self.poly
+            * multiplier[1],
             self.multiplier_monomials,
         )
+        # fmt: on
         return sympy_sum(terms)
 
 
 class SumOfSquares:
     """Data structure representing a sum of squares polynomials"""
 
-    def __init__(self, squares: List[sympy.Expr], middle_term: sympy.Expr) -> None:
+    def __init__(
+        self,
+        squares: List[sympy.Expr],
+        middle_term: sympy.Expr,
+        adjoint_func: Callable[[sympy.Expr], sympy.Expr],
+    ) -> None:
         """The polynomial represented is the sum of the squares of the elements of `squares`"""
         self.squares = squares
         self.middle_term = middle_term
+        self.adjoint_func = adjoint_func
 
     def to_expression(self) -> sympy.Expr:
-        return sympy_sum([self.middle_term * term**2 for term in self.squares])
+        return sympy_sum(
+            [self.adjoint_func(term) * self.middle_term * term for term in self.squares]
+        )
 
 
 class SosDecomposition:
@@ -112,20 +129,42 @@ def compute_equality_constraints(
     for constraint in problem_algebra.equality_constraints:
         multiplier_monomials: List[Tuple[sympy.Expr, sympy.Expr]] = []
         for monomials in constraint.monomial_multiples:
-            nu_i = solution.dual_eqC_variables[y_idx]
             a, b = monomials
-            multiplier_monomials.append((nu_i * a, b))
+            nu_i = solution.dual_eqC_variables[y_idx]
             y_idx += 1
+            if not problem_algebra.is_real:
+                nu_i2 = solution.dual_eqC_variables[y_idx]
+                y_idx += 1
+                multiplier_monomials.append(
+                    (-0.5j * nu_i2 * problem_algebra.get_adjoint(a), b)
+                )
+                multiplier_monomials.append(
+                    (+0.5j * nu_i2 * problem_algebra.get_adjoint(b), a)
+                )
+
+            multiplier_monomials.append(
+                (0.5 * nu_i * problem_algebra.get_adjoint(a), b)
+            )
+            multiplier_monomials.append(
+                (0.5 * nu_i * problem_algebra.get_adjoint(b), a)
+            )
+
         res.append(
             SumOfMultiplesPolynomial(
-                constraint.zero_polynomials[0], multiplier_monomials
+                constraint.zero_polynomials[0],
+                multiplier_monomials,
+                adjoint_func=problem_algebra.get_adjoint,
             )
         )
 
     for i in range(len(problem_algebra.local_inequality_constraints)):
         multiplier_monomials = [(sympy.S.One, sympy.S.One)]
         poly = problem_algebra.local_inequality_constraints[i]
-        res.append(SumOfMultiplesPolynomial(poly, multiplier_monomials))
+        res.append(
+            SumOfMultiplesPolynomial(
+                poly, multiplier_monomials, adjoint_func=problem_algebra.get_adjoint
+            )
+        )
 
     return res
 
@@ -160,7 +199,7 @@ def compute_sos_decomposition(
         for i in range(len(P)):
             for j in range(len(P)):
                 Pw[i] += P[i][j] * w[j]
-        return SumOfSquares(Pw, middle)
+        return SumOfSquares(Pw, middle, adjoint_func=problem_algebra.get_adjoint)
 
     w = problem_algebra.monomials  # list of monomials used in the polynomial
 
