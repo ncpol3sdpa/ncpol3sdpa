@@ -4,7 +4,7 @@ from sympy import S
 from sympy import Expr, symbols, I
 from sympy.physics.quantum import HermitianOperator, Operator
 
-from ncpol3sdpa import Constraint, Problem, AvailableSolvers
+from ncpol3sdpa import Constraint, Problem, SolverFactory
 
 
 def test_1() -> None:
@@ -17,9 +17,9 @@ def test_1() -> None:
     assert abs(p.solve(1) - 2.4142) <= 0.01
     assert abs(p.solve(2) - 2.4142) <= 0.01
     assert abs(p.solve(3) - 2.4142) <= 0.01
-    assert abs(p.solve(1, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
-    assert abs(p.solve(2, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
-    assert abs(p.solve(3, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve(1, SolverFactory.create_solver("mosek")) - 2.4142) <= 0.01
+    assert abs(p.solve(2, SolverFactory.create_solver("mosek")) - 2.4142) <= 0.01
+    assert abs(p.solve(3, SolverFactory.create_solver("mosek")) - 2.4142) <= 0.01
 
 
 def test_2() -> None:
@@ -32,9 +32,9 @@ def test_2() -> None:
     assert abs(p.solve(1)) <= 1
     assert abs(p.solve(2)) <= 0.1
     assert abs(p.solve(3)) <= 0.001
-    assert abs(p.solve(1, AvailableSolvers.MOSEK)) <= 1
-    assert abs(p.solve(2, AvailableSolvers.MOSEK)) <= 0.1
-    assert abs(p.solve(3, AvailableSolvers.MOSEK)) <= 0.001
+    assert abs(p.solve(1, SolverFactory.create_solver("mosek"))) <= 1
+    assert abs(p.solve(2, SolverFactory.create_solver("mosek"))) <= 0.1
+    assert abs(p.solve(3, SolverFactory.create_solver("mosek"))) <= 0.001
 
 
 def test_3() -> None:
@@ -43,9 +43,9 @@ def test_3() -> None:
     assert abs(p.solve(1) - 10) <= 1
     assert abs(p.solve(2) - 10) <= 0.1
     assert abs(p.solve(3) - 10) <= 0.001
-    assert abs(p.solve(1, AvailableSolvers.MOSEK) - 10) <= 1
-    assert abs(p.solve(2, AvailableSolvers.MOSEK) - 10) <= 0.1
-    assert abs(p.solve(3, AvailableSolvers.MOSEK) - 10) <= 0.001
+    assert abs(p.solve(1, SolverFactory.create_solver("mosek")) - 10) <= 1
+    assert abs(p.solve(2, SolverFactory.create_solver("mosek")) - 10) <= 0.1
+    assert abs(p.solve(3, SolverFactory.create_solver("mosek")) - 10) <= 0.001
 
 
 def test_4() -> None:
@@ -54,8 +54,8 @@ def test_4() -> None:
     p.add_rule(y, 10 * S.One)
     assert abs(p.solve(2) - 20) <= 0.1
     assert abs(p.solve(3) - 20) <= 0.001
-    assert abs(p.solve(2, AvailableSolvers.MOSEK) - 20) <= 0.1
-    assert abs(p.solve(3, AvailableSolvers.MOSEK) - 20) <= 0.001
+    assert abs(p.solve(2, SolverFactory.create_solver("mosek")) - 20) <= 0.1
+    assert abs(p.solve(3, SolverFactory.create_solver("mosek")) - 20) <= 0.001
 
 
 def test_1_sub() -> None:
@@ -67,9 +67,9 @@ def test_1_sub() -> None:
     assert abs(p.solve(1) - 2.4142) <= 0.01
     assert abs(p.solve(2) - 2.4142) <= 0.01
     assert abs(p.solve(3) - 2.4142) <= 0.01
-    assert abs(p.solve(1, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
-    assert abs(p.solve(2, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
-    assert abs(p.solve(3, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve(1, SolverFactory.create_solver("mosek")) - 2.4142) <= 0.01
+    assert abs(p.solve(2, SolverFactory.create_solver("mosek")) - 2.4142) <= 0.01
+    assert abs(p.solve(3, SolverFactory.create_solver("mosek")) - 2.4142) <= 0.01
 
 
 def test_1_nc() -> None:
@@ -172,4 +172,4 @@ def test_trace_inequality() -> None:
     c1 = Constraint.LocalInequalityConstraint(X1 * X2 + X2 * X1)
     p.add_constraint(c1)
     assert abs(p.solve(2)) <= 0.1
-    assert abs(p.solve(3, AvailableSolvers.MOSEK)) <= 0.0001
+    assert abs(p.solve(3, SolverFactory.create_solver("mosek"))) <= 0.0001
