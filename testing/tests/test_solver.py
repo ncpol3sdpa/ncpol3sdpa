@@ -2,7 +2,7 @@ from scipy.sparse import lil_matrix
 import numpy as np
 # from typing import List
 
-from ncpol3sdpa import Problem, SolverList, SolverFactory
+from ncpol3sdpa import SolverList, SolverFactory
 from ncpol3sdpa.sdp_repr import MomentMatrixSDP, ProblemSDP
 
 
