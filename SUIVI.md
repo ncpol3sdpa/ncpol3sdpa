@@ -520,6 +520,9 @@ New planning for the folowing 2 weeks:
   * Refactor complex SDP to real SDP conversion
   * add scipy type stubs
   * Add articles to the bibliography at Yann's request
+- (Yann)
+  * Merge [MR 38 - Refactor & clean documentation](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/38)
+  * Merge [MR 39 - Improve docstrings](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/39)
 
 # 25/06/2025
 - (Nazar)
