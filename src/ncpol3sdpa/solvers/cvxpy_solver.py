@@ -19,7 +19,9 @@ def cvxpy_dot_prod(c: lil_matrix, x: "cvxpy.Expression") -> "cvxpy.Expression":
 
 class CvxpySolver(Solver):
     @classmethod
-    def solve(self, problem: ProblemSDP) -> float:
+    def solve(self, problem: ProblemSDP, verbose: bool = False) -> float:
+        if verbose:
+            print("Initialization of the solver ")
         """Solve the SDP problem with cvxpy"""
         # Variables
         sdp_vars = [
@@ -55,6 +57,8 @@ class CvxpySolver(Solver):
 
         prob = cvxpy.Problem(objective, constraints)
         # Returns the optimal value.
-        prob.solve()
+        if verbose:
+            print("Solved with CVXPY")
+        prob.solve(verbose=verbose)
         assert isinstance(prob.value, float)
         return prob.value

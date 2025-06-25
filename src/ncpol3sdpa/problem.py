@@ -141,6 +141,7 @@ class Problem:
         self,
         relaxation_order: int = 1,
         solver: Solver | AvailableSolvers = AvailableSolvers.CVXPY,
+        verbose: bool = False,
     ) -> float:
         """Solve the polynomial optimization problem using SDP relaxation.
 
@@ -160,7 +161,10 @@ class Problem:
 
         normal_constraints = self.constraints
 
-        # 1. Build algebraic formulation
+        # 1. Build algebric formulation
+        if verbose:
+            print("Build the algebric formulation")
+
         all_constraint_polynomials = [c.polynomial for c in self.constraints] + [
             self.objective
         ]
@@ -179,15 +183,20 @@ class Problem:
         algebraSDP.add_constraints(normal_constraints)
 
         # 2. Translate to SDP
+        if verbose:
+            print("Translate to SDP")
+
         problemSDP = algebra_to_SDP(algebraSDP)
         if not self.is_real:
             problemSDP = problemSDP.complex_to_realSDP()
 
         # 3. Solve the SDP
+        if verbose:
+            print("Solve the SDP")
         if isinstance(solver, AvailableSolvers):
-            return SolverRegistry.get_solver(solver).solve(problemSDP)
+            return SolverRegistry.get_solver(solver).solve(problemSDP, verbose=verbose)
         elif isinstance(solver, Solver):
-            return solver.solve(problemSDP)
+            return solver.solve(problemSDP, verbose=verbose)
         else:
             raise TypeError(
                 f"Solver must be of type {Solver} or {AvailableSolvers}, not {type(solver)}"

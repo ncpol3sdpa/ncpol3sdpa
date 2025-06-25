@@ -15,7 +15,7 @@ class Solver:
     """
 
     @classmethod
-    def solve(cls, problem: ProblemSDP) -> float:
+    def solve(cls, problem: ProblemSDP, verbose: bool = False) -> float:
         """Solve the semidefinite programming (SDP) problem.
 
         Parameters

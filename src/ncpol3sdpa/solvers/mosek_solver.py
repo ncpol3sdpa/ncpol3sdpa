@@ -43,9 +43,8 @@ def get_sparse_vecs(
 
 class MosekSolver(Solver):
     @classmethod
-    def solve(self, problem: ProblemSDP) -> float:
+    def solve(self, problem: ProblemSDP, verbose: bool = False) -> float:
         """Solve the SDP problem with mosek"""
-
         # Convert constraints inside the moment matrix to primal form constraints
         problem.compile_moment_matrix_to_constraints()
 
@@ -53,6 +52,8 @@ class MosekSolver(Solver):
         def stream_printer(text: str) -> None:
             # sys.stdout.write(text)
             # sys.stdout.flush()
+            if verbose:
+                print(text)
             pass
 
         def mosek_task() -> float:
@@ -169,9 +170,8 @@ class MosekSolver(Solver):
                     mosek.solsta.prim_infeas_cer,
                 ]:
                     warnings.warn("Infeasible")
-                    return float(
-                        "inf"
-                    )  # Primal or dual infeasibility certificate found
+                    return float("inf")
+                # Primal or dual infeasibility certificate found
                 elif solution_status == mosek.solsta.unknown:
                     warnings.warn("Unknown solution status")
                     return float("nan")  # Unknown solution status
