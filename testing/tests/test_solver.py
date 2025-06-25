@@ -2,7 +2,7 @@ from scipy.sparse import lil_matrix
 import numpy as np
 # from typing import List
 
-from ncpol3sdpa import SolverFactory
+from ncpol3sdpa import SolverList, SolverFactory
 from ncpol3sdpa.sdp_repr import MomentMatrixSDP, ProblemSDP
 
 
@@ -11,7 +11,7 @@ def test_1x1() -> None:
     moment_matrix = MomentMatrixSDP(1, [[(0, 0)]])
     p = ProblemSDP(moment_matrix, lil_matrix([[-1]]))
 
-    result = SolverFactory.create_solver("cvxpy").solve(p)
+    result = SolverFactory.create_solver(SolverList.CVXPY).solve(p)
     assert np.abs(-1 - result) <= 0.001  # result should be -1
 
 
@@ -24,5 +24,5 @@ def test_2x2() -> None:
     # maximize -2a, optimal for a = -1, and objective = 2
     # x2 -2axy + y2 >= 0, because SDP
 
-    result = SolverFactory.create_solver("cvxpy").solve(p)
+    result = SolverFactory.create_solver(SolverList.CVXPY).solve(p)
     assert np.abs(2 - result) <= 0.001  # result should be 2

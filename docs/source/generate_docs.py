@@ -27,7 +27,7 @@ def generate_RST_files() -> None:
         # ("ncpol3sdpa.sdp_repr.eq_constraint", "EqConstraint"),
         # ("ncpol3sdpa.sdp_repr.moment_matrix_SDP", "MomentMatrixSDP"),
         # ("ncpol3sdpa.sdp_repr.problem_SDP", "ProblemSDP"),
-        ("ncpol3sdpa.solvers.solver_registry", "SolverRegistry"),
+        ("ncpol3sdpa.solvers.solver_factory", "SolverFactory"),
         ("ncpol3sdpa.solvers.solver", "Solver"),
         # ("ncpol3sdpa.algebra_to_SDP", "AlgebraToSDP"),
         # ("ncpol3sdpa.funs", "Funs"),

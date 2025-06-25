@@ -17,18 +17,8 @@ class Solver(ABC):
     and dependencies. Refer to specific solver documentation for details.
     """
 
-    def __init__(self, **kwargs: Dict[str, Any]) -> None:
-        """Initialize the solver with optional configuration parameters.
-
-        Parameters
-        ----------
-        **kwargs : Any
-            Additional keyword arguments for configuration.
-        """
-        self.config = kwargs
-
     @abstractmethod
-    def solve(cls, problem: ProblemSDP) -> float:
+    def solve(cls, problem: ProblemSDP, **config: Dict[str, Any]) -> float:
         """Solve the semidefinite programming (SDP) problem.
 
         Parameters

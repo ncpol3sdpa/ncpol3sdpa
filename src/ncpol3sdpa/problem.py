@@ -1,10 +1,9 @@
-from typing import List
+from typing import List, Dict, Any
 
 from sympy import Expr
 import sympy
 
-# from ncpol3sdpa.solvers import AvailableSolvers, Solver, SolverRegistry
-from ncpol3sdpa.solvers import Solver, SolverFactory
+from ncpol3sdpa.solvers import Solver, SolverList, SolverFactory
 from ncpol3sdpa.resolution import (
     Rules,
     RulesCommutative,
@@ -141,7 +140,8 @@ class Problem:
     def solve(
         self,
         relaxation_order: int = 1,
-        solver: Solver = SolverFactory.create_solver("cvxpy")
+        solver: Solver | SolverList = SolverList.CVXPY,
+        **solver_config: Dict[str, Any],
     ) -> float:
         """Solve the polynomial optimization problem using SDP relaxation.
 
@@ -149,6 +149,9 @@ class Problem:
             relaxation_order (int): The order of relaxation in Lasserre hierarchy.
                 Higher orders give better approximations but increase complexity.
                 Defaults to 1.
+            solver (Solver | SolverList): The solver to use for solving the SDP.
+            solver_config (Dict[str, Any]): Additional configuration parameters for the solver.
+                Like `verbose`, which controls the verbosity of the solver output.
 
         Returns:
             float: An upper bound on the optimal value of the objective function
@@ -161,7 +164,10 @@ class Problem:
 
         normal_constraints = self.constraints
 
-        # 1. Build algebraic formulation
+        # 1. Build algebric formulation
+        # if verbose:
+        #     print("Build the algebric formulation")
+
         all_constraint_polynomials = [c.polynomial for c in self.constraints] + [
             self.objective
         ]
@@ -180,13 +186,18 @@ class Problem:
         algebraSDP.add_constraints(normal_constraints)
 
         # 2. Translate to SDP
+        # if verbose:
+        #     print("Translate to SDP")
+
         problemSDP = algebra_to_SDP(algebraSDP)
         if not self.is_real:
             problemSDP = problemSDP.complex_to_realSDP()
 
         # 3. Solve the SDP
-        if isinstance(solver, Solver):
-            return solver.solve(problemSDP)
+        if isinstance(solver, SolverList):
+            return SolverFactory.create_solver(solver).solve(problemSDP, **solver_config)
+        elif isinstance(solver, Solver):
+            return solver.solve(problemSDP, **solver_config)
         else:
             raise TypeError(
                 f"Solver must be of type {Solver}, not {type(solver)}"

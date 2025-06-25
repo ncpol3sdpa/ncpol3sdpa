@@ -11,17 +11,6 @@ from .solver import Solver
 class CvxpySolver(Solver):
     """Solver for SDP problems using CVXPY."""
 
-    def __init__(self, **kwargs: Dict[str, Any]) -> None:
-        """
-        Initialize the CvxpySolver instance.
-        
-        Parameters
-        ----------
-        **kwargs: Additional keyword arguments for configuration.
-        """
-        
-        super().__init__(**kwargs)
-
     def is_available(self) -> bool:
         """Check if cvxpy is available"""
         try:
@@ -30,7 +19,7 @@ class CvxpySolver(Solver):
         except ImportError:
             return False
 
-    def solve(self, problem: ProblemSDP) -> float:
+    def solve(self, problem: ProblemSDP, **config: Dict[str, Any]) -> float:
         """Solve the SDP problem with cvxpy"""
 
         import cvxpy
@@ -65,13 +54,11 @@ class CvxpySolver(Solver):
             )
             constraints.append(expression >= cvxpy.Constant(0))
 
-        # tr(A.T x G)
         objective = cvxpy.Maximize(CvxpySolver._cvxpy_dot_prod(problem.objective, G))
 
         prob = cvxpy.Problem(objective, constraints)
 
-        # Returns the optimal value.
-        prob.solve()
+        prob.solve(verbose=config.get("verbose", False))
         assert isinstance(prob.value, float)
         return prob.value
 

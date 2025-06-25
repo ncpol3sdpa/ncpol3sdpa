@@ -1,7 +1,4 @@
 from .solver import Solver
-# from .solver_registry import AvailableSolvers, SolverRegistry
-from .solver_factory import SolverFactory
+from .solver_factory import SolverList, SolverFactory
 
-# __all__ = ["AvailableSolvers", "Solver", "SolverRegistry"]
-
-__all__ = ["Solver", "SolverFactory"]
+__all__ = ["Solver", "SolverList", "SolverFactory"]
