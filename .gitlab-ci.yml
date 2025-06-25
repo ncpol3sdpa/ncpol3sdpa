@@ -73,10 +73,10 @@ pytest:
     - uv add mosek
     # Executes pytest to run all test files in the project.
     # Options:
-    # - `--durations=10`: Shows the 10 slowest test executions
+    # - `--durations=20`: Shows the 20 slowest test executions
     # - `--cov=src`: Measures code coverage for the 'src' directory
     # - `--cov-report=xml:docs/source/coverage.xml`: Generates an XML coverage report at the specified path
-    - uv run pytest --durations=10 --cov=src --cov-report=xml:docs/source/coverage.xml
+    - uv run pytest --durations=20 --cov=src --cov-report=xml:docs/source/coverage.xml
   coverage: '/TOTAL.*\s+(\d+%)$/'
   artifacts:
     reports:

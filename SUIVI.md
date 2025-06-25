@@ -482,7 +482,7 @@ New planning for the folowing 2 weeks:
 
 # 22/06/2025
 - (Mathis)
-  * Change MR [33] to implement the requested changes 
+  * Change MR [33] to implement the requested changes
 
 # 23/06/2025
 - (Thomas)
@@ -493,14 +493,14 @@ New planning for the folowing 2 weeks:
   * Add randomized propery tests for SOS
   * Add type paramerter for Solution_SDP (real/complex)
   * Begin work to convert a real solution of an SDP to a complex solution
-- (Mathis & Nazar) Discover big problem in the way the complex SDP was handled. Argumets + tring to understand the problem. 
+- (Mathis & Nazar) Discover big problem in the way the complex SDP was handled. Argumets + tring to understand the problem.
 
 # 24/06/2025
 - (Thomas)
-  * Finish the implementation of the ground-state problem and a set of examples to test 
-- (Mathis & Nazar) 
-  * Big problem solved. Previusly, constraints in the complex SDP between maricies would only constrain the real parts of the coeffients, so additional constraints were required for the imaginary part. 
-- (Nazar) 
+  * Finish the implementation of the ground-state problem and a set of examples to test
+- (Mathis & Nazar)
+  * Big problem solved. Previusly, constraints in the complex SDP between maricies would only constrain the real parts of the coeffients, so additional constraints were required for the imaginary part.
+- (Nazar)
   * Implement support local inequality constraint in SOS
   * Implement with the help of Mathis the solution to the previeus problem, by adding additional constraints on the imaginary parts.
   * Refactor complex SDP to real SDP conversion
@@ -508,9 +508,6 @@ New planning for the folowing 2 weeks:
   * Add articles to the bibliography at Yann's request
 
 # 25/06/2025
-- (Nazar) 
+- (Nazar)
   * Add tests and fix bugs for the complex non commutative case for the SOS decomposition
   * Tweek misconfigured tests that was causing failure because of long execution time and floating point precision errors.
-
-
-

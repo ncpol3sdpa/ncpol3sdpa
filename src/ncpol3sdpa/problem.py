@@ -13,6 +13,8 @@ from ncpol3sdpa.resolution import (
     generate_needed_symbols,
 )
 from ncpol3sdpa.algebra_to_SDP import algebra_to_SDP
+from ncpol3sdpa.sdp_solution import Solution_SDP
+from ncpol3sdpa.sos import SosDecomposition, compute_sos_decomposition
 
 
 class Problem:
@@ -65,6 +67,7 @@ class Problem:
         self.objective: Expr = obj
         self.is_commutative = is_commutative
         self.is_real = is_real
+        self.solution: Solution_SDP[Any] | None = None
         self.rules: Rules = (
             RulesCommutative() if is_commutative else RulesNoncommutative()
         )
@@ -142,7 +145,7 @@ class Problem:
         relaxation_order: int = 1,
         solver: Solver | SolverList = SolverList.CVXPY,
         **solver_config: Dict[str, Any],
-    ) -> float:
+    ) -> float | None:
         """Solve the polynomial optimization problem using SDP relaxation.
 
         Args:
@@ -173,7 +176,7 @@ class Problem:
         ]
         needed_symbols = self.commute_variables
         if not self.commute_variables:
-            needed_symbols = [generate_needed_symbols(all_constraint_polynomials)]
+            needed_symbols = [generate_needed_symbols(all_constraint_polynomials)]  # type: ignore
 
         algebraSDP = create_AlgebraSDP(
             needed_symbols,  # type: ignore
@@ -183,7 +186,9 @@ class Problem:
             self.is_commutative,
             self.is_real,
         )
+        self.algebraSDP = algebraSDP
         algebraSDP.add_constraints(normal_constraints)
+        # print(algebraSDP.moment_matrix)
 
         # 2. Translate to SDP
         # if verbose:
@@ -192,13 +197,42 @@ class Problem:
         problemSDP = algebra_to_SDP(algebraSDP)
         if not self.is_real:
             problemSDP = problemSDP.complex_to_realSDP()
+        # print(problemSDP)
 
         # 3. Solve the SDP
         if isinstance(solver, SolverList):
-            return SolverFactory.create_solver(solver).solve(problemSDP, **solver_config)
-        elif isinstance(solver, Solver):
-            return solver.solve(problemSDP, **solver_config)
+            solver = SolverFactory.create_solver(solver)
+        if isinstance(solver, Solver):
+            self.solution = solver.solve(problemSDP, **solver_config)
         else:
-            raise TypeError(
-                f"Solver must be of type {Solver}, not {type(solver)}"
-            )
+            raise TypeError(f"Solver must be of type {Solver}, not {type(solver)}")
+
+        if self.solution is not None:
+            return self.solution.primal_objective_value
+        else:
+            return None
+
+    def solve_unchecked(
+        self,
+        relaxation_order: int = 1,
+        solver: Solver | SolverList = SolverList.CVXPY,
+    ) -> float:
+        """Same as solve, but will raise an exception if there was no solution"""
+        res = self.solve(relaxation_order=relaxation_order, solver=solver)
+        assert res is not None, "Could not find solution"
+        return res
+
+    def compute_sos_decomposition(self) -> SosDecomposition:
+        """Returns a Sum of Squares decomposition of (lambda - objective).
+        See sos_duality_derivation.md for more details.
+        The `solve` function must be called and must have succeeded before this function can be called.
+        """
+
+        assert self.solution is not None, (
+            "Solution not found: `solve` was not called or a solution was not found"
+        )
+        assert self.algebraSDP is not None, "Could not find algebra"
+
+        return compute_sos_decomposition(
+            solution=self.solution, problem_algebra=self.algebraSDP
+        )

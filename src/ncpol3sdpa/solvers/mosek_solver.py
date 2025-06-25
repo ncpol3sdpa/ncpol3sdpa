@@ -1,8 +1,13 @@
+from numpy.typing import NDArray
+
+import mosek
 from typing import Tuple, List, Dict, Any
 import warnings
+import numpy as np
 
 from scipy.sparse import lil_matrix
 
+from ncpol3sdpa.sdp_solution import Solution_SDP
 from ncpol3sdpa.sdp_repr import ProblemSDP
 from .solver import Solver
 
@@ -40,6 +45,81 @@ def get_sparse_vecs(
     return values, rows, cols
 
 
+def de_linearize(vec: NDArray[np.float64]) -> NDArray[np.float64]:
+    """Converts a linearized, lower triangular symmetric matrix array used by mosek
+    to a conventional numpy matrix"""
+    matrix_size = int(np.sqrt(1 + 8 * len(vec)) - 1) // 2
+    if matrix_size * (matrix_size + 1) / 2 != len(vec):
+        raise ValueError("vec should be of dimension n(n+1)/2")
+
+    result = np.zeros((matrix_size, matrix_size), dtype=np.float64)
+    index = 0
+    for i in range(matrix_size):
+        for j in range(i, matrix_size):
+            value = vec[index]
+            result[i][j] = value
+            result[j][i] = value
+            index += 1
+    return result
+
+
+def parse_mosek_solution(
+    problem: ProblemSDP, task: mosek.Task, n_eq_constrants: int
+) -> Solution_SDP[np.float64]:
+    solution_type = mosek.soltype.itr
+    primal_objective_value = task.getprimalobj(solution_type)
+    dual_objective_value = task.getdualobj(solution_type)
+
+    # Sanity check: in our case, the  dual objective is <e0 | slc - suc> = <e0 | y> = y_0
+    # https://docs.mosek.com/latest/pythonapi/prob-def-semidef.html#index-11
+    dual_alt = (
+        task.getslcslice(solution_type, 0, 1)[0]
+        - task.getsucslice(solution_type, 0, 1)[0]
+    )
+    assert abs(dual_objective_value - dual_alt) <= 0.01
+
+    # pre-allocate the arrays to be filled in. They are stored as a list by mosek
+    primal_PSD_variables_lin = [
+        np.zeros(n * (n + 1) // 2, dtype=np.float64) for n in problem.variable_sizes
+    ]
+    dual_PSD_variables_lin = [
+        np.zeros(n * (n + 1) // 2, dtype=np.float64) for n in problem.variable_sizes
+    ]
+
+    for i in range(len(problem.variable_sizes)):
+        task.getbarxj(solution_type, i, primal_PSD_variables_lin[i])
+        task.getbarsj(solution_type, i, dual_PSD_variables_lin[i])
+
+    primal_PSD_variables = [de_linearize(var) for var in primal_PSD_variables_lin]
+    # despite what the MOSEK docs might suggest, barsj are negative semidefinite variables
+    dual_PSD_variables = [-de_linearize(var) for var in dual_PSD_variables_lin]
+
+    # The first y is the dual_objective, then come the equality constraints.
+    dual_eqC_variables = np.zeros(n_eq_constrants, dtype=np.float64)
+    task.getyslice(solution_type, 1, 1 + n_eq_constrants, dual_eqC_variables)
+    dual_eqC_variables *= -1.0
+
+    n_scalar_ineq_constrains = len(problem.inequality_scalar_constraints)
+    dual_ineqC_variables = np.zeros(n_scalar_ineq_constrains, dtype=np.float64)
+    task.getyslice(
+        solution_type,
+        1 + n_eq_constrants,
+        1 + n_eq_constrants + n_scalar_ineq_constrains,
+        dual_ineqC_variables,
+    )
+    dual_ineqC_variables *= -1.0
+
+    return Solution_SDP(
+        primal_objective_value=primal_objective_value,
+        primal_PSD_variables=primal_PSD_variables,
+        dual_objective_value=dual_objective_value,
+        dual_PSD_variables=dual_PSD_variables,
+        dual_eqC_variables=dual_eqC_variables,
+        dual_ineqC_variables=dual_ineqC_variables,
+        dtype=np.float64,
+    )
+
+
 class MosekSolver(Solver):
     """Solver for SDP problems using MOSEK."""
 
@@ -47,21 +127,32 @@ class MosekSolver(Solver):
         """Check if mosek is available"""
         try:
             import mosek  # noqa: F401
+
             return True
         except ImportError:
             return False
 
-    def solve(self, problem: ProblemSDP, **config: Dict[str, Any]) -> float:
+    def solve(
+        self, problem: ProblemSDP, **config: Dict[str, Any]
+    ) -> Solution_SDP[np.float64] | None:
         """Solve the SDP problem with mosek"""
-
         import mosek
+
+        # Gets the number of equ constraints to decode the solution
+        n_eq_constrants = len(problem.constraints)
 
         # Convert constraints inside the moment matrix to primal form constraints
         problem.compile_moment_matrix_to_constraints()
 
-        
-        try:
-            # Create a task object
+        # Define a stream printer to grab output from MOSEK
+        def stream_printer(text: str) -> None:
+            # sys.stdout.write(text)
+            # sys.stdout.flush()
+            # print(text, end="")
+            pass  # TODO implement getting the dual solution out of mosek
+
+        def mosek_task() -> Solution_SDP[np.float64] | None:
+            # Create a task object and attach log stream printer
             with mosek.Task() as task:
                 task.set_Stream(mosek.streamtype.log, lambda text: None)
 
@@ -164,31 +255,28 @@ class MosekSolver(Solver):
 
                 # Handle solution cases
                 if solution_status == mosek.solsta.optimal:
-                    optimal = task.getprimalobj(
-                        mosek.soltype.itr
-                    )  # Return optimal value
-                    assert isinstance(optimal, float)
-                    return optimal
+                    return parse_mosek_solution(problem, task, n_eq_constrants)
 
                 elif solution_status in [
                     mosek.solsta.dual_infeas_cer,
                     mosek.solsta.prim_infeas_cer,
                 ]:
                     warnings.warn("Infeasible")
-                    return float("inf")
-                
-                # Primal or dual infeasibility certificate found
+                    return None  # Primal or dual infeasibility certificate found
                 elif solution_status == mosek.solsta.unknown:
                     warnings.warn("Unknown solution status")
-                    return float("nan")  # Unknown solution status
 
+                    # Unknown solution status
+                    # In the mosek docs: `Solution status UNKNOWN does not necessarily mean that the solution is completely useless`
+                    return parse_mosek_solution(problem, task, n_eq_constrants)
                 else:
+                    # task.analyzeproblem(mosek.streamtype.msg)
+                    # task.solutionsummary(mosek.streamtype.msg)
                     warnings.warn(f"Other solution status: {solution_status}")
-                    return float("nan")
+                    return None  # Other solution status
 
+        try:
+            return mosek_task()
         except mosek.MosekException as e:
             warnings.warn(f"Mosek exception : {e}")
-            return float("nan")
-        except Exception as e:
-            warnings.warn(f"Other exception : {e}")
-            return float("nan")
+            return None

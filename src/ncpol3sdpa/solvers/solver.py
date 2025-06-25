@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict
 
 from ncpol3sdpa.sdp_repr import ProblemSDP
+from ncpol3sdpa.sdp_solution import Solution_SDP
 
 
 class Solver(ABC):
@@ -18,7 +19,9 @@ class Solver(ABC):
     """
 
     @abstractmethod
-    def solve(cls, problem: ProblemSDP, **config: Dict[str, Any]) -> float:
+    def solve(
+        cls, problem: ProblemSDP, **config: Dict[str, Any]
+    ) -> Solution_SDP[Any] | None:
         """Solve the semidefinite programming (SDP) problem.
 
         Parameters
@@ -33,7 +36,6 @@ class Solver(ABC):
         """
 
         raise NotImplementedError("Subclasses must implement this method.")
-        
 
     @abstractmethod
     def is_available(cls) -> bool:

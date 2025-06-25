@@ -19,7 +19,7 @@ def constraint_gen(
     floats: SearchStrategy[float] = float_strategies.small_normal_floats,
 ) -> SearchStrategy[Constraint]:
     polynomials_custom = builds(
-        polynomials.polynomials_commutative,
+        polynomials.polynomials,
         symbols=just(symbols),
         degree=integers(min_value=0, max_value=max_degree),
         coefs=floats,
@@ -47,9 +47,9 @@ def problems_no_constraints(
     raise NotImplementedError
     return builds(
         problem.Problem,
-        obj=polynomials.polynomials_commutative(
+        obj=polynomials.polynomials(
             symbols=symbols,
-            degree=10,
+            max_degree=10,
             coefs=floats,  # TODO no 10 constants
         ),
     )

@@ -94,7 +94,7 @@ def maxcut_relaxation(n: int = 8, M: NDArray[np.float64] | None = None) -> float
     maxcut = Problem(maxcut_objective)
     maxcut.add_constraints(maxcut_constraints)
 
-    return maxcut.solve()
+    return maxcut.solve_unchecked()
 
 
 if __name__ == "__main__":
