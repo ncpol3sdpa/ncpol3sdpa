@@ -89,8 +89,14 @@ class SosDecomposition:
 
     # TODO add substitution rules
     def reconstructed_objective(self) -> sympy.Expr:
-        """Calculates the objective polynomial from the SOS formula
-        See equation (34) form "Semidefinite programming relaxations for quantum correlations" """
+        """
+        Calculates the objective polynomial from the SOS formula
+        See equation (34) form "Semidefinite programming relaxations for quantum correlations"
+
+        Note:
+        THIS FUNCTION TAKES A LOT OF TIME TO COMPUTE
+        """
+
         s_lambda: sympy.Expr = sympy.sympify(self.dual_objective)
         return sympy_sum(
             [s_lambda, -self.SOS.to_expression()]

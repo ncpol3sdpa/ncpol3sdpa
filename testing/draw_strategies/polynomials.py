@@ -9,7 +9,7 @@ from ncpol3sdpa.resolution.rules import RulesCommutative
 
 from ncpol3sdpa.resolution.monomial import generate_monomials
 from ncpol3sdpa.resolution.utils import sympy_sum
-import testing.draw_strategies.float_strategies as float_strategies
+from . import float_strategies
 
 one_symbol: List[sympy.Symbol] = [sympy.Symbol("x")]
 two_symbols: List[sympy.Symbol] = [sympy.Symbol("x"), sympy.Symbol("y")]
