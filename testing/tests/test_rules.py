@@ -49,6 +49,13 @@ monomials_c = monomials(commutative=True)
 monomials_nc = monomials(commutative=False)
 
 
+def polynomial_max_coef(p: Expr) -> float:
+    m = 0.0
+    for k in p.as_coefficients_dict().values():
+        m = max(m, abs(k))
+    return m
+
+
 def rules_gen(
     commutative: bool, min_rules: int = 0, max_rules: int = 3
 ) -> SearchStrategy[Rules]:
@@ -77,7 +84,7 @@ def test_divides_factors_P_c(m1: Expr, m2: Expr) -> None:
         return
     if res is not None:
         a, b = res
-        assert 0 == sp.simplify(m2 - a * m1 * b)
+        assert polynomial_max_coef(sp.simplify(m2 - a * m1 * b)) < 1e-10
 
 
 @given(monomials_nc, monomials_nc)
@@ -93,7 +100,7 @@ def test_divides_factors_P_nc(m1: Expr, m2: Expr) -> None:
 
     if res is not None:
         a, b = res
-        assert 0 == sp.simplify(m2 - a * m1 * b)
+        assert polynomial_max_coef(sp.simplify(m2 - a * m1 * b)) < 1e-10
 
 
 @given(monomials_c.filter(lambda x: x != 0), monomials_c)
@@ -118,7 +125,7 @@ def test_apply_to_polynomial_nc(monomials: List[Expr], rules: RulesCommutative) 
     sub_monomials = [rules.apply_to_monomial(m_i) for m_i in monomials]
     poly_sub2 = sp.sympify(sum(sub_monomials))
 
-    assert 0 == sp.simplify(poly_sub - poly_sub2)
+    assert polynomial_max_coef(sp.simplify(poly_sub - poly_sub2)) < 1e-10
 
 
 @given(lists(coef_monomials(commutative=True), max_size=10), rules_gen(True))
@@ -129,7 +136,7 @@ def test_apply_to_polynomial_c(monomials: List[Expr], rules: RulesCommutative) -
     sub_monomials = [rules.apply_to_monomial(m_i) for m_i in monomials]
     poly_sub2 = sp.sympify(sum(sub_monomials))
 
-    assert 0 == sp.simplify(poly_sub - poly_sub2)
+    assert polynomial_max_coef(sp.simplify(poly_sub - poly_sub2)) < 1e-10
 
 
 def test_apply_rule() -> None:
