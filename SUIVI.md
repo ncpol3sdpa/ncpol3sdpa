@@ -487,7 +487,30 @@ New planning for the folowing 2 weeks:
 # 23/06/2025
 - (Thomas)
   * Continue the work on goround-state and mthen modifie the approche after the meeting with Peter Brown
+- (Nazar)
+  * Aprove [Merge Request](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/33) for the local inequality constaints
+  * Fix bug in generate_needed_symbols
+  * Add randomized propery tests for SOS
+  * Add type paramerter for Solution_SDP (real/complex)
+  * Begin work to convert a real solution of an SDP to a complex solution
+- (Mathis & Nazar) Discover big problem in the way the complex SDP was handled. Argumets + tring to understand the problem. 
 
 # 24/06/2025
 - (Thomas)
   * Finish the implementation of the ground-state problem and a set of examples to test 
+- (Mathis & Nazar) 
+  * Big problem solved. Previusly, constraints in the complex SDP between maricies would only constrain the real parts of the coeffients, so additional constraints were required for the imaginary part. 
+- (Nazar) 
+  * Implement support local inequality constraint in SOS
+  * Implement with the help of Mathis the solution to the previeus problem, by adding additional constraints on the imaginary parts.
+  * Refactor complex SDP to real SDP conversion
+  * add scipy type stubs
+  * Add articles to the bibliography at Yann's request
+
+# 25/06/2025
+- (Nazar) 
+  * Add tests and fix bugs for the complex non commutative case for the SOS decomposition
+  * Tweek misconfigured tests that was causing failure because of long execution time and floating point precision errors.
+
+
+
