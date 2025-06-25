@@ -22,7 +22,7 @@ def matrix_real_to_complex(s: NDArray[np.float64]) -> NDArray[np.complex64]:
     # fmt: on
 
     h_re = s11 + s22
-    h_im = s21 - s12
+    h_im = s12 - s21
     # print("Re diff", s11 - s22)
     # print("Im diff", s12 - s12.T)
     return h_re + 1j * h_im

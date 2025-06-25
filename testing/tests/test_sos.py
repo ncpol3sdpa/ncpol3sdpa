@@ -103,12 +103,7 @@ def test_complex0() -> None:
         is_commutative=False,
         is_real=False,
     )
-    problem.solve()
-    sos = problem.compute_sos_decomposition()
-
-    print(sos.reconstructed_objective())
-    assert sos.objective_error(problem.algebraSDP) < 0.01
-    # verify_test(problem, k=1)
+    verify_test(problem, k=1)
 
 
 def test_complex1() -> None:
@@ -133,6 +128,42 @@ def test_complex2() -> None:
     )
     problem.add_constraint(Constraint.InequalityConstraint(1 - 1j * (x - x.adjoint())))
     problem.add_constraint(Constraint.InequalityConstraint(1 - 1j * (y - y.adjoint())))
+
+    verify_test(problem, k=2)
+
+
+def test_complex3() -> None:
+    x, y = sp.symbols("x y", commutative=False)
+    problem = Problem(
+        1 - x.adjoint() * y * x - 1 - x.adjoint() * y.adjoint() * x,
+        is_commutative=False,
+        is_real=False,
+    )
+    problem.add_constraint(Constraint.InequalityConstraint((y + y.adjoint())))
+
+    verify_test(problem, k=2)
+
+
+def test_complex4() -> None:
+    x, y = sp.symbols("x y", commutative=False)
+    problem = Problem(
+        1 - 1j * x.adjoint() * y * x + 1j * x.adjoint() * y.adjoint() * x,
+        is_commutative=False,
+        is_real=False,
+    )
+    problem.add_constraint(Constraint.InequalityConstraint((y + y.adjoint())))
+
+    verify_test(problem, k=2)
+
+
+def test_complex_local1() -> None:
+    x, y = sp.symbols("x y", commutative=False)
+    problem = Problem(
+        1 - 1j * x.adjoint() * y * x + 1j * x.adjoint() * y.adjoint() * x,
+        is_commutative=False,
+        is_real=False,
+    )
+    problem.add_constraint(Constraint.InequalityConstraint((y + y.adjoint())))
 
     verify_test(problem, k=2)
 
