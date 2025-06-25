@@ -169,7 +169,7 @@ class Problem:
         ]
         needed_symbols = self.commute_variables
         if not self.commute_variables:
-            needed_symbols = [generate_needed_symbols(all_constraint_polynomials)]
+            needed_symbols = [generate_needed_symbols(all_constraint_polynomials)]  # type: ignore
 
         algebraSDP = create_AlgebraSDP(
             needed_symbols,  # type: ignore

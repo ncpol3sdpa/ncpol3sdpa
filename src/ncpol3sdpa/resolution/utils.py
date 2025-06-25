@@ -110,7 +110,7 @@ def tensor_product_lower_triangle(A: Matrix, B: Matrix) -> Matrix:
     C = [[S.Zero] * (I1 + 1) for I1 in range(size)]
 
     def get_hermitian(M: Matrix, i: int, j: int) -> Expr:
-        return M[i][j] if i >= j else adjoint(M[j][i])  # type: ignore
+        return M[i][j] if i >= j else adjoint(M[j][i])
 
     for i in range(n):
         for j in range(n):
