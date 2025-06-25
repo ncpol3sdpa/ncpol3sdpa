@@ -79,6 +79,7 @@ class CvxpySolver(Solver):
                 dual_PSD_variables=[c.dual_value for c in psd_constraints],
                 dual_eqC_variables=np.array([c.dual_value for c in eq_constraints]),
                 dual_ineqC_variables=np.array([c.dual_value for c in ineq_constraints]),
+                dtype=np.float64,
             )
         else:
             warnings.warn(

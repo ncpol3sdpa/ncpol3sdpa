@@ -116,6 +116,7 @@ def parse_mosek_solution(
         dual_PSD_variables=dual_PSD_variables,
         dual_eqC_variables=dual_eqC_variables,
         dual_ineqC_variables=dual_ineqC_variables,
+        dtype=np.float64,
     )
 
 
