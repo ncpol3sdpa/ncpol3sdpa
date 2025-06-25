@@ -20,8 +20,9 @@ from hypothesis import given, settings
 from hypothesis.strategies import sampled_from, integers
 
 solvers = [
-    AvailableSolvers.MOSEK,
-]  # AvailableSolvers.CVXPY]
+    # AvailableSolvers.MOSEK,
+    AvailableSolvers.CVXPY,
+]
 
 
 def verify_test(problem: Problem, k: int = 1) -> None:
