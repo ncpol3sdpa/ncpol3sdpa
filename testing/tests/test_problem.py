@@ -195,7 +195,7 @@ def test_nc_agebra_commute() -> None:
     # p.add_constraint(Constraint.EqualityConstraint(A1 * B1 - B1 * A1))
 
     # val2 = p.solve(2)
-    val3 = p.solve(2, solver=AvailableSolvers.MOSEK)
+    val3 = p.solve(2, solver=SolverFactory.create_solver("mosek"))
 
     # assert abs(val2 - 2.82842712475) <= 0.1
     assert abs(val3 - 2.82842712475) <= 0.001
