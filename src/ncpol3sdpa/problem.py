@@ -39,6 +39,7 @@ class Problem:
         is_commutative: bool = True,
         is_real: bool = True,
         commute_variables: List[List[Expr]] = [],
+        more_monomials: List[Expr] = [],
     ) -> None:
         """
         Initialize the Problem instance.
@@ -69,6 +70,7 @@ class Problem:
             RulesCommutative() if is_commutative else RulesNoncommutative()
         )
         self.commute_variables = commute_variables
+        self.more_monomials = more_monomials
 
     def add_rule(self, old: Expr, new: Expr) -> None:
         """
@@ -175,6 +177,7 @@ class Problem:
             self.rules,
             self.is_commutative,
             self.is_real,
+            self.more_monomials,
         )
         algebraSDP.add_constraints(normal_constraints)
 

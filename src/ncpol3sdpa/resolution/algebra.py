@@ -42,6 +42,7 @@ class AlgebraSDP:
         objective: sp.Expr,
         relaxation_order: int,
         substitution_rules: Rules,
+        more_monomials: List[sp.Expr] = [],
     ) -> None:
         """
         Construct the symbolic Moment Matrices and soundings data structures.
@@ -56,6 +57,7 @@ class AlgebraSDP:
                 generate_monomials(
                     needed_variables[i], relaxation_order, self.is_commutative
                 )
+                + more_monomials
             )
             for i in range(len(needed_variables))
         ]
