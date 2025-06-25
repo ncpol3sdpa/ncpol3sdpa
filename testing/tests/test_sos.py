@@ -96,6 +96,47 @@ def test_failing2() -> None:
     verify_test(problem, k=3)
 
 
+def test_complex0() -> None:
+    x = sp.symbols("x", commutative=False)
+    problem = Problem(
+        1 - x.adjoint() * x,
+        is_commutative=False,
+        is_real=False,
+    )
+    problem.solve()
+    sos = problem.compute_sos_decomposition()
+
+    print(sos.reconstructed_objective())
+    assert sos.objective_error(problem.algebraSDP) < 0.01
+    # verify_test(problem, k=1)
+
+
+def test_complex1() -> None:
+    x, y = sp.symbols("x y", commutative=False)
+    problem = Problem(
+        x.adjoint() * y * x + x.adjoint() * y.adjoint() * x,
+        is_commutative=False,
+        is_real=False,
+    )
+    problem.add_constraint(Constraint.InequalityConstraint(1 - (x + x.adjoint())))
+    problem.add_constraint(Constraint.InequalityConstraint(1 - (y + y.adjoint())))
+
+    verify_test(problem, k=2)
+
+
+def test_complex2() -> None:
+    x, y = sp.symbols("x y", commutative=False)
+    problem = Problem(
+        1j * x.adjoint() * y * x - 1j * x.adjoint() * y.adjoint() * x,
+        is_commutative=False,
+        is_real=False,
+    )
+    problem.add_constraint(Constraint.InequalityConstraint(1 - 1j * (x - x.adjoint())))
+    problem.add_constraint(Constraint.InequalityConstraint(1 - 1j * (y - y.adjoint())))
+
+    verify_test(problem, k=2)
+
+
 # --------- Automatic property tests ---------
 
 epsilon = 0.0001

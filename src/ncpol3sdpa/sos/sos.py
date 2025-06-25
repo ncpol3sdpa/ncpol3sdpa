@@ -7,10 +7,11 @@ from numpy.typing import NDArray
 from ncpol3sdpa.sdp_solution import Solution_SDP
 from ncpol3sdpa.resolution import AlgebraSDP
 from ncpol3sdpa.resolution.utils import sympy_sum
+from .solution_real_to_complex import solution_real_to_complex
 
 
 def semidefinite_PTP_decomp(A: NDArray[numpy.float64]) -> NDArray[numpy.float64]:
-    """Returns $P$ such that $A = P^T P$ .
+    """Returns $P$ such that $A = P^† P$ .
 
     We could not use the standard Cholesky decomposition of numpy, because it does not like singular
     positive semidefinite matrices(it only works with positive definite ones).
@@ -21,7 +22,7 @@ def semidefinite_PTP_decomp(A: NDArray[numpy.float64]) -> NDArray[numpy.float64]
     sqrt_eigvals = numpy.sqrt(eigvals_clipped)
 
     P = eigenvectors @ numpy.diag(sqrt_eigvals)
-    return P.T  # type: ignore
+    return numpy.conj(P).T  # type: ignore
 
 
 class SumOfMultiplesPolynomial(NamedTuple):
@@ -132,6 +133,13 @@ def compute_equality_constraints(
             a, b = monomials
             nu_i = solution.dual_eqC_variables[y_idx]
             y_idx += 1
+            multiplier_monomials.append(
+                (0.5 * nu_i * problem_algebra.get_adjoint(a), b)
+            )
+            multiplier_monomials.append(
+                (0.5 * nu_i * problem_algebra.get_adjoint(b), a)
+            )
+
             if not problem_algebra.is_real:
                 nu_i2 = solution.dual_eqC_variables[y_idx]
                 y_idx += 1
@@ -141,13 +149,6 @@ def compute_equality_constraints(
                 multiplier_monomials.append(
                     (+0.5j * nu_i2 * problem_algebra.get_adjoint(b), a)
                 )
-
-            multiplier_monomials.append(
-                (0.5 * nu_i * problem_algebra.get_adjoint(a), b)
-            )
-            multiplier_monomials.append(
-                (0.5 * nu_i * problem_algebra.get_adjoint(b), a)
-            )
 
         res.append(
             SumOfMultiplesPolynomial(
@@ -179,7 +180,9 @@ def compute_sos_decomposition(
     requires: solution is a solution of the SDP relaxation
     ensures: lambda - problem_algebra.objective_polynomial = SOS + Sum of(SOS_i*g_i)
     """
-
+    if not problem_algebra.is_real:
+        solution = solution_real_to_complex(solution)
+    print(solution)
     A = solution.dual_PSD_variables[0]
     B = solution.dual_PSD_variables[1:]
 
@@ -187,7 +190,7 @@ def compute_sos_decomposition(
         w: List[sympy.Expr], A: NDArray[numpy.float64], middle: sympy.Expr
     ) -> SumOfSquares:
         """
-        w.T A w is a polynomial, and if A is positive-semidefinite, then
+        w† A w is a polynomial, and if A is positive-semidefinite, then
         this function will calculate the SOS of this polynomial using the
         eigenvalue decomposition
         Arguments:
@@ -202,13 +205,13 @@ def compute_sos_decomposition(
         return SumOfSquares(Pw, middle, adjoint_func=problem_algebra.get_adjoint)
 
     w = problem_algebra.monomials  # list of monomials used in the polynomial
-
     SOS = calculate_SOS(w, A, sympy.S.One)
 
     SOSi = [
         calculate_SOS(w, B[i], problem_algebra.psd_polynomials_gi[i])
         for i in range(len(B))
     ]
+    print("sso", SOS.squares)
 
     eq_polys = compute_equality_constraints(problem_algebra, solution)
 

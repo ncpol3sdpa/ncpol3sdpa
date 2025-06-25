@@ -21,10 +21,10 @@ def matrix_real_to_complex(s: NDArray[np.float64]) -> NDArray[np.complex64]:
     s22 = s[n:2*n, n:2*n]
     # fmt: on
 
-    h_re = 0.5 * (s11 + s22)
-    h_im = 0.5 * (s21 - s12)
-    print("Re diff", s11 - s22)
-    print("Im diff", s12 - s12.T)
+    h_re = s11 + s22
+    h_im = s21 - s12
+    # print("Re diff", s11 - s22)
+    # print("Im diff", s12 - s12.T)
     return h_re + 1j * h_im
 
 
@@ -42,4 +42,5 @@ def solution_real_to_complex(
         primal_PSD_variables=[
             matrix_real_to_complex(Z) for Z in solution.primal_PSD_variables
         ],
+        dtype=np.complex64,
     )
