@@ -17,9 +17,9 @@ def test_1() -> None:
     assert abs(p.solve(1) - 2.4142) <= 0.01
     assert abs(p.solve(2) - 2.4142) <= 0.01
     assert abs(p.solve(3) - 2.4142) <= 0.01
-    assert abs(p.solve(1, SolverFactory.create_solver("mosek")) - 2.4142) <= 0.01
-    assert abs(p.solve(2, SolverFactory.create_solver("mosek")) - 2.4142) <= 0.01
-    assert abs(p.solve(3, SolverFactory.create_solver("mosek")) - 2.4142) <= 0.01
+    assert abs(p.solve(1, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve(2, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve(3, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
 
 
 def test_2() -> None:

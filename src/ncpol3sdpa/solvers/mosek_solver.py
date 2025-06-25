@@ -185,9 +185,8 @@ class MosekSolver(Solver):
                     mosek.solsta.prim_infeas_cer,
                 ]:
                     warnings.warn("Infeasible")
-                    return float(
-                        "inf"
-                    )  # Primal or dual infeasibility certificate found
+                    return float("inf")
+                # Primal or dual infeasibility certificate found
                 elif solution_status == mosek.solsta.unknown:
                     warnings.warn("Unknown solution status")
                     return float("nan")  # Unknown solution status

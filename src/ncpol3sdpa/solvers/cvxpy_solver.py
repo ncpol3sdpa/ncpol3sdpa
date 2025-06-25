@@ -71,7 +71,9 @@ class CvxpySolver(Solver):
         prob = cvxpy.Problem(objective, constraints)
 
         # Returns the optimal value.
-        prob.solve()
+        if verbose:
+            print("Solved with CVXPY")
+        prob.solve(verbose=verbose)
         assert isinstance(prob.value, float)
         return prob.value
 
