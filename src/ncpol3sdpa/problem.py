@@ -36,7 +36,11 @@ class Problem:
     """
 
     def __init__(
-        self, obj: sympy.Expr, is_commutative: bool = True, is_real: bool = True
+        self,
+        obj: sympy.Expr,
+        is_commutative: bool = True,
+        is_real: bool = True,
+        commute_variables: List[List[Expr]] = [],
     ) -> None:
         """
         Initialize the Problem instance.
@@ -67,6 +71,7 @@ class Problem:
         self.rules: Rules = (
             RulesCommutative() if is_commutative else RulesNoncommutative()
         )
+        self.commute_variables = commute_variables
 
     def add_rule(self, old: Expr, new: Expr) -> None:
         """
@@ -162,9 +167,12 @@ class Problem:
         all_constraint_polynomials = [c.polynomial for c in self.constraints] + [
             self.objective
         ]
-        needed_symbols = generate_needed_symbols(all_constraint_polynomials)
+        needed_symbols = self.commute_variables
+        if not self.commute_variables:
+            needed_symbols = [generate_needed_symbols(all_constraint_polynomials)]
+
         algebraSDP = create_AlgebraSDP(
-            needed_symbols,
+            needed_symbols,  # type: ignore
             self.objective,
             relaxation_order,
             self.rules,

@@ -79,7 +79,7 @@ def test_AlgebraSDP(
 ) -> None:
     # crash tests
     al = AlgebraSDPReal(
-        needed_variables=needed_variables,
+        needed_variables=[needed_variables],
         objective=objective,
         relaxation_order=relaxation_order,
         substitution_rules=substitution_rules,
