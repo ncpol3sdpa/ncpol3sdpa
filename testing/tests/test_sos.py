@@ -39,7 +39,7 @@ def verify_test(problem: Problem, k: int = 1, epsilon: float = 0.05) -> None:
         assert sosDecomposition is not None
         print(sp.expand(sosDecomposition.reconstructed_objective()))
         # print((sosDecomposition.reconstructed_objective()))
-        assert np.abs(sosDecomposition.objective_error(prob_copy.algebraSDP)) < epsilon
+        assert np.abs(sosDecomposition.objective_error()) < epsilon
 
 
 # --------- Manual tests ---------
@@ -200,7 +200,7 @@ def test_bounded_no_constraints(sos_poly: sp.Expr, solver: AvailableSolvers) -> 
 
     sosDecomposition = problem.compute_sos_decomposition()
     assert sosDecomposition is not None
-    assert np.abs(sosDecomposition.objective_error(problem.algebraSDP)) < epsilon
+    assert np.abs(sosDecomposition.objective_error()) < epsilon
 
 
 @settings(deadline=2000)
@@ -219,7 +219,7 @@ def test_bounded_monomials(poly: sp.Expr, solver: AvailableSolvers) -> None:
     sosDecomposition = problem.compute_sos_decomposition()
     assert sosDecomposition is not None
     # This level of impression is probably a bug
-    assert np.abs(sosDecomposition.objective_error(problem.algebraSDP)) < 0.05
+    assert np.abs(sosDecomposition.objective_error()) < 0.05
 
 
 @settings(deadline=2000)
@@ -248,4 +248,4 @@ def test_ellipsis_monomials(
 
     sosDecomposition = problem.compute_sos_decomposition()
     assert sosDecomposition is not None
-    assert np.abs(sosDecomposition.objective_error(problem.algebraSDP)) < epsilon
+    assert np.abs(sosDecomposition.objective_error()) < epsilon

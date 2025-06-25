@@ -79,11 +79,13 @@ class SosDecomposition:
         SOS: SumOfSquares,
         SOS_i: List[SumOfSquares],
         eq_polys: List[SumOfMultiplesPolynomial],  # $\\nu_i * f_i | \\eta_i * h_i
+        original_objective: sympy.Expr,
     ) -> None:
         self.dual_objective = dual_objective
         self.SOS = SOS
         self.SOS_i = SOS_i
         self.eq_polys = eq_polys
+        self.original_objective = original_objective
 
     # TODO add substitution rules
     def reconstructed_objective(self) -> sympy.Expr:
@@ -96,14 +98,14 @@ class SosDecomposition:
             + [-cpol.to_expression() for cpol in self.eq_polys]
         )
 
-    def objective_error(self, problem_algebra: AlgebraSDP) -> float:
+    def objective_error(self) -> float:
         """Returns the maximum difference in coefficients of f - f_reconstructed,
         where f is the objective polynomial, and f_reconstructed is the reconstructed
-        objective, see the above function.
+        objective, see the `reconstructed_objective` function above.
 
         Ideally, this should be zero. In practice it is non zero due to numerical precision."""
         difference: sympy.Expr = sympy.expand(
-            problem_algebra.objective - self.reconstructed_objective()
+            self.original_objective - self.reconstructed_objective()
         )
         epsilon = 0.0
         for v in difference.as_coefficients_dict().values():
@@ -213,4 +215,10 @@ def compute_sos_decomposition(
 
     eq_polys = compute_equality_constraints(problem_algebra, solution)
 
-    return SosDecomposition(solution.dual_objective_value, SOS, SOSi, eq_polys)
+    return SosDecomposition(
+        solution.dual_objective_value,
+        SOS,
+        SOSi,
+        eq_polys,
+        original_objective=problem_algebra.objective,
+    )

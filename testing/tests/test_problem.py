@@ -64,7 +64,7 @@ def test_arithmetic_geometric() -> None:
     p = Problem(obj)
     assert abs(p.solve_unchecked(1)) <= 0.0001
     sos = p.compute_sos_decomposition()
-    assert abs(sos.objective_error(problem_algebra=p.algebraSDP)) <= 0.0001
+    assert abs(sos.objective_error()) <= 0.0001
 
 
 def test_1_sub() -> None:
