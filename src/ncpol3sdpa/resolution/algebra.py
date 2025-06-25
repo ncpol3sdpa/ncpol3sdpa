@@ -1,16 +1,15 @@
 from __future__ import annotations
-from typing import List, Tuple, Dict, Callable
+
+from functools import reduce
+from typing import Callable, Dict, List, Tuple
 
 import sympy as sp
 from scipy.sparse import lil_matrix
 
-from .rules import Rules
-from .monomial import generate_monomials
 from .constraints import Constraint, ConstraintType
-from .utils import (
-    Matrix,
-    degree_of_polynomial,
-)
+from .monomial import generate_monomials
+from .rules import Rules
+from .utils import Matrix, degree_of_polynomial, tensor_product_lower_triangle
 
 
 def create_moment_matrix(
@@ -39,7 +38,7 @@ class AlgebraSDP:
 
     def __init__(
         self,
-        needed_variables: List[sp.Symbol],
+        needed_variables: List[List[sp.Symbol]],
         objective: sp.Expr,
         relaxation_order: int,
         substitution_rules: Rules,
@@ -52,21 +51,37 @@ class AlgebraSDP:
 
         self.relaxation_order: int = relaxation_order
         self.substitution_rules: Rules = substitution_rules
-        self.monomials: List[sp.Expr] = substitution_rules.filter_monomials(
-            generate_monomials(needed_variables, relaxation_order, self.is_commutative)
-        )
+        self.all_monomials: List[List[sp.Expr]] = [
+            substitution_rules.filter_monomials(
+                generate_monomials(
+                    needed_variables[i], relaxation_order, self.is_commutative
+                )
+            )
+            for i in range(len(needed_variables))
+        ]
         self.objective: sp.Expr = substitution_rules.apply_to_polynomial(
             sp.expand(objective)
         )
 
+        self.moment_matrices = [
+            create_moment_matrix(
+                substitution_rules=self.substitution_rules,
+                monomials=self.all_monomials[i],
+                is_commutative=self.is_commutative,
+                get_adjoint=self.get_adjoint,
+            )
+            for i in range(len(self.all_monomials))
+        ]
+
         # In the commutative case, the moment matrix is symmetric
-        self.moment_matrix = create_moment_matrix(
-            substitution_rules=self.substitution_rules,
-            monomials=self.monomials,
-            is_commutative=self.is_commutative,
-            get_adjoint=self.get_adjoint,
+        self.moment_matrix = (
+            self.moment_matrices[0]
+            if len(self.moment_matrices) == 1
+            else reduce(tensor_product_lower_triangle, self.moment_matrices)
         )
         matrix_size: int = len(self.moment_matrix)
+
+        self.monomials: List[sp.Expr] = [x for xs in self.all_monomials for x in xs]
 
         # equivalence classes of equal coefficients
         self.monomial_to_positions: Dict[sp.Expr, List[Tuple[int, int]]] = {}
