@@ -2,7 +2,7 @@
 # from typing import Dict, Tuple, List
 from ncpol3sdpa import Problem, Constraint
 from sympy.physics.quantum import HermitianOperator
-from ncpol3sdpa import AvailableSolvers
+from ncpol3sdpa import SolverList
 
 
 class Bell_inequality:
@@ -62,7 +62,7 @@ class Bell_inequality:
         p.add_rule(A2 * B2, B2*A2)
         """
 
-        solution = p.solve(2, solver=AvailableSolvers.MOSEK)
+        solution = p.solve(2, solver=SolverList.MOSEK)
 
         if solution is None:
             raise ValueError("No solution found for the Bell inequality problem.")

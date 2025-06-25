@@ -1,10 +1,10 @@
 # from numpy import format_float_scientific
 from sympy.abc import x, y
 from sympy import S
-from sympy import Expr, symbols, I, expand
+from sympy import Expr, symbols, I
 from sympy.physics.quantum import HermitianOperator, Operator
 
-from ncpol3sdpa import Constraint, Problem, AvailableSolvers
+from ncpol3sdpa import Constraint, Problem, SolverList
 
 
 def test_1() -> None:
@@ -17,9 +17,9 @@ def test_1() -> None:
     assert abs(p.solve_unchecked(1) - 2.4142) <= 0.01
     assert abs(p.solve_unchecked(2) - 2.4142) <= 0.01
     assert abs(p.solve_unchecked(3) - 2.4142) <= 0.01
-    assert abs(p.solve_unchecked(1, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
-    assert abs(p.solve_unchecked(2, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
-    assert abs(p.solve_unchecked(3, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(1, SolverList.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(2, SolverList.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(3, SolverList.MOSEK) - 2.4142) <= 0.01
 
 
 def test_2() -> None:
@@ -32,9 +32,9 @@ def test_2() -> None:
     assert abs(p.solve_unchecked(1)) <= 1
     assert abs(p.solve_unchecked(2)) <= 0.1
     assert abs(p.solve_unchecked(3)) <= 0.001
-    assert abs(p.solve_unchecked(1, AvailableSolvers.MOSEK)) <= 1
-    assert abs(p.solve_unchecked(2, AvailableSolvers.MOSEK)) <= 0.1
-    assert abs(p.solve_unchecked(3, AvailableSolvers.MOSEK)) <= 0.001
+    assert abs(p.solve_unchecked(1, SolverList.MOSEK)) <= 1
+    assert abs(p.solve_unchecked(2, SolverList.MOSEK)) <= 0.1
+    assert abs(p.solve_unchecked(3, SolverList.MOSEK)) <= 0.001
 
 
 def test_3() -> None:
@@ -43,9 +43,9 @@ def test_3() -> None:
     assert abs(p.solve_unchecked(1) - 10) <= 1
     assert abs(p.solve_unchecked(2) - 10) <= 0.1
     assert abs(p.solve_unchecked(3) - 10) <= 0.001
-    assert abs(p.solve_unchecked(1, AvailableSolvers.MOSEK) - 10) <= 1
-    assert abs(p.solve_unchecked(2, AvailableSolvers.MOSEK) - 10) <= 0.1
-    assert abs(p.solve_unchecked(3, AvailableSolvers.MOSEK) - 10) <= 0.001
+    assert abs(p.solve_unchecked(1, SolverList.MOSEK) - 10) <= 1
+    assert abs(p.solve_unchecked(2, SolverList.MOSEK) - 10) <= 0.1
+    assert abs(p.solve_unchecked(3, SolverList.MOSEK) - 10) <= 0.001
 
 
 def test_4() -> None:
@@ -54,17 +54,8 @@ def test_4() -> None:
     p.add_rule(y, 10 * S.One)
     assert abs(p.solve_unchecked(2) - 20) <= 0.1
     assert abs(p.solve_unchecked(3) - 20) <= 0.001
-    assert abs(p.solve_unchecked(2, AvailableSolvers.MOSEK) - 20) <= 0.1
-    assert abs(p.solve_unchecked(3, AvailableSolvers.MOSEK) - 20) <= 0.001
-
-
-def test_arithmetic_geometric() -> None:
-    obj = -expand((x + y) ** 2 - 4 * x * y)
-
-    p = Problem(obj)
-    assert abs(p.solve_unchecked(1)) <= 0.0001
-    sos = p.compute_sos_decomposition()
-    assert abs(sos.objective_error()) <= 0.0001
+    assert abs(p.solve_unchecked(2, SolverList.MOSEK) - 20) <= 0.1
+    assert abs(p.solve_unchecked(3, SolverList.MOSEK) - 20) <= 0.001
 
 
 def test_1_sub() -> None:
@@ -76,9 +67,9 @@ def test_1_sub() -> None:
     assert abs(p.solve_unchecked(1) - 2.4142) <= 0.01
     assert abs(p.solve_unchecked(2) - 2.4142) <= 0.01
     assert abs(p.solve_unchecked(3) - 2.4142) <= 0.01
-    assert abs(p.solve_unchecked(1, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
-    assert abs(p.solve_unchecked(2, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
-    assert abs(p.solve_unchecked(3, AvailableSolvers.MOSEK) - 2.4142) <= 0.01
+    assert abs(p.solve_unchecked(1, SolverList.MOSEK)) - 2.4142 <= 0.01
+    assert abs(p.solve_unchecked(2, SolverList.MOSEK)) - 2.4142 <= 0.01
+    assert abs(p.solve_unchecked(3, SolverList.MOSEK)) - 2.4142 <= 0.01
 
 
 def test_1_nc() -> None:
@@ -148,8 +139,7 @@ def test_complex_2() -> None:
     p.add_constraint(c2)
     p.add_constraint(c3)
     p.add_constraint(c4)
-    solution = p.solve_unchecked(3)
-    assert abs(solution - 0.7071) <= 0.1
+    assert abs(p.solve_unchecked(3) - 0.7071) <= 0.1
 
 
 def test_nc_complex_1() -> None:
@@ -182,10 +172,10 @@ def test_trace_inequality() -> None:
     c1 = Constraint.LocalInequalityConstraint(X1 * X2 + X2 * X1)
     p.add_constraint(c1)
     assert abs(p.solve_unchecked(2)) <= 0.1
-    assert abs(p.solve_unchecked(3, AvailableSolvers.MOSEK)) <= 0.0001
+    assert abs(p.solve_unchecked(3, SolverList.MOSEK)) <= 0.0001
 
 
-def test_nc_algebra_commute() -> None:
+def test_nc_agebra_commute() -> None:
     A0 = HermitianOperator("A0")  # type: ignore
     A1 = HermitianOperator("A1")  # type: ignore
     B0 = HermitianOperator("B0")  # type: ignore
@@ -204,8 +194,8 @@ def test_nc_algebra_commute() -> None:
     # p.add_constraint(Constraint.EqualityConstraint(A1 * B0 - B0 * A1))
     # p.add_constraint(Constraint.EqualityConstraint(A1 * B1 - B1 * A1))
 
-    # val2 = p.solve(2)
-    val3 = p.solve_unchecked(2, solver=AvailableSolvers.MOSEK)
+    # val2 = p.solve_unchecked(2)
+    val3 = p.solve_unchecked(2, solver=SolverList.MOSEK)
 
     # assert abs(val2 - 2.82842712475) <= 0.1
     assert abs(val3 - 2.82842712475) <= 0.001

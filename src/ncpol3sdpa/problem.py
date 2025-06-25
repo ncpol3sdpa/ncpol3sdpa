@@ -1,9 +1,9 @@
-from typing import List, Any
+from typing import List, Dict, Any
 
 from sympy import Expr
 import sympy
 
-from ncpol3sdpa.solvers import AvailableSolvers, Solver, SolverRegistry
+from ncpol3sdpa.solvers import Solver, SolverList, SolverFactory
 from ncpol3sdpa.resolution import (
     Rules,
     RulesCommutative,
@@ -143,7 +143,8 @@ class Problem:
     def solve(
         self,
         relaxation_order: int = 1,
-        solver: Solver | AvailableSolvers = AvailableSolvers.CVXPY,
+        solver: Solver | SolverList = SolverList.CVXPY,
+        **solver_config: Dict[str, Any],
     ) -> float | None:
         """Solve the polynomial optimization problem using SDP relaxation.
 
@@ -151,6 +152,9 @@ class Problem:
             relaxation_order (int): The order of relaxation in Lasserre hierarchy.
                 Higher orders give better approximations but increase complexity.
                 Defaults to 1.
+            solver (Solver | SolverList): The solver to use for solving the SDP.
+            solver_config (Dict[str, Any]): Additional configuration parameters for the solver.
+                Like `verbose`, which controls the verbosity of the solver output.
 
         Returns:
             float: An upper bound on the optimal value of the objective function
@@ -163,13 +167,16 @@ class Problem:
 
         normal_constraints = self.constraints
 
-        # 1. Build algebraic formulation
+        # 1. Build algebric formulation
+        # if verbose:
+        #     print("Build the algebric formulation")
+
         all_constraint_polynomials = [c.polynomial for c in self.constraints] + [
             self.objective
         ]
         needed_symbols = self.commute_variables
         if not self.commute_variables:
-            needed_symbols = [generate_needed_symbols(all_constraint_polynomials)] # type: ignore
+            needed_symbols = [generate_needed_symbols(all_constraint_polynomials)]  # type: ignore
 
         algebraSDP = create_AlgebraSDP(
             needed_symbols,  # type: ignore
@@ -184,20 +191,21 @@ class Problem:
         # print(algebraSDP.moment_matrix)
 
         # 2. Translate to SDP
+        # if verbose:
+        #     print("Translate to SDP")
+
         problemSDP = algebra_to_SDP(algebraSDP)
         if not self.is_real:
             problemSDP = problemSDP.complex_to_realSDP()
         # print(problemSDP)
 
         # 3. Solve the SDP
-        if isinstance(solver, AvailableSolvers):
-            solver = SolverRegistry.get_solver(solver)
+        if isinstance(solver, SolverList):
+            solver = SolverFactory.create_solver(solver)
         if isinstance(solver, Solver):
-            self.solution = solver.solve(problemSDP)
+            self.solution = solver.solve(problemSDP, **solver_config)
         else:
-            raise TypeError(
-                f"Solver must be of type {Solver} or {AvailableSolvers}, not {type(solver)}"
-            )
+            raise TypeError(f"Solver must be of type {Solver}, not {type(solver)}")
 
         if self.solution is not None:
             return self.solution.primal_objective_value
@@ -207,7 +215,7 @@ class Problem:
     def solve_unchecked(
         self,
         relaxation_order: int = 1,
-        solver: Solver | AvailableSolvers = AvailableSolvers.CVXPY,
+        solver: Solver | SolverList = SolverList.CVXPY,
     ) -> float:
         """Same as solve, but will raise an exception if there was no solution"""
         res = self.solve(relaxation_order=relaxation_order, solver=solver)

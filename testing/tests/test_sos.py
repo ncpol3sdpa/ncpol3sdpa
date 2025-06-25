@@ -11,7 +11,7 @@ if __name__ == "__main__":
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 
 # from typing import List
-from ncpol3sdpa import AvailableSolvers
+from ncpol3sdpa import SolverList
 from ncpol3sdpa import Problem
 from ncpol3sdpa import Constraint
 
@@ -26,7 +26,7 @@ from testing.draw_strategies.polynomials import (
 from hypothesis import given, settings
 from hypothesis.strategies import sampled_from
 
-solvers = [AvailableSolvers.MOSEK]  # , AvailableSolvers.CVXPY]
+solvers = [SolverList.MOSEK]  # SolverList.CVXPY]
 
 
 def verify_test(problem: Problem, k: int = 1, epsilon: float = 0.05) -> None:
@@ -188,7 +188,7 @@ epsilon = 0.0001
     ),
     sampled_from(solvers),
 )
-def test_bounded_no_constraints(sos_poly: sp.Expr, solver: AvailableSolvers) -> None:
+def test_bounded_no_constraints(sos_poly: sp.Expr, solver: SolverList) -> None:
     sos_margin = 1.0
     sos_poly = sp.expand(sos_margin + sos_poly)
     problem = Problem(-sos_poly)
@@ -210,7 +210,7 @@ def test_bounded_no_constraints(sos_poly: sp.Expr, solver: AvailableSolvers) -> 
     polynomials(two_symbols, coefs=order_of_magnitude_floats(1), max_degree=2),
     sampled_from(solvers),
 )
-def test_bounded_monomials(poly: sp.Expr, solver: AvailableSolvers) -> None:
+def test_bounded_monomials(poly: sp.Expr, solver: SolverList) -> None:
     problem = Problem(poly)
     problem.add_constraint(Constraint.InequalityConstraint(1 - two_symbols[0] ** 2))
     problem.add_constraint(Constraint.InequalityConstraint(1 - two_symbols[1] ** 2))
@@ -237,7 +237,7 @@ def test_bounded_monomials(poly: sp.Expr, solver: AvailableSolvers) -> None:
     sampled_from(solvers),
 )
 def test_ellipsis_monomials(
-    a: float, b: float, poly: sp.Expr, solver: AvailableSolvers
+    a: float, b: float, poly: sp.Expr, solver: SolverList
 ) -> None:
     problem = Problem(poly)
     problem.add_constraint(

@@ -1,10 +1,10 @@
-from typing import Tuple, List
 from numpy.typing import NDArray
 
+import mosek
+from typing import Tuple, List, Dict, Any
 import warnings
 import numpy as np
 
-import mosek
 from scipy.sparse import lil_matrix
 
 from ncpol3sdpa.sdp_solution import Solution_SDP
@@ -121,9 +121,22 @@ def parse_mosek_solution(
 
 
 class MosekSolver(Solver):
-    @classmethod
-    def solve(self, problem: ProblemSDP) -> Solution_SDP[np.float64]:
+    """Solver for SDP problems using MOSEK."""
+
+    def is_available(self) -> bool:
+        """Check if mosek is available"""
+        try:
+            import mosek  # noqa: F401
+
+            return True
+        except ImportError:
+            return False
+
+    def solve(
+        self, problem: ProblemSDP, **config: Dict[str, Any]
+    ) -> Solution_SDP[np.float64] | None:
         """Solve the SDP problem with mosek"""
+        import mosek
 
         # Gets the number of equ constraints to decode the solution
         n_eq_constrants = len(problem.constraints)
@@ -136,12 +149,12 @@ class MosekSolver(Solver):
             # sys.stdout.write(text)
             # sys.stdout.flush()
             # print(text, end="")
-            pass
+            pass  # TODO implement getting the dual solution out of mosek
 
         def mosek_task() -> Solution_SDP[np.float64] | None:
             # Create a task object and attach log stream printer
             with mosek.Task() as task:
-                task.set_Stream(mosek.streamtype.log, stream_printer)
+                task.set_Stream(mosek.streamtype.log, lambda text: None)
 
                 # Append #problem.variable_sizes symmetric variables of dimension problem.variable_sizes
                 task.appendbarvars(problem.variable_sizes)
@@ -235,6 +248,7 @@ class MosekSolver(Solver):
                 # Optimize
                 task.putobjsense(mosek.objsense.maximize)
                 task.optimize()
+                # verbose=config.get("verbose", False) ???
 
                 # Get solution status
                 solution_status = task.getsolsta(mosek.soltype.itr)
@@ -261,12 +275,8 @@ class MosekSolver(Solver):
                     warnings.warn(f"Other solution status: {solution_status}")
                     return None  # Other solution status
 
-        # TODO implement getting the dual solution out of mosek
         try:
-            return mosek_task()  # type: ignore
+            return mosek_task()
         except mosek.MosekException as e:
             warnings.warn(f"Mosek exception : {e}")
-            return None  # type: ignore
-        # except Exception as e:
-        #     warnings.warn(f"Other exception : {e}")
-        #     return None  # type: ignore
+            return None
