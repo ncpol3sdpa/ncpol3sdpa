@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Any
 
 from sympy import Expr
 import sympy
@@ -141,7 +141,7 @@ class Problem:
         self,
         relaxation_order: int = 1,
         solver: Solver | SolverList = SolverList.CVXPY,
-        verbose: bool = False,
+        **solver_config: Dict[str, Any],
     ) -> float:
         """Solve the polynomial optimization problem using SDP relaxation.
 
@@ -149,6 +149,9 @@ class Problem:
             relaxation_order (int): The order of relaxation in Lasserre hierarchy.
                 Higher orders give better approximations but increase complexity.
                 Defaults to 1.
+            solver (Solver | SolverList): The solver to use for solving the SDP.
+            solver_config (Dict[str, Any]): Additional configuration parameters for the solver.
+                Like `verbose`, which controls the verbosity of the solver output.
 
         Returns:
             float: An upper bound on the optimal value of the objective function
@@ -191,15 +194,10 @@ class Problem:
             problemSDP = problemSDP.complex_to_realSDP()
 
         # 3. Solve the SDP
-        if isinstance(solver, Solver):
-            return solver.solve(problemSDP)
-        if verbose:
-            print("Solve the SDP")
         if isinstance(solver, SolverList):
-            # return SolverF.get_solver(solver).solve(problemSDP, verbose=verbose)
-            return SolverFactory.create_solver(solver).solve(problemSDP)
+            return SolverFactory.create_solver(solver).solve(problemSDP, **solver_config)
         elif isinstance(solver, Solver):
-            return solver.solve(problemSDP, verbose=verbose)
+            return solver.solve(problemSDP, **solver_config)
         else:
             raise TypeError(
                 f"Solver must be of type {Solver}, not {type(solver)}"

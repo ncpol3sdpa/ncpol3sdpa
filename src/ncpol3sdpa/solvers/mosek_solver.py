@@ -43,17 +43,6 @@ def get_sparse_vecs(
 class MosekSolver(Solver):
     """Solver for SDP problems using MOSEK."""
 
-    def __init__(self, **kwargs: Dict[str, Any]) -> None:
-        """
-        Initialize the MosekSolver instance.
-
-        Parameters
-        ----------
-        **kwargs: Additional keyword arguments for configuration.
-        """
-        
-        super().__init__(**kwargs)
-
     def is_available(self) -> bool:
         """Check if mosek is available"""
         try:
@@ -62,7 +51,7 @@ class MosekSolver(Solver):
         except ImportError:
             return False
 
-    def solve(self, problem: ProblemSDP) -> float:
+    def solve(self, problem: ProblemSDP, **config: Dict[str, Any]) -> float:
         """Solve the SDP problem with mosek"""
 
         import mosek
@@ -168,6 +157,7 @@ class MosekSolver(Solver):
                 # Optimize
                 task.putobjsense(mosek.objsense.maximize)
                 task.optimize()
+                # verbose=config.get("verbose", False) ???
 
                 # Get solution status
                 solution_status = task.getsolsta(mosek.soltype.itr)
@@ -186,15 +176,16 @@ class MosekSolver(Solver):
                 ]:
                     warnings.warn("Infeasible")
                     return float("inf")
+                
                 # Primal or dual infeasibility certificate found
                 elif solution_status == mosek.solsta.unknown:
                     warnings.warn("Unknown solution status")
                     return float("nan")  # Unknown solution status
 
                 else:
-                    warnings.warn("Other solution status: ", solution_status)
-                    return float("nan")  # Other solution status
-                
+                    warnings.warn(f"Other solution status: {solution_status}")
+                    return float("nan")
+
         except mosek.MosekException as e:
             warnings.warn(f"Mosek exception : {e}")
             return float("nan")
