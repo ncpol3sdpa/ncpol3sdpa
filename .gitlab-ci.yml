@@ -54,7 +54,7 @@ uv-install:
       - $UV_CACHE_DIR
   script:
     - uv cache prune --ci
-    - uv pip install --system -e .
+    - uv pip install --system -e ".[mosek]"
 
 
 ###########################################
@@ -67,11 +67,10 @@ uv-install:
 pytest:
   stage: test
   script:
-    - echo "Running Pytest..."
     - mkdir $HOME/mosek
     - touch $HOME/mosek/mosek.lic
     - echo "$MOSEK_LICENSE" >> $HOME/mosek/mosek.lic
-    - echo "Mosek license file created at $HOME/mosek/mosek.lic\n"
+    - uv add mosek
     # Executes pytest to run all test files in the project.
     # Options:
     # - `--durations=10`: Shows the 10 slowest test executions
@@ -92,26 +91,20 @@ pytest:
 mypy:
   stage: test
   script:
-    - echo "Running Mypy..."
     - uv run mypy
-    - echo "Mypy complete"
   allow_failure: false
 
 # This job checks the code for style violations using Ruff
 ruff-check-src:
   stage: test
   script:
-    - echo "Running Ruff..."
     - uvx ruff check src
-    - echo "Ruff complete"
   allow_failure: true
 
 # ruff-check-tests:
 #   stage: test
 #   script:
-#     - echo "Running Ruff..."
 #     - uvx ruff check tests
-#     - echo "Ruff complete"
 #   allow_failure: true
 
 ###########################################

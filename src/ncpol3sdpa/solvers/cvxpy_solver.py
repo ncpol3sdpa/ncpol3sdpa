@@ -1,29 +1,43 @@
-from typing import List
+from typing import List, Dict, Any
 
 from scipy.sparse import lil_matrix
-
-import cvxpy
 
 from ncpol3sdpa.sdp_repr import ProblemSDP
 from .solver import Solver
 
 
-def cvxpy_dot_prod(c: lil_matrix, x: "cvxpy.Expression") -> "cvxpy.Expression":
-    expr = cvxpy.Constant(0)
-    for i, row in enumerate(c.rows):
-        for idx, j in enumerate(row):
-            val = c.data[i][idx]
-            expr += val * x[i, j]
-    return expr
 
 
 class CvxpySolver(Solver):
-    @classmethod
+    """Solver for SDP problems using CVXPY."""
+
+    def __init__(self, **kwargs: Dict[str, Any]) -> None:
+        """
+        Initialize the CvxpySolver instance.
+        
+        Parameters
+        ----------
+        **kwargs: Additional keyword arguments for configuration.
+        """
+        
+        super().__init__(**kwargs)
+
+    def is_available(self) -> bool:
+        """Check if cvxpy is available"""
+        try:
+            import cvxpy  # noqa: F401
+            return True
+        except ImportError:
+            return False
+
     def solve(self, problem: ProblemSDP) -> float:
         """Solve the SDP problem with cvxpy"""
-        # Variables
+
+        import cvxpy
+
         sdp_vars = [
-            cvxpy.Variable((size, size), PSD=True) for size in problem.variable_sizes
+            cvxpy.Variable((size, size), PSD=True) 
+            for size in problem.variable_sizes
         ]
 
         # Moment matrix structure
@@ -35,26 +49,42 @@ class CvxpySolver(Solver):
             for x, y in eq_class:
                 constraints.append(G[i, j] == G[x, y])
 
-        # Constraints
+        # Equality Constraints
         for constraint in problem.constraints:
             expression: cvxpy.Expression = cvxpy.Constant(0)
             for var_num, matrix in constraint.constraints:
-                expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
+                expression += CvxpySolver._cvxpy_dot_prod(matrix, sdp_vars[var_num])
             constraints.append(cvxpy.Constant(0) == expression)
 
-        for constraint in problem.inequality_scalar_constraints:  # type: ignore
-            var_num, mat = constraint.constraints  # type: ignore
-            expression: cvxpy.Expression = cvxpy_dot_prod(  # type: ignore
-                mat,  # type: ignore
+        # Inequality Constraints
+        for ineq_constraint in problem.inequality_scalar_constraints:
+            var_num, matrix = ineq_constraint.constraints
+            expression = CvxpySolver._cvxpy_dot_prod(
+                matrix,
                 sdp_vars[var_num],
             )
             constraints.append(expression >= cvxpy.Constant(0))
 
         # tr(A.T x G)
-        objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
+        objective = cvxpy.Maximize(CvxpySolver._cvxpy_dot_prod(problem.objective, G))
 
         prob = cvxpy.Problem(objective, constraints)
+
         # Returns the optimal value.
         prob.solve()
         assert isinstance(prob.value, float)
         return prob.value
+
+
+    @classmethod
+    def _cvxpy_dot_prod(cls, c: lil_matrix, x: Any) -> Any:
+        """Compute the dot product of a sparse matrix and a cvxpy expression."""
+
+        import cvxpy
+
+        expr = cvxpy.Constant(0)
+        for i, row in enumerate(c.rows):
+            for idx, j in enumerate(row):
+                val = c.data[i][idx]
+                expr += val * x[i, j]
+        return expr

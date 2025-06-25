@@ -3,7 +3,8 @@ from typing import List
 from sympy import Expr
 import sympy
 
-from ncpol3sdpa.solvers import AvailableSolvers, Solver, SolverRegistry
+# from ncpol3sdpa.solvers import AvailableSolvers, Solver, SolverRegistry
+from ncpol3sdpa.solvers import Solver, SolverFactory
 from ncpol3sdpa.resolution import (
     Rules,
     RulesCommutative,
@@ -140,7 +141,7 @@ class Problem:
     def solve(
         self,
         relaxation_order: int = 1,
-        solver: Solver | AvailableSolvers = AvailableSolvers.CVXPY,
+        solver: Solver = SolverFactory.create_solver("cvxpy")
     ) -> float:
         """Solve the polynomial optimization problem using SDP relaxation.
 
@@ -184,11 +185,9 @@ class Problem:
             problemSDP = problemSDP.complex_to_realSDP()
 
         # 3. Solve the SDP
-        if isinstance(solver, AvailableSolvers):
-            return SolverRegistry.get_solver(solver).solve(problemSDP)
-        elif isinstance(solver, Solver):
+        if isinstance(solver, Solver):
             return solver.solve(problemSDP)
         else:
             raise TypeError(
-                f"Solver must be of type {Solver} or {AvailableSolvers}, not {type(solver)}"
+                f"Solver must be of type {Solver}, not {type(solver)}"
             )
