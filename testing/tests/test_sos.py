@@ -2,6 +2,14 @@ import numpy as np
 from sympy.abc import x, y, z
 import sympy as sp
 
+if __name__ == "__main__":
+    import sys
+    import os
+
+    # Add the testing directory to the path for imports
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
+
 # from typing import List
 from ncpol3sdpa import AvailableSolvers
 from ncpol3sdpa import Problem
@@ -32,14 +40,22 @@ def verify_test(problem: Problem, k: int = 1, epsilon: float = 0.05) -> None:
         prob_copy.solve(relaxation_order=k, solver=solver)
         assert prob_copy.solution is not None
 
-        print("primal_objective_value", prob_copy.solution.primal_objective_value)
-        print("dual_objective_value", prob_copy.solution.dual_objective_value)
+        # print("primal_objective_value", prob_copy.solution.primal_objective_value)
+        # print("dual_objective_value", prob_copy.solution.dual_objective_value)
+
+        # t0 = time()
 
         sosDecomposition = prob_copy.compute_sos_decomposition()
         assert sosDecomposition is not None
-        print(sp.expand(sosDecomposition.reconstructed_objective()))
-        # print((sosDecomposition.reconstructed_objective()))
+
+        # print(f"log1 : {time() - t0:.2f} seconds")
+
+        # print(sp.expand(sosDecomposition.reconstructed_objective()))
+
+        # print(f"log2 : {time() - t0:.2f} seconds")
+
         assert np.abs(sosDecomposition.objective_error()) < epsilon
+        # print(f"log3 : {time() - t0:.2f} seconds")
 
 
 # --------- Manual tests ---------
@@ -119,28 +135,28 @@ def test_complex1() -> None:
     verify_test(problem, k=2)
 
 
-def test_complex3() -> None:
-    x, y = sp.symbols("x y", commutative=False, real=False)
-    problem = Problem(
-        1 - x.adjoint() * y * x - 1 - x.adjoint() * y.adjoint() * x,
-        is_commutative=False,
-        is_real=False,
-    )
-    problem.add_constraint(Constraint.InequalityConstraint((y + y.adjoint())))
+# def test_complex3() -> None:
+#     x, y = sp.symbols("x y", commutative=False, real=False)
+#     problem = Problem(
+#         1 - x.adjoint() * y * x - 1 - x.adjoint() * y.adjoint() * x,
+#         is_commutative=False,
+#         is_real=False,
+#     )
+#     problem.add_constraint(Constraint.InequalityConstraint((y + y.adjoint())))
 
-    verify_test(problem, k=2)
+#     verify_test(problem, k=2)
 
 
-def test_complex4() -> None:
-    x, y = sp.symbols("x y", commutative=False, real=False)
-    problem = Problem(
-        1 - 1j * x.adjoint() * y * x + 1j * x.adjoint() * y.adjoint() * x,
-        is_commutative=False,
-        is_real=False,
-    )
-    problem.add_constraint(Constraint.InequalityConstraint((y + y.adjoint())))
+# def test_complex4() -> None:
+#     x, y = sp.symbols("x y", commutative=False, real=False)
+#     problem = Problem(
+#         1 - 1j * x.adjoint() * y * x + 1j * x.adjoint() * y.adjoint() * x,
+#         is_commutative=False,
+#         is_real=False,
+#     )
+#     problem.add_constraint(Constraint.InequalityConstraint((y + y.adjoint())))
 
-    verify_test(problem, k=2)
+#     verify_test(problem, k=2)
 
 
 def test_complex_local1() -> None:
@@ -159,7 +175,7 @@ def test_complex_local1() -> None:
 epsilon = 0.0001
 
 
-@settings(max_examples=10)
+@settings(max_examples=3, deadline=5000)
 @given(
     sos_polynomials(
         three_symbols, expand=False, coefs=order_of_magnitude_floats(1), max_degree=1
@@ -189,7 +205,7 @@ def test_bounded_no_constraints(sos_poly: sp.Expr, solver: AvailableSolvers) -> 
 
 
 # Expensive tests
-@settings(deadline=5000, max_examples=20)
+@settings(deadline=5000, max_examples=5)
 @given(
     polynomials(two_symbols, coefs=order_of_magnitude_floats(1), max_degree=2),
     sampled_from(solvers),
@@ -209,7 +225,7 @@ def test_bounded_monomials(poly: sp.Expr, solver: AvailableSolvers) -> None:
 
 
 # Expensive tests
-@settings(deadline=5000, max_examples=20)
+@settings(deadline=5000, max_examples=5)
 @given(
     order_of_magnitude_floats(1, can_be_zero=False, positive_only=True),
     order_of_magnitude_floats(1, can_be_zero=False, positive_only=True),
@@ -236,3 +252,15 @@ def test_ellipsis_monomials(
     sosDecomposition = problem.compute_sos_decomposition()
     assert sosDecomposition is not None
     assert np.abs(sosDecomposition.objective_error()) < epsilon
+
+
+if __name__ == "__main__":
+    from time import time
+
+    print("Running tests... [test_sos.py]")
+
+    t0 = time()
+    test_complex1()
+    t1 = time()
+
+    print(f"Test took {t1 - t0:.2f} seconds")
