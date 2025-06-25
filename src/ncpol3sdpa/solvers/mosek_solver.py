@@ -1,4 +1,4 @@
-from typing import Tuple, List, Optional
+from typing import Tuple, List
 from numpy.typing import NDArray
 
 import warnings
@@ -65,7 +65,7 @@ def de_linearize(vec: NDArray[np.float64]) -> NDArray[np.float64]:
 
 def parse_mosek_solution(
     problem: ProblemSDP, task: mosek.Task, n_eq_constrants: int
-) -> Solution_SDP:
+) -> Solution_SDP[np.float64]:
     solution_type = mosek.soltype.itr
     primal_objective_value = task.getprimalobj(solution_type)
     dual_objective_value = task.getdualobj(solution_type)
@@ -96,9 +96,18 @@ def parse_mosek_solution(
 
     # The first y is the dual_objective, then come the equality constraints.
     dual_eqC_variables = np.zeros(n_eq_constrants, dtype=np.float64)
-
     task.getyslice(solution_type, 1, 1 + n_eq_constrants, dual_eqC_variables)
     dual_eqC_variables *= -1.0
+
+    n_scalar_ineq_constrains = len(problem.inequality_scalar_constraints)
+    dual_ineqC_variables = np.zeros(n_scalar_ineq_constrains, dtype=np.float64)
+    task.getyslice(
+        solution_type,
+        1 + n_eq_constrants,
+        1 + n_eq_constrants + n_scalar_ineq_constrains,
+        dual_ineqC_variables,
+    )
+    dual_ineqC_variables *= -1.0
 
     return Solution_SDP(
         primal_objective_value=primal_objective_value,
@@ -106,12 +115,14 @@ def parse_mosek_solution(
         dual_objective_value=dual_objective_value,
         dual_PSD_variables=dual_PSD_variables,
         dual_eqC_variables=dual_eqC_variables,
+        dual_ineqC_variables=dual_ineqC_variables,
+        dtype=np.float64,
     )
 
 
 class MosekSolver(Solver):
     @classmethod
-    def solve(self, problem: ProblemSDP) -> Solution_SDP:
+    def solve(self, problem: ProblemSDP) -> Solution_SDP[np.float64]:
         """Solve the SDP problem with mosek"""
 
         # Gets the number of equ constraints to decode the solution
@@ -124,9 +135,10 @@ class MosekSolver(Solver):
         def stream_printer(text: str) -> None:
             # sys.stdout.write(text)
             # sys.stdout.flush()
+            # print(text, end="")
             pass
 
-        def mosek_task() -> Optional[Solution_SDP]:
+        def mosek_task() -> Solution_SDP[np.float64] | None:
             # Create a task object and attach log stream printer
             with mosek.Task() as task:
                 task.set_Stream(mosek.streamtype.log, stream_printer)
@@ -144,7 +156,12 @@ class MosekSolver(Solver):
                 )
                 # Append the contraints
                 number_of_constraints = len(problem.constraints)
-                task.appendcons(number_of_constraints + 1)
+                number_of_scalar_constraints = len(
+                    problem.inequality_scalar_constraints
+                )
+                task.appendcons(
+                    number_of_constraints + number_of_scalar_constraints + 1
+                )
 
                 # Adds the normalisation constraint
                 task.putbarablocktriplet(
@@ -159,7 +176,7 @@ class MosekSolver(Solver):
                     constraint_l = []
                     constraint_v = []
                     for var_num, matrix in problem.constraints[i].constraints:
-                        val_m, rows_m, cols_m = get_sparse_vecs(matrix)  # type
+                        val_m, rows_m, cols_m = get_sparse_vecs(matrix)
                         which_constraint += [1 + i] * len(val_m)
                         which_SDP += [var_num] * len(val_m)
                         constraint_k += rows_m
@@ -173,12 +190,46 @@ class MosekSolver(Solver):
                         constraint_v,
                     )
 
+                for i in range(number_of_scalar_constraints):
+                    which_constraint = []
+                    which_SDP = []
+                    constraint_k = []
+                    constraint_l = []
+                    constraint_v = []
+                    var_num, matrix = problem.inequality_scalar_constraints[
+                        i
+                    ].constraints
+                    val_m, rows_m, cols_m = get_sparse_vecs(matrix)
+                    which_constraint += [1 + i + number_of_constraints] * len(val_m)
+                    which_SDP += [var_num] * len(val_m)
+                    constraint_k += rows_m
+                    constraint_l += cols_m
+                    constraint_v += val_m
+                    task.putbarablocktriplet(
+                        which_constraint,
+                        which_SDP,
+                        constraint_k,
+                        constraint_l,
+                        constraint_v,
+                    )
+
                 # Set bounds for constraints
                 task.putconboundlist(
-                    list(range(number_of_constraints + 1)),
-                    [mosek.boundkey.fx for _ in range(number_of_constraints + 1)],
-                    [1.0] + [0.0 for _ in range(number_of_constraints)],
-                    [1] + [0 for _ in range(number_of_constraints)],
+                    list(
+                        range(number_of_constraints + number_of_scalar_constraints + 1)
+                    ),
+                    [mosek.boundkey.fx for _ in range(number_of_constraints + 1)]
+                    + [mosek.boundkey.lo for _ in range(number_of_scalar_constraints)],
+                    [1.0]
+                    + [
+                        0.0
+                        for _ in range(
+                            number_of_constraints + number_of_scalar_constraints
+                        )
+                    ],
+                    [1]
+                    + [0 for _ in range(number_of_constraints)]
+                    + [float("inf") for _ in range(number_of_scalar_constraints)],  # type: ignore
                 )
 
                 # Optimize

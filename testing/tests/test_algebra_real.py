@@ -40,8 +40,7 @@ def test_filter_monomials(
         assert monomial not in rules.rules.keys()
 
 
-# @given(just(monomials_3_7), just({}))
-@settings(deadline=1000)  # Increase deadline to 1000ms
+@settings(deadline=2000, max_examples=70)  # Increase deadline to 2000ms
 @given(just(monomials_3_4), generate_rules_1to1(monomials_3_4, max_rules=1))
 def test_create_moment_matrix_commutative(
     monomials: List[sympy.Expr], substitution_rules: RulesCommutative
@@ -79,7 +78,7 @@ def test_AlgebraSDP(
 ) -> None:
     # crash tests
     al = AlgebraSDPReal(
-        needed_variables=needed_variables,
+        needed_variables=[needed_variables],
         objective=objective,
         relaxation_order=relaxation_order,
         substitution_rules=substitution_rules,

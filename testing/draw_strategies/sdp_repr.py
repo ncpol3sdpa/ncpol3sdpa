@@ -7,7 +7,7 @@ from ncpol3sdpa.sdp_repr import (
 from scipy.sparse import lil_matrix
 
 # typing
-from typing import Optional, Tuple, TypeVar, List
+from typing import Tuple, TypeVar, List
 from hypothesis.strategies import SearchStrategy, DrawFn
 
 # from hypothesis import given
@@ -36,11 +36,9 @@ def symmetric_matrices(
 ) -> lil_matrix:
     if not isinstance(size, int):
         size = draw(size)
-    m: lil_matrix = draw(
-        lil_matrix(hyp_np.arrays(np.float64, shape=(size, size), elements=elements))  # type: ignore
-    )
+    m = draw(hyp_np.arrays(np.float64, shape=(size, size), elements=elements))
 
-    return m + m.T  # type: ignore
+    return lil_matrix(m + m.T)
 
 
 A = TypeVar("A")
@@ -70,7 +68,7 @@ def equivalence_classes(draw: DrawFn, list: List[A]) -> List[List[A]]:
 
 @composite
 def gen_MomentMatrixSDPs(
-    draw: DrawFn, min_size: int = 1, max_size: Optional[int] = None
+    draw: DrawFn, min_size: int = 1, max_size: int | None = None
 ) -> MomentMatrixSDP:
     assert min_size >= 0
     size = draw(integers(min_value=min_size, max_value=max_size))
@@ -85,7 +83,7 @@ def gen_ProblemSDPs_no_constraints(
     draw: DrawFn,
     num_strat: SearchStrategy[float] = float_strategies.small_normal_floats,
     min_size: int = 1,
-    max_size: Optional[int] = None,
+    max_size: int | None = None,
     max_vars: int = 10,
 ) -> ProblemSDP:
     assert min_size >= 0

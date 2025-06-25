@@ -16,6 +16,8 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
+
+
 stages:
   - build
   - test
@@ -27,15 +29,18 @@ variables:
   BASE_LAYER: bookworm-slim
   IMAGE: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
 
-# Define the image to use for the entire pipeline
-image:
-  name: $IMAGE
-  entrypoint: [""]
+image: $IMAGE
 
-# Script to be executed before each stage
 before_script:
   - echo "Setting up the environment..."
-  - python3 --version
+  - uv run python3 --version
+
+
+###########################################
+#                                         #
+#               Build Stage               #
+#                                         #
+###########################################
 
 uv-install:
   stage: build
@@ -49,20 +54,41 @@ uv-install:
       - $UV_CACHE_DIR
   script:
     - uv cache prune --ci
+    - uv pip install --system -e .
 
+
+###########################################
+#                                         #
+#               Test Stage                #
+#                                         #
+###########################################
+
+# This job runs the tests using Pytest
 pytest:
   stage: test
   script:
     - echo "Running Pytest..."
-    - echo "HOME is $HOME"
     - mkdir $HOME/mosek
     - touch $HOME/mosek/mosek.lic
-    # - echo "$MSK_LICENSE" >> $HOME/mosek/mosek.lic
     - echo "$MOSEK_LICENSE" >> $HOME/mosek/mosek.lic
     - echo "Mosek license file created at $HOME/mosek/mosek.lic\n"
-    - uv run pytest
-    - echo "Pytest complete"
+    # Executes pytest to run all test files in the project.
+    # Options:
+    # - `--durations=10`: Shows the 10 slowest test executions
+    # - `--cov=src`: Measures code coverage for the 'src' directory
+    # - `--cov-report=xml:docs/source/coverage.xml`: Generates an XML coverage report at the specified path
+    - uv run pytest --durations=10 --cov=src --cov-report=xml:docs/source/coverage.xml
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: docs/source/coverage.xml
+    paths:
+      - docs/source/coverage.xml
+    expire_in: 1 week
 
+# This job checks the code for type errors using Mypy
 mypy:
   stage: test
   script:
@@ -71,20 +97,7 @@ mypy:
     - echo "Mypy complete"
   allow_failure: false
 
-# - name: Setup MOSEK & Run Tests
-#    env:
-#      MOSEKLM_LICENSE_FILE: ${{ secrets.MSK_LICENSE }}
-#    run: |
-#      pytest -sv
-
-# testing-key:
-#   stage: test
-#   script:
-#     - echo "Running Testing Key..."
-#     - echo "$TestKey"
-#     - echo "Testing Key complete"
-#   allow_failure: true
-
+# This job checks the code for style violations using Ruff
 ruff-check-src:
   stage: test
   script:
@@ -101,9 +114,25 @@ ruff-check-src:
 #     - echo "Ruff complete"
 #   allow_failure: true
 
-deploy-job:
-  stage: deploy
-  environment: production
-  script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
+###########################################
+#                                         #
+#               Deploy Stage              #
+#                                         #
+###########################################
+
+# The deploy job has been disabled for now.
+# Gitlab Pages is unavailable for us,
+# so we used GitHub Actions for deployment instead.
+
+# pages:
+#   stage: deploy
+#   script:
+#   - echo "Deploying documentation..."
+#   - uv run sphinx-build --version
+#   - cd docs
+#   - make html
+#   - yes "" | make latexpdf
+#   - cd ..
+#   # - uv run sphinx-build -b html docs/source public
+#   # - uv run sphinx-build -b latex docs/source docs/build/latex
+#   # - make -C docs/build/latex

@@ -12,7 +12,7 @@ from .algebra_sdp_nc_real import AlgebraSDPncReal
 
 
 def create_AlgebraSDP(
-    needed_variables: List[sp.Symbol],
+    needed_variables: List[List[sp.Symbol]],
     objective: sp.Expr,
     relaxation_order: int,
     substitution_rules: Rules,
