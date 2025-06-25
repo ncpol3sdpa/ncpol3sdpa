@@ -3,8 +3,7 @@ from typing import List
 from sympy import Expr
 import sympy
 
-# from ncpol3sdpa.solvers import AvailableSolvers, Solver, SolverRegistry
-from ncpol3sdpa.solvers import Solver, SolverFactory
+from ncpol3sdpa.solvers import Solver, SolverList, SolverFactory
 from ncpol3sdpa.resolution import (
     Rules,
     RulesCommutative,
@@ -141,7 +140,7 @@ class Problem:
     def solve(
         self,
         relaxation_order: int = 1,
-        solver: Solver = SolverFactory.create_solver("cvxpy")
+        solver: Solver | SolverList = SolverList.CVXPY,
         verbose: bool = False,
     ) -> float:
         """Solve the polynomial optimization problem using SDP relaxation.
@@ -163,8 +162,8 @@ class Problem:
         normal_constraints = self.constraints
 
         # 1. Build algebric formulation
-        if verbose:
-            print("Build the algebric formulation")
+        # if verbose:
+        #     print("Build the algebric formulation")
 
         all_constraint_polynomials = [c.polynomial for c in self.constraints] + [
             self.objective
@@ -184,8 +183,8 @@ class Problem:
         algebraSDP.add_constraints(normal_constraints)
 
         # 2. Translate to SDP
-        if verbose:
-            print("Translate to SDP")
+        # if verbose:
+        #     print("Translate to SDP")
 
         problemSDP = algebra_to_SDP(algebraSDP)
         if not self.is_real:
@@ -196,8 +195,9 @@ class Problem:
             return solver.solve(problemSDP)
         if verbose:
             print("Solve the SDP")
-        if isinstance(solver, AvailableSolvers):
-            return SolverRegistry.get_solver(solver).solve(problemSDP, verbose=verbose)
+        if isinstance(solver, SolverList):
+            # return SolverF.get_solver(solver).solve(problemSDP, verbose=verbose)
+            return SolverFactory.create_solver(solver).solve(problemSDP)
         elif isinstance(solver, Solver):
             return solver.solve(problemSDP, verbose=verbose)
         else:
