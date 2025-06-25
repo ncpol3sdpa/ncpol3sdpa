@@ -181,4 +181,4 @@ class Ground_state2:
                     )
                     p.add_constraint(c)
 
-        return -p.solve_uncheked(2)
+        return -p.solve(2)

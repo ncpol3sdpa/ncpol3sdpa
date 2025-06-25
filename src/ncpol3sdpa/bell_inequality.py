@@ -62,4 +62,8 @@ class Bell_inequality:
         p.add_rule(A2 * B2, B2*A2)
         """
 
-        return p.solve_uncheked(2, solver=AvailableSolvers.MOSEK)
+        solution = p.solve(2, solver=AvailableSolvers.MOSEK)
+
+        if solution is None:
+            raise ValueError("No solution found for the Bell inequality problem.")
+        return solution
