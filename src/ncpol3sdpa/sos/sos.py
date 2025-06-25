@@ -182,7 +182,6 @@ def compute_sos_decomposition(
     """
     if not problem_algebra.is_real:
         solution = solution_real_to_complex(solution)
-    print(solution)
     A = solution.dual_PSD_variables[0]
     B = solution.dual_PSD_variables[1:]
 
@@ -211,7 +210,6 @@ def compute_sos_decomposition(
         calculate_SOS(w, B[i], problem_algebra.psd_polynomials_gi[i])
         for i in range(len(B))
     ]
-    print("sso", SOS.squares)
 
     eq_polys = compute_equality_constraints(problem_algebra, solution)
 
