@@ -173,3 +173,29 @@ def test_trace_inequality() -> None:
     p.add_constraint(c1)
     assert abs(p.solve(2)) <= 0.1
     assert abs(p.solve(3, AvailableSolvers.MOSEK)) <= 0.0001
+
+
+def test_nc_agebra_commute() -> None:
+    A0 = HermitianOperator("A0")  # type: ignore
+    A1 = HermitianOperator("A1")  # type: ignore
+    B0 = HermitianOperator("B0")  # type: ignore
+    B1 = HermitianOperator("B1")  # type: ignore
+    obj = A0 * B0 + A0 * B1 + A1 * B0 - A1 * B1
+    p = Problem(
+        obj, is_commutative=False, is_real=False, commute_variables=[[A0, A1], [B0, B1]]
+    )
+    p.add_constraint(Constraint.EqualityConstraint(A0 * A0 - 1))
+    p.add_constraint(Constraint.EqualityConstraint(A1 * A1 - 1))
+    p.add_constraint(Constraint.EqualityConstraint(B0 * B0 - 1))
+    p.add_constraint(Constraint.EqualityConstraint(B1 * B1 - 1))
+
+    # p.add_constraint(Constraint.EqualityConstraint(A0 * B0 - B0 * A0))
+    # p.add_constraint(Constraint.EqualityConstraint(A0 * B1 - B1 * A0))
+    # p.add_constraint(Constraint.EqualityConstraint(A1 * B0 - B0 * A1))
+    # p.add_constraint(Constraint.EqualityConstraint(A1 * B1 - B1 * A1))
+
+    # val2 = p.solve(2)
+    val3 = p.solve(2, solver=AvailableSolvers.MOSEK)
+
+    # assert abs(val2 - 2.82842712475) <= 0.1
+    assert abs(val3 - 2.82842712475) <= 0.001

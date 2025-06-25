@@ -41,7 +41,7 @@ def algebra_to_SDP_add_inequality_constraint(
 
     for i, row in enumerate(constraint_moment_matrix):
         for j, poly in enumerate(row):
-            a_k = lil_matrix((constraint_matrix_size, constraint_matrix_size))  # type: ignore
+            a_k = lil_matrix((constraint_matrix_size, constraint_matrix_size))
             a_k[i, j] -= 0.5
             a_k[j, i] -= 0.5
 
