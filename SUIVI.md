@@ -482,12 +482,15 @@ New planning for the folowing 2 weeks:
 
 # 22/06/2025
 - (Mathis)
-  * Change MR [33] to implement the requested changes 
+  * Change MR [33] to implement the requested changes
 
 # 23/06/2025
 - (Thomas)
   * Continue the work on goround-state and mthen modifie the approche after the meeting with Peter Brown
+- (Alain)
+  * begin debug mob farm optimization
+  * add repr for mob farm & constraints
 
 # 24/06/2025
 - (Thomas)
-  * Finish the implementation of the ground-state problem and a set of examples to test 
+  * Finish the implementation of the ground-state problem and a set of examples to test
