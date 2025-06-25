@@ -72,14 +72,14 @@ def test_generate_needed_symbols(polynomials: List[sympy.Expr]) -> None:
     draw_poly.generate_rules_1to1(monomials_2_3, max_rules=3),
 )
 def test_AlgebraSDP(
-    needed_variables: List[List[sympy.Symbol]],
+    needed_variables: List[sympy.Symbol],
     objective: sympy.Expr,
     relaxation_order: int,
     substitution_rules: RulesCommutative,
 ) -> None:
     # crash tests
     al = AlgebraSDPReal(
-        needed_variables=needed_variables,
+        needed_variables=[needed_variables],
         objective=objective,
         relaxation_order=relaxation_order,
         substitution_rules=substitution_rules,
