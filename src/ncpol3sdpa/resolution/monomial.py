@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import List, Iterable
 
-from sympy import Expr, Symbol, total_degree, sympify, S
+from sympy import Expr, total_degree, sympify, S
 from sympy.physics.quantum import Operator
 
 
@@ -19,7 +19,7 @@ def list_increment(degrees: List[int], k: int) -> bool:
 
 
 def generate_monomials(
-    symbols: Iterable[Symbol | Operator],
+    symbols: Iterable[Expr | Operator],
     relaxation_order: int,
     is_commutative: bool = True,
 ) -> List[Expr]:
