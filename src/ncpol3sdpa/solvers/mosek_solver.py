@@ -1,7 +1,6 @@
-from typing import Tuple, List
+from typing import Tuple, List, Dict, Any
 import warnings
 
-import mosek
 from scipy.sparse import lil_matrix
 
 from ncpol3sdpa.sdp_repr import ProblemSDP
@@ -42,23 +41,40 @@ def get_sparse_vecs(
 
 
 class MosekSolver(Solver):
-    @classmethod
+    """Solver for SDP problems using MOSEK."""
+
+    def __init__(self, **kwargs: Dict[str, Any]) -> None:
+        """
+        Initialize the MosekSolver instance.
+
+        Parameters
+        ----------
+        **kwargs: Additional keyword arguments for configuration.
+        """
+        
+        super().__init__(**kwargs)
+
+    def is_available(self) -> bool:
+        """Check if mosek is available"""
+        try:
+            import mosek  # noqa: F401
+            return True
+        except ImportError:
+            return False
+
     def solve(self, problem: ProblemSDP) -> float:
         """Solve the SDP problem with mosek"""
+
+        import mosek
 
         # Convert constraints inside the moment matrix to primal form constraints
         problem.compile_moment_matrix_to_constraints()
 
-        # Define a stream printer to grab output from MOSEK
-        def stream_printer(text: str) -> None:
-            # sys.stdout.write(text)
-            # sys.stdout.flush()
-            pass
-
-        def mosek_task() -> float:
-            # Create a task object and attach log stream printer
+        
+        try:
+            # Create a task object
             with mosek.Task() as task:
-                task.set_Stream(mosek.streamtype.log, stream_printer)
+                task.set_Stream(mosek.streamtype.log, lambda text: None)
 
                 # Append #problem.variable_sizes symmetric variables of dimension problem.variable_sizes
                 task.appendbarvars(problem.variable_sizes)
@@ -179,9 +195,7 @@ class MosekSolver(Solver):
                 else:
                     warnings.warn("Other solution status: ", solution_status)
                     return float("nan")  # Other solution status
-
-        try:
-            return mosek_task()
+                
         except mosek.MosekException as e:
             warnings.warn(f"Mosek exception : {e}")
             return float("nan")
