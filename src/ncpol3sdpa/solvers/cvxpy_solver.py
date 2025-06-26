@@ -1,14 +1,18 @@
-from typing import List
+import warnings
+from typing import List, Dict, Any
 
 from scipy.sparse import lil_matrix
+import numpy as np
 
-import cvxpy
-
+from ncpol3sdpa.sdp_solution import Solution_SDP
 from ncpol3sdpa.sdp_repr import ProblemSDP
 from .solver import Solver
 
 
-def cvxpy_dot_prod(c: lil_matrix, x: "cvxpy.Expression") -> "cvxpy.Expression":
+def cvxpy_dot_prod(c: lil_matrix, x: Any) -> Any:
+    """Compute the dot product of a sparse matrix and a cvxpy expression."""
+    import cvxpy
+
     expr = cvxpy.Constant(0)
     for i, row in enumerate(c.rows):
         for idx, j in enumerate(row):
@@ -18,43 +22,81 @@ def cvxpy_dot_prod(c: lil_matrix, x: "cvxpy.Expression") -> "cvxpy.Expression":
 
 
 class CvxpySolver(Solver):
-    @classmethod
-    def solve(self, problem: ProblemSDP) -> float:
-        """Solve the SDP problem with cvxpy"""
-        # Variables
-        sdp_vars = [
-            cvxpy.Variable((size, size), PSD=True) for size in problem.variable_sizes
-        ]
+    """Solver for SDP problems using CVXPY."""
 
+    def is_available(self) -> bool:
+        """Check if cvxpy is available"""
+        try:
+            import cvxpy  # noqa: F401
+
+            return True
+        except ImportError:
+            return False
+
+    def solve(
+        self, problem: ProblemSDP, **config: Dict[str, Any]
+    ) -> Solution_SDP[np.float64] | None:
+        """Solve the SDP problem with cvxpy"""
+
+        import cvxpy
+
+        sdp_vars = [
+            cvxpy.Variable((size, size), symmetric=True)
+            for size in problem.variable_sizes
+        ]
+        psd_constraints: List[cvxpy.Constraint] = [x >> 0 for x in sdp_vars]
         # Moment matrix structure
         G = sdp_vars[problem.MOMENT_MATRIX_VAR_NUM]
-        constraints: List[cvxpy.Constraint] = [G[0, 0] == 1]
+        moment_structure_constraints: List[cvxpy.Constraint] = [G[0, 0] == 1]
         for eq_class in problem.moment_matrix.eq_classes:
             assert len(eq_class) > 0
             (i, j) = eq_class.pop()
             for x, y in eq_class:
-                constraints.append(G[i, j] == G[x, y])
+                moment_structure_constraints.append(G[i, j] == G[x, y])
 
         # Constraints
+        eq_constraints: List[cvxpy.Constraint] = []
         for constraint in problem.constraints:
             expression: cvxpy.Expression = cvxpy.Constant(0)
             for var_num, matrix in constraint.constraints:
                 expression += cvxpy_dot_prod(matrix, sdp_vars[var_num])
-            constraints.append(cvxpy.Constant(0) == expression)
+            eq_constraints.append(cvxpy.Constant(0) == expression)
 
-        for constraint in problem.inequality_scalar_constraints:  # type: ignore
-            var_num, mat = constraint.constraints  # type: ignore
-            expression: cvxpy.Expression = cvxpy_dot_prod(  # type: ignore
-                mat,  # type: ignore
+        ineq_constraints: List[cvxpy.Constraint] = []
+        for constraint2 in problem.inequality_scalar_constraints:
+            var_num, mat = constraint2.constraints
+            expression2: cvxpy.Expression = cvxpy_dot_prod(
+                mat,
                 sdp_vars[var_num],
             )
-            constraints.append(expression >= cvxpy.Constant(0))
+            ineq_constraints.append(expression2 >= cvxpy.Constant(0))
 
-        # tr(A.T x G)
         objective = cvxpy.Maximize(cvxpy_dot_prod(problem.objective, G))
 
-        prob = cvxpy.Problem(objective, constraints)
+        prob = cvxpy.Problem(
+            objective, moment_structure_constraints + psd_constraints + eq_constraints
+        )
         # Returns the optimal value.
-        prob.solve()
+        prob.solve(verbose=config.get("verbose", False))
         assert isinstance(prob.value, float)
-        return prob.value
+
+        if prob.status in ["optimal", "optimal_inaccurate", "unknown"]:
+            if prob.status == "optimal_inaccurate":
+                warnings.warn(
+                    f'CVXPY does not guarantee the accuracy of the solution: "{prob.status}"'
+                )
+
+            return Solution_SDP(
+                primal_objective_value=prob.value,
+                primal_PSD_variables=[x.value for x in sdp_vars],  # type: ignore
+                dual_objective_value=moment_structure_constraints[0].dual_value,
+                dual_PSD_variables=[c.dual_value for c in psd_constraints],
+                dual_eqC_variables=np.array([c.dual_value for c in eq_constraints]),
+                dual_ineqC_variables=np.array([c.dual_value for c in ineq_constraints]),
+                dtype=np.float64,
+            )
+        else:
+            warnings.warn(
+                f'CVXPY could not solve the problem, solution status is "{prob.status}"'
+            )
+            return None
