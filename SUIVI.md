@@ -491,7 +491,7 @@ New planning for the folowing 2 weeks:
 
 # 23/06/2025
 - (Thomas)
-  * Continue the work on goround-state and mthen modifie the approche after the meeting with Peter Brown
+  * Continue the work on ground-state and then modifie the approche after the meeting with Peter Brown
 - (Nazar)
   * Aprove [Merge Request](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/33) for the local inequality constaints
   * Fix bug in generate_needed_symbols
@@ -547,6 +547,8 @@ New planning for the folowing 2 weeks:
 - (Mathis) 
   * Finish tensor product, MR[https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/42]
   * start to work on the add of monomials in the list of monomials if its not in the SDP monomials 
+- (Thomas) 
+  * Implement verbose: enable -if activated- the user to follow the process of the solvers and see documentation
 
 # 26/06/2025
 - (Mathis)
@@ -554,7 +556,8 @@ New planning for the folowing 2 weeks:
   * Start the benchmark with Yann
     + benchmark for Bell Inequality CHSH
     + Benchmark Ground state problem
-
+- (Thomas)
+  * Implement a new feature: rank loop. It tells the user if the solution at the order of relaxation r is stable or not
 >>>
 ### We have a new architecture for the solver:
 
