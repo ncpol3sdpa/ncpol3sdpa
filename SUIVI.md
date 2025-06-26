@@ -503,7 +503,7 @@ New planning for the folowing 2 weeks:
 - (Alain)
   * debug mob farm optimization
   * add repr for mob farm & constraints
-- (Yann) 
+- (Yann)
   * Work on coverage documentation to create a coverage html report
   * Merge [MR 32 — GitLab Page configuration](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/32)
   * Merge [MR 34 — Documentation Improvements](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/34)
@@ -544,10 +544,10 @@ New planning for the folowing 2 weeks:
   * Merge [MR 41 — Update GitHub Workflows & Documentation](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/41)
   * Merge [MR 44 — Refactor solver architecture and make MOSEK optional dependency](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/44)
   * Merge [MR 47 — Solver enhancements](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/47)
-- (Mathis) 
+- (Mathis)
   * Finish tensor product, MR[https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/42]
-  * start to work on the add of monomials in the list of monomials if its not in the SDP monomials 
-- (Thomas) 
+  * start to work on the add of monomials in the list of monomials if its not in the SDP monomials
+- (Thomas)
   * Implement verbose: enable -if activated- the user to follow the process of the solvers and see documentation
 
 # 26/06/2025
@@ -558,13 +558,16 @@ New planning for the folowing 2 weeks:
     + Benchmark Ground state problem
 - (Thomas)
   * Implement a new feature: rank loop. It tells the user if the solution at the order of relaxation r is stable or not
+- (Nazar)
+  * Fix more bugs
+  * Write documentation
+
 >>>
 ### We have a new architecture for the solver:
 
 ![](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/raw/main/docs/graphs/pydeps_graph6.svg)
 ![](./docs/graphs/pydeps_graph6.svg)
 
-THE DOCUMENTATION IS NOW AVAILABLE ONLINE: [https://yruellan.gitlab.io/ncpol3sdpa/](https://yruellan.gitlab.io/ncpol3sdpa/)
+THE DOCUMENTATION IS NOW AVAILABLE ONLINE: [https://yruellan.github.io/ncpol3sdpa/](https://yruellan.github.io/ncpol3sdpa/)
 
 >>>
-

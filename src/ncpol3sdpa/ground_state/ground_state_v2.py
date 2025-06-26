@@ -4,42 +4,6 @@ from ncpol3sdpa import Constraint, Problem
 from sympy.physics.quantum import HermitianOperator
 
 
-""""
-class Pauli:
-    Id = np.array([[1, 0], [0, 1]])
-    X = np.array([[0, 1], [1, 0]])
-    Y = np.array([[0, -1j], [1j, 0]])
-    Z = np.array([[1, 0], [0, -1]])
-
-"""
-
-""""
-class Variables:
-    Id = HermitianOperator("Id")  # type: ignore
-    X = HermitianOperator("X")  # type: ignore
-    Y = HermitianOperator("Y")  # type: ignore
-    Z = HermitianOperator("Z")  # type: ignore
-
-    Id_var = Matrix([[1, 0], [0, 1]])
-    X_var = Matrix([[0, 1], [1, 0]])
-    Y_var = Matrix([[0, -1j], [1j, 0]])
-    Z_var = Matrix([[1, 0], [0, -1]])
-
-"""
-
-"""def transform_pauli_matrices(n: int, i: int, W: Matrix) -> np.ndarray:
-    return  Wi the associated matrix of Pauli W "translated" i-times to the right with tensor products
-
-    for a in range(i - 1):
-        W = TensorProduct(Variables.Id_var, W)  # produit tensoriel de matrice
-
-    for b in range(i, n):
-        W = TensorProduct(W, Variables.Id_var)
-    return W
-
-"""
-
-
 class Ground_state2:
     def __init__(
         self,
@@ -48,39 +12,6 @@ class Ground_state2:
     ) -> None:
         self.number_of_edges = number_of_edges
         self.list_of_edges = list_of_edges
-
-    """def create_list_matrices_X(self) -> List[np.ndarray]:
-        number_of_edges = self.number_of_edges
-        list_of_X: List[np.ndarray] = []
-        for i in range(number_of_edges):  ##list_of_X = [X1, X2, X3...]
-            list_of_X.append(
-                transform_pauli_matrices(number_of_edges, i, np.array([[0, 1], [1, 0]]))
-            )
-        return list_of_X
-
-    def create_list_matrices_Y(self) -> List[np.ndarray]:
-        number_of_edges = self.number_of_edges
-        list_of_Y: List[np.ndarray] = []
-        for i in range(number_of_edges):
-            list_of_Y.append(
-                transform_pauli_matrices(
-                    number_of_edges, i, np.array([[0, -1j], [1j, 0]])
-                )
-            )
-        return list_of_Y
-
-    def create_list_matrices_Z(self) -> List[np.ndarray]:
-        number_of_edges = self.number_of_edges
-        list_of_Z: List[np.ndarray] = []
-        for i in range(number_of_edges):
-            list_of_Z.append(
-                transform_pauli_matrices(
-                    number_of_edges, i, np.array([[1, 0], [0, -1]])
-                )
-            )
-        return list_of_Z
-
-    """
 
     def create_variables_X(self) -> List[HermitianOperator]:
         list_of_X: List[HermitianOperator] = []
