@@ -54,3 +54,14 @@ def test_ground_state_3() -> None:
         },
     )
     assert abs(ground_state.solve_ground_state() + 9) <= 0.01
+
+
+"""
+def test_ground_state_1() -> None:
+    #test corresponds to a situation wwhere there are 3 qubits and 2 edges between 2 of the 3 qubits
+    #In this situation the minimun of the energy of the system is -3
+    ground_state = ground_state_v2.Ground_state2(
+        3, {(1, 2): 1, (2, 3): 1, (1, 3): 0, (2, 1): 1, (3, 1): 0, (3, 2): 1}
+    )
+    assert abs(ground_state.solve_ground_state_with_optimization() + 3) <= 0.01
+"""
