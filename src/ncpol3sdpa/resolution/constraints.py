@@ -26,6 +26,9 @@ class ConstraintType(Enum):
 
     .. math::
        f(x) \\succcurlyeq 0
+
+    In the commutative case, this means that the polynomial is non-negative.
+    In the non-commutative case, this means that the polynomial is positive semi-definite.
     """
     LOCAL_INEQUALITY = auto()
     """
