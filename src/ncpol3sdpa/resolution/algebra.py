@@ -164,7 +164,7 @@ class AlgebraSDP:
         a_0: lil_matrix = lil_matrix(
             (moment_matrix_size, moment_matrix_size), dtype=self.DTYPE
         )
-        print(self.monomial_to_positions)
+
         for monomial, coef in sp.expand(poly).as_coefficients_dict().items():
             if sp.I in coef.atoms():  # type: ignore
                 coef /= sp.I
@@ -174,7 +174,7 @@ class AlgebraSDP:
                 monomial /= sp.I
                 coef = float(coef)
                 coef *= 1j  # type: ignore
-            print(monomial)
+
             assert monomial in self.monomial_to_positions.keys()
             assert 0 < len(self.monomial_to_positions[monomial])
 
