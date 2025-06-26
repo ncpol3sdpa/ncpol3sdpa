@@ -30,8 +30,7 @@ def stable_rank(matrix: NDArray[Any], tol: float = 1e-6) -> int:
     """Compute matrix rank robustly given numerical noise."""
     s = np.linalg.svd(matrix, compute_uv=False)
     res = np.sum(s > tol)
-    assert isinstance(res, int)
-    return res
+    return int(res)
 
 
 def rank_loop(p: Problem) -> int:

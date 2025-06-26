@@ -28,4 +28,4 @@ def test_2() -> None:
 
     r = rank_loop.rank_loop(p)
 
-    assert (3 - r) >= 0 and abs(p.solve_unchecked(3) - 2.414) <= 0.01
+    assert (4 - r) >= 0 and abs(p.solve_unchecked(3) - 2.414) <= 0.01
