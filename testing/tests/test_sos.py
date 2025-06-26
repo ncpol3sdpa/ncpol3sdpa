@@ -29,7 +29,7 @@ from hypothesis.strategies import sampled_from
 solvers = [SolverList.MOSEK]  # SolverList.CVXPY]
 
 
-def verify_test(problem: Problem, k: int = 1, epsilon: float = 0.05) -> None:
+def verify_test(problem: Problem, k: int = 1, epsilon: float = 1e-6) -> None:
     for solver in solvers:
         # The problem should be solved only once
         # prob_copy = deepcopy(problem)
@@ -43,19 +43,12 @@ def verify_test(problem: Problem, k: int = 1, epsilon: float = 0.05) -> None:
         # print("primal_objective_value", prob_copy.solution.primal_objective_value)
         # print("dual_objective_value", prob_copy.solution.dual_objective_value)
 
-        # t0 = time()
-
         sosDecomposition = prob_copy.compute_sos_decomposition()
         assert sosDecomposition is not None
 
-        # print(f"log1 : {time() - t0:.2f} seconds")
-
         # print(sp.expand(sosDecomposition.reconstructed_objective()))
-
-        # print(f"log2 : {time() - t0:.2f} seconds")
-
+        epsilon *= max(1, abs(prob_copy.solution.dual_objective_value))
         assert np.abs(sosDecomposition.objective_error()) < epsilon
-        # print(f"log3 : {time() - t0:.2f} seconds")
 
 
 # --------- Manual tests ---------
@@ -101,6 +94,7 @@ def test_failing() -> None:
         + 163.816502149217
     )
     problem = Problem(p1)
+    # this level of imprecision is possibly a bug
     verify_test(problem, k=3)
 
 
@@ -172,10 +166,10 @@ def test_complex_local1() -> None:
 
 # --------- Automatic property tests ---------
 
-epsilon = 0.0001
+epsilon = 1e-5
 
 
-@settings(max_examples=3, deadline=5000)
+@settings(max_examples=5, deadline=5000)
 @given(
     sos_polynomials(
         three_symbols, expand=False, coefs=order_of_magnitude_floats(1), max_degree=1
@@ -201,7 +195,9 @@ def test_bounded_no_constraints(sos_poly: sp.Expr, solver: SolverList) -> None:
 
     sosDecomposition = problem.compute_sos_decomposition()
     assert sosDecomposition is not None
-    assert np.abs(sosDecomposition.objective_error()) < epsilon
+
+    epsilon2 = epsilon * max(1, abs(problem.solution.dual_objective_value))
+    assert np.abs(sosDecomposition.objective_error()) < epsilon2
 
 
 # Expensive tests
@@ -220,8 +216,9 @@ def test_bounded_monomials(poly: sp.Expr, solver: SolverList) -> None:
 
     sosDecomposition = problem.compute_sos_decomposition()
     assert sosDecomposition is not None
-    # This level of impression is probably a bug
-    assert np.abs(sosDecomposition.objective_error()) < 0.05
+
+    epsilon2 = epsilon * max(1, abs(problem.solution.dual_objective_value))
+    assert np.abs(sosDecomposition.objective_error()) < epsilon2
 
 
 # Expensive tests
@@ -251,7 +248,9 @@ def test_ellipsis_monomials(
 
     sosDecomposition = problem.compute_sos_decomposition()
     assert sosDecomposition is not None
-    assert np.abs(sosDecomposition.objective_error()) < epsilon
+
+    epsilon2 = epsilon * max(1, abs(problem.solution.dual_objective_value))
+    assert np.abs(sosDecomposition.objective_error()) < epsilon2
 
 
 if __name__ == "__main__":
