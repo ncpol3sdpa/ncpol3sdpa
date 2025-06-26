@@ -508,6 +508,9 @@ New planning for the folowing 2 weeks:
   * Merge [MR 34 — Documentation Improvements](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/34)
   * Merge [MR 35 — Documentation and Configuration Improvements](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/35)
   * Merge [MR 36 - Github action](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/36)
+- (All)
+  * Email to Peter Brown to ask questions
+  * Think about the documentation
 
 # 24/06/2025
 - (Thomas)
@@ -523,6 +526,7 @@ New planning for the folowing 2 weeks:
 - (Yann)
   * Merge [MR 38 - Refactor & clean documentation](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/38)
   * Merge [MR 39 - Improve docstrings](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/39)
+  * Create a todo list for the next steps in the project
 
 # 25/06/2025
 - (Nazar)
