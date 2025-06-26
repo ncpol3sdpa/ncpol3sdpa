@@ -483,6 +483,7 @@ New planning for the folowing 2 weeks:
 # 22/06/2025
 - (Mathis)
   * Change MR [33] to implement the requested changes
+  * Change MR [33] to implement the requested changes
 
 # 23/06/2025
 - (Thomas)
