@@ -4,63 +4,28 @@
 
 This package is a Python library for solving polynomial optimization problems using Lasserre hierarchical SDP relaxations.
 
-We solve the following problem:
+We solve the following problem:  
 $$\begin{align*}
 \max_{x_1, \ldots, x_n} &\quad f(x_1, \ldots, x_n) \\
-\text{s.t.} &\quad g_i(x_1, \ldots, x_n) \leq 0 \quad \forall i
+\text{s.t.} &\quad g_i(x_1, \ldots, x_n) \leq 0 \quad \forall i \in [1, C]
 \end{align*}$$
 
 where $f,g_i \in \mathbb K [x_1,\ldots,x_n]$.
 
-This library is a successor to the ncpol2sdpa library.
+This library is a successor to the [ncpol2sdpa library](https://ncpol2sdpa.readthedocs.io/en/stable/index.html).
 
-### Architecture
+### About
 
-```
-ncpol3sdpa
-├─ __init__.py
-├─ algebra_to_SDP.py
-├─ funs.py
-├─ main.py
-├─ problem.py                Problem
-├─ sos.py                    Sos
-│
-├─ resolution                The resolution of a problem
-│  ├─ __init__.py
-│  ├─ algebra.py             AlgebraSDP
-│  ├─ algebra_sdp_real.py
-│  ├─ algebra_sdp_complex.py
-│  ├─ constraints.py         Constraint
-│  ├─ create_algebra.py
-│  ├─ monomial.py
-│  ├─ rules.py               Rule
-│  └─ utils.py               generate_needed_symbols
-│
-├─ sdp_repr                  The structure of a problem
-│  ├─ __init__.py
-│  ├─ eq_constraint.py       EqConstraint
-│  ├─ moment_matrix_SDP.py   MomentMatrixSDP
-│  └─ problem_SDP.py         ProblemSDP
-│
-└─ solvers                   Implementation of the solvers
-   ├─ __init__.py            AvailableSolvers
-   ├─ cvxpy_solver.py
-   ├─ mosek_solver.py
-   └─ solver_registry.py
-   └─ solver.py              Solver
-```
+This package is developed by Alain, Thomas, Nazar, Mathis and Yann, under the supervision of Peter J Brown, at Telecom Paris, during the 2025 Artishow project.
+
+The documentation is available at [ncpol3sdpa github](https://yruellan.github.io/ncpol3sdpa).
 
 ## Development
 
-To develop this package, you need to install the `uv` package. You can do this by running the following command:
+To develop this package, you need to install the [`uv` package manager](https://docs.astral.sh/uv/). 
 
-```bash
-pip install uv
-# or
-curl -LsSf https://astral.sh/uv/install.sh | sudo sh
-```
-
-We also use `ruff` and `mypy` for error checking and formatting. These are installed as part of the `uv` package. You can install the VSCode extension for `ruff` by following the instructions [here](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) and for `mypy` by following the instructions [here](https://marketplace.visualstudio.com/items?itemName=matangover.mypy).
+We also use [`ruff`](https://docs.astral.sh/ruff/) and [`mypy`](https://mypy.readthedocs.io/en/stable/#) for error checking and formatting. These are installed by `uv sync` package.  
+You can install the VSCode extension for `ruff` by following the instructions [here](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) and for `mypy` by following the instructions [here](https://marketplace.visualstudio.com/items?itemName=matangover.mypy).
 
 ### Testing
 
@@ -109,7 +74,7 @@ uvx ruff format
 
 ### Pre-Commit
 
-We use pre-commit hooks to ensure a automatically verify adherence to formatting, linting, typing and tests.To use pre-commit hooks you must install them like this:
+We use pre-commit hooks to format the code, check for lint or type errors and run tests. To use pre-commit hooks you must install them like this:
 
 ```bash
 uv sync
@@ -142,14 +107,8 @@ To learn more about the details of pre-commit, the documentation is [here](https
 ## Documentation
 
 ### Build Documentation
-<!-- You can install it by running the following command:
 
-```bash
-pip install sphinx
-```
--->
-
-For the documentation, we use `sphinx`. You can build the documentation by executing the following command:
+For the documentation, we use `sphinx`. You can build the documentation by executing the following command in the `docs` folder:
 
 ```bash
 make html -C docs
@@ -158,14 +117,16 @@ make latexpdf -C docs
 
 ### Build Dependencies Graph
 
+<!-- 
 #### With `tach`
 
 We use `tach` to build the dependencies graph of modules.
 
-<!-- ```bash
+```bash
 uv run tach mod
 uv run tach sync
-``` -->
+``` 
+
 
 ```bash
 uv run tach show --web
@@ -173,9 +134,10 @@ uv run tach show --web
 ```bash
 uv run tach show -o docs/graphs/tach_graph.dot
 uv run dot -Tpdf docs/graphs/tach_graph.dot -o docs/graphs/tach_graph.pdf
-```
+``` 
 
 #### With `pydeps`
+-->
 
 We use `pydeps` to build the dependencies graph of functions.
 
