@@ -18,6 +18,7 @@ def create_AlgebraSDP(
     substitution_rules: Rules,
     is_commutative: bool = True,
     is_real: bool = True,
+    more_monomials: List[sp.Expr] = [],
 ) -> AlgebraSDP:
     AlgebraSubClass: Type[AlgebraSDP]
     match (is_commutative, is_real):
@@ -35,4 +36,5 @@ def create_AlgebraSDP(
         objective,
         relaxation_order,
         substitution_rules,
+        more_monomials,
     )

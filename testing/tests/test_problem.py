@@ -199,3 +199,13 @@ def test_nc_agebra_commute() -> None:
 
     # assert abs(val2 - 2.82842712475) <= 0.1
     assert abs(val3 - 2.82842712475) <= 0.001
+
+
+def test_add_variables() -> None:
+    obj = -(x**2) + y
+    c1 = Constraint.EqualityConstraint(y - 10)
+    c2 = Constraint.InequalityConstraint(1 - x**3)
+    p = Problem(obj, more_monomials=[x**2])
+    p.add_constraint(c1)
+    p.add_constraint(c2)
+    assert abs(p.solve_unchecked(1) - 10) <= 0.1
