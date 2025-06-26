@@ -78,14 +78,50 @@ For more information about Max-Cut, see the :doc:`api/max_cut` section.
 Example X: Sum-of-Squares (SOS) Optimization
 --------------------------------------------
 
-This example shows how to perform Sum-of-Squares (SOS) optimization.
+This example shows how to obtain a basic Sum-of-Squares decomposition certificate (SOS) for a problem.
+Consider the following problem:
+.. math::
+
+   \begin{align}
+   \max_{x, y} &\quad\quad  4 x y -(x + y)^2 \\
+   \end{align}
+
 
 .. code-block:: python
 
-   # Example code for Sum-of-Squares (SOS) optimization will be provided here
+   from ncpol3sdpa import Problem, Constraint
+   from sympy.abc import x, y
+   import sympy
 
+   # Define objective function
+   objective = -sympy.expand((x + y)**2 - 4* x * y)
 
-For more information about SOS, see the :doc:`api/SOS` section.
+   # Create problem
+   problem = Problem(obj, is_real=True)
+
+   # Solve the problem (default solver is CVXPY)
+   result = problem.solve()
+   print(f"Optimal value: {result.dual_objective_value}")
+
+   # Extract SOS decomposition
+   sos = problem.compute_sos_decomposition()
+
+   # This is a sum of squares decomposition of the objective, proving that objective <= result.dual_objective_value
+   obj_decomposition = sos.reconstructed_objective()
+   print(obj_decomposition)
+
+   # Because of floating-point rounding errors, there is a difference between the objective and the decomposition
+   # the following function mesures this error:
+   error = sos.objective_error()
+   print("sos error=", error)
+
+In this case, result.dual_objective_value is 0, so we prove that $(x + y)^2 \geq 4 x y$,
+proving the AM-GM inequality.
+
+This example is without constraints. With each constraint that is added, there are additional
+terms that appear in the SOS decomposition.
+
+For more information about SOS, see the :doc:`sos` and :doc:`api/SOS` section.
 
 Example X: Ground State Preparation
 -----------------------------------
