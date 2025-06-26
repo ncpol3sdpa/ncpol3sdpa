@@ -538,3 +538,14 @@ New planning for the folowing 2 weeks:
   * Merge [MR 41 — Update GitHub Workflows & Documentation](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/41)
   * Merge [MR 44 — Refactor solver architecture and make MOSEK optional dependency](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/44)
   * Merge [MR 47 — Solver enhancements](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/47)
+
+>>>
+### We have a new architecture for the solver:
+
+![](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/raw/main/docs/graphs/pydeps_graph6.svg)
+![](./docs/graphs/pydeps_graph6.svg)
+
+THE DOCUMENTATION IS NOW AVAILABLE ONLINE: [https://yruellan.gitlab.io/ncpol3sdpa/](https://yruellan.gitlab.io/ncpol3sdpa/)
+
+>>>
+
