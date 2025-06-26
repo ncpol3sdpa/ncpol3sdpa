@@ -1,6 +1,5 @@
 from numpy.typing import NDArray
 
-import mosek
 from typing import Tuple, List, Dict, Any
 import warnings
 import numpy as np
@@ -64,8 +63,11 @@ def de_linearize(vec: NDArray[np.float64]) -> NDArray[np.float64]:
 
 
 def parse_mosek_solution(
-    problem: ProblemSDP, task: mosek.Task, n_eq_constrants: int
+    problem: ProblemSDP, task: Any, n_eq_constrants: int
 ) -> Solution_SDP[np.float64]:
+    
+    import mosek
+
     solution_type = mosek.soltype.itr
     primal_objective_value = task.getprimalobj(solution_type)
     dual_objective_value = task.getdualobj(solution_type)

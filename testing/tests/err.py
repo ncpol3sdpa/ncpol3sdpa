@@ -13,7 +13,7 @@ def test_cvxpy() -> None:
 
 if __name__ == "__main__":
     
-    test_mosek()
     test_cvxpy()
+    test_mosek()
 
     print("All tests passed.")
