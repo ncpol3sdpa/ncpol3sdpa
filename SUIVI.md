@@ -530,3 +530,7 @@ New planning for the folowing 2 weeks:
   * Tweek misconfigured tests that was causing failure because of long execution time and floating point precision errors.
 - (Alain)
   * debug in MobFarm with Nazar -> fix algebra.py + merge generate_needed_symbols
+- (Yann)
+  * Merge [MR 41 — Update GitHub Workflows & Documentation](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/41)
+  * Merge [MR 44 — Refactor solver architecture and make MOSEK optional dependency](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/44)
+  * Merge [MR 47 — Solver enhancements](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/47)
