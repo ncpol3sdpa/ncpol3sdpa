@@ -185,3 +185,58 @@ class Ground_state2:
         if solution is None:
             raise ValueError("No solution found for the ground state problem.")
         return -solution
+
+    def solve_ground_state_with_optimization(self) -> float:
+        number_of_edges = self.number_of_edges
+        list_of_edges = self.list_of_edges
+
+        obj = -self.create_hermitian_matrix(number_of_edges, list_of_edges)
+
+        list_of_X: List[HermitianOperator] = self.create_variables_X()
+        list_of_Y: List[HermitianOperator] = self.create_variables_Y()
+        list_of_Z: List[HermitianOperator] = self.create_variables_Z()
+
+        list_of_list = [list_of_X, list_of_Y, list_of_Z]
+
+        p = Problem(
+            obj,
+            is_commutative=False,
+            is_real=False,
+            commute_variables=[
+                [list_of_list[a][i] for a in range(3)] for i in range(number_of_edges)
+            ],
+        )
+
+        for a in range(3):
+            for i in range(number_of_edges):
+                p.add_rule(list_of_list[a][i] * list_of_list[a][i], 1)  # type: ignore
+
+        for i in range(number_of_edges):
+            c1 = Constraint.EqualityConstraint(
+                list_of_X[i] * list_of_Y[i] - 1j * list_of_Z[i]
+            )
+            p.add_constraint(c1)
+
+            c2 = Constraint.EqualityConstraint(
+                list_of_Z[i] * list_of_X[i] - 1j * list_of_Y[i]
+            )
+            p.add_constraint(c2)
+
+            c3 = Constraint.EqualityConstraint(
+                list_of_Y[i] * list_of_Z[i] - 1j * list_of_X[i]
+            )
+            p.add_constraint(c3)
+
+        for i in range(number_of_edges):
+            for a in range(2):
+                for b in range(a + 1, 3):
+                    c = Constraint.EqualityConstraint(
+                        list_of_list[a][i] * list_of_list[b][i]
+                        + list_of_list[b][i] * list_of_list[a][i]
+                    )
+                    p.add_constraint(c)
+
+        solution = p.solve(1)
+        if solution is None:
+            raise ValueError("No solution found for the ground state problem.")
+        return -solution
