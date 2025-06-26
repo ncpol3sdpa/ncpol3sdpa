@@ -1,8 +1,8 @@
 Basics
 ===========
 
-Input the problem
------------------
+Inputting your problem
+---------------------
 
 `ncpol3sdpa` can take a wide range of polynomial optimization problems that have a certain form. It supports
 commutative and noncommutative problem, as well as real and complex problems. The format of the problem is
@@ -116,3 +116,62 @@ which can be faster than a regular constraint. This is done like this:
 
 Solving the problem
 -------------------
+
+Once A problem has been set up, the following function will create an SDP relaxation of
+order :math:`k` and call a solver.
+
+.. code-block:: python
+
+    s = problem.solve(k)
+
+.. warning::
+    `s` is an upper bound for the orignal problem, and not the true solution. As :math:`k \rightarrow \infty`,
+    :math:`s_k` is approaches the solution of the original problem, at the cost of more computation time.
+
+A specific solver can be specified as follows, one of :doc:`api/SolverFactory/SolverList`
+
+.. code-block:: python
+
+    # Solve with Mosek
+    s = problem.solve(k, SolverList.MOSEK)
+
+
+Exploiting the solution
+-----------------------
+
+Once `problem.solve` has been called, there are several options for exploiting the solution.
+
+Primal and Dual solutions
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The solvers produce a primal and a dual solution to the SDP relaxation. The objective values of these solution can be accessed like this:
+
+.. code-block:: python
+
+    problem.solution.primal_objective_value
+    problem.solution.dual_objective_value
+
+Both are upper bounds to the original polynomial problem.
+
+In general problem.solution contains most of the raw solution data from the solver, including
+the numerical value of the moment matrices, see doc:`api/SDP_Solution`
+
+
+SOS Decomposition
+~~~~~~~~~~~~~~~~~
+
+The solution can also be transformed into the SOS decomposition certificate that the dual objective value is a proof.
+
+.. code-block:: python
+
+    sos = problem.compute_sos_decomposition()
+
+For more information, see :docs:`sos_guide` and :docs:`api/Sos`
+
+
+Inner workings of ncpol3sdpa
+----------------------------
+
+.. image:: ../graphs/block_diagram_drawing_e.svg
+  :width: 700
+  :alt: Functional block diagram of ncpo3sdpa
