@@ -65,7 +65,6 @@ def de_linearize(vec: NDArray[np.float64]) -> NDArray[np.float64]:
 def parse_mosek_solution(
     problem: ProblemSDP, task: Any, n_eq_constrants: int
 ) -> Solution_SDP[np.float64]:
-    
     import mosek
 
     solution_type = mosek.soltype.itr

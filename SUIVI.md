@@ -495,6 +495,9 @@ New planning for the folowing 2 weeks:
   * Add type paramerter for Solution_SDP (real/complex)
   * Begin work to convert a real solution of an SDP to a complex solution
 - (Mathis & Nazar) Discover big problem in the way the complex SDP was handled. Argumets + tring to understand the problem.
+- (Alain)
+  * debug mob farm optimization
+  * add repr for mob farm & constraints
 
 # 24/06/2025
 - (Thomas)
@@ -512,3 +515,5 @@ New planning for the folowing 2 weeks:
 - (Nazar)
   * Add tests and fix bugs for the complex non commutative case for the SOS decomposition
   * Tweek misconfigured tests that was causing failure because of long execution time and floating point precision errors.
+- (Alain)
+  * debug in MobFarm with Nazar -> fix algebra.py + merge generate_needed_symbols
