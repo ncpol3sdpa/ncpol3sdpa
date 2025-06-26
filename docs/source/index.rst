@@ -36,14 +36,14 @@ You will need a mosek license to use the solver. You can get a free academic lic
 
 .. code-block:: bash
 
-   git clone https://github.com/yourusername/python-poly-opt.git
-   cd python-poly-opt
+   git clone https://github.com/yruellan/ncpol3sdpa.git
+   cd ncpol3sdpa
 
-2. Install the package:
+2. Install the package (we recommend using a virtual environment):
 
 .. code-block:: bash
 
-   pip install -e .
+   uv sync
 
 Basic Usage
 -----------
