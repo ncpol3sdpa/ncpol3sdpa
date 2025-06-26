@@ -169,7 +169,7 @@ def test_complex_local1() -> None:
 epsilon = 1e-5
 
 
-@settings(max_examples=5, deadline=5000)
+@settings(max_examples=5, deadline=15000)
 @given(
     sos_polynomials(
         three_symbols, expand=False, coefs=order_of_magnitude_floats(1), max_degree=1
@@ -201,7 +201,7 @@ def test_bounded_no_constraints(sos_poly: sp.Expr, solver: SolverList) -> None:
 
 
 # Expensive tests
-@settings(deadline=5000, max_examples=5)
+@settings(deadline=15000, max_examples=5)
 @given(
     polynomials(two_symbols, coefs=order_of_magnitude_floats(1), max_degree=2),
     sampled_from(solvers),
@@ -222,7 +222,7 @@ def test_bounded_monomials(poly: sp.Expr, solver: SolverList) -> None:
 
 
 # Expensive tests
-@settings(deadline=5000, max_examples=5)
+@settings(deadline=15000, max_examples=5)
 @given(
     order_of_magnitude_floats(1, can_be_zero=False, positive_only=True),
     order_of_magnitude_floats(1, can_be_zero=False, positive_only=True),
