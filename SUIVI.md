@@ -499,6 +499,7 @@ New planning for the folowing 2 weeks:
   * Add type paramerter for Solution_SDP (real/complex)
   * Begin work to convert a real solution of an SDP to a complex solution
 - (Mathis & Nazar) Discover big problem in the way the complex SDP was handled. Argumets + tring to understand the problem.
+- (Mathis) Start implementing tensor product + work on the complex SDP problem
 - (Alain)
   * debug mob farm optimization
   * add repr for mob farm & constraints
@@ -527,6 +528,11 @@ New planning for the folowing 2 weeks:
   * Merge [MR 38 - Refactor & clean documentation](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/38)
   * Merge [MR 39 - Improve docstrings](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/39)
   * Create a todo list for the next steps in the project
+- (Mathis)
+  * Review MR[https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/37]
+  * debugging tensor product (the tensor product has to be calculting on low triangle matrices to low triangle matrices. Issues with some coefficents)
+  * Continue to work on the complex SDP issue
+  * help on the ground state problem (how to represent the Pauli Operator with our algo)
 
 # 25/06/2025
 - (Nazar)
@@ -538,6 +544,16 @@ New planning for the folowing 2 weeks:
   * Merge [MR 41 — Update GitHub Workflows & Documentation](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/41)
   * Merge [MR 44 — Refactor solver architecture and make MOSEK optional dependency](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/44)
   * Merge [MR 47 — Solver enhancements](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/47)
+- (Mathis) 
+  * Finish tensor product, MR[https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/42]
+  * start to work on the add of monomials in the list of monomials if its not in the SDP monomials 
+
+# 26/06/2025
+- (Mathis)
+  * Finish the add monomials MR[https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/49]
+  * Start the benchmark with Yann
+    + benchmark for Bell Inequality CHSH
+    + Benchmark Ground state problem
 
 >>>
 ### We have a new architecture for the solver:
