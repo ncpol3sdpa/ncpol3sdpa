@@ -61,6 +61,7 @@ class AlgebraSDP:
         Works for the commutative case only.
         """
 
+        self.needed_variables = needed_variables
         self.relaxation_order: int = relaxation_order
         self.substitution_rules: Rules = substitution_rules
         self.all_monomials: List[List[sp.Expr]] = [
@@ -202,7 +203,7 @@ class AlgebraSDP:
         # TODO This is redundant work, does this matter?
         constraint_monomials = self.substitution_rules.filter_monomials(
             generate_monomials(
-                self.objective.free_symbols,  # type: ignore
+                [var for vars in self.needed_variables for var in vars],
                 k_i,
                 self.is_commutative,
             )
