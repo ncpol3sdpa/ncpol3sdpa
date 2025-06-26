@@ -14,7 +14,6 @@ dependencies = [
     "pytest>=8.3.4",
     "pre-commit>=4.2.0",
     "pydeps>=3.0.1",
-    "mosek>=11.0.13",
     "pyvis>=0.3.2",
     "networkx>=3.4.2",
     "sphinx-rtd-theme>=3.0.2",
@@ -25,10 +24,17 @@ dependencies = [
     "scipy-stubs>=1.16.0.0",
 ]
 
+[project.optional-dependencies]
+mosek = ["mosek>=11.0.0"]
+
 [dependency-groups]
 dev = [
     "pytest>=8.3.4",
 ]
+mosek = [
+    "mosek>=11.0.0, <12.0.0",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

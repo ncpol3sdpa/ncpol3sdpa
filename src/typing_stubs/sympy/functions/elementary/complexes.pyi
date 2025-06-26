@@ -59,6 +59,7 @@ class transpose(Function):
     def eval(cls, arg): ...
 
 class adjoint(Function):
+    def __new__(cls : adjoint, arg : Expr) -> Expr: ... # type: ignore
     @classmethod
     def eval(cls, arg): ...
 

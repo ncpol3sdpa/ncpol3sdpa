@@ -169,7 +169,6 @@ class ProblemSDP:
 
         self.compile_moment_matrix_to_constraints()
         real_moment_matrix = MomentMatrixSDP(2 * size, [])
-        print(self.constraints)
 
         # creation of the real objective
         objective = complexMatrix_to_realMatrix(self.objective)
