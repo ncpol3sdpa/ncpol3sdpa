@@ -9,7 +9,7 @@ Python-poly-opt (ncpol3sdpa) is a Python library for polynomial optimization usi
 Development Team
 ----------------
 
-This project is being developed as part of research and academic work at `Télécom Paris <https://www.telecom-paris.fr/en/home>`_. The current development is led by students and a researcher interested in optimization techniques and their applications in quantum information theory.
+This package is being developed by `Alain <https://github.com/oxontheroof>`_, `Thomas <https://www.linkedin.com/in/thomas-debernardi-a6b8ab332/>`_, Nazar, `Mathis <http://github.com/mathiscr>`_ and `Yann <https://github.com/yruellan>`_, as part of research and academic work at `Télécom Paris <https://www.telecom-paris.fr/en/home>`_. The current development is led by students and a researcher interested in optimization techniques and their applications in quantum information theory.
 
 Contributors
 ------------
