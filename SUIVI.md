@@ -460,6 +460,10 @@ ncpol3sdpa
  - (Thomas) Begin the work on one possible application of the sdp relaxation: the quantum gorund-state problem
  - (All) Meeting with Peter Brown
  - (Matihs) Begin to implement the trace inequality constraint
+ - (Yann) Work on the pipeline
+    * Add code coverage to the pipeline
+    * Test to add code quality
+    * Add code coverage visualization
 
 New planning for the folowing 2 weeks:
   Thomas : Ground State Energy example
@@ -482,12 +486,55 @@ New planning for the folowing 2 weeks:
 
 # 22/06/2025
 - (Mathis)
-  * Change MR [33] to implement the requested changes 
+  * Change MR [33] to implement the requested changes
+  * Change MR [33] to implement the requested changes
 
 # 23/06/2025
 - (Thomas)
   * Continue the work on goround-state and mthen modifie the approche after the meeting with Peter Brown
+- (Nazar)
+  * Aprove [Merge Request](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/33) for the local inequality constaints
+  * Fix bug in generate_needed_symbols
+  * Add randomized propery tests for SOS
+  * Add type paramerter for Solution_SDP (real/complex)
+  * Begin work to convert a real solution of an SDP to a complex solution
+- (Mathis & Nazar) Discover big problem in the way the complex SDP was handled. Argumets + tring to understand the problem.
+- (Alain)
+  * debug mob farm optimization
+  * add repr for mob farm & constraints
+- (Yann) 
+  * Work on coverage documentation to create a coverage html report
+  * Merge [MR 32 — GitLab Page configuration](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/32)
+  * Merge [MR 34 — Documentation Improvements](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/34)
+  * Merge [MR 35 — Documentation and Configuration Improvements](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/35)
+  * Merge [MR 36 - Github action](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/36)
+- (All)
+  * Email to Peter Brown to ask questions
+  * Think about the documentation
 
 # 24/06/2025
 - (Thomas)
-  * Finish the implementation of the ground-state problem and a set of examples to test 
+  * Finish the implementation of the ground-state problem and a set of examples to test
+- (Mathis & Nazar)
+  * Big problem solved. Previusly, constraints in the complex SDP between maricies would only constrain the real parts of the coeffients, so additional constraints were required for the imaginary part.
+- (Nazar)
+  * Implement support local inequality constraint in SOS
+  * Implement with the help of Mathis the solution to the previeus problem, by adding additional constraints on the imaginary parts.
+  * Refactor complex SDP to real SDP conversion
+  * add scipy type stubs
+  * Add articles to the bibliography at Yann's request
+- (Yann)
+  * Merge [MR 38 - Refactor & clean documentation](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/38)
+  * Merge [MR 39 - Improve docstrings](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/39)
+  * Create a todo list for the next steps in the project
+
+# 25/06/2025
+- (Nazar)
+  * Add tests and fix bugs for the complex non commutative case for the SOS decomposition
+  * Tweek misconfigured tests that was causing failure because of long execution time and floating point precision errors.
+- (Alain)
+  * debug in MobFarm with Nazar -> fix algebra.py + merge generate_needed_symbols
+- (Yann)
+  * Merge [MR 41 — Update GitHub Workflows & Documentation](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/41)
+  * Merge [MR 44 — Refactor solver architecture and make MOSEK optional dependency](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/44)
+  * Merge [MR 47 — Solver enhancements](https://gitlab.telecom-paris.fr/proj104/2024-2025/python-poly-opt/-/merge_requests/47)

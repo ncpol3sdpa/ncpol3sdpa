@@ -1,11 +1,18 @@
 from __future__ import annotations
-from typing import List, TypeAlias, TypeVar, Any, Type
+from typing import List, Type, TypeAlias, Any, TypeVar, Iterable, Set
 
 from sympy import Expr, S, adjoint
 import sympy as sp
 
 
 Matrix: TypeAlias = List[List[Expr]]
+
+
+def sympy_sum(terms: Iterable[sp.Expr]) -> sp.Expr:
+    res: sp.Expr = sp.sympify(0)
+    for term in terms:
+        res += term
+    return res
 
 
 def degree_of_polynomial(polynomial: Expr) -> int:
@@ -23,12 +30,12 @@ def degree_of_polynomial(polynomial: Expr) -> int:
     return res
 
 
-def generate_needed_symbols(polynomials: List[sp.Expr]) -> List[sp.Expr]:
-    total: sp.Expr = sp.S.One
+def generate_needed_symbols(polynomials: List[sp.Expr]) -> List[sp.Symbol]:
+    total: Set[sp.Symbol] = set([])
     for p in polynomials:
-        total += p
+        total = total | set(p.free_symbols)  # type: ignore
 
-    return list(total.free_symbols)  # type: ignore
+    return list(total)
 
 
 T = TypeVar("T")
@@ -103,7 +110,7 @@ def tensor_product_lower_triangle(A: Matrix, B: Matrix) -> Matrix:
     C = [[S.Zero] * (I1 + 1) for I1 in range(size)]
 
     def get_hermitian(M: Matrix, i: int, j: int) -> Expr:
-        return M[i][j] if i >= j else adjoint(M[j][i])  # type: ignore
+        return M[i][j] if i >= j else adjoint(M[j][i])
 
     for i in range(n):
         for j in range(n):

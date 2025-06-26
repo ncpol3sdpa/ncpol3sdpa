@@ -18,7 +18,7 @@ class AlgebraSDPncReal(AlgebraSDP):
         return True
 
     def get_length_constraint_matrix(self, deg_pol: int) -> int:
-        k_i = self.relaxation_order - deg_pol // 2
+        k_i = int(self.relaxation_order - deg_pol / 2)
         return k_i
 
     def is_expressible_as_moment_coeff(self, monomial: sp.Expr) -> bool:

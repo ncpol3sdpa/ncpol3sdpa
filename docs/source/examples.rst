@@ -16,7 +16,7 @@ Here's a simple example to get you started:
 
 .. code-block:: python
 
-   from ncpol3sdpa import Problem, Constraint, AvailableSolvers
+   from ncpol3sdpa import Problem, Constraint, SolverList
    from sympy.abc import x, y
 
    # Define objective function
@@ -36,8 +36,8 @@ Here's a simple example to get you started:
    print(f"Optimal value: {result}")
 
    # Select a particular solver
-   print(f"CVXPY : {problem.solve(relaxation_order=2, solver=AvailableSolvers.CVXPY)}")
-   print(f"MOSEK : {problem.solve(relaxation_order=2, solver=AvailableSolvers.MOSEK)}")
+   print(f"CVXPY : {problem.solve(relaxation_order=2, solver=SolverList.CVXPY)}")
+   print(f"MOSEK : {problem.solve(relaxation_order=2, solver=SolverList.MOSEK)}")
 
 
 Example 2: Non-commutative Complex Polynomial Optimization
