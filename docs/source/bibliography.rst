@@ -3,6 +3,8 @@
 Bibliography
 ============
 
+.. TODO: Add links to the papers
+
 * **Convex Optimization** by Boyd et Vandenberghe.
 
   Reference book on convex optimization.
@@ -21,7 +23,7 @@ Bibliography
 
 * **MORE EFFICIENT REFORMULATION OF COMPLEX SDP AS REAL SDP** by JIE WANG.
 
-Paper presenting more efficient methods to reformulate complex semidefinite programs as real semidefinite programs.
+  Paper presenting more efficient methods to reformulate complex semidefinite programs as real semidefinite programs.
 
 
 .. toctree::
