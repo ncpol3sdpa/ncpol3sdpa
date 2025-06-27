@@ -80,6 +80,7 @@ Example 3: Sum-of-Squares (SOS) Optimization
 
 This example shows how to obtain a basic Sum-of-Squares decomposition certificate (SOS) for a problem.
 Consider the following problem:
+
 .. math::
 
    \begin{align}
