@@ -116,8 +116,7 @@ Consider the following problem:
    error = sos.objective_error()
    print("sos error=", error)
 
-In this case, result.dual_objective_value is 0, so we prove that $(x + y)^2 \geq 4 x y$,
-proving the AM-GM inequality.
+In this case, result.dual_objective_value is 0, so we prove that :math:`(x + y)^2 \geq 4 x y`, proving the AM-GM inequality.
 
 This example is without constraints. With each constraint that is added, there are additional
 terms that appear in the SOS decomposition.
