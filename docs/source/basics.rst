@@ -166,7 +166,7 @@ The solution can also be transformed into the SOS decomposition certificate that
 
     sos = problem.compute_sos_decomposition()
 
-For more information, see :docs:`sos_guide` and :docs:`api/Sos`
+For more information, see `Example 3: Sum of Squares (SOS) Optimization <examples.html#example-3-sum-of-squares-sos-optimization>`_  and :doc:`api/SOS`
 
 
 Inner workings of ncpol3sdpa
