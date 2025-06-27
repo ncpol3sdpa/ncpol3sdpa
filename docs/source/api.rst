@@ -9,7 +9,7 @@ This section provides detailed API documentation for ncpol3sdpa.
    api/Problem
    api/Constraints
    api/Solver
-   api/SolverRegistry
+   api/SolverFactory
 
    api/SOS
 
