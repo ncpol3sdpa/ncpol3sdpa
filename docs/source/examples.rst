@@ -64,18 +64,18 @@ This example demonstrates how to solve a non-commutative complex polynomial opti
 
    print(f"Optimal value: {p.solve(relaxation_order=2)}")
 
-Example X: Max-Cut Problem
---------------------------
+.. Example X: Max-Cut Problem
+.. --------------------------
 
-This example shows how to solve a Max-Cut problem using ncpol3sdpa.
+.. This example shows how to solve a Max-Cut problem using ncpol3sdpa.
 
-.. code-block:: python
+.. .. code-block:: python
 
-   # Example code for Max-Cut will be provided here
+..    # Example code for Max-Cut will be provided here
 
-For more information about Max-Cut, see the :doc:`api/max_cut` section.
+.. For more information about Max-Cut, see the :doc:`api/max_cut` section.
 
-Example X: Sum-of-Squares (SOS) Optimization
+Example 3: Sum-of-Squares (SOS) Optimization
 --------------------------------------------
 
 This example shows how to obtain a basic Sum-of-Squares decomposition certificate (SOS) for a problem.
@@ -123,7 +123,7 @@ terms that appear in the SOS decomposition.
 
 For more information about SOS, see the :doc:`sos` and :doc:`api/SOS` section.
 
-Example X: CHSH Bell inequality
+Example 4: CHSH Bell inequality
 ----------------------------------------------------------
 
 This example demonstrates how to express and optimize the **CHSH Bell inequality**
@@ -168,25 +168,25 @@ Code Example
 
 
 
-Example X: Ground State Preparation
------------------------------------
+.. Example X: Ground State Preparation
+.. -----------------------------------
 
-This example demonstrates how to prepare the ground state of a quantum system.
+.. This example demonstrates how to prepare the ground state of a quantum system.
 
-.. code-block:: python
+.. .. code-block:: python
 
-   # Example code for ground state preparation will be provided here
+..    # Example code for ground state preparation will be provided here
 
-Example X: BB84 Quantum Key Distribution
------------------------------------------
+.. Example X: BB84 Quantum Key Distribution
+.. -----------------------------------------
 
-This example demonstrates how to implement the BB84 quantum key distribution protocol.
+.. This example demonstrates how to implement the BB84 quantum key distribution protocol.
 
-.. code-block:: python
+.. .. code-block:: python
 
-   # Example code for BB84 will be provided here
+..    # Example code for BB84 will be provided here
 
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents
+.. .. toctree::
+..    :maxdepth: 2
+..    :caption: Contents
