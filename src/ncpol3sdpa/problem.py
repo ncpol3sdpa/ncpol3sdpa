@@ -40,8 +40,12 @@ class Problem:
         obj: sympy.Expr,
         is_commutative: bool = True,
         is_real: bool = True,
-        commute_variables: List[List[Expr]] = [],
+        commute_variables: List[
+            List[Expr]
+        ] = [],  # if a variable commute with every variables,
+        # use [x], not all_commutative_variables if you have to also use commute_variables
         more_monomials: List[Expr] = [],
+        all_commute_variables: List[Expr] = [],  # Used only in the non-commutative case
     ) -> None:
         """
         Initialize the Problem instance.
@@ -74,6 +78,7 @@ class Problem:
         )
         self.commute_variables = commute_variables
         self.more_monomials = more_monomials
+        self.all_commute_variables = all_commute_variables
 
     def add_rule(self, old: Expr, new: Expr) -> None:
         """
@@ -179,6 +184,15 @@ class Problem:
         needed_symbols = self.commute_variables
         if not self.commute_variables:
             needed_symbols = [generate_needed_symbols(all_constraint_polynomials)]  # type: ignore
+
+        if self.all_commute_variables and not self.commute_variables:
+            new_symbols = [[x] for x in self.all_commute_variables]
+            temp = []
+            for x in needed_symbols[0]:
+                if x not in self.all_commute_variables:
+                    temp.append(x)
+            new_symbols.append(temp)
+            needed_symbols = new_symbols
 
         algebraSDP = create_AlgebraSDP(
             needed_symbols,  # type: ignore
