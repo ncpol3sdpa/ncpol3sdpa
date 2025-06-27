@@ -169,14 +169,32 @@ Code Example
 
 
 
-.. Example X: Ground State Preparation
-.. -----------------------------------
+Example 5: Ground State Problem
+-------------------------------
 
-.. This example demonstrates how to prepare the ground state of a quantum system.
+The ground state problem is a fundamental issue in quantum mechanics and quantum computing, where the goal is to find the lowest energy state (ground state) of a quantum system.
 
-.. .. code-block:: python
+Mathematically, the ground state problem can be formulated as follows:
 
-..    # Example code for ground state preparation will be provided here
+.. math::
+
+   \begin{align}
+   \min_{\psi} &\quad\quad \langle \psi | \hat H | \psi \rangle \\
+   \text{s.t. } &\quad\quad \langle \psi | \psi \rangle = 1
+   \end{align}
+
+where :math:`\hat H` is the Hamiltonian operator of the system, and :math:`|\psi\rangle` is the state vector of the quantum system.
+
+Specifically, we solve this problem for a system with multiple particles interacting with their neighbors. The Hamiltonian is given by:
+
+.. math::
+
+   \begin{align}
+   \hat H &= \sum \hat H_{i,j} \\
+   \hat H_{i,j} &= - X_i \otimes X_j - Y_i \otimes Y_j - Z_i \otimes Z_j
+   \end{align}
+
+where :math:`H_{i,j}` is the interaction term between particles :math:`i` and :math:`j`, and :math:`X`, :math:`Y`, and :math:`Z` are position operators (Pauli matrices).
 
 .. Example X: BB84 Quantum Key Distribution
 .. -----------------------------------------
@@ -188,7 +206,7 @@ Code Example
 ..    # Example code for BB84 will be provided here
 
 
-Example 5: Max-Cut
+Example 6: Max-Cut
 ------------------
 
 The Max-Cut problem is a well-known combinatorial optimization problem where the goal is to partition the vertices of a graph into two disjoint subsets such that the number of edges between the subsets is maximized.
@@ -210,7 +228,7 @@ where :math:`\mathbb{1}` is the indicator function.
     :width: 90%
     :alt: Max-Cut problem visualization
 
-Example 6: Minecraft Mob Farm
+Example 7: Minecraft Mob Farm
 -----------------------------
 
 The goal is to maximize the free space with the constraint that there is no 3x3 square of free space.
