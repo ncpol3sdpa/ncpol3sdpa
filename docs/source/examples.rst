@@ -123,6 +123,51 @@ terms that appear in the SOS decomposition.
 
 For more information about SOS, see the :doc:`sos` and :doc:`api/SOS` section.
 
+Example X: CHSH Bell inequality
+----------------------------------------------------------
+
+This example demonstrates how to express and optimize the **CHSH Bell inequality**
+using non-commutative polynomial optimization with `ncpol3sdpa`.
+
+Overview
+^^^^^^^^
+
+We consider two parties, Alice and Bob, each with two measurement settings:
+
+- Alice: :math:`A_0`, :math:`A_1`
+- Bob: :math:`B_0`, :math:`B_1`
+
+The CHSH expression is:
+
+.. math::
+
+    \langle A_0 B_0 \rangle + \langle A_0 B_1 \rangle + \langle A_1 B_0 \rangle - \langle A_1 B_1 \rangle \leq 2
+
+In quantum mechanics, this value can reach up to :math:`2\sqrt{2} \approx 2.828`, violating the classical (local hidden variable) bound of 2.
+
+Code Example
+^^^^^^^^^^^^
+
+.. code-block:: python
+
+    A0 = HermitianOperator("A0")
+    A1 = HermitianOperator("A1")
+    B0 = HermitianOperator("B0")
+    B1 = HermitianOperator("B1")
+    obj = A0 * B0 + A0 * B1 + A1 * B0 - A1 * B1
+    p = Problem(
+        obj, is_commutative=False, is_real=False, commute_variables=[[A0, A1], [B0, B1]]
+    )
+    p.add_constraint(Constraint.EqualityConstraint(A0 * A0 - 1))
+    p.add_constraint(Constraint.EqualityConstraint(A1 * A1 - 1))
+    p.add_constraint(Constraint.EqualityConstraint(B0 * B0 - 1))
+    p.add_constraint(Constraint.EqualityConstraint(B1 * B1 - 1))
+
+    print(f"Optimal value: {p.solve(relaxation_order=1, solver=ListSolver.MOSEK)}")
+    # print 2.828
+
+
+
 Example X: Ground State Preparation
 -----------------------------------
 

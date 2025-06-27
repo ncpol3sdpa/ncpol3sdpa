@@ -209,3 +209,15 @@ def test_add_variables() -> None:
     p.add_constraint(c1)
     p.add_constraint(c2)
     assert abs(p.solve_unchecked(1) - 10) <= 0.1
+
+
+def test_all_commute() -> None:
+    X = HermitianOperator("X")  # type: ignore
+    Y = HermitianOperator("Y")  # type: ignore
+    obj = 2 * X * Y
+    p = Problem(obj, is_real=True, is_commutative=False, all_commute_variables=[X, Y])
+    c1 = Constraint.EqualityConstraint(X * X - X)
+    c2 = Constraint.InequalityConstraint(-Y * Y + Y + 0.25)
+    p.add_constraint(c1)
+    p.add_constraint(c2)
+    assert abs(p.solve_unchecked(3, SolverList.MOSEK) - 2.4142) <= 0.01
