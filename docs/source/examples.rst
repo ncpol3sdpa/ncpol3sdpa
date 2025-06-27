@@ -188,6 +188,40 @@ Code Example
 ..    # Example code for BB84 will be provided here
 
 
+Example 5: Max-Cut
+------------------
+
+The Max-Cut problem is a well-known combinatorial optimization problem where the goal is to partition the vertices of a graph into two disjoint subsets such that the number of edges between the subsets is maximized.
+
+Mathematically, given a graph with vertices :math:`V` and edges :math:`E`, the Max-Cut problem is to find a partition of the vertices into two sets :math:`S_1` and :math:`S_2`:
+
+.. math::
+
+   \begin{align}
+   \max_{S_1, S_2} &\quad\quad
+   \sum_{(u, v) \in E} \mathbb{1}_{(u \in S_1, v \in S_2) \text{ or } (u \in S_2, v \in S_1)} \\
+   \text{ s.t. } &\quad\quad S_1 \cap S_2 = \emptyset, \\
+       &\quad\quad S_1 \cup S_2 = V
+   \end{align}
+
+where :math:`\mathbb{1}` is the indicator function.
+
+.. image:: ./img/maxcut.png
+    :width: 90%
+    :alt: Max-Cut problem visualization
+
+Example 6: Minecraft Mob Farm
+-----------------------------
+
+The goal is to maximize the free space with the constraint that there is no 3x3 square of free space.
+
+We can model this problem as a polynomial optimization problem: each square is a variable that can be either free (1) or occupied (0), and the constraints ensure that no 3x3 square of free space exists. We can also add the symmetric constraints to ensure that the solution is symmetric.
+
+.. image:: ./img/minecraft-mob-farm.png
+    :width: 90%
+    :alt: Minecraft Mob Farm visualization
+
+
 .. .. toctree::
-..    :maxdepth: 2
-..    :caption: Contents
+   :maxdepth: 2
+   :caption: Contents
