@@ -2,13 +2,16 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="297mm"
-   height="210mm"
-   viewBox="0 0 297 210"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
    version="1.1"
    id="svg5"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   sodipodi:docname="block_diagram_drawing.svg"
+   sodipodi:docname="block_diagram_drawing_e.svg"
+   inkscape:export-filename="bitmap.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -24,9 +27,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="0.34921665"
-     inkscape:cx="946.40391"
-     inkscape:cy="254.85612"
+     inkscape:zoom="0.93579149"
+     inkscape:cx="781.15692"
+     inkscape:cy="251.12432"
      inkscape:window-width="1536"
      inkscape:window-height="887"
      inkscape:window-x="0"
@@ -35,38 +38,6 @@
      inkscape:current-layer="layer1" />
   <defs
      id="defs2">
-    <inkscape:path-effect
-       effect="skeletal"
-       id="path-effect64554"
-       is_visible="true"
-       lpeversion="1"
-       pattern="M 0,4.9921385 C 0,2.2364781 2.2364781,0 4.9921385,0 7.747799,0 9.984277,2.2364781 9.984277,4.9921385 9.984277,7.747799 7.747799,9.984277 4.9921385,9.984277 2.2364781,9.984277 0,7.747799 0,4.9921385 Z"
-       copytype="single_stretched"
-       prop_scale="1"
-       scale_y_rel="false"
-       spacing="0"
-       normal_offset="0"
-       tang_offset="0"
-       prop_units="false"
-       vertical_pattern="false"
-       hide_knot="false"
-       fuse_tolerance="0" />
-    <inkscape:path-effect
-       effect="skeletal"
-       id="path-effect12326"
-       is_visible="false"
-       lpeversion="1"
-       pattern="M 0,4.9921385 C 0,2.2364781 2.2364781,0 4.9921385,0 7.747799,0 9.984277,2.2364781 9.984277,4.9921385 9.984277,7.747799 7.747799,9.984277 4.9921385,9.984277 2.2364781,9.984277 0,7.747799 0,4.9921385 Z"
-       copytype="single_stretched"
-       prop_scale="1"
-       scale_y_rel="false"
-       spacing="0"
-       normal_offset="0"
-       tang_offset="0"
-       prop_units="false"
-       vertical_pattern="false"
-       hide_knot="false"
-       fuse_tolerance="0" />
     <inkscape:path-effect
        effect="bspline"
        id="path-effect12324"
@@ -94,23 +65,6 @@
        vertical_pattern="false"
        hide_knot="false"
        fuse_tolerance="1.2" />
-    <inkscape:path-effect
-       effect="fillet_chamfer"
-       id="path-effect12104"
-       is_visible="true"
-       lpeversion="1"
-       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1"
-       unit="px"
-       method="auto"
-       mode="F"
-       radius="0"
-       chamfer_steps="1"
-       flexible="false"
-       use_knot_distance="true"
-       apply_no_radius="true"
-       apply_with_radius="true"
-       only_selected="false"
-       hide_knots="false" />
     <marker
        style="overflow:visible"
        id="RoundedArrow"
@@ -229,44 +183,6 @@
     </marker>
     <marker
        style="overflow:visible"
-       id="TriangleStart-0"
-       refX="0"
-       refY="0"
-       orient="auto-start-reverse"
-       inkscape:stockid="TriangleStart"
-       markerWidth="5.3244081"
-       markerHeight="6.155385"
-       viewBox="0 0 5.3244081 6.1553851"
-       inkscape:isstock="true"
-       inkscape:collect="always"
-       preserveAspectRatio="xMidYMid">
-      <path
-         transform="scale(0.5)"
-         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
-         d="M 5.77,0 -2.88,5 V -5 Z"
-         id="path135-7" />
-    </marker>
-    <marker
-       style="overflow:visible"
-       id="TriangleStart-0-6"
-       refX="0"
-       refY="0"
-       orient="auto-start-reverse"
-       inkscape:stockid="TriangleStart"
-       markerWidth="5.3244081"
-       markerHeight="6.155385"
-       viewBox="0 0 5.3244081 6.1553851"
-       inkscape:isstock="true"
-       inkscape:collect="always"
-       preserveAspectRatio="xMidYMid">
-      <path
-         transform="scale(0.5)"
-         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
-         d="M 5.77,0 -2.88,5 V -5 Z"
-         id="path135-7-8" />
-    </marker>
-    <marker
-       style="overflow:visible"
        id="TriangleStart-0-4"
        refX="0"
        refY="0"
@@ -285,67 +201,10 @@
          id="path135-7-3" />
     </marker>
     <marker
-       style="overflow:visible"
-       id="TriangleStart-0-6-7"
-       refX="0"
-       refY="0"
-       orient="auto-start-reverse"
-       inkscape:stockid="TriangleStart"
-       markerWidth="5.3244081"
-       markerHeight="6.155385"
-       viewBox="0 0 5.3244081 6.1553851"
-       inkscape:isstock="true"
-       inkscape:collect="always"
-       preserveAspectRatio="xMidYMid">
-      <path
-         transform="scale(0.5)"
-         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
-         d="M 5.77,0 -2.88,5 V -5 Z"
-         id="path135-7-8-1" />
-    </marker>
-    <marker
-       style="overflow:visible"
-       id="TriangleStart-0-6-7-2"
-       refX="0"
-       refY="0"
-       orient="auto-start-reverse"
-       inkscape:stockid="TriangleStart"
-       markerWidth="5.3244081"
-       markerHeight="6.155385"
-       viewBox="0 0 5.3244081 6.1553851"
-       inkscape:isstock="true"
-       inkscape:collect="always"
-       preserveAspectRatio="xMidYMid">
-      <path
-         transform="scale(0.5)"
-         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
-         d="M 5.77,0 -2.88,5 V -5 Z"
-         id="path135-7-8-1-7" />
-    </marker>
-    <marker
-       style="overflow:visible"
-       id="RoundedArrow-1-4"
-       refX="0"
-       refY="0"
-       orient="auto-start-reverse"
-       inkscape:stockid="RoundedArrow"
-       markerWidth="6.1347523"
-       markerHeight="5.9304953"
-       viewBox="0 0 6.1347524 5.9304951"
-       inkscape:isstock="true"
-       inkscape:collect="always"
-       preserveAspectRatio="xMidYMid">
-      <path
-         transform="scale(0.7)"
-         d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
-         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
-         id="path1367-5-9" />
-    </marker>
-    <marker
-       markerWidth="302.22468"
-       markerHeight="143.92495"
+       markerWidth="302.22467"
+       markerHeight="143.92496"
        refX="151.11234"
-       refY="71.962477"
+       refY="71.962479"
        orient="auto"
        id="marker12690">
       <path
@@ -415,13 +274,17 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     transform="translate(-22.168083,24.293686)">
     <text
        xml:space="preserve"
        style="font-size:7.05556px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:none;stroke:#ff00ff;stroke-width:0.264583"
        x="22.104584"
        y="52.409252"
-       id="text412"><tspan
+       id="text412"
+       inkscape:export-filename="block_diagram_drawing_e.svg"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
          sodipodi:role="line"
          id="tspan410"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';fill:#000000;stroke:none;stroke-width:0.264583"
@@ -431,7 +294,7 @@
        id="g1319"
        transform="translate(-23.973462,-54.186592)">
       <rect
-         style="fill:none;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
+         style="fill:#ffffff;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
          id="rect726"
          width="68.964752"
          height="22.988251"
@@ -458,7 +321,7 @@
        id="g1319-2"
        transform="translate(102.79778,-54.186592)">
       <rect
-         style="fill:none;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.465;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
          id="rect726-9"
          width="68.964752"
          height="22.988251"
@@ -485,7 +348,7 @@
        id="g1319-2-8"
        transform="translate(102.79778,19.896746)">
       <rect
-         style="fill:none;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.465;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
          id="rect726-9-4"
          width="68.964752"
          height="22.988251"
@@ -512,7 +375,7 @@
        id="g1319-9"
        transform="translate(-23.973462,19.896744)">
       <rect
-         style="fill:none;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.465;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
          id="rect726-7"
          width="68.964752"
          height="22.988251"
@@ -535,163 +398,6 @@
            y="111.07571"
            id="tspan1321-1">Optimisation Problem</tspan></text>
     </g>
-    <g
-       id="g1319-2-6"
-       transform="translate(229.56904,-54.186592)">
-      <rect
-         style="fill:none;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
-         id="rect726-9-1"
-         width="68.964752"
-         height="22.988251"
-         x="114.01762"
-         y="93.505875" />
-      <text
-         xml:space="preserve"
-         style="font-size:7.05556px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:none;stroke:#ff00ff;stroke-width:0.264583"
-         x="148.40828"
-         y="102.21219"
-         id="text1311-31-0"><tspan
-           sodipodi:role="line"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-           x="148.40828"
-           y="102.21219"
-           id="tspan1321-4-6">Semi-definite</tspan><tspan
-           sodipodi:role="line"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-           x="149.29022"
-           y="111.07571"
-           id="tspan1433-32">Program ℝ </tspan></text>
-    </g>
-    <g
-       id="g1319-2-6-0"
-       transform="translate(229.56904,19.896746)">
-      <rect
-         style="fill:none;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
-         id="rect726-9-1-6"
-         width="68.964752"
-         height="22.988251"
-         x="114.01762"
-         y="93.505875" />
-      <text
-         xml:space="preserve"
-         style="font-size:7.05556px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:none;stroke:#ff00ff;stroke-width:0.264583"
-         x="148.40828"
-         y="102.21219"
-         id="text1311-31-0-1"><tspan
-           sodipodi:role="line"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-           x="148.40828"
-           y="102.21219"
-           id="tspan1321-4-6-5">Semi-definite</tspan><tspan
-           sodipodi:role="line"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-           x="149.29022"
-           y="111.07571"
-           id="tspan1433-32-5">Program ℝ </tspan></text>
-    </g>
-    <g
-       id="g1652"
-       transform="translate(360.90318,-17.144921)">
-      <rect
-         style="fill:none;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
-         id="rect1644"
-         width="68.964752"
-         height="22.988251"
-         x="114.01762"
-         y="93.505875" />
-      <text
-         xml:space="preserve"
-         style="font-size:7.05556px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:none;stroke:#ff00ff;stroke-width:0.264583"
-         x="148.34477"
-         y="107.36008"
-         id="text1650"><tspan
-           sodipodi:role="line"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-           x="148.34477"
-           y="107.36008"
-           id="tspan1656">Solver</tspan></text>
-    </g>
-    <g
-       id="g1668"
-       transform="translate(229.56904,-117.06706)">
-      <rect
-         style="fill:none;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
-         id="rect1660"
-         width="68.964752"
-         height="22.988251"
-         x="114.01762"
-         y="93.505875" />
-      <text
-         xml:space="preserve"
-         style="font-size:7.05556px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:none;stroke:#ff00ff;stroke-width:0.264583"
-         x="148.40828"
-         y="102.21219"
-         id="text1666"><tspan
-           sodipodi:role="line"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-           x="148.40828"
-           y="102.21219"
-           id="tspan1662">Primal SDP</tspan><tspan
-           sodipodi:role="line"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-           x="149.29022"
-           y="111.07571"
-           id="tspan1664">Solution ℝ </tspan></text>
-    </g>
-    <g
-       id="g1700"
-       transform="translate(563.28694,-46.572775)">
-      <rect
-         style="fill:none;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
-         id="rect1692"
-         width="68.964752"
-         height="22.988251"
-         x="114.01762"
-         y="93.505875" />
-      <text
-         xml:space="preserve"
-         style="font-size:7.05556px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:none;stroke:#ff00ff;stroke-width:0.264583"
-         x="148.40828"
-         y="102.21219"
-         id="text1698"><tspan
-           sodipodi:role="line"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-           x="148.40828"
-           y="102.21219"
-           id="tspan1694">Sum of</tspan><tspan
-           sodipodi:role="line"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-           x="149.29022"
-           y="111.07571"
-           id="tspan1696">Squares </tspan></text>
-    </g>
-    <g
-       id="g1736"
-       transform="translate(229.55494,82.777217)">
-      <rect
-         style="fill:none;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
-         id="rect1728"
-         width="68.964752"
-         height="22.988251"
-         x="114.01762"
-         y="93.505875" />
-      <text
-         xml:space="preserve"
-         style="font-size:7.05556px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:none;stroke:#ff00ff;stroke-width:0.264583"
-         x="148.40828"
-         y="102.21219"
-         id="text1734"><tspan
-           sodipodi:role="line"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-           x="148.40828"
-           y="102.21219"
-           id="tspan1730">Dual SDP</tspan><tspan
-           sodipodi:role="line"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-           x="149.29022"
-           y="111.07571"
-           id="tspan1732">Solution ℝ </tspan></text>
-    </g>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.865;stroke-linejoin:round;stroke-dasharray:2.595, 2.595;stroke-dashoffset:0;paint-order:markers stroke fill"
        d="m 80.796202,158.2726 365.488338,0.0493 V 137.12337 L 401.302,88.287579 H 80.398516 Z"
@@ -703,29 +409,9 @@
        id="path3379"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:0.864998;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart-0);paint-order:markers stroke fill"
-       d="m 286.40803,50.810008 53.91646,0.0035"
-       id="path3379-8"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:0.864998;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart-0-6);paint-order:markers stroke fill"
-       d="m 286.40803,124.89639 53.91646,0.004"
-       id="path3379-8-8"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:0.864998;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart-0-6-7);paint-order:markers stroke fill"
-       d="m 342.74004,187.77722 -53.91646,0.004"
-       id="path3379-8-8-7"
-       sodipodi:nodetypes="cc" />
-    <path
        style="fill:none;stroke:#000000;stroke-width:0.864998;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart-0-6-7-7);paint-order:markers stroke fill"
        d="m 216.4062,187.77333 -53.91646,0.004"
        id="path3379-8-8-7-7"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:0.864998;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart-0-6-7-2);paint-order:markers stroke fill"
-       d="m 343.0928,-12.070946 -53.91646,0.004"
-       id="path3379-8-8-7-2"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.864998;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart-2);paint-order:markers stroke fill"
@@ -747,7 +433,7 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
          x="187.90651"
          y="45.274437"
-         id="tspan3777">Relaxatoion</tspan></text>
+         id="tspan3777">Relaxation</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.864998;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart-6);paint-order:markers stroke fill"
        d="m 159.00891,124.89287 53.91646,0.004"
@@ -768,7 +454,7 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
          x="187.90651"
          y="140.43175"
-         id="tspan3777-5">Relaxatoion</tspan></text>
+         id="tspan3777-5">Relaxation</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:5.64444px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:none;stroke:#ff00ff;stroke-width:0.264583"
@@ -827,129 +513,11 @@
          x="-80.801056"
          y="130.12788"
          id="tspan4289" /></text>
-    <path
-       style="fill:none;stroke:#666666;stroke-width:1;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-start:url(#Arrow1);marker-end:url(#marker4139);paint-order:markers stroke fill"
-       d="M 250.05159,111.77403 V 63.936127"
-       id="path4295"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:#800000;stroke:#800000;stroke-width:0.999997;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#RoundedArrow-1-4);paint-order:markers stroke fill;font-variation-settings:normal;opacity:1;vector-effect:none;fill-opacity:1;stroke-linecap:butt;stroke-miterlimit:4;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
-       d="m 250.0516,175.83311 -1e-5,-34.28658"
-       id="path4295-6"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:#800000;stroke:#800000;stroke-width:0.999997;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#RoundedArrow-1-4);paint-order:markers stroke fill;font-variation-settings:normal;opacity:1;vector-effect:none;fill-opacity:1;stroke-linecap:butt;stroke-miterlimit:4;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
-       d="m 250.0516,-0.59446177 -1e-5,34.28657877"
-       id="path4295-6-9"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:#800000;stroke:#800000;stroke-width:0.999997;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#RoundedArrow-1-4);paint-order:markers stroke fill"
-       d="m 377.95654,-0.1502474 -1e-5,34.2865784"
-       id="path4295-6-9-0"
-       sodipodi:nodetypes="cc" />
-    <text
-       xml:space="preserve"
-       style="font-size:5.64444px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:none;stroke:#ff00ff;stroke-width:0.264583"
-       x="-80.801056"
-       y="248.5974"
-       id="text4301"
-       transform="rotate(-90)"><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-         x="-80.801056"
-         y="248.5974"
-         id="tspan4297">Dual</tspan><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-         x="-80.801056"
-         y="255.65295"
-         id="tspan4299" /></text>
-    <text
-       xml:space="preserve"
-       style="font-size:5.64444px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:#800000;stroke:#ff00ff;stroke-width:0.264583"
-       x="-16.713226"
-       y="374.91296"
-       id="text4301-5"
-       transform="rotate(-90)"><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#800000;stroke:none;stroke-width:0.264583"
-         x="-16.713226"
-         y="374.91296"
-         id="tspan4297-6">Solution</tspan><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#800000;stroke:none;stroke-width:0.264583"
-         x="-16.713226"
-         y="381.96851"
-         id="tspan4299-3" /></text>
-    <text
-       xml:space="preserve"
-       style="font-size:5.64444px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:#800000;stroke:#ff00ff;stroke-width:0.264583"
-       x="390.25201"
-       y="165.21353"
-       id="text4301-5-9"><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#800000;stroke:none;stroke-width:0.264583"
-         x="390.25201"
-         y="165.21353"
-         id="tspan4297-6-4">Solution</tspan><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#800000;stroke:none;stroke-width:0.264583"
-         x="390.25201"
-         y="172.26909"
-         id="tspan4299-3-8" /></text>
-    <text
-       xml:space="preserve"
-       style="font-size:5.64444px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:#800000;stroke:#ff00ff;stroke-width:0.264583"
-       x="263.26532"
-       y="165.81641"
-       id="text4301-5-9-8"><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#800000;stroke:none;stroke-width:0.264583"
-         x="263.26532"
-         y="165.81641"
-         id="tspan4297-6-4-8">Solution</tspan><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#800000;stroke:none;stroke-width:0.264583"
-         x="263.26532"
-         y="172.87196"
-         id="tspan4299-3-8-5" /></text>
-    <path
-       style="fill:none;stroke:#666666;stroke-width:1;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-start:url(#Arrow1);marker-end:url(#marker4139);paint-order:markers stroke fill"
-       d="M 378.05493,111.77403 V 63.936127"
-       id="path4448"
-       sodipodi:nodetypes="cc" />
-    <text
-       xml:space="preserve"
-       style="font-size:5.64444px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:none;stroke:#ff00ff;stroke-width:0.264583"
-       x="-80.801056"
-       y="376.60074"
-       id="text4454"
-       transform="rotate(-90)"><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-         x="-80.801056"
-         y="376.60074"
-         id="tspan4450">Dual</tspan><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#000000;stroke:none;stroke-width:0.264583"
-         x="-80.801056"
-         y="383.65628"
-         id="tspan4452" /></text>
-    <path
-       style="fill:none;stroke:#000000;stroke-width:0.864998;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart-0-4);paint-order:markers stroke fill"
-       d="m 412.71373,50.810008 58.70734,30.005159"
-       id="path4904"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:0.864998;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#TriangleStart-0-4);paint-order:markers stroke fill"
-       d="M 412.71373,125.65074 471.42107,95.645581"
-       id="path6097"
-       sodipodi:nodetypes="cc" />
     <g
        id="g6109"
        transform="translate(102.79778,-117.06706)">
       <rect
-         style="fill:none;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
+         style="fill:#ffffff;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
          id="rect6101"
          width="68.964752"
          height="22.988251"
@@ -976,7 +544,7 @@
        id="g6272"
        transform="translate(102.76958,82.777217)">
       <rect
-         style="fill:none;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.465;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
          id="rect6264"
          width="68.964752"
          height="22.988251"
@@ -999,26 +567,11 @@
            y="111.07571"
            id="tspan6303">Solution ℂ </tspan></text>
     </g>
-    <path
-       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.864998;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;marker-start:url(#TriangleStart-0-6);paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
-       d="m 416.99258,-12.06706 39.8923,0 52.51828,58.029497 v 30.398516"
-       id="path6307"
-       sodipodi:nodetypes="cccc" />
-    <path
-       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.864998;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;marker-start:url(#TriangleStart-0-6);paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
-       d="m 416.99258,188.33434 h 39.8923 l 52.51828,-58.0295 V 99.906333"
-       id="path8463"
-       sodipodi:nodetypes="cccc" />
-    <path
-       style="fill:#800000;stroke:#800000;stroke-width:0.999997;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#RoundedArrow-1-4);paint-order:markers stroke fill"
-       d="m 377.95654,175.92528 -1e-5,-34.2866"
-       id="path11086"
-       sodipodi:nodetypes="cc" />
     <g
        id="g11098"
        transform="translate(-23.955814,82.777217)">
       <rect
-         style="fill:none;stroke:#000000;stroke-width:1.465;stroke-dasharray:none"
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.465;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
          id="rect11090"
          width="68.964752"
          height="22.988251"
@@ -1042,7 +595,7 @@
            id="tspan11206">certificate</tspan></text>
     </g>
     <path
-       style="fill:none;stroke:#000000;stroke-width:0.999997;stroke-linejoin:round;stroke-dasharray:0.99999702,0.99999702;stroke-dashoffset:0;marker-end:url(#RoundedArrow);paint-order:markers stroke fill"
+       style="fill:none;stroke:#000000;stroke-width:0.999997;stroke-linejoin:round;stroke-dasharray:0.999997, 0.999997;stroke-dashoffset:0;marker-end:url(#RoundedArrow);paint-order:markers stroke fill"
        d="m 125.78687,175.83311 c -0.18848,-0.61942 -0.37697,-1.23887 -0.37695,-1.9395 2e-5,-0.70062 0.1885,-1.48196 0.36992,-2.26578 0.18142,-0.78382 0.35572,-1.56992 0.3557,-2.29795 -3e-5,-0.72803 -0.17434,-1.3982 -0.34867,-2.06842 -0.18848,-0.61942 -0.37698,-1.23887 -0.37695,-1.93949 2e-5,-0.70062 0.1885,-1.48196 0.36992,-2.26579 0.18141,-0.78382 0.35572,-1.56992 0.3557,-2.29795 -3e-5,-0.72803 -0.17435,-1.3982 -0.34867,-2.06841 -0.18849,-0.61942 -0.37698,-1.23887 -0.37696,-1.9395 3e-5,-0.70062 0.18851,-1.48196 0.36993,-2.26578 0.18141,-0.78383 0.35572,-1.56992 0.35569,-2.29795 -2e-5,-0.72804 -0.17434,-1.3982 -0.34867,-2.06842 -0.18848,-0.61942 -0.37697,-1.23887 -0.37695,-1.93949 3e-5,-0.70063 0.18851,-1.48196 0.36992,-2.26579 0.18142,-0.78382 0.35572,-1.56992 0.3557,-2.29795 -3e-5,-0.72803 -0.17434,-1.3982 -0.34867,-2.06841"
        id="path11212"
        sodipodi:nodetypes="cc"
@@ -1063,22 +616,5 @@
        d="M 90.0618,187.77722 67.642128,165.35754 67.162473,80.815166 84.073326,64.89945"
        id="path64552"
        sodipodi:nodetypes="cccc" />
-    <text
-       xml:space="preserve"
-       style="font-size:5.64444px;font-family:'UKIJ Esliye Qara';-inkscape-font-specification:'UKIJ Esliye Qara';fill:#800000;stroke:#ff00ff;stroke-width:0.264583"
-       x="-16.713226"
-       y="248.5974"
-       id="text91498"
-       transform="rotate(-90)"><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#800000;stroke:none;stroke-width:0.264583"
-         x="-16.713226"
-         y="248.5974"
-         id="tspan91494">Solution</tspan><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:'TeX Gyre Termes Math';-inkscape-font-specification:'TeX Gyre Termes Math';text-align:center;text-anchor:middle;fill:#800000;stroke:none;stroke-width:0.264583"
-         x="-16.713226"
-         y="255.65294"
-         id="tspan91496" /></text>
   </g>
 </svg>
