@@ -128,7 +128,7 @@ order :math:`k` and call a solver.
     `s` is an upper bound for the orignal problem, and not the true solution. As :math:`k \rightarrow \infty`,
     :math:`s_k` is approaches the solution of the original problem, at the cost of more computation time.
 
-A specific solver can be specified as follows, one of :doc:`api/SolverFactory/SolverList`
+A specific solver can be specified as follows, one of :doc:`api/SolverFactory`
 
 .. code-block:: python
 
