@@ -2,7 +2,7 @@ Basics
 ===========
 
 Inputting your problem
----------------------
+----------------------
 
 `ncpol3sdpa` can take a wide range of polynomial optimization problems that have a certain form. It supports
 commutative and noncommutative problem, as well as real and complex problems. The format of the problem is
@@ -71,7 +71,7 @@ Where the problem specific parameters are:
     * :math:`(g_i)` are inequality constraint polynomials. They also must be hermitian.
     * :math:`(h_i)` are trace inequality constraint polynomials, which is a weaker version and faster version of inequality constraints. They also must be hermitian.
 
-As previusly, constraints can be added in the following way:
+As before, constraints can be added in the following way:
 
 Constraints can be added in the following way:
 
@@ -109,7 +109,7 @@ which can be faster than a regular constraint. This is done like this:
     Caution should be taken so as to not introduce an infinite chain of substitutions, in which case
     the program will not terminate. A simple way to achieve this is to make sure that the degree of
     :math:`M` is strictly greater then the degree of :math:`N`. Or more generally that
-    :math:`M \succcurlyeq N`  for some well founded relation  :math:`\succcurlyeq`.
+    :math:`M \succ N`  for some `well founded <https://en.wikipedia.org/wiki/Well-founded_relation>`_ order relation  :math:`\succcurlyeq`.
 
     Example:  :math:`X \rightarrow Y^2`, :math:`XY \rightarrow X^2`, this goes to make the infinite
     chain of substitutions :math:`X^2 \rightarrow X Y^2 \rightarrow X^2Y\rightarrow X^2Y^3 \rightarrow \cdots`
@@ -117,7 +117,7 @@ which can be faster than a regular constraint. This is done like this:
 Solving the problem
 -------------------
 
-Once A problem has been set up, the following function will create an SDP relaxation of
+Once a problem has been set up, the following function will create an SDP relaxation of
 order :math:`k` and call a solver.
 
 .. code-block:: python
@@ -174,4 +174,4 @@ Inner workings of ncpol3sdpa
 
 .. image:: ../graphs/block_diagram_drawing_e.svg
   :width: 700
-  :alt: Functional block diagram of ncpo3sdpa
+  :alt: Functional block diagram of ncpol3sdpa

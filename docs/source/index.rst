@@ -78,8 +78,9 @@ Documentation
    :maxdepth: 2
 
    Home <self>
-   basics
    examples
+   basics
+   sos
    api
    organization
    bibliography

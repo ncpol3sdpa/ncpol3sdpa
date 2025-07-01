@@ -45,7 +45,7 @@ $$\large \begin{gather*} &\max_{\mathcal H, X_1, \cdots , X_n} & \mathrm{tr} \le
 & \textrm{s.t.} & f_i(X_1, \cdots , X_n) = 0 & \forall i\\
 & & g_i(X_1, \cdots , X_n) \succcurlyeq 0 & \forall i\\
 & & \mathrm{tr}(\rho h_i(X_1, \cdots , X_n)) \geqslant 0 & \forall i\\
-& & \mathrm{tr}(\rho) = 1 &\end{gather*}$$
+& & \mathrm{tr}(\rho) = 1, \rho \succcurlyeq 0 &\end{gather*}$$
 
 #### Primal SDP Relaxation
 
