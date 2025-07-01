@@ -33,6 +33,7 @@ extensions = [
     "sphinx.ext.viewcode",  # Link documentation to source code
     "sphinx.ext.intersphinx",  # Link to other documentation
     "sphinx.ext.mathjax",  # For math notation
+    "sphinx_toolbox.more_autodoc.autonamedtuple",
 ]
 
 # Configure autodoc
