@@ -208,4 +208,42 @@ def test_add_variables() -> None:
     p = Problem(obj, more_monomials=[x**2])
     p.add_constraint(c1)
     p.add_constraint(c2)
-    assert abs(p.solve_unchecked(1) - 10) <= 0.1
+    assert abs(p.solve_unchecked(1) - 10) <= 0.0001
+
+
+def test_coefficients_rules1() -> None:
+    obj = y
+    p = Problem(obj)
+    c1 = Constraint.EqualityConstraint(y - 1.3 * x)
+    p.add_constraint(c1)
+    p.add_rule(x**2, S.One)  # x^2 = 1
+    assert abs(p.solve_unchecked(2) - 1.3) <= 0.0001
+
+
+def test_coefficients_rules2() -> None:
+    obj = y
+    p = Problem(obj, more_monomials=[x])
+    p.add_rule(y, 1.3 * x)
+    p.add_rule(x**2, S.One)  # x^2 = 1
+    assert abs(p.solve_unchecked(2) - 1.3) <= 0.0001
+
+
+def test_coefficients_rules_complementarity() -> None:
+    p = Problem(x + y)
+    p.add_rule(x * y, S.Zero)
+    c1 = Constraint.InequalityConstraint(1 - x**2)
+    c2 = Constraint.InequalityConstraint(1 - y**2)
+    p.add_constraint(c1)
+    p.add_constraint(c2)
+    assert abs(p.solve_unchecked(2, solver=SolverList.MOSEK) - 1.0) <= 0.0001
+
+
+def test_coefficients_rules_zero_var() -> None:
+    z = symbols("z")
+    p = Problem(x + y + z + x * z - z * y)
+    p.add_rule(z, S.Zero)
+    c1 = Constraint.InequalityConstraint(1 - x**2)
+    c2 = Constraint.InequalityConstraint(1 - y**2)
+    p.add_constraint(c1)
+    p.add_constraint(c2)
+    assert abs(p.solve_unchecked(2, solver=SolverList.MOSEK) - 2.0) <= 0.0001

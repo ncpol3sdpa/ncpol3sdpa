@@ -99,11 +99,11 @@ class AlgebraSDP:
         self.monomials: List[sp.Expr] = [x for xs in self.all_monomials for x in xs]
 
         # equivalence classes of equal coefficients
-        self.monomial_to_positions: Dict[sp.Expr, List[Tuple[int, int]]] = {}
+        self.monomial_to_positions: Dict[sp.Expr, List[Tuple[int, int, float]]] = {}
         for i in range(matrix_size):
             for j in range(i + 1):
-                monomial = self.moment_matrix[i][j]
-                self.add_monomial_to_positions(monomial, i, j)
+                coef, monomial = self.moment_matrix[i][j].as_coeff_Mul()
+                self.add_monomial_to_positions(monomial, i, j, float(coef))
 
         # This is the positive semi-definite matrices in the sdp
         self.constraint_moment_matrices: List[Matrix] = []
@@ -175,22 +175,24 @@ class AlgebraSDP:
                 coef = float(coef)
                 coef *= 1j  # type: ignore
 
+            print(monomial)
             assert monomial in self.monomial_to_positions.keys()
             assert 0 < len(self.monomial_to_positions[monomial])
 
             # The 0 is arbitrary (?) could be any other element of the list.
             # TODO/Idea What happens if we chose other than 0? at random?
-            monomial_x, monomial_y = self.monomial_to_positions[monomial][0]
+            monomial_x, monomial_y, mm_coef = self.monomial_to_positions[monomial][0]
+            assert mm_coef != 0
 
             # The matrices must be hermitian
             if real_part:
                 # real part constraint
-                a_0[monomial_x, monomial_y] += 0.5 * coef
-                a_0[monomial_y, monomial_x] += 0.5 * coef.conjugate()
+                a_0[monomial_x, monomial_y] += (0.5 / mm_coef) * coef
+                a_0[monomial_y, monomial_x] += (0.5 / mm_coef) * coef.conjugate()
             else:
                 # imaginary part constraint
-                a_0[monomial_x, monomial_y] += -0.5j * coef
-                a_0[monomial_y, monomial_x] += 0.5j * coef.conjugate()
+                a_0[monomial_x, monomial_y] += -(0.5j / mm_coef) * coef
+                a_0[monomial_y, monomial_x] += (0.5j / mm_coef) * coef.conjugate()
 
         return a_0
 
@@ -240,13 +242,16 @@ class AlgebraSDP:
         for constraint in constraints:
             self.add_constraint(constraint)
 
-    def add_monomial_to_positions(self, monomial: sp.Expr, i: int, j: int) -> None:
+    def add_monomial_to_positions(
+        self, monomial: sp.Expr, i: int, j: int, coef: float
+    ) -> None:
         """Add a monomial to the list of monomials and its position in the moment matrix"""
 
         if monomial in self.monomial_to_positions.keys():
-            self.monomial_to_positions[monomial].append((i, j))
+            self.monomial_to_positions[monomial].append((i, j, coef))
         else:
-            self.monomial_to_positions[monomial] = [(i, j)]
+            # if coef were to be complex, it would be conjugated here
+            self.monomial_to_positions[monomial] = [(i, j, coef)]
 
     def _cross_product_monomials(self) -> Generator[Tuple[sp.Expr, sp.Expr]]:
         for n in self.monomials:
@@ -268,7 +273,9 @@ class AlgebraSDP:
             lambda monomials: (
                 monomials[0],
                 self.substitution_rules.apply_to_polynomial(
-                    self.get_adjoint(monomials[0]) * constraint * monomials[1]
+                    sp.expand(
+                        self.get_adjoint(monomials[0]) * constraint * monomials[1]
+                    )
                 ),
                 monomials[1],
             ),

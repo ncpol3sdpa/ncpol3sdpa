@@ -91,43 +91,45 @@ class ProblemSDP:
 
     def _eq_2_coefs_constraint_re(
         self,
-        coef1: Tuple[int, int],
-        coef2: Tuple[int, int],
+        coef1: Tuple[int, int, float],
+        coef2: Tuple[int, int, float],
         var_number: int,
     ) -> EqConstraint:
-        x, y = coef2
-        i, j = coef1
+        i, j, c1 = coef1
+        x, y, c2 = coef2
         assert coef1 != coef2
         a = lil_matrix(
             (self.variable_sizes[var_number], self.variable_sizes[var_number]),
             dtype=np.float64 if self.is_real else np.complex64,  # type:ignore
         )
 
-        a[i, j] += 0.5
-        a[j, i] += 0.5
-        a[x, y] -= 0.5
-        a[y, x] -= 0.5
+        # opposite coefficient c
+        a[i, j] += 0.5 * c2
+        a[j, i] += 0.5 * c2
+        a[x, y] -= 0.5 * c1
+        a[y, x] -= 0.5 * c1
 
         return EqConstraint([(var_number, a)])
 
     def _eq_2_coefs_constraint_im(
         self,
-        coef1: Tuple[int, int],
-        coef2: Tuple[int, int],
+        coef1: Tuple[int, int, float],
+        coef2: Tuple[int, int, float],
         var_number: int,
     ) -> EqConstraint:
-        x, y = coef2
-        i, j = coef1
+        i, j, c1 = coef1
+        x, y, c2 = coef2
         assert coef1 != coef2
         a = lil_matrix(
             (self.variable_sizes[var_number], self.variable_sizes[var_number]),
             dtype=np.float64 if self.is_real else np.complex64,  # type: ignore
         )
 
-        a[i, j] += 0.5j
-        a[j, i] -= 0.5j
-        a[x, y] -= 0.5j
-        a[y, x] += 0.5j
+        # opposite coefficient c
+        a[i, j] += 0.5j * c2
+        a[j, i] -= 0.5j * c2
+        a[x, y] -= 0.5j * c1
+        a[y, x] += 0.5j * c1
 
         return EqConstraint([(var_number, a)])
 

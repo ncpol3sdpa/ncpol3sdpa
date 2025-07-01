@@ -19,7 +19,10 @@ def algebra_to_SDP_add_equality_constraint(
     implied_constraints = eq_constraint.zero_polynomials
     for implied_constraint in implied_constraints:
         # constraint matrix
-        a_0 = algebra.polynomial_to_matrix(implied_constraint, real_part=True)
+        a_0 = algebra.polynomial_to_matrix(
+            algebra.substitution_rules.apply_to_polynomial(implied_constraint),
+            real_part=True,
+        )
         constraint = EqConstraint([(problem.MOMENT_MATRIX_VAR_NUM, a_0)])
         problem.constraints.append(constraint)
 
@@ -103,7 +106,7 @@ def algebra_to_SDP(algebra: AlgebraSDP) -> ProblemSDP:
     objective = algebra.polynomial_to_matrix(algebra.objective)
 
     # Moment matrix
-    equiv_classes: List[List[Tuple[int, int]]] = list(
+    equiv_classes: List[List[Tuple[int, int, float]]] = list(
         algebra.monomial_to_positions.values()
     )
 

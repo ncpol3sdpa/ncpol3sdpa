@@ -8,7 +8,7 @@ from ncpol3sdpa.sdp_repr import MomentMatrixSDP, ProblemSDP
 
 def test_1x1() -> None:
     # essentially, maximize -x with x >= 0 and x == 1 and x in R^1
-    moment_matrix = MomentMatrixSDP(1, [[(0, 0)]])
+    moment_matrix = MomentMatrixSDP(1, [[(0, 0, 1.0)]])
     p = ProblemSDP(moment_matrix, lil_matrix([[-1]]))
 
     solution = SolverFactory.create_solver(SolverList.CVXPY).solve(p)
@@ -19,7 +19,7 @@ def test_1x1() -> None:
 
 def test_2x2() -> None:
     # Arithmetic - Geometric inequality
-    moment_matrix = MomentMatrixSDP(2, [[(0, 0), (1, 1)], [(1, 0)]])
+    moment_matrix = MomentMatrixSDP(2, [[(0, 0, 1.0), (1, 1, 1.0)], [(1, 0, 1.0)]])
     # [ 1 a ]
     # [ a 1 ]
     p = ProblemSDP(moment_matrix, lil_matrix([[0, -1], [-1, 0]]))
@@ -34,7 +34,7 @@ def test_2x2() -> None:
 
 def test_2x2_mosek() -> None:
     # Arithmetic - Geometric inequality
-    moment_matrix = MomentMatrixSDP(2, [[(0, 0), (1, 1)], [(1, 0)]])
+    moment_matrix = MomentMatrixSDP(2, [[(0, 0, 1.0), (1, 1, 1.0)], [(1, 0, 1.0)]])
     # [ 1 a ]
     # [ a 1 ]
     p = ProblemSDP(moment_matrix, lil_matrix([[0, -1], [-1, 0]]))

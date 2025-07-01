@@ -29,12 +29,14 @@ class AlgebraSDPncReal(AlgebraSDP):
         """Return the type of the objects in the algebra"""
         return float64
 
-    def add_monomial_to_positions(self, monomial: sp.Expr, i: int, j: int) -> None:
-        super().add_monomial_to_positions(monomial, i, j)
+    def add_monomial_to_positions(
+        self, monomial: sp.Expr, i: int, j: int, coef: float
+    ) -> None:
+        super().add_monomial_to_positions(monomial, i, j, coef)
 
         if i != j:
             monomial = self.get_adjoint(self.moment_matrix[i][j])
             if monomial in self.monomial_to_positions.keys():
-                self.monomial_to_positions[monomial].append((j, i))
+                self.monomial_to_positions[monomial].append((j, i, coef))
             else:
-                self.monomial_to_positions[monomial] = [(j, i)]
+                self.monomial_to_positions[monomial] = [(j, i, coef)]
