@@ -175,7 +175,6 @@ class AlgebraSDP:
                 coef = float(coef)
                 coef *= 1j  # type: ignore
 
-            print(monomial)
             assert monomial in self.monomial_to_positions.keys()
             assert 0 < len(self.monomial_to_positions[monomial])
 
@@ -188,11 +187,11 @@ class AlgebraSDP:
             if real_part:
                 # real part constraint
                 a_0[monomial_x, monomial_y] += (0.5 / mm_coef) * coef
-                a_0[monomial_y, monomial_x] += (0.5 / mm_coef) * coef.conjugate()
+                a_0[monomial_y, monomial_x] += ((0.5 / mm_coef) * coef).conjugate()
             else:
                 # imaginary part constraint
                 a_0[monomial_x, monomial_y] += -(0.5j / mm_coef) * coef
-                a_0[monomial_y, monomial_x] += (0.5j / mm_coef) * coef.conjugate()
+                a_0[monomial_y, monomial_x] += ((0.5j / mm_coef) * coef).conjugate()
 
         return a_0
 
@@ -242,6 +241,7 @@ class AlgebraSDP:
         for constraint in constraints:
             self.add_constraint(constraint)
 
+    # TODO : coef should be a complex in the complex case
     def add_monomial_to_positions(
         self, monomial: sp.Expr, i: int, j: int, coef: float
     ) -> None:
@@ -250,7 +250,6 @@ class AlgebraSDP:
         if monomial in self.monomial_to_positions.keys():
             self.monomial_to_positions[monomial].append((i, j, coef))
         else:
-            # if coef were to be complex, it would be conjugated here
             self.monomial_to_positions[monomial] = [(i, j, coef)]
 
     def _cross_product_monomials(self) -> Generator[Tuple[sp.Expr, sp.Expr]]:

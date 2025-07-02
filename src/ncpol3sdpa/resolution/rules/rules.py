@@ -69,9 +69,7 @@ class Rules:
             result = self.divides_factors(key, monomial)
             if result is not None:
                 a, b = result
-                res = a * self.rules[key] * b
-                print(res)
-                return self.apply_to_monomial(res)
+                return self.apply_to_monomial(a * self.rules[key] * b)
         return monomial  # TODO remove remove_one coeff #15
 
     def apply_to_polynomial(self, polynomial: Expr) -> Expr:
