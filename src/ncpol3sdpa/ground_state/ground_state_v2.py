@@ -1,6 +1,6 @@
 # import numpy as np
 from typing import Dict, Tuple, List, Any
-from ncpol3sdpa import Constraint, Problem
+from ncpol3sdpa import Problem
 from sympy.physics.quantum import HermitianOperator
 
 
@@ -16,30 +16,33 @@ class Ground_state2:
     def create_variables_X(self) -> List[HermitianOperator]:
         list_of_X: List[HermitianOperator] = []
         for i in range(self.number_of_edges):
-            x = HermitianOperator("x")  # type: ignore
+            x = HermitianOperator(f"x_{i}")  # type: ignore
             list_of_X.append(x)
         return list_of_X
 
     def create_variables_Y(self) -> List[HermitianOperator]:
         list_of_Y: List[HermitianOperator] = []
         for i in range(self.number_of_edges):
-            y = HermitianOperator("y")  # type: ignore
+            y = HermitianOperator(f"y_{i}")  # type: ignore
             list_of_Y.append(y)
         return list_of_Y
 
     def create_variables_Z(self) -> List[HermitianOperator]:
         list_of_Z: List[HermitianOperator] = []
         for i in range(self.number_of_edges):
-            z = HermitianOperator("z")  # type: ignore
+            z = HermitianOperator(f"z_{i}")  # type: ignore
             list_of_Z.append(z)
         return list_of_Z
 
-    def add_to_hermitian_matrix(self, i: int, j: int) -> Any:
+    def add_to_hermitian_matrix(
+        self,
+        i: int,
+        j: int,
+        list_of_X: List[HermitianOperator],
+        list_of_Y: List[HermitianOperator],
+        list_of_Z: List[HermitianOperator],
+    ) -> Any:
         """return Hij : the hermitian matrix associated to the edge i-j"""
-        list_of_X = self.create_variables_X()
-        list_of_Y = self.create_variables_Y()
-        list_of_Z = self.create_variables_Z()
-
         res = (
             -list_of_X[i] * list_of_X[j]
             - list_of_Y[i] * list_of_Y[j]
@@ -48,7 +51,12 @@ class Ground_state2:
         return res
 
     def create_hermitian_matrix(
-        self, number_of_edges: int, list_of_edges: Dict[Tuple[int, int], int]
+        self,
+        number_of_edges: int,
+        list_of_edges: Dict[Tuple[int, int], int],
+        list_of_X: List[HermitianOperator],
+        list_of_Y: List[HermitianOperator],
+        list_of_Z: List[HermitianOperator],
     ) -> HermitianOperator:
         H = 0
         for i in range(number_of_edges - 1):
@@ -56,20 +64,25 @@ class Ground_state2:
                 if (
                     list_of_edges.get((i, j), 0) == 1
                 ):  ##renvoie 0 si la clé n'est pas dans le dictionnaire
-                    H += self.add_to_hermitian_matrix(i, j)
+                    H += self.add_to_hermitian_matrix(
+                        i, j, list_of_X, list_of_Y, list_of_Z
+                    )
         return H  # type: ignore
 
     def solve_ground_state(self) -> float:
         number_of_edges = self.number_of_edges
         list_of_edges = self.list_of_edges
-
-        obj = -self.create_hermitian_matrix(number_of_edges, list_of_edges)
-
-        p = Problem(obj, is_commutative=False, is_real=False)
-
         list_of_X: List[HermitianOperator] = self.create_variables_X()
         list_of_Y: List[HermitianOperator] = self.create_variables_Y()
         list_of_Z: List[HermitianOperator] = self.create_variables_Z()
+
+        print("Variables created")
+        obj = -self.create_hermitian_matrix(
+            number_of_edges, list_of_edges, list_of_X, list_of_Y, list_of_Z
+        )
+
+        p = Problem(obj, is_commutative=False, is_real=False)
+        print("problem")
 
         list_of_list = [list_of_X, list_of_Y, list_of_Z]
 
@@ -83,36 +96,36 @@ class Ground_state2:
                                 list_of_list[b][j] * list_of_list[a][i],
                             )
 
+        print("r1")
+
         for a in range(3):
             for i in range(number_of_edges):
                 p.add_rule(list_of_list[a][i] * list_of_list[a][i], 1)  # type: ignore
 
+        print("r2")
+
         for i in range(number_of_edges):
-            c1 = Constraint.EqualityConstraint(
-                list_of_X[i] * list_of_Y[i] - 1j * list_of_Z[i]
-            )
-            p.add_constraint(c1)
-
-            c2 = Constraint.EqualityConstraint(
-                list_of_Z[i] * list_of_X[i] - 1j * list_of_Y[i]
-            )
-            p.add_constraint(c2)
-
-            c3 = Constraint.EqualityConstraint(
-                list_of_Y[i] * list_of_Z[i] - 1j * list_of_X[i]
-            )
-            p.add_constraint(c3)
+            p.add_rule(list_of_X[i] * list_of_Y[i], 1j * list_of_Z[i])
+            p.add_rule(list_of_Z[i] * list_of_X[i], 1j * list_of_Y[i])
+            p.add_rule(list_of_Y[i] * list_of_Z[i], 1j * list_of_X[i])
+        print("r3")
 
         for i in range(number_of_edges):
             for a in range(2):
                 for b in range(a + 1, 3):
-                    c = Constraint.EqualityConstraint(
-                        list_of_list[a][i] * list_of_list[b][i]
-                        + list_of_list[b][i] * list_of_list[a][i]
+                    # c = Constraint.EqualityConstraint(
+                    #     list_of_list[a][i] * list_of_list[b][i]
+                    #     + list_of_list[b][i] * list_of_list[a][i]
+                    # )
+                    # p.add_constraint(c)
+                    p.add_rule(
+                        list_of_list[a][i] * list_of_list[b][i],
+                        -list_of_list[b][i] * list_of_list[a][i],
                     )
-                    p.add_constraint(c)
+        print("r4")
 
-        solution = p.solve(2)
+        solution = p.solve(1)
+        print("solved")
         if solution is None:
             raise ValueError("No solution found for the ground state problem.")
         return -solution
@@ -121,11 +134,13 @@ class Ground_state2:
         number_of_edges = self.number_of_edges
         list_of_edges = self.list_of_edges
 
-        obj = -self.create_hermitian_matrix(number_of_edges, list_of_edges)
-
         list_of_X: List[HermitianOperator] = self.create_variables_X()
         list_of_Y: List[HermitianOperator] = self.create_variables_Y()
         list_of_Z: List[HermitianOperator] = self.create_variables_Z()
+
+        obj = -self.create_hermitian_matrix(
+            number_of_edges, list_of_edges, list_of_X, list_of_Y, list_of_Z
+        )
 
         list_of_list = [list_of_X, list_of_Y, list_of_Z]
 
@@ -137,35 +152,35 @@ class Ground_state2:
                 [list_of_list[a][i] for a in range(3)] for i in range(number_of_edges)
             ],
         )
+        print("problem")
 
         for a in range(3):
             for i in range(number_of_edges):
                 p.add_rule(list_of_list[a][i] * list_of_list[a][i], 1)  # type: ignore
 
+        print("r1")
+
         for i in range(number_of_edges):
-            c1 = Constraint.EqualityConstraint(
-                list_of_X[i] * list_of_Y[i] - 1j * list_of_Z[i]
-            )
-            p.add_constraint(c1)
+            p.add_rule(list_of_X[i] * list_of_Y[i], 1j * list_of_Z[i])
+            p.add_rule(list_of_Z[i] * list_of_X[i], 1j * list_of_Y[i])
+            p.add_rule(list_of_Y[i] * list_of_Z[i], 1j * list_of_X[i])
 
-            c2 = Constraint.EqualityConstraint(
-                list_of_Z[i] * list_of_X[i] - 1j * list_of_Y[i]
-            )
-            p.add_constraint(c2)
-
-            c3 = Constraint.EqualityConstraint(
-                list_of_Y[i] * list_of_Z[i] - 1j * list_of_X[i]
-            )
-            p.add_constraint(c3)
+        print("r2")
 
         for i in range(number_of_edges):
             for a in range(2):
                 for b in range(a + 1, 3):
-                    c = Constraint.EqualityConstraint(
-                        list_of_list[a][i] * list_of_list[b][i]
-                        + list_of_list[b][i] * list_of_list[a][i]
+                    # c = Constraint.EqualityConstraint(
+                    #     list_of_list[a][i] * list_of_list[b][i]
+                    #     + list_of_list[b][i] * list_of_list[a][i]
+                    # )
+                    p.add_rule(
+                        list_of_list[a][i] * list_of_list[b][i],
+                        -list_of_list[b][i] * list_of_list[a][i],
                     )
-                    p.add_constraint(c)
+                    # p.add_constraint(c)
+
+        print("r3")
 
         solution = p.solve(1)
         if solution is None:
