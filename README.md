@@ -18,7 +18,7 @@ This library is a successor to the [ncpol2sdpa library](https://ncpol2sdpa.readt
 
 This package is developed by [Alain](https://github.com/oxontheroof), [Thomas](https://www.linkedin.com/in/thomas-debernardi-a6b8ab332/), Nazar, [Mathis](http://github.com/mathiscr) and [Yann](https://github.com/yruellan), under the supervision of [Peter J Brown](https://peterjbrown519.github.io/), at Telecom Paris, during the 2025 Artishow project.
 
-The documentation is available at [ncpol3sdpa github](https://yruellan.github.io/ncpol3sdpa).
+The documentation is available at [ncpol3sdpa github](https://ncpol3sdpa.github.io/ncpol3sdpa).
 
 ## Development
 

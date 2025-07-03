@@ -36,7 +36,7 @@ You will need a mosek license to use the solver. You can get a free academic lic
 
 .. code-block:: bash
 
-   git clone https://github.com/yruellan/ncpol3sdpa.git
+   git clone https://github.com/ncpol3sdpa/ncpol3sdpa.git
    cd ncpol3sdpa
 
 2. Install the package (we recommend using a virtual environment):
