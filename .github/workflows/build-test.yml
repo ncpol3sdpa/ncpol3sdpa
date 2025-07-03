@@ -71,6 +71,7 @@ jobs:
           mkdir -p $HOME/mosek
           touch $HOME/mosek/mosek.lic
           echo "${{ secrets.MOSEK_LICENSE }}" >> $HOME/mosek/mosek.lic
+          echo "${{ secrets.TEST }}" # should be hello world 
           uv add mosek
       
       - name: Run tests
