@@ -1,0 +1,128 @@
+# Workflow for building and testing the project
+name: Build and Test Project
+
+on:
+  push:
+    branches: [ '**' ]  # Match all branches
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+jobs:
+  # Build stage - Install dependencies
+  uv-install:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/astral-sh/uv:0.5.5-python3.13-bookworm-slim
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup environment
+        run: |
+          echo "Setting up the environment..."
+          uv run python3 --version
+      
+      - name: Cache uv dependencies
+        uses: actions/cache@v4
+        with:
+          path: .uv-cache
+          key: uv-${{ hashFiles('uv.lock') }}
+      
+      - name: Install dependencies
+        run: |
+          export UV_CACHE_DIR=.uv-cache
+          uv cache prune --ci
+          uv pip install --system -e ".[mosek]"
+      
+      - name: Upload installed environment
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-environment
+          path: |
+            /usr/local/lib/python3.13/site-packages
+            /usr/local/bin
+          retention-days: 1
+
+  # Test stage - Run tests with coverage
+  pytest:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/astral-sh/uv:0.5.5-python3.13-bookworm-slim
+    needs: uv-install
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup environment
+        run: |
+          echo "Setting up the environment..."
+          uv run python3 --version
+      
+      - name: Download installed environment
+        uses: actions/download-artifact@v4
+        with:
+          name: python-environment
+          path: /usr/local/
+      
+      - name: Setup MOSEK license
+        run: |
+          mkdir -p $HOME/mosek
+          touch $HOME/mosek/mosek.lic
+          echo "${{ secrets.MOSEK_LICENSE }}" >> $HOME/mosek/mosek.lic
+          uv add mosek
+      
+      - name: Run tests
+        run: |
+          uv run pytest --durations=20 --cov=src --cov-report=xml:docs/source/coverage.xml
+      
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: docs/source/coverage.xml
+          retention-days: 7
+
+  # Test stage - Type checking
+  mypy:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/astral-sh/uv:0.5.5-python3.13-bookworm-slim
+    needs: uv-install
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup environment
+        run: |
+          echo "Setting up the environment..."
+          uv run python3 --version
+      
+      - name: Download installed environment
+        uses: actions/download-artifact@v4
+        with:
+          name: python-environment
+          path: /usr/local/
+      
+      - name: Run mypy
+        run: uv run mypy
+
+  # Test stage - Linting
+  ruff-check-src:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/astral-sh/uv:0.5.5-python3.13-bookworm-slim
+    needs: uv-install
+    continue-on-error: true  # Equivalent to allow_failure: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup environment
+        run: |
+          echo "Setting up the environment..."
+          uv run python3 --version
+      
+      - name: Run ruff check
+        run: uvx ruff check src
