@@ -69,9 +69,7 @@ jobs:
       - name: Setup MOSEK license
         run: |
           mkdir -p $HOME/mosek
-          touch $HOME/mosek/mosek.lic
-          echo "${{ secrets.MOSEK_LICENSE }}" >> $HOME/mosek/mosek.lic
-          echo "${{ secrets.TEST }}" # should be hello world 
+          echo "${{ secrets.MOSEK_LICENSE }}" > $HOME/mosek/mosek.lic
           uv add mosek
       
       - name: Run tests
