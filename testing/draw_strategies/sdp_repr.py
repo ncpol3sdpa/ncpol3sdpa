@@ -72,8 +72,8 @@ def gen_MomentMatrixSDPs(
 ) -> MomentMatrixSDP:
     assert min_size >= 0
     size = draw(integers(min_value=min_size, max_value=max_size))
-    all_positions: List[Tuple[int, int]] = [
-        (i, j) for j in range(size) for i in range(size) if j <= i
+    all_positions: List[Tuple[int, int, float]] = [
+        (i, j, 1.0) for j in range(size) for i in range(size) if j <= i
     ]
     return MomentMatrixSDP(size, draw(equivalence_classes(all_positions)))
 

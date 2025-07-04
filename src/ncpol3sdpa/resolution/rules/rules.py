@@ -4,15 +4,6 @@ from typing import Dict, List, Tuple
 from sympy import Expr, S, Mul
 
 
-# TODO This is a temporary fix. Should be removed when issue #15 "Substitution rule oversight/bug" is resolved
-def remove_one_coeff(expr: Expr) -> Expr:
-    if isinstance(expr, Mul):
-        coef, rest = expr.as_coeff_Mul()
-        if coef == 1.0:
-            return rest  # type: ignore
-    return expr
-
-
 class Rules:
     def __init__(self, dictionary: Dict[Expr, Expr] | None = None) -> None:
         if dictionary is None:
@@ -70,12 +61,16 @@ class Rules:
     def apply_to_monomial(self, monomial: Expr) -> Expr:
         """Apply rules to a monomial.
         Expects monomials to be non zero and without a numeric coefficient"""
+
+        if monomial == 0:
+            return monomial
+
         for key in self.rules.keys():
             result = self.divides_factors(key, monomial)
             if result is not None:
                 a, b = result
                 return self.apply_to_monomial(a * self.rules[key] * b)
-        return remove_one_coeff(monomial)  # TODO remove remove_one coeff #15
+        return monomial  # TODO remove remove_one coeff #15
 
     def apply_to_polynomial(self, polynomial: Expr) -> Expr:
         """Apply rules to a polynomial"""

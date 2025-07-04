@@ -43,7 +43,9 @@ class AlgebraSDPReal(AlgebraSDP):
         ruled: map[Tuple[sp.Expr, sp.Expr]] = map(
             lambda monomial: (
                 monomial,
-                self.substitution_rules.apply_to_polynomial(monomial * constraint),
+                self.substitution_rules.apply_to_polynomial(
+                    sp.expand(monomial * constraint)
+                ),
             ),
             self.monomials,
         )

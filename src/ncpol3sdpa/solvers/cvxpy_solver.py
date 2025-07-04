@@ -50,9 +50,9 @@ class CvxpySolver(Solver):
         moment_structure_constraints: List[cvxpy.Constraint] = [G[0, 0] == 1]
         for eq_class in problem.moment_matrix.eq_classes:
             assert len(eq_class) > 0
-            (i, j) = eq_class.pop()
-            for x, y in eq_class:
-                moment_structure_constraints.append(G[i, j] == G[x, y])
+            (i, j, c1) = eq_class.pop()
+            for x, y, c2 in eq_class:
+                moment_structure_constraints.append(c2 * G[i, j] == c1 * G[x, y])
 
         # Constraints
         eq_constraints: List[cvxpy.Constraint] = []
