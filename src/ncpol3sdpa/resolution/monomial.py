@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import List, Iterable
+from typing import List, Iterable, Generator
 
-from sympy import Expr, total_degree, sympify, S
+from sympy import Expr, total_degree, sympify
 from sympy.physics.quantum import Operator
 
 
@@ -18,26 +18,34 @@ def list_increment(degrees: List[int], k: int) -> bool:
     return True
 
 
+def gen_monomials_commutative(
+    degree: int, symbols: List[Expr | Operator]
+) -> Generator[Expr]:
+    """in the commutative case,
+    returns a list of all monomials that have EXACTLY degree :param:`degree`"""
+    n = len(symbols)
+    if degree == 0:
+        yield sympify(1)
+    elif n != 0:
+        other_symbols = symbols[0 : n - 1]
+        x = symbols[n - 1]
+        for k in range(degree + 1):
+            for monomial in gen_monomials_commutative(degree - k, other_symbols):
+                yield x**k * monomial
+
+
 def generate_monomials(
     symbols: Iterable[Expr | Operator],
     relaxation_order: int,
     is_commutative: bool = True,
 ) -> List[Expr]:
-    """returns a list of all monomials that have degree less or equal to the relaxation_order"""
+    """returns a list of all monomials that have degree less or equal to the :param:`relaxation_order`"""
 
     if is_commutative:
-        current_degrees = [0 for _ in symbols]
         res: List[Expr] = []
-
-        while True:
-            expr = S.One
-            for i, symbol in enumerate(symbols):
-                expr *= symbol ** current_degrees[i]
-            if total_degree(expr) <= relaxation_order:
-                res.append(expr)
-
-            if list_increment(current_degrees, relaxation_order + 1):
-                break
+        for i in range(relaxation_order + 1):
+            for monomial in gen_monomials_commutative(i, list(symbols)):
+                res.append(monomial)
 
         return sorted(res, key=total_degree)
 
