@@ -22,6 +22,7 @@ dependencies = [
     "pytest-cov>=6.1.1",
     "coverage>=7.8.2",
     "scipy-stubs>=1.16.0.0",
+    "sphinx-toolbox>=4.0.0",
 ]
 
 [project.optional-dependencies]
