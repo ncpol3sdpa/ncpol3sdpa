@@ -11,13 +11,18 @@ from .solution_real_to_complex import solution_real_to_complex
 
 
 class SOS_TraceConstraintTerm(NamedTuple):
-    """Represents a trace inequality equality constraint SOS term"""
+    """
+    Represents a trace inequality equality constraint SOS term :math:`\\eta_i  h_i`
+
+    See :doc:`../sos` for more detail
+    """
 
     coef_eta: float
-    """The positive scalar coefficient that multiplies the term"""
+    """The positive scalar coefficient :math:`\\eta_i`"""
 
     poly_h: sympy.Expr
-    """Polynomial form the trace constraint :math:`\\mathrm{tr}(\\rho h_i) \\geqslant 0`"""
+    """Polynomial form the trace constraint :math:`h_i` such that
+    :math:`\\mathrm{tr}(\\rho h_i) \\geqslant 0`"""
 
     def to_expression(self) -> sympy.Expr:
         """Convert this to a sympy expression"""
@@ -25,29 +30,44 @@ class SOS_TraceConstraintTerm(NamedTuple):
 
 
 class SOS_EqConstraintFactor(NamedTuple):
-    """Represents a part of an equality constraint SOS term"""
+    """Represents a part of an equality constraint SOS term.
+    More precisely, for some polynomial :math:`f`, it represents the expression:
+
+    .. math::
+
+         \\frac {\\nu M^\\dagger f N + \\bar\\nu N^\\dagger f^\\dagger M} {2}
+    """
 
     coef_nu: complex
-    """The scalar coefficient that multiplies the term. possibly imaginary"""
+    """The scalar coefficient :math:`\\nu` that multiplies the term. possibly imaginary"""
 
     l_monomial: sympy.Expr
-    """Left multiplier monomial"""
+    """Left multiplier monomial :math:`M`"""
 
     r_monomial: sympy.Expr
-    """Right multiplier monomial"""
+    """Right multiplier monomial :math:`N`"""
 
 
 class SOS_EqConstraintTerms(NamedTuple):
-    """Represents equality constraint SOS terms"""
+    """
+    Represents equality constraint SOS terms:
+
+    .. math::
+
+        \\sum_{M, N \\text{monomials}}\\left(\\nu_{i, M, N}^{\\mathfrak{Re}} \\frac {M^\\dagger f_{i} N + N^\\dagger f_{i}^\\dagger M} {2}  \
+                                           + \\nu_{i, M, N}^{\\mathfrak{Im}} \\frac {M^\\dagger f_{i} N - N^\\dagger f_{i}^\\dagger M} {2i} \\right)
+
+    See :doc:`../sos` for more detail
+    """
 
     poly_f: sympy.Expr
-    """The zero polynomial"""
+    """The zero polynomial :math:`f_i`"""
 
     multiplier_monomials: List[SOS_EqConstraintFactor]
-    """Factors that multiply the polynomial"""
+    """Factors that multiply the polynomial: :math:`\\nu, M, N`"""
 
     adjoint_func: Callable[[sympy.Expr], sympy.Expr]
-    """Function that maps a monomial to it's adjoint (in particular in the complex case)"""
+    """(internal) Function that maps a monomial to it's adjoint (in particular in the complex case)"""
 
     def to_expression(self) -> sympy.Expr:
         """Convert this to a sympy expression"""
@@ -71,13 +91,16 @@ class SOS_EqConstraintTerms(NamedTuple):
 
 class SumOfSquaresTerm(NamedTuple):
     """Data structure representing a sum of squares polynomials.
-    The represented expression is :math:`\\sum_i \\texttt{squares[i]}^\\dagger \\times \\texttt{middle_term[i]} \\times \\texttt{squares[i]}`"""
+    The represented expression is :math:`\\sum_i \\texttt{squares[i]}^\\dagger \\times \\texttt{middle_term[i]} \\times \\texttt{squares[i]}`
+
+    See :doc:`../sos` for more detail
+    """
 
     squares: List[sympy.Expr]
     middle_term: sympy.Expr
 
     adjoint_func: Callable[[sympy.Expr], sympy.Expr]
-    """Function that maps a monomial to it's adjoint (in particular in the complex case)"""
+    """(internal) Function that maps a monomial to it's adjoint (in particular in the complex case)"""
 
     def to_expression(self) -> sympy.Expr:
         """Convert this to a sympy expression"""
@@ -87,7 +110,7 @@ class SumOfSquaresTerm(NamedTuple):
 
 
 class SosDecomposition(NamedTuple):
-    """Class to represent a SOS decomposition. See :docs:`sos` for more detail"""
+    """Class to represent a SOS decomposition. See :doc:`../sos` for more detail"""
 
     original_objective: sympy.Expr
     """The objective polynomial :math:`c` from the optimisation problem"""
@@ -105,13 +128,13 @@ class SosDecomposition(NamedTuple):
     """Terms from the equality constraints"""
 
     trace_terms: List[SOS_TraceConstraintTerm]  # \\eta_i * h_i
-    """Terms from the inequality constrains :math:`\\eta_i * h_i`"""
+    """Terms from the inequality constrains :math:`\\eta_i h_i`"""
 
     def reconstructed_objective(self) -> sympy.Expr:
         """
         Calculates the objective polynomial from the SOS formula
 
-        See equation :math:`(2)` in :doc:`sos`
+        See equation :math:`(2)` in :doc:`../sos`
         """
 
         s_lambda: sympy.Expr = sympy.sympify(self.dual_objective)
@@ -125,7 +148,7 @@ class SosDecomposition(NamedTuple):
     def objective_error(self) -> float:
         """Returns the maximum difference in coefficients of :math:`c - c_r`,
         where :math:`c` is the objective polynomial, and :math:`c_r` is
-        the reconstructed objective, see the :func:`SosDecomposition.reconstructed_objective` function.
+        the reconstructed objective, see the :func:`~ncpol3sdpa.sos.SosDecomposition.reconstructed_objective` function.
 
         Ideally, this should be zero. In practice it is non zero due to numerical precision.
 

@@ -21,16 +21,20 @@ of an unconstrained polynomial optimisation problem, this name is in fact accura
     \lambda - c  = SOS \tag{1}
     \end{equation}
 
-See `api/sos/SosDecomposition.SOS` to obtain the exact decomposition
-
+The exact decomposition is stored in the
+:py:attr:`SosDecomposition.SOS<ncpol3sdpa.sos.SosDecomposition.SOS>` attribute.
+See also the :py:attr:`~ncpol3sdpa.sos.SumOfSquaresTerm` class(in this case
+:py:class:`~ncpol3sdpa.sos.SumOfSquaresTerm.middle_term` should be 1).
 
 .. note::
 
-    The simplest way to access the sos decomposition is through `SosDecomposition.reconstructed_objective()`
-    and ` .to_expression()` functions, however it may be cumbersome or slow to go through sympy
-    expressions when working with large polynomials, in which case the data can be accessed
-    directly by accessing the data felids of the `SumOfSquares` and `SumOfMultiplesPolynomial`
-    classes
+    The simplest way to access the sos decomposition is through
+    :py:meth:`~ncpol3sdpa.sos.SosDecomposition.reconstructed_objective`
+    or the varus :func:`to_expression` functions, however it may be cumbersome or slow to go
+    through sympy expressions when working with large polynomials, in which case the data can
+    be accessed directly by accessing the data felids of the
+    :py:class:`~ncpol3sdpa.sos.SumOfSquaresTerm` and
+    :py:class:`~ncpol3sdpa.sos.SOS_EqConstraintTerms` classes
 
 
 Constraints terms
@@ -52,9 +56,8 @@ to the decomposition:
 For some family of polynomials :math:`(p_j)` . For every feasible point :math:`(x_f, v)`, :math:`g_i(x_f)` is
 positive semidefinite, and therefore :math:`v^\dagger p_j(x_f)^\dagger g_i(x_f) p_j(x_f) v \geqslant 0` .
 
-The exact :math:`(p_j)` s are stored in `SosDecomposition.SOS_i` . See the `SumOfSquares` class for
-more details.
-
+The exact :math:`(p_j)` s are stored in :py:attr:`SosDecomposition.SOS_i<ncpol3sdpa.sos.SosDecomposition.SOS_i>` attribute.
+See also the :py:class:`~ncpol3sdpa.sos.SumOfSquaresTerm` class.
 
 Trace inequality constraint term
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,8 +72,9 @@ the following term is appended to the decomposition:
 with :math:`\eta_i \geqslant 0` . For every feasible point :math:`(x_f, v)`,
 :math:`\eta_i v^\dagger h_i(x_f) v \geqslant 0`
 
-The coefficient of this term (:math:`\eta_{i}` ) is stored in `SosDecomposition.eq_polys` . See the
-`SumOfMultiplesPolynomial` class for more details.
+The coefficient of this term (:math:`\eta_{i}` ) is stored in
+:py:attr:`SosDecomposition.trace_terms<ncpol3sdpa.sos.SosDecomposition.trace_terms>` .
+See the :py:class:`~ncpol3sdpa.sos.SOS_TraceConstraintTerm` class for more details.
 
 
 Equality constraint term
@@ -88,14 +92,15 @@ These constraints are encoded in the SDP. Thus, the following term is appended t
 .. math::
 
     \sum_{M, N \text{monomials}}\left( \nu_{i, M, N}^{\mathfrak{Re}} \frac {M^\dagger f_{i} N + N^\dagger f_{i}^\dagger M} {2}
-                                     + \nu_{i, M, N}^{\mathfrak{Im}} \frac {M^\dagger f_{i} N - N^\dagger f_{i}^\dagger M} {2i} \right)
+                                      +\nu_{i, M, N}^{\mathfrak{Im}} \frac {M^\dagger f_{i} N - N^\dagger f_{i}^\dagger M} {2i} \right)
 
 For every feasible point :math:`x_f`, :math:`f_i(x_f)` is zero, so each term in the sum above is zero,
 and therefore positive.
 
 The coefficients of this term (:math:`\nu_{i, M, N}^{\mathfrak{Re}}` s and
-:math:`\nu_{i, M, N}^{\mathfrak{Im}}` s) are stored in `SosDecomposition.eq_polys` . See the
-`SumOfMultiplesPolynomial` class for more details.
+:math:`\nu_{i, M, N}^{\mathfrak{Im}}` s) are stored in
+:py:attr:`SosDecomposition.eq_terms<ncpol3sdpa.sos.SosDecomposition.eq_terms>` .
+See the :py:class:`~ncpol3sdpa.sos.SOS_EqConstraintTerms` class for more details.
 
 .. note::
 
@@ -108,13 +113,13 @@ Full decomposition formula
 In the most general case, the SOS decomposition is written like so:
 
 .. math::
-
     \begin{align}
+    \tag{2}
     \lambda -  c =& \, SOS \\
       &+ \sum_i SOS_i \\
       &+ \sum_i\eta_{i}  h_i  \\
-      &+ \sum_{M, N \text{monomials}}\left( \nu_{i, M, N}^{\mathfrak{Re}} \frac {M^\dagger f_{i} N + N^\dagger f_{i}^\dagger M} {2}  \\
-                                         + \nu_{i, M, N}^{\mathfrak{Im}} \frac {M^\dagger f_{i} N - N^\dagger f_{i}^\dagger M} {2i} \right)
+      &+ \sum_i\sum_{M, N \text{monomials}}\left( \nu_{i, M, N}^{\mathfrak{Re}} \frac {M^\dagger f_{i} N + N^\dagger f_{i}^\dagger M} {2}  \\
+                                                + \nu_{i, M, N}^{\mathfrak{Im}} \frac {M^\dagger f_{i} N - N^\dagger f_{i}^\dagger M} {2i} \right)
     \end{align}
 
 where :math:`SOS_i = \sum_j p_j^\dagger g_i p_j` for some family of polynomials :math:`(p_j)` .

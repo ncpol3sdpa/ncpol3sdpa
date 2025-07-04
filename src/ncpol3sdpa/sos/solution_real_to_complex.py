@@ -9,7 +9,7 @@ T = TypeVar("T", bound=np.generic)
 
 
 def matrix_real_to_complex(s: NDArray[np.float64]) -> NDArray[np.complex64]:
-    """Symmetric s of dimetion 2n converted to hermetian matrix"""
+    """Symmetric s of dimetion 2n converted to hermitian matrix"""
     (p, m) = np.shape(s)
     assert p == m
     assert p % 2 == 0

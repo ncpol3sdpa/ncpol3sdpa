@@ -101,7 +101,16 @@ class Problem:
 
         Notes
         -----
-        This method is a special case of constraint.
+        This method is a special case of constraint. It may be faster than a regular constraint
+
+        .. warning::
+            Caution should be taken so as to not introduce an infinite chain of substitutions, in which case
+            the program will not terminate. A simple way to achieve this is to make sure that the degree of
+            :math:`M` is strictly greater then the degree of :math:`N`. Or more generally that
+            :math:`M \\succ N`  for some `well founded <https://en.wikipedia.org/wiki/Well-founded_relation>`_ order relation  :math:`\\succcurlyeq`.
+
+            Example:  :math:`X \\rightarrow Y^2`, :math:`XY \\rightarrow X^2`, this goes to make the infinite
+            chain of substitutions :math:`X^2 \\rightarrow X Y^2 \\rightarrow X^2Y\\rightarrow X^2Y^3 \\rightarrow \\cdots`
         """
         # TODO: assert that old and new are monomials
         self.rules.add_rule(old, new)
