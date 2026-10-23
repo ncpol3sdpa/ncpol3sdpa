@@ -28,11 +28,26 @@ To develop this package, you need to install the [`uv` package manager](https://
 We also use [`ruff`](https://docs.astral.sh/ruff/) and [`mypy`](https://mypy.readthedocs.io/en/stable/#) for error checking and formatting. These are installed by `uv sync` package.  
 You can install the VSCode extension for `ruff` by following the instructions [here](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) and for `mypy` by following the instructions [here](https://marketplace.visualstudio.com/items?itemName=matangover.mypy).
 
-### Testing
+### MOSEK
 
-You can run the tests by executing the following command:
+Some optimization problems require [MOSEK](https://www.mosek.com/), an SDP solver.
+
+To install the project dependencies with MOSEK support, run:
 
 ```bash
+uv sync --extra mosek
+```
+
+This installs the optional Python `mosek` package in the project's virtual environment.
+
+**Note:** A valid MOSEK license may be required to solve optimization problems. See the [MOSEK documentation](https://docs.mosek.com/) for installation and licensing instructions.
+
+### Testing
+
+The test suite requires MOSEK. Install the project dependencies with MOSEK support before running the tests:
+
+```bash
+uv sync --extra mosek
 uv run pytest
 ```
 
