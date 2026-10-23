@@ -23,7 +23,7 @@ Here's a simple example to get you started:
    objective = x*y
 
    # Create problem
-   problem = Problem(obj, is_real=True)
+   problem = Problem(objective, is_real=True)
 
    # Add constraints
    c1 = Constraint.EqualityConstraint(x * x - x)
@@ -98,11 +98,11 @@ Consider the following problem:
    objective = -sympy.expand((x + y)**2 - 4* x * y)
 
    # Create problem
-   problem = Problem(obj, is_real=True)
+   problem = Problem(objective, is_real=True)
 
    # Solve the problem (default solver is CVXPY)
    result = problem.solve()
-   print(f"Optimal value: {result.dual_objective_value}")
+   print(f"Optimal value: {result}")
 
    # Extract SOS decomposition
    sos = problem.compute_sos_decomposition()
@@ -150,22 +150,26 @@ Code Example
 
 .. code-block:: python
 
+    from ncpol3sdpa import Problem, Constraint
+    from sympy.physics.quantum import HermitianOperator
+    from ncpol3sdpa import SolverList
+
+
     A0 = HermitianOperator("A0")
     A1 = HermitianOperator("A1")
     B0 = HermitianOperator("B0")
     B1 = HermitianOperator("B1")
     obj = A0 * B0 + A0 * B1 + A1 * B0 - A1 * B1
     p = Problem(
-        obj, is_commutative=False, is_real=False, commute_variables=[[A0, A1], [B0, B1]]
+        obj, is_commutative=False, is_real=False
     )
     p.add_constraint(Constraint.EqualityConstraint(A0 * A0 - 1))
     p.add_constraint(Constraint.EqualityConstraint(A1 * A1 - 1))
     p.add_constraint(Constraint.EqualityConstraint(B0 * B0 - 1))
     p.add_constraint(Constraint.EqualityConstraint(B1 * B1 - 1))
 
-    print(f"Optimal value: {p.solve(relaxation_order=1, solver=ListSolver.MOSEK)}")
+    print(f"Optimal value: {p.solve(relaxation_order=2, solver=SolverList.MOSEK)}")
     # print 2.828
-
 
 
 Example 5: Ground State Problem

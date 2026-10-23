@@ -30,20 +30,26 @@ This library is a successor to the ncpol2sdpa library.
 Installation
 ------------
 
-You will need a mosek license to use the solver. You can get a free academic license from the `Mosek website <https://www.mosek.com/>`_.
+You will need a MOSEK license to use the solver. You can get a free academic license from the `MOSEK website <https://www.mosek.com/>`_.
 
 1. Clone the repository:
 
-.. code-block:: bash
+   .. code-block:: bash
 
-   git clone https://github.com/ncpol3sdpa/ncpol3sdpa.git
-   cd ncpol3sdpa
+      git clone https://github.com/ncpol3sdpa/ncpol3sdpa.git
+      cd ncpol3sdpa
 
 2. Install the package (we recommend using a virtual environment):
 
-.. code-block:: bash
+   .. code-block:: bash
 
-   uv sync
+      uv sync
+
+3. Install the optional MOSEK dependency:
+
+   .. code-block:: bash
+
+      uv sync --extra mosek
 
 Basic Usage
 -----------
